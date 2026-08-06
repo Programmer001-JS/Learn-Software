@@ -8,7 +8,7 @@
 | **Architectural Layer** | Data access |
 | **Language** | C# / F# |
 | **Abbreviation** | EF Core |
-| **Related notes** | [ORM](ORM.md) · [ASP.NET Core](../06%20-%20Backend%20Architecture/ASP.NET%20Core.md) · [SQL](SQL.md) · [Transactions](Transactions.md) · [.NET Runtime](../03%20-%20Programming%20Languages%20and%20Runtime/.NET%20Runtime.md) |
+| **Related notes** | [ORM](ORM.md) · [ASP.NET Core](../06%20-%20Backend%20Architecture/ASP.NET%20Core.md) · [SQL](SQL.md) · [Transactions](Transactions.md) · [.NET Runtime](../03%20-%20Programming%20Languages%20and%20Runtime/dotNET%20Runtime.md) |
 
 ---
 

@@ -7,7 +7,7 @@
 | **Category** | Web Framework |
 | **Architectural Layer** | Application |
 | **Language** | C# / F# |
-| **Runs on** | [.NET Runtime](../03%20-%20Programming%20Languages%20and%20Runtime/.NET%20Runtime.md) |
+| **Runs on** | [.NET Runtime](../03%20-%20Programming%20Languages%20and%20Runtime/dotNET%20Runtime.md) |
 | **Related notes** | [Backend Frameworks](Backend%20Frameworks.md) · [Spring Boot](Spring%20Boot.md) · [Entity Framework](../08%20-%20Databases%20and%20Data/Entity%20Framework.md) · [Dependency Injection](../07%20-%20Backend%20Design%20Patterns/Dependency%20Injection.md) |
 
 ---

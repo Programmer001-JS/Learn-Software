@@ -6,14 +6,14 @@
 |---|---|
 | **Category** | Runtime / Infrastructure Concept |
 | **Architectural Layer** | Language runtime, or infrastructure |
-| **Related notes** | [Bytecode](Bytecode.md) · [JVM](JVM.md) · [.NET Runtime](.NET%20Runtime.md) · [Docker](../13%20-%20DevOps%20and%20Delivery/Docker.md) · [EC2](../12%20-%20Cloud%20Architecture/EC2.md) · [Kernel](../02%20-%20Computer%20Science%20Fundamentals/Kernel.md) |
+| **Related notes** | [Bytecode](Bytecode.md) · [JVM](JVM.md) · [.NET Runtime](dotNET%20Runtime.md) · [Docker](../13%20-%20DevOps%20and%20Delivery/Docker.md) · [EC2](../12%20-%20Cloud%20Architecture/EC2.md) · [Kernel](../02%20-%20Computer%20Science%20Fundamentals/Kernel.md) |
 
 ---
 
 ## 1. Two different things with the same name
 
 > [!IMPORTANT]
-> **Process VM** — runs *one program* written in bytecode. Examples: the [JVM](JVM.md), the [.NET runtime](.NET%20Runtime.md), [CPython](CPython.md).
+> **Process VM** — runs *one program* written in bytecode. Examples: the [JVM](JVM.md), the [.NET runtime](dotNET%20Runtime.md), [CPython](CPython.md).
 >
 > **System VM** — runs *a whole operating system* on virtualised hardware. Examples: VMware, VirtualBox, AWS [EC2](../12%20-%20Cloud%20Architecture/EC2.md), Hyper-V.
 >
