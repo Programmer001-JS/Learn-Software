@@ -49,24 +49,31 @@ It is also not a tutorial. You will not find installation steps or API reference
 
 ---
 
-## The one page to read first
+## The Atlas — open this before anything else
 
-**[The Complete System Map](The%20Complete%20System%20Map.md)** — the whole handbook as a single journey: from a user's click to the product in their hands, in 24 stations. Each station says what happens there, which concepts live there, and what can go wrong. It contains no definitions — every definition is one click away.
+**[Atlas.html](Atlas.html)** — the whole handbook as nine maps. Open it in a browser; print it on A2 if you want it on a wall.
 
 ```text
 If the table above tells you WHAT is in the handbook,
-the map tells you WHERE each thing sits, and what is waiting for whom.
+the atlas tells you WHERE each thing sits, and what is waiting for whom.
 ```
 
-It comes in two formats, for two different jobs:
+Each sheet borrows the drawing convention its subject actually deserves, and **every note in the handbook is a named point on exactly one sheet.**
 
-| | For | Shape |
+| Sheet | | Drawn as |
 |---|---|---|
-| **[The Complete System Map](The%20Complete%20System%20Map.md)** | Looking things up | Vertical, station by station, every concept linked |
-| **[The same map, as a Poster](The%20Complete%20System%20Map%20-%20Poster.md)** | The wall | Wide landscape, five posters, built to print on A3 |
+| **1** | The Request Line — one click to one product, 24 stops | Transit diagram |
+| **2** | The Machine — your code down to silicon | Cutaway section |
+| **3** | The Two Ends — the browser's pipeline and the server's | Production lines |
+| **4** | The Blueprint — how to lay out the rooms of a codebase | Floor plan |
+| **5** | The Data Yard — which siding each kind of data belongs on | Marshalling yard |
+| **6** | The Estate — infrastructure as a plot of land | Site plan |
+| **7** | The Refinery — documents in, grounded answers out | Process plant |
+| **8** | The Threat Map — how far one compromise reaches | Blast radius |
+| **9** | Five Real Systems — each one's bottleneck, and its trade | Comparative plates |
 
 > [!TIP]
-> Read the poster's first diagram before anything else, and again after every few notes. It is the difference between 204 separate facts and one system.
+> Read Sheet 1 before anything else, and return to it after every few notes. It is the difference between 200 separate facts and one system.
 
 ---
 
@@ -86,7 +93,7 @@ If you can answer those six, you understand the technology well enough to make a
 
 ## Start here
 
-1. **[The Complete System Map](The%20Complete%20System%20Map.md)** — the whole picture, in one file
+1. **[Atlas.html](Atlas.html)** — the whole picture, in nine maps
 2. **[How To Use This Handbook](How%20To%20Use%20This%20Handbook.md)** — the workflow
 3. **[Learning Philosophy](Learning%20Philosophy.md)** — why it is built this way
 4. **[Architect Mindset](Architect%20Mindset.md)** — the shift from coder to architect
