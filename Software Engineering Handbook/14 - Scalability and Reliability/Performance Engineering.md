@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Concept / Practice |
 | **Architectural Layer** | Cross-cutting |
-| **Related notes** | [Load Testing](Load%20Testing.md) · [Scalability Fundamentals](Scalability%20Fundamentals.md) · [Caching](../08%20-%20Databases%20and%20Data/Caching.md) · [Database Indexing](../08%20-%20Databases%20and%20Data/Database%20Indexing.md) · [Monitoring and Alerting](Monitoring%20and%20Alerting.md) · [Vertical Scaling](Vertical%20Scaling.md) |
+| **Related notes** | [Load Testing](Load%20Testing.md) · [Scalability Fundamentals](Scalability%20Fundamentals.md) · [Cache](../08%20-%20Databases%20and%20Data/Cache.md) · [Indexes](../08%20-%20Databases%20and%20Data/Indexes.md) · [Monitoring and Alerting](Monitoring%20and%20Alerting.md) · [Vertical Scaling](Vertical%20Scaling.md) |
 
 ---
 
@@ -172,7 +172,7 @@ WHY THE TAIL MATTERS MORE THAN IT LOOKS
 - **A missing index** on a foreign key turning a 4-second page into 40 ms — the most common single fix in the industry.
 - **An N+1 in an ORM-heavy admin page**, resolved by eager loading.
 - **A synchronous third-party call** in the checkout path, moved to a queue with a fallback.
-- **Frontend performance** — image sizing, code splitting and lazy loading routinely outweighing all backend work; see [Web Performance](../05%20-%20Frontend%20Architecture/Web%20Performance.md).
+- **Frontend performance** — image sizing, code splitting and lazy loading routinely outweighing all backend work; see [Browser Internals](../05%20-%20Frontend%20Architecture/Browser%20Internals.md).
 - **A `SELECT *` returning a large text column** on a list endpoint, transferring megabytes nobody read.
 - **Connection pool exhaustion** presenting as "the database is slow" when the database was idle.
 

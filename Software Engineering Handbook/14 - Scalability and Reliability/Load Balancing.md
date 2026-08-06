@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Networking / Traffic Management |
 | **Architectural Layer** | Infrastructure |
-| **Related notes** | [Horizontal Scaling](Horizontal%20Scaling.md) · [High Availability](High%20Availability.md) · [Scalability Fundamentals](Scalability%20Fundamentals.md) · [Deployment Strategies](../13%20-%20DevOps%20and%20Delivery/Deployment%20Strategies.md) · [DNS](../04%20-%20Networking%20and%20Internet/DNS.md) · [HTTP](../04%20-%20Networking%20and%20Internet/HTTP.md) |
+| **Related notes** | [Horizontal Scaling](Horizontal%20Scaling.md) · [High Availability](High%20Availability.md) · [Scalability Fundamentals](Scalability%20Fundamentals.md) · [Deployment Strategies](../13%20-%20DevOps%20and%20Delivery/Deployment%20Strategies.md) · [DNS](../04%20-%20Networking%20and%20Internet/DNS.md) · [HTTP HTTPS](../04%20-%20Networking%20and%20Internet/HTTP%20HTTPS.md) |
 
 ---
 

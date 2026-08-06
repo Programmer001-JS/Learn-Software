@@ -7,7 +7,7 @@
 | **Category** | Overview note *(hub for this sub-section)* |
 | **Architectural Layer** | Cross-cutting |
 | **Sub-topics** | [Horizontal Scaling](Horizontal%20Scaling.md) · [Vertical Scaling](Vertical%20Scaling.md) · [Load Balancing](Load%20Balancing.md) · [Performance Engineering](Performance%20Engineering.md) · [Load Testing](Load%20Testing.md) |
-| **Related notes** | [High Availability](High%20Availability.md) · [Caching](../08%20-%20Databases%20and%20Data/Caching.md) · [Distributed Systems Fundamentals](../10%20-%20Distributed%20Systems/Distributed%20Systems%20Fundamentals.md) · [Cloud Fundamentals](../12%20-%20Cloud%20Architecture/Cloud%20Fundamentals.md) |
+| **Related notes** | [High Availability](High%20Availability.md) · [Cache](../08%20-%20Databases%20and%20Data/Cache.md) · [Microservices](../10%20-%20Distributed%20Systems/Microservices.md) · [Cloud Fundamentals](../12%20-%20Cloud%20Architecture/Cloud%20Fundamentals.md) |
 
 ---
 
@@ -182,7 +182,7 @@ one slow dependency = slow request    workers scale independently
 ## 10. Communication and Dependencies
 
 - **[Load Balancing](Load%20Balancing.md)** — required by any horizontal tier
-- **[Caching](../08%20-%20Databases%20and%20Data/Caching.md)** — the cheapest capacity you will ever add
+- **[Cache](../08%20-%20Databases%20and%20Data/Cache.md)** — the cheapest capacity you will ever add
 - **Shared state stores** — a cache and object storage, so the application can be stateless
 - **[Monitoring and Alerting](Monitoring%20and%20Alerting.md)** — you cannot scale what you cannot measure
 - **[Load Testing](Load%20Testing.md)** — the only way to know where the bottleneck actually is

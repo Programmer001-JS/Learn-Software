@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Case Study *(system design)* |
 | **Architectural Layer** | Whole-system |
-| **Related notes** | [Message Queues](../10%20-%20Distributed%20Systems/Message%20Queues.md) · [WebSockets](../04%20-%20Networking%20and%20Internet/WebSockets.md) · [Redis](../08%20-%20Databases%20and%20Data/Redis.md) · [Distributed Systems Fundamentals](../10%20-%20Distributed%20Systems/Distributed%20Systems%20Fundamentals.md) · [Database Sharding](../08%20-%20Databases%20and%20Data/Database%20Sharding.md) · [Idempotency](../07%20-%20Backend%20Design%20Patterns/Idempotency.md) |
+| **Related notes** | [Message Queues](../10%20-%20Distributed%20Systems/Message%20Queues.md) · [WebSockets](../04%20-%20Networking%20and%20Internet/WebSockets.md) · [Redis](../08%20-%20Databases%20and%20Data/Redis.md) · [Microservices](../10%20-%20Distributed%20Systems/Microservices.md) · [Database Optimization](../08%20-%20Databases%20and%20Data/Database%20Optimization.md) · [Design Patterns](../07%20-%20Backend%20Design%20Patterns/Design%20Patterns.md) |
 
 ---
 
@@ -203,7 +203,7 @@ plus a LEDGER: append-only, double-entry, reconciled against the provider
 ```
 
 > [!CAUTION]
-> **In any distributed system, "did the payment succeed?" is sometimes genuinely unanswerable at the moment you ask.** A timeout tells you nothing about whether the other side committed. Idempotency keys are what convert that ambiguity from a correctness bug into a retryable operation, and a ledger is what lets you prove afterwards what happened. See [Idempotency](../07%20-%20Backend%20Design%20Patterns/Idempotency.md).
+> **In any distributed system, "did the payment succeed?" is sometimes genuinely unanswerable at the moment you ask.** A timeout tells you nothing about whether the other side committed. Idempotency keys are what convert that ambiguity from a correctness bug into a retryable operation, and a ledger is what lets you prove afterwards what happened. See [Design Patterns](../07%20-%20Backend%20Design%20Patterns/Design%20Patterns.md).
 
 ---
 

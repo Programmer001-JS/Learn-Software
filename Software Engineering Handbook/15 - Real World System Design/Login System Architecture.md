@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Case Study *(system design)* |
 | **Architectural Layer** | Application / Security |
-| **Related notes** | [Authentication](../09%20-%20Security/Authentication.md) · [Authorization](../09%20-%20Security/Authorization.md) · [JWT](../09%20-%20Security/JWT.md) · [OAuth](../09%20-%20Security/OAuth.md) · [Password Hashing](../09%20-%20Security/Password%20Hashing.md) · [Redis](../08%20-%20Databases%20and%20Data/Redis.md) |
+| **Related notes** | [Authentication](../09%20-%20Security/Authentication.md) · [Authorization](../09%20-%20Security/Authorization.md) · [JWT](../09%20-%20Security/JWT.md) · [OAuth2](../09%20-%20Security/OAuth2.md) · [Password Hashing](../09%20-%20Security/Password%20Hashing.md) · [Redis](../08%20-%20Databases%20and%20Data/Redis.md) |
 
 ---
 
@@ -258,7 +258,7 @@ LOCKOUT IS A TRAP
 ## 12. Real World Example
 
 - **Google, GitHub, Microsoft** — passkeys plus opaque server-side sessions, with per-device session management visible to the user.
-- **Any application using "Sign in with Google"** — delegating both credential handling and MFA; see [OAuth](../09%20-%20Security/OAuth.md).
+- **Any application using "Sign in with Google"** — delegating both credential handling and MFA; see [OAuth2](../09%20-%20Security/OAuth2.md).
 - **Banking applications** — short access tokens, aggressive re-authentication for sensitive actions, full audit trails.
 - **Enterprise SSO** — SAML or OIDC against a corporate identity provider, with the application holding no credentials at all.
 - **Keycloak or Authentik**, self-hosted, where data residency rules out a SaaS provider.

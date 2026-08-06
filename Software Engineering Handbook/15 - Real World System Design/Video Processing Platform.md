@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Case Study *(system design)* |
 | **Architectural Layer** | Whole-system |
-| **Related notes** | [Netflix Architecture](Netflix%20Architecture.md) · [S3](../12%20-%20Cloud%20Architecture/S3.md) · [Message Queues](../10%20-%20Distributed%20Systems/Message%20Queues.md) · [Background Workers](../10%20-%20Distributed%20Systems/Background%20Workers.md) · [CDN](../04%20-%20Networking%20and%20Internet/CDN.md) · [EC2](../12%20-%20Cloud%20Architecture/EC2.md) |
+| **Related notes** | [Netflix Architecture](Netflix%20Architecture.md) · [S3](../12%20-%20Cloud%20Architecture/S3.md) · [Message Queues](../10%20-%20Distributed%20Systems/Message%20Queues.md) · [Background Workers](../10%20-%20Distributed%20Systems/Background%20Workers.md) · [Internet Fundamentals](../04%20-%20Networking%20and%20Internet/Internet%20Fundamentals.md) · [EC2](../12%20-%20Cloud%20Architecture/EC2.md) |
 
 ---
 

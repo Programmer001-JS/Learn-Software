@@ -117,7 +117,7 @@ Everything is a `PyObject`. `x = 1 + 2` does not add two machine integers — it
 ## 9. Communication
 
 - **Native extensions** through the C API — NumPy, psycopg, Pillow, PyTorch
-- **The [operating system](../02%20-%20Operating%20Systems.md)** via system calls
+- **The [operating system](../02%20-%20Computer%20Science%20Fundamentals/02%20-%20Operating%20Systems.md)** via system calls
 - **Other processes** through `multiprocessing`, queues, sockets
 - **Servers** — [Gunicorn](../06%20-%20Backend%20Architecture/Gunicorn.md) and [Uvicorn](../06%20-%20Backend%20Architecture/Uvicorn.md) run multiple CPython processes to work around the GIL
 

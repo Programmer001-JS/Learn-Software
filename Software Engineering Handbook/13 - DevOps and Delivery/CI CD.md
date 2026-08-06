@@ -7,7 +7,7 @@
 | **Category** | Overview note *(hub for this sub-section)* |
 | **Architectural Layer** | Delivery |
 | **Sub-topics** | [GitHub Actions](GitHub%20Actions.md) · [Deployment Strategies](Deployment%20Strategies.md) · [Docker](Docker.md) · [Terraform](Terraform.md) |
-| **Related notes** | [Git](Git.md) · [GitHub](GitHub.md) · [Testing](../01%20-%20Foundation/Testing.md) · [Monitoring and Alerting](../14%20-%20Scalability%20and%20Reliability/Monitoring%20and%20Alerting.md) |
+| **Related notes** | [Git](Git.md) · [GitHub](GitHub.md) · [Software Development Lifecycle](../01%20-%20Foundation/05%20-%20Software%20Development%20Lifecycle.md) · [Monitoring and Alerting](../14%20-%20Scalability%20and%20Reliability/Monitoring%20and%20Alerting.md) |
 
 ---
 

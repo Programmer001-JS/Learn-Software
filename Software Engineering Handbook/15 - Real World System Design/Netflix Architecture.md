@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Case Study *(system design)* |
 | **Architectural Layer** | Whole-system |
-| **Related notes** | [Video Processing Platform](Video%20Processing%20Platform.md) · [CDN](../04%20-%20Networking%20and%20Internet/CDN.md) · [Microservices](../06%20-%20Backend%20Architecture/Microservices.md) · [High Availability](../14%20-%20Scalability%20and%20Reliability/High%20Availability.md) · [Cloud Fundamentals](../12%20-%20Cloud%20Architecture/Cloud%20Fundamentals.md) · [Caching](../08%20-%20Databases%20and%20Data/Caching.md) |
+| **Related notes** | [Video Processing Platform](Video%20Processing%20Platform.md) · [Internet Fundamentals](../04%20-%20Networking%20and%20Internet/Internet%20Fundamentals.md) · [Microservices](../10%20-%20Distributed%20Systems/Microservices.md) · [High Availability](../14%20-%20Scalability%20and%20Reliability/High%20Availability.md) · [Cloud Fundamentals](../12%20-%20Cloud%20Architecture/Cloud%20Fundamentals.md) · [Cache](../08%20-%20Databases%20and%20Data/Cache.md) |
 
 ---
 
@@ -198,7 +198,7 @@ WHAT THEY COST
 ```
 
 > [!CAUTION]
-> **Netflix adopted microservices because it had thousands of engineers, and the tooling it built was necessary to make them survivable — not because microservices are inherently better.** Copying this architecture with twenty engineers imports every cost and none of the organisational benefit. The correct lesson from Netflix is the two-plane split, the fallback discipline, and the client-side adaptation — not the service count. See [Microservices](../06%20-%20Backend%20Architecture/Microservices.md).
+> **Netflix adopted microservices because it had thousands of engineers, and the tooling it built was necessary to make them survivable — not because microservices are inherently better.** Copying this architecture with twenty engineers imports every cost and none of the organisational benefit. The correct lesson from Netflix is the two-plane split, the fallback discipline, and the client-side adaptation — not the service count. See [Microservices](../10%20-%20Distributed%20Systems/Microservices.md).
 
 ---
 

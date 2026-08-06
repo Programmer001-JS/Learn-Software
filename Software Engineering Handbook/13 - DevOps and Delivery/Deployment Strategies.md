@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Concept / Practice |
 | **Architectural Layer** | Delivery |
-| **Related notes** | [CI CD](CI%20CD.md) · [Kubernetes](Kubernetes.md) · [Load Balancing](../14%20-%20Scalability%20and%20Reliability/Load%20Balancing.md) · [Monitoring and Alerting](../14%20-%20Scalability%20and%20Reliability/Monitoring%20and%20Alerting.md) · [High Availability](../14%20-%20Scalability%20and%20Reliability/High%20Availability.md) · [Database Migrations](../08%20-%20Databases%20and%20Data/Database%20Migrations.md) |
+| **Related notes** | [CI CD](CI%20CD.md) · [Kubernetes](Kubernetes.md) · [Load Balancing](../14%20-%20Scalability%20and%20Reliability/Load%20Balancing.md) · [Monitoring and Alerting](../14%20-%20Scalability%20and%20Reliability/Monitoring%20and%20Alerting.md) · [High Availability](../14%20-%20Scalability%20and%20Reliability/High%20Availability.md) · [Database Fundamentals](../08%20-%20Databases%20and%20Data/Database%20Fundamentals.md) |
 
 ---
 
@@ -170,7 +170,7 @@ EXPAND / MIGRATE / CONTRACT — across THREE releases
 ```
 
 > [!CAUTION]
-> **A destructive migration in the same release as the code that needs it makes rollback impossible, and it will be discovered during an incident.** Additive changes are always safe; removals must lag behind by at least one release. Also beware migrations that lock a large table — an `ALTER` that takes a lock for four minutes on a busy table is an outage regardless of your deployment strategy. See [Database Migrations](../08%20-%20Databases%20and%20Data/Database%20Migrations.md).
+> **A destructive migration in the same release as the code that needs it makes rollback impossible, and it will be discovered during an incident.** Additive changes are always safe; removals must lag behind by at least one release. Also beware migrations that lock a large table — an `ALTER` that takes a lock for four minutes on a busy table is an outage regardless of your deployment strategy. See [Database Fundamentals](../08%20-%20Databases%20and%20Data/Database%20Fundamentals.md).
 
 ---
 

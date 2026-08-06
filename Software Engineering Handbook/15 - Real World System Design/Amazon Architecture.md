@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Case Study *(system design)* |
 | **Architectural Layer** | Whole-system |
-| **Related notes** | [Microservices](../06%20-%20Backend%20Architecture/Microservices.md) · [Event Driven Architecture](../07%20-%20Backend%20Design%20Patterns/Event%20Driven%20Architecture.md) · [Eventual Consistency](../10%20-%20Distributed%20Systems/Eventual%20Consistency.md) · [Idempotency](../07%20-%20Backend%20Design%20Patterns/Idempotency.md) · [Caching](../08%20-%20Databases%20and%20Data/Caching.md) · [AWS Architecture](../12%20-%20Cloud%20Architecture/AWS%20Architecture.md) |
+| **Related notes** | [Microservices](../10%20-%20Distributed%20Systems/Microservices.md) · [Event Driven Architecture](../10%20-%20Distributed%20Systems/Event%20Driven%20Architecture.md) · [Transactions](../08%20-%20Databases%20and%20Data/Transactions.md) · [Design Patterns](../07%20-%20Backend%20Design%20Patterns/Design%20Patterns.md) · [Cache](../08%20-%20Databases%20and%20Data/Cache.md) · [AWS Architecture](../12%20-%20Cloud%20Architecture/AWS%20Architecture.md) |
 
 ---
 
@@ -204,7 +204,7 @@ CONSEQUENCE, made concrete
 ```
 
 > [!TIP]
-> **The Dynamo paper is worth reading for the reasoning, not the implementation.** It made the availability-versus-consistency trade explicit and product-driven: for a cart, accepting a write always is worth an occasional resurrected item; for a payment, it is not. DynamoDB is its managed descendant, and the general lesson survives — **pick the consistency model per dataset, based on what the business actually loses in each failure mode.** See [Eventual Consistency](../10%20-%20Distributed%20Systems/Eventual%20Consistency.md).
+> **The Dynamo paper is worth reading for the reasoning, not the implementation.** It made the availability-versus-consistency trade explicit and product-driven: for a cart, accepting a write always is worth an occasional resurrected item; for a payment, it is not. DynamoDB is its managed descendant, and the general lesson survives — **pick the consistency model per dataset, based on what the business actually loses in each failure mode.** See [Transactions](../08%20-%20Databases%20and%20Data/Transactions.md).
 
 ---
 

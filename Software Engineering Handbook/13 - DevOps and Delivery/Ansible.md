@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Configuration Management |
 | **Architectural Layer** | Infrastructure |
-| **Related notes** | [Terraform](Terraform.md) · [Docker](Docker.md) · [EC2](../12%20-%20Cloud%20Architecture/EC2.md) · [Linux](../02%20-%20Computer%20Science%20Fundamentals/Linux.md) · [CI CD](CI%20CD.md) |
+| **Related notes** | [Terraform](Terraform.md) · [Docker](Docker.md) · [EC2](../12%20-%20Cloud%20Architecture/EC2.md) · [Kernel](../02%20-%20Computer%20Science%20Fundamentals/Kernel.md) · [CI CD](CI%20CD.md) |
 
 ---
 

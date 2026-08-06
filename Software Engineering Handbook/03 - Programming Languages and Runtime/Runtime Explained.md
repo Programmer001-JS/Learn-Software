@@ -116,7 +116,7 @@ Sometimes PAUSES your program to do it       ← the part that shows up in laten
 ## 10. Communication
 
 - **Your code** above it
-- **The [operating system](../02%20-%20Operating%20Systems.md)** below it, via [system calls](../02%20-%20Computer%20Science%20Fundamentals/System%20Calls.md)
+- **The [operating system](../02%20-%20Computer%20Science%20Fundamentals/02%20-%20Operating%20Systems.md)** below it, via [system calls](../02%20-%20Computer%20Science%20Fundamentals/System%20Calls.md)
 - **Native libraries** through a foreign function interface
 - **Its own background threads** — GC, JIT compilation, timers
 

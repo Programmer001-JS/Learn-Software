@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Concept / Practice |
 | **Architectural Layer** | Security |
-| **Related notes** | [IAM](IAM.md) · [VPC](VPC.md) · [Cloud Fundamentals](Cloud%20Fundamentals.md) · [Secrets Management](../09%20-%20Security/Secrets%20Management.md) · [Security Fundamentals](../09%20-%20Security/Security%20Fundamentals.md) · [Encryption](../09%20-%20Security/Encryption.md) |
+| **Related notes** | [IAM](IAM.md) · [VPC](VPC.md) · [Cloud Fundamentals](Cloud%20Fundamentals.md) · [Secrets Management](../09%20-%20Security/Secrets%20Management.md) · [Secure Coding](../09%20-%20Security/Secure%20Coding.md) · [TLS SSL](../04%20-%20Networking%20and%20Internet/TLS%20SSL.md) |
 
 ---
 

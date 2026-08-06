@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Containerisation |
 | **Architectural Layer** | Infrastructure |
-| **Related notes** | [Docker Compose](Docker%20Compose.md) · [Kubernetes](Kubernetes.md) · [CI CD](CI%20CD.md) · [Process](../02%20-%20Computer%20Science%20Fundamentals/Process.md) · [Linux](../02%20-%20Computer%20Science%20Fundamentals/Linux.md) · [EC2](../12%20-%20Cloud%20Architecture/EC2.md) |
+| **Related notes** | [Docker Compose](Docker%20Compose.md) · [Kubernetes](Kubernetes.md) · [CI CD](CI%20CD.md) · [Process](../02%20-%20Computer%20Science%20Fundamentals/Process.md) · [Kernel](../02%20-%20Computer%20Science%20Fundamentals/Kernel.md) · [EC2](../12%20-%20Cloud%20Architecture/EC2.md) |
 
 ---
 

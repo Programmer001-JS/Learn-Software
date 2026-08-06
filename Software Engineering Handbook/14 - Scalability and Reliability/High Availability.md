@@ -6,7 +6,7 @@
 |---|---|
 | **Category** | Concept / Practice |
 | **Architectural Layer** | Cross-cutting |
-| **Related notes** | [Disaster Recovery](Disaster%20Recovery.md) · [Load Balancing](Load%20Balancing.md) · [Horizontal Scaling](Horizontal%20Scaling.md) · [Monitoring and Alerting](Monitoring%20and%20Alerting.md) · [Cloud Fundamentals](../12%20-%20Cloud%20Architecture/Cloud%20Fundamentals.md) · [Distributed Systems Fundamentals](../10%20-%20Distributed%20Systems/Distributed%20Systems%20Fundamentals.md) |
+| **Related notes** | [Disaster Recovery](Disaster%20Recovery.md) · [Load Balancing](Load%20Balancing.md) · [Horizontal Scaling](Horizontal%20Scaling.md) · [Monitoring and Alerting](Monitoring%20and%20Alerting.md) · [Cloud Fundamentals](../12%20-%20Cloud%20Architecture/Cloud%20Fundamentals.md) · [Microservices](../10%20-%20Distributed%20Systems/Microservices.md) |
 
 ---
 

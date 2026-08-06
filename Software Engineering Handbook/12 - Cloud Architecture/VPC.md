@@ -7,7 +7,7 @@
 | **Full name** | Amazon Virtual Private Cloud |
 | **Category** | Cloud Networking |
 | **Architectural Layer** | Infrastructure |
-| **Related notes** | [AWS Architecture](AWS%20Architecture.md) · [EC2](EC2.md) · [RDS](RDS.md) · [Cloud Security](Cloud%20Security.md) · [IP Addressing](../04%20-%20Networking%20and%20Internet/IP%20Addressing.md) · [Firewalls](../09%20-%20Security/Firewalls.md) |
+| **Related notes** | [AWS Architecture](AWS%20Architecture.md) · [EC2](EC2.md) · [RDS](RDS.md) · [Cloud Security](Cloud%20Security.md) · [IP Addresses](../04%20-%20Networking%20and%20Internet/IP%20Addresses.md) · [TCP IP](../04%20-%20Networking%20and%20Internet/TCP%20IP.md) |
 
 ---
 
