@@ -6,6 +6,7 @@
 |---|---|
 | **Category** | Map *(the whole handbook on one page)* |
 | **Read it** | Before the handbook, to see the shape. Again after, to connect it. |
+| **For the wall** | **[The Complete System Map — Poster](The%20Complete%20System%20Map%20-%20Poster.md)** — the same journey drawn wide, landscape, built to print |
 | **Related notes** | [How To Use This Handbook](How%20To%20Use%20This%20Handbook.md) · [README](README.md) · [Architect Mindset](Architect%20Mindset.md) · [Diagrams](../17%20-%20Personal%20Knowledge%20Base/Diagrams.md) |
 
 ---

@@ -58,8 +58,15 @@ If the table above tells you WHAT is in the handbook,
 the map tells you WHERE each thing sits, and what is waiting for whom.
 ```
 
+It comes in two formats, for two different jobs:
+
+| | For | Shape |
+|---|---|---|
+| **[The Complete System Map](The%20Complete%20System%20Map.md)** | Looking things up | Vertical, station by station, every concept linked |
+| **[The same map, as a Poster](The%20Complete%20System%20Map%20-%20Poster.md)** | The wall | Wide landscape, five posters, built to print on A3 |
+
 > [!TIP]
-> Read the map's first diagram before anything else, and again after every few notes. It is the difference between 204 separate facts and one system.
+> Read the poster's first diagram before anything else, and again after every few notes. It is the difference between 204 separate facts and one system.
 
 ---
 
