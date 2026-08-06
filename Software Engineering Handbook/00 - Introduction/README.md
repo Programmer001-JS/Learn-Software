@@ -49,6 +49,20 @@ It is also not a tutorial. You will not find installation steps or API reference
 
 ---
 
+## The one page to read first
+
+**[The Complete System Map](The%20Complete%20System%20Map.md)** — the whole handbook as a single journey: from a user's click to the product in their hands, in 24 stations. Each station says what happens there, which concepts live there, and what can go wrong. It contains no definitions — every definition is one click away.
+
+```text
+If the table above tells you WHAT is in the handbook,
+the map tells you WHERE each thing sits, and what is waiting for whom.
+```
+
+> [!TIP]
+> Read the map's first diagram before anything else, and again after every few notes. It is the difference between 204 separate facts and one system.
+
+---
+
 ## The 26 questions
 
 Every technology note answers the same list. You can find the full template in **[Universal Technology Learning Template](../16%20-%20Templates/Universal%20Technology%20Learning%20Template.md)**, but the short version is:
@@ -65,10 +79,11 @@ If you can answer those six, you understand the technology well enough to make a
 
 ## Start here
 
-1. **[How To Use This Handbook](How%20To%20Use%20This%20Handbook.md)** — the workflow
-2. **[Learning Philosophy](Learning%20Philosophy.md)** — why it is built this way
-3. **[Architect Mindset](Architect%20Mindset.md)** — the shift from coder to architect
-4. **[01 - Foundation](../01%20-%20Foundation/01%20-%20What%20Is%20Software%20Architecture.md)** — the first real lesson
+1. **[The Complete System Map](The%20Complete%20System%20Map.md)** — the whole picture, in one file
+2. **[How To Use This Handbook](How%20To%20Use%20This%20Handbook.md)** — the workflow
+3. **[Learning Philosophy](Learning%20Philosophy.md)** — why it is built this way
+4. **[Architect Mindset](Architect%20Mindset.md)** — the shift from coder to architect
+5. **[01 - Foundation](../01%20-%20Foundation/01%20-%20What%20Is%20Software%20Architecture.md)** — the first real lesson
 
 > [!IMPORTANT]
 > Do not read this handbook front to back like a novel. Read Foundation, then jump to whatever you are actually working on. The map is there so you never get lost — not so you walk every road.

@@ -10,6 +10,7 @@ The handbook contains several kinds of notes, and they are read differently.
 
 | Type | Folders | How to read it |
 |---|---|---|
+| **The map** | 00 | [The Complete System Map](The%20Complete%20System%20Map.md) — read its first diagram now, and return to it constantly. |
 | **Concept essays** | 00, 01 | Read once, slowly. These change *how you think*, not *what you know*. |
 | **Technology notes** | 02 – 14 | Reference. Read on demand, answer the 26 questions, do the exercise. |
 | **Case studies** | 15 | Read after you know the components. They connect everything together. |
@@ -90,6 +91,9 @@ You can answer these four questions without looking:
 Notes link to each other with relative Markdown links, so they work both on GitHub and in Obsidian. When you notice that two notes connect, **add the link yourself.**
 
 The value of this handbook grows with the number of **connections**, not the number of files.
+
+> [!TIP]
+> When you cannot see how a note connects to anything, open [The Complete System Map](The%20Complete%20System%20Map.md) and find which station it belongs to. That is what the map is for.
 
 ---
 
