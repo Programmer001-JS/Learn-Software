@@ -1,0 +1,634 @@
+<title>The Request Line — A Transit Map of One Web Request</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4;
+    --band:#F1F0EC;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C;
+      --band:#161C1E;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C;
+    --band:#161C1E;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4;
+    --band:#F1F0EC;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:0;
+    background:var(--paper); color:var(--ink);
+    font-family:var(--serif); font-size:15px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet{max-width:1500px; margin:0 auto; padding:40px 28px 72px; display:flex; flex-direction:column; gap:52px}
+
+  /* ---------- masthead ---------- */
+  .cartouche{display:flex; flex-direction:column; gap:14px; border-top:3px solid var(--ink); padding-top:20px}
+  .eyebrow{
+    font-family:var(--sans); font-size:11px; font-weight:700; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--line);
+  }
+  h1{
+    font-family:var(--sans); font-weight:700; font-size:clamp(30px,5vw,58px);
+    letter-spacing:-.022em; line-height:.98; margin:0; text-wrap:balance;
+  }
+  h1 em{font-style:normal; color:var(--line)}
+  .standfirst{max-width:62ch; font-size:17px; color:var(--ink); margin:0}
+  .standfirst strong{font-weight:400; box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+  .meta{
+    display:flex; flex-wrap:wrap; gap:6px 26px; font-family:var(--mono); font-size:11.5px;
+    color:var(--mute); border-top:1px solid var(--rule); padding-top:12px;
+  }
+  .meta b{color:var(--ink); font-weight:400}
+
+  /* ---------- sections ---------- */
+  section{display:flex; flex-direction:column; gap:16px}
+  h2{
+    font-family:var(--sans); font-size:13px; font-weight:700; letter-spacing:.18em;
+    text-transform:uppercase; margin:0; padding-bottom:9px;
+    border-bottom:1px solid var(--ink); display:flex; gap:14px; align-items:baseline;
+  }
+  h2 span{font-family:var(--mono); font-weight:400; color:var(--line); letter-spacing:.06em}
+  h2 i{font-style:normal; margin-left:auto; font-weight:400; letter-spacing:.04em; color:var(--mute); text-transform:none; font-family:var(--serif); font-size:13.5px}
+  .lede{max-width:78ch; margin:0; color:var(--ink)}
+
+  figure{margin:0; display:flex; flex-direction:column; gap:12px}
+  .scroll{overflow-x:auto; overflow-y:hidden; padding-bottom:4px}
+  svg{display:block; width:100%; min-width:900px; height:auto}
+  figcaption{font-size:13.5px; color:var(--mute); max-width:84ch}
+  figcaption b{color:var(--ink); font-weight:400}
+
+  /* ---------- svg type ---------- */
+  .s-name{font-family:var(--sans); font-size:13px; font-weight:700; letter-spacing:-.005em; fill:var(--ink)}
+  .s-sub {font-family:var(--sans); font-size:11px; font-weight:400; fill:var(--mute)}
+  .s-num {font-family:var(--mono); font-size:10.5px; fill:var(--mute); font-variant-numeric:tabular-nums}
+  .s-zone{font-family:var(--sans); font-size:11px; font-weight:700; letter-spacing:.19em; text-transform:uppercase}
+  .s-note{font-family:var(--sans); font-size:11.5px; font-weight:700; letter-spacing:.03em; fill:var(--fast)}
+  .s-haz {font-family:var(--sans); font-size:11.5px; font-weight:700; fill:var(--hazard)}
+  .s-lab {font-family:var(--sans); font-size:12px; font-weight:700; fill:var(--ink)}
+
+  /* ---------- key ---------- */
+  .key{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); gap:0;
+    border:1px solid var(--rule); border-bottom:0;
+  }
+  .key > div{border-bottom:1px solid var(--rule); border-right:1px solid var(--rule); padding:14px 16px; display:flex; gap:13px; align-items:flex-start}
+  .key svg{width:34px; min-width:34px; flex:0 0 34px; margin-top:2px}
+  .key h3{font-family:var(--sans); font-size:11px; letter-spacing:.14em; text-transform:uppercase; margin:0 0 4px; font-weight:700}
+  .key p{margin:0; font-size:13px; color:var(--mute); line-height:1.45}
+
+  /* ---------- floor ---------- */
+  .floor{background:var(--band); border-top:2px solid var(--ink); border-bottom:1px solid var(--rule); padding:20px 22px; display:flex; flex-direction:column; gap:9px}
+  .floor h3{font-family:var(--sans); font-size:12px; letter-spacing:.16em; text-transform:uppercase; margin:0; font-weight:700}
+  .floor p{margin:0; max-width:88ch}
+  .floor code{font-family:var(--mono); font-size:12px; color:var(--line)}
+
+  /* ---------- hazard board ---------- */
+  .board{width:100%; border-collapse:collapse; font-size:13.5px}
+  .board caption{text-align:left; font-family:var(--sans); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--mute); padding-bottom:10px}
+  .board th{
+    font-family:var(--sans); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+    text-align:left; padding:0 12px 8px; border-bottom:1.5px solid var(--ink); font-weight:700; color:var(--mute);
+  }
+  .board td{padding:9px 12px; border-bottom:1px solid var(--rule); vertical-align:top}
+  .board td:first-child{font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--mute); width:3.4em; white-space:nowrap}
+  .board td:nth-child(2){font-family:var(--sans); font-weight:700; font-size:12.5px; width:10.5em}
+  .board tr.crit td{background:color-mix(in srgb,var(--hazard) 7%,transparent)}
+  .board tr.crit td:first-child{box-shadow:inset 4px 0 0 var(--hazard); color:var(--hazard)}
+  .board tr.crit td:nth-child(3){color:var(--ink)}
+  .board tr.crit strong{color:var(--hazard); font-weight:700; font-family:var(--sans); font-size:12.5px}
+  .board td em{font-style:normal; font-family:var(--mono); font-size:12px; color:var(--mute)}
+
+  .five{border:2px solid var(--hazard); padding:20px 22px; display:flex; flex-direction:column; gap:12px}
+  .five h3{font-family:var(--sans); font-size:12px; letter-spacing:.14em; text-transform:uppercase; margin:0; color:var(--hazard); font-weight:700}
+  .five ol{margin:0; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:9px; counter-reset:f}
+  .five li{display:flex; gap:14px; align-items:baseline}
+  .five li::before{
+    counter-increment:f; content:counter(f); font-family:var(--mono); font-size:11px; color:var(--paper);
+    background:var(--hazard); width:19px; height:19px; min-width:19px; display:flex; align-items:center;
+    justify-content:center; border-radius:50%; font-weight:700;
+  }
+  .five b{font-family:var(--sans); font-size:13px}
+  .five span{color:var(--mute)}
+
+  /* ---------- colophon ---------- */
+  .colophon{border-top:3px solid var(--ink); padding-top:22px; display:flex; flex-direction:column; gap:16px}
+  .six{margin:0; padding-left:0; list-style:none; counter-reset:c; display:grid; grid-template-columns:repeat(auto-fit,minmax(310px,1fr)); gap:16px 34px}
+  .six li{display:flex; gap:13px; align-items:baseline; max-width:56ch}
+  .six li::before{
+    counter-increment:c; content:counter(c); font-family:var(--mono); font-size:11px; color:var(--line);
+    border:1px solid var(--line); width:20px; height:20px; min-width:20px; display:flex;
+    align-items:center; justify-content:center;
+  }
+  .credit{font-family:var(--mono); font-size:11.5px; color:var(--mute); display:flex; flex-wrap:wrap; gap:4px 24px; border-top:1px solid var(--rule); padding-top:14px}
+
+  a{color:var(--line); text-decoration:none; border-bottom:1px solid color-mix(in srgb,var(--line) 40%,transparent)}
+  a:focus-visible{outline:2px solid var(--fast); outline-offset:3px}
+
+  @media (max-width:720px){
+    .sheet{padding:26px 16px 48px; gap:40px}
+    h2 i{display:none}
+  }
+
+  /* ---------- print: A2 landscape ---------- */
+  @page{size:A2 landscape; margin:12mm}
+  @media print{
+    :root{
+      --paper:#fff; --ink:#111; --mute:#555; --rule:#c8c8c8;
+      --line:#0B6E6E; --fast:#8F6212; --hazard:#8E1F20;
+      --z1:#E2EDEE; --z2:#E9EDEE; --z3:#EFEDE9; --z4:#F4EBE2; --z5:#F8E7D8; --band:#F2F1ED;
+    }
+    body{-webkit-print-color-adjust:exact; print-color-adjust:exact; font-size:10pt}
+    .sheet{max-width:none; padding:0; gap:26px}
+    .scroll{overflow:visible}
+    svg{min-width:0}
+    figure,section,.five,.floor,tr{break-inside:avoid}
+    h2{break-after:avoid}
+    .credit{display:none}
+  }
+</style>
+
+<div class="sheet">
+
+  <!-- ============ MASTHEAD ============ -->
+  <header class="cartouche">
+    <p class="eyebrow">Software Engineering Handbook · the whole thing on one sheet</p>
+    <h1>The Request <em>Line</em></h1>
+    <p class="standfirst">One click, one route, twenty-four stops. Every station says what happens there and what is waiting for you. <strong>Two stations let the journey end early — and almost all performance work is the effort to end it at one of them.</strong></p>
+    <div class="meta">
+      <span><b>Sheet</b> A2 landscape</span>
+      <span><b>Outbound</b> 19 stops</span>
+      <span><b>Return</b> 3 stops</span>
+      <span><b>Interchanges</b> 2</span>
+      <span><b>Branch lines</b> 1</span>
+      <span><b>Detail &amp; links</b> The Complete System Map.md</span>
+    </div>
+  </header>
+
+  <!-- ============ FIGURE 1 — THE LINE ============ -->
+  <section>
+    <h2><span>Fig. 1</span> The line<i>outbound left to right, return below, one continuous route</i></h2>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 170 1640 466" role="img"
+             aria-label="A transit map of one web request. Nineteen numbered outbound stations run left to right through five zones: their device, the network, your cloud, your application, your data. Station 6 (CDN edge) and station 17 (cache) are interchanges with dashed shortcut branches dropping straight to the return line, skipping every station between. Station 16 (business logic) has a branch line to asynchronous work. The line terminates at station 19, the database, then loops back along a return line right to left through stations 22, 23 and 24 to the product.">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/>
+            </marker>
+            <marker id="ahf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/>
+            </marker>
+          </defs>
+
+          <!-- fare zones -->
+          <rect x="34"   y="186" width="323" height="228" fill="var(--z1)"/>
+          <rect x="357"  y="186" width="164" height="228" fill="var(--z2)"/>
+          <rect x="521"  y="186" width="246" height="228" fill="var(--z3)"/>
+          <rect x="767"  y="186" width="574" height="228" fill="var(--z4)"/>
+          <rect x="1341" y="186" width="255" height="228" fill="var(--z5)"/>
+          <g class="s-zone" fill="var(--mute)">
+            <text x="46"   y="206">Their device</text>
+            <text x="369"  y="206">The network</text>
+            <text x="533"  y="206">Your cloud</text>
+            <text x="779"  y="206">Your application</text>
+            <text x="1353" y="206">Your data</text>
+          </g>
+          <g stroke="var(--rule)" stroke-width="1">
+            <line x1="357" y1="186" x2="357" y2="414"/>
+            <line x1="521" y1="186" x2="521" y2="414"/>
+            <line x1="767" y1="186" x2="767" y2="414"/>
+            <line x1="1341" y1="186" x2="1341" y2="414"/>
+          </g>
+
+          <!-- ===== the outbound line ===== -->
+          <line x1="70" y1="300" x2="1546" y2="300" stroke="var(--line)" stroke-width="7"/>
+          <!-- loop round to the return line -->
+          <path d="M1546,300 C1600,300 1600,545 1546,545" fill="none" stroke="var(--line)" stroke-width="7"/>
+          <!-- the return line -->
+          <line x1="1546" y1="545" x2="82" y2="545" stroke="var(--line)" stroke-width="7" marker-end="url(#ah)"/>
+
+          <!-- terminus bars -->
+          <line x1="70" y1="283" x2="70" y2="317" stroke="var(--line)" stroke-width="7"/>
+          <line x1="1546" y1="283" x2="1546" y2="317" stroke="var(--line)" stroke-width="7"/>
+
+          <!-- ===== shortcut branch 1 — station 06 ===== -->
+          <path d="M480,307 L480,545" fill="none" stroke="var(--fast)" stroke-width="3.5"
+                stroke-dasharray="9 7" marker-end="url(#ahf)"/>
+          <circle cx="480" cy="452" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+          <text x="480" y="456" text-anchor="middle" class="s-note" font-size="12">1</text>
+          <text x="497" y="440" class="s-note">cached at the edge</text>
+          <text x="497" y="454" class="s-sub" fill="var(--fast)">nothing to the right ever runs</text>
+
+          <!-- ===== shortcut branch 2 — station 17 ===== -->
+          <path d="M1382,307 L1382,545" fill="none" stroke="var(--fast)" stroke-width="3.5"
+                stroke-dasharray="9 7" marker-end="url(#ahf)"/>
+          <circle cx="1382" cy="452" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+          <text x="1382" y="456" text-anchor="middle" class="s-note" font-size="12">2</text>
+          <text x="1365" y="440" text-anchor="end" class="s-note">already in the cache</text>
+          <text x="1365" y="454" text-anchor="end" class="s-sub" fill="var(--fast)">the database is never touched</text>
+
+          <!-- ===== branch line to asynchronous work — station 16 ===== -->
+          <path d="M1300,307 L1300,496" fill="none" stroke="var(--line)" stroke-width="4"/>
+          <rect x="1288" y="490" width="24" height="12" fill="var(--paper)" stroke="var(--line)" stroke-width="3"/>
+          <text x="1274" y="490" text-anchor="end" class="s-lab">21 · branch line to the async continent</text>
+          <text x="1274" y="504" text-anchor="end" class="s-sub">the response does not wait — see fig. 2</text>
+
+          <!-- ===== outbound stations ===== -->
+          <!-- ordinary stops: tick through the line -->
+          <g stroke="var(--paper)" stroke-width="3.5">
+            <line x1="152"  y1="288" x2="152"  y2="312"/>
+            <line x1="234"  y1="288" x2="234"  y2="312"/>
+            <line x1="316"  y1="288" x2="316"  y2="312"/>
+            <line x1="398"  y1="288" x2="398"  y2="312"/>
+            <line x1="562"  y1="288" x2="562"  y2="312"/>
+            <line x1="644"  y1="288" x2="644"  y2="312"/>
+            <line x1="726"  y1="288" x2="726"  y2="312"/>
+            <line x1="808"  y1="288" x2="808"  y2="312"/>
+            <line x1="890"  y1="288" x2="890"  y2="312"/>
+            <line x1="972"  y1="288" x2="972"  y2="312"/>
+            <line x1="1054" y1="288" x2="1054" y2="312"/>
+            <line x1="1136" y1="288" x2="1136" y2="312"/>
+            <line x1="1218" y1="288" x2="1218" y2="312"/>
+            <line x1="1464" y1="288" x2="1464" y2="312"/>
+          </g>
+          <!-- junction (16): solid disc -->
+          <circle cx="1300" cy="300" r="9" fill="var(--line)" stroke="var(--paper)" stroke-width="3"/>
+          <!-- interchanges (06, 17): double ring -->
+          <circle cx="480"  cy="300" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="5"/>
+          <circle cx="1382" cy="300" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="5"/>
+
+          <!-- labels above -->
+          <g text-anchor="middle">
+            <text x="70"   y="272" class="s-num">01</text><text x="70"   y="256" class="s-name">the click</text><text x="70"   y="241" class="s-sub">JS runs</text>
+            <text x="234"  y="272" class="s-num">03</text><text x="234"  y="256" class="s-name">TCP + TLS</text><text x="234"  y="241" class="s-sub">handshake</text>
+            <text x="398"  y="272" class="s-num">05</text><text x="398"  y="256" class="s-name">ISP</text><text x="398"  y="241" class="s-sub">physics</text>
+            <text x="480"  y="272" class="s-num" fill="var(--fast)">06</text><text x="480" y="256" class="s-name" fill="var(--fast)">CDN edge</text><text x="480" y="241" class="s-sub" fill="var(--fast)">interchange</text>
+            <text x="562"  y="272" class="s-num">07</text><text x="562"  y="256" class="s-name">VPC</text><text x="562"  y="241" class="s-sub">route table</text>
+            <text x="726"  y="272" class="s-num">09</text><text x="726"  y="256" class="s-name">proxy</text><text x="726"  y="241" class="s-sub">nginx</text>
+            <text x="890"  y="272" class="s-num">11</text><text x="890"  y="256" class="s-name">middleware</text><text x="890"  y="241" class="s-sub">the chain</text>
+            <text x="1054" y="272" class="s-num">13</text><text x="1054" y="256" class="s-name">authN</text><text x="1054" y="241" class="s-sub">who are you?</text>
+            <text x="1218" y="272" class="s-num">15</text><text x="1218" y="256" class="s-name">validation</text><text x="1218" y="241" class="s-sub" fill="var(--hazard)">untrusted</text>
+            <text x="1300" y="272" class="s-num">16</text><text x="1300" y="256" class="s-name">logic</text><text x="1300" y="241" class="s-sub">your product</text>
+            <text x="1382" y="272" class="s-num" fill="var(--fast)">17</text><text x="1382" y="256" class="s-name" fill="var(--fast)">cache</text><text x="1382" y="241" class="s-sub" fill="var(--fast)">interchange</text>
+            <text x="1546" y="272" class="s-num">19</text><text x="1546" y="256" class="s-name">database</text><text x="1546" y="241" class="s-sub">the truth</text>
+          </g>
+          <!-- labels below -->
+          <g text-anchor="middle">
+            <text x="152"  y="330" class="s-num">02</text><text x="152"  y="347" class="s-name">DNS</text><text x="152"  y="362" class="s-sub">name → address</text>
+            <text x="316"  y="330" class="s-num">04</text><text x="316"  y="347" class="s-name">HTTP</text><text x="316"  y="362" class="s-sub">request built</text>
+            <text x="644"  y="330" class="s-num">08</text><text x="644"  y="347" class="s-name">load balancer</text><text x="644"  y="362" class="s-sub">which one is healthy?</text>
+            <text x="808"  y="330" class="s-num">10</text><text x="808"  y="347" class="s-name">runtime</text><text x="808"  y="362" class="s-sub">process, thread</text>
+            <text x="972"  y="330" class="s-num">12</text><text x="972"  y="347" class="s-name">routing</text><text x="972"  y="362" class="s-sub">controller</text>
+            <text x="1136" y="330" class="s-num">14</text><text x="1136" y="347" class="s-name">authZ</text><text x="1136" y="362" class="s-sub">may you?</text>
+            <text x="1464" y="330" class="s-num">18</text><text x="1464" y="347" class="s-name">ORM</text><text x="1464" y="362" class="s-sub">objects → SQL</text>
+          </g>
+
+          <!-- ===== return stations ===== -->
+          <g stroke="var(--paper)" stroke-width="3.5">
+            <line x1="1136" y1="533" x2="1136" y2="557"/>
+            <line x1="644"  y1="533" x2="644"  y2="557"/>
+          </g>
+          <line x1="70" y1="528" x2="70" y2="562" stroke="var(--line)" stroke-width="7"/>
+          <g text-anchor="middle">
+            <text x="1136" y="575" class="s-num">22</text><text x="1136" y="592" class="s-name">serialise</text><text x="1136" y="607" class="s-sub">JSON · status code</text>
+            <text x="644"  y="575" class="s-num">23</text><text x="644"  y="592" class="s-name">back out</text><text x="644"  y="607" class="s-sub" fill="var(--hazard)">egress is metered per GB</text>
+            <text x="70"   y="575" class="s-num">24</text><text x="70"   y="592" class="s-name">render</text><text x="70"   y="607" class="s-sub">the product</text>
+          </g>
+          <text x="1440" y="575" text-anchor="middle" class="s-sub">the response turns around at 19</text>
+          <text x="180" y="592" class="s-haz">← the user’s clock is still running here</text>
+        </svg>
+      </div>
+      <figcaption><b>The two dashed ochre branches are the whole poster.</b> A request that finds its answer at station 06 or station 17 drops straight to the return line and every station between is never executed — no proxy, no runtime, no authorisation, no database. The zones warm from left to right because that is also the direction of cost.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ KEY ============ -->
+  <section>
+    <h2><span>Key</span> How to read the line<i>five symbols, and each one means something</i></h2>
+    <div class="key">
+      <div>
+        <svg viewBox="0 0 34 34" role="img" aria-label="A tick across the line"><line x1="0" y1="17" x2="34" y2="17" stroke="var(--line)" stroke-width="6"/><line x1="17" y1="7" x2="17" y2="27" stroke="var(--paper)" stroke-width="3"/></svg>
+        <div><h3>Stop</h3><p>The request passes through and something happens to it. It cannot be skipped.</p></div>
+      </div>
+      <div>
+        <svg viewBox="0 0 34 34" role="img" aria-label="A double ring on the line"><line x1="0" y1="17" x2="34" y2="17" stroke="var(--line)" stroke-width="6"/><circle cx="17" cy="17" r="11" fill="var(--paper)" stroke="var(--fast)" stroke-width="4.5"/></svg>
+        <div><h3>Interchange</h3><p>A cache. The journey may end here and return immediately — stations 06 and 17.</p></div>
+      </div>
+      <div>
+        <svg viewBox="0 0 34 34" role="img" aria-label="A dashed line descending"><line x1="17" y1="0" x2="17" y2="34" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="6 5"/></svg>
+        <div><h3>Shortcut</h3><p>A cache hit dropping straight to the return line. Free, fast, and where all the wins are.</p></div>
+      </div>
+      <div>
+        <svg viewBox="0 0 34 34" role="img" aria-label="A solid disc on the line with a branch"><line x1="0" y1="17" x2="34" y2="17" stroke="var(--line)" stroke-width="6"/><circle cx="17" cy="17" r="7.5" fill="var(--line)" stroke="var(--paper)" stroke-width="2.5"/></svg>
+        <div><h3>Junction</h3><p>Work leaves the line here and finishes later, on the branch line — station 16.</p></div>
+      </div>
+      <div>
+        <svg viewBox="0 0 34 34" role="img" aria-label="A terminus bar across the line"><line x1="0" y1="17" x2="30" y2="17" stroke="var(--line)" stroke-width="6"/><line x1="28" y1="4" x2="28" y2="30" stroke="var(--line)" stroke-width="6"/></svg>
+        <div><h3>Terminus</h3><p>The end of a leg: the click (01), the database (19), the product (24).</p></div>
+      </div>
+      <div>
+        <svg viewBox="0 0 34 34" role="img" aria-label="Two tinted zone bands"><rect x="0" y="4" width="17" height="26" fill="var(--z2)"/><rect x="17" y="4" width="17" height="26" fill="var(--z5)"/></svg>
+        <div><h3>Zone</h3><p>Who owns this ground. Cooler is further from you; warmer is more yours, and costs more.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE FLOOR ============ -->
+  <section>
+    <div class="floor">
+      <h3>Beneath every station — the floor</h3>
+      <p><code>CPU · RAM · SSD · kernel · syscalls · scheduler · context switching · memory management · file systems</code></p>
+      <p>This is not a station; it is the ground all twenty-four stand on, and it is why the advice above is true rather than arbitrary. Caching works because memory is about a hundred times faster than disk. An event loop stalls because of how the scheduler hands out time. A container starts in milliseconds because it shares a kernel instead of booting one. You can build a system without this layer. You cannot debug the strange ones.</p>
+    </div>
+  </section>
+
+  <!-- ============ FIGURE 2 — THE ASYNC BRANCH ============ -->
+  <section>
+    <h2><span>Fig. 2</span> The branch line<i>where work goes when it is too slow for a request</i></h2>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 1400 460" role="img"
+             aria-label="The asynchronous branch line. From station 16 a message enters a queue, whose two alarms are depth and oldest message age. Workers, which must be idempotent, fan out to five kinds of job: notify, media, AI, documents and integration. A dashed siding carries messages that failed three times to a dead letter queue, then an alarm, then a human.">
+          <defs>
+            <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/>
+            </marker>
+            <marker id="ah2h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/>
+            </marker>
+          </defs>
+
+          <!-- entry -->
+          <line x1="40" y1="190" x2="196" y2="190" stroke="var(--line)" stroke-width="7" marker-end="url(#ah2)"/>
+          <text x="40" y="172" class="s-num">from 16</text>
+          <text x="40" y="215" class="s-sub">the user already has their answer</text>
+
+          <!-- queue -->
+          <circle cx="220" cy="190" r="15" fill="var(--paper)" stroke="var(--line)" stroke-width="5.5"/>
+          <text x="220" y="146" text-anchor="middle" class="s-name">queue</text>
+          <text x="220" y="252" text-anchor="middle" class="s-sub">alarm on depth</text>
+          <text x="220" y="266" text-anchor="middle" class="s-sub">and oldest age</text>
+          <text x="220" y="280" text-anchor="middle" class="s-sub" fill="var(--hazard)">never on CPU</text>
+
+          <!-- queue to workers -->
+          <line x1="235" y1="190" x2="425" y2="190" stroke="var(--line)" stroke-width="7"/>
+
+          <!-- workers -->
+          <circle cx="440" cy="190" r="15" fill="var(--line)" stroke="var(--paper)" stroke-width="4"/>
+          <text x="440" y="146" text-anchor="middle" class="s-name">workers</text>
+          <text x="440" y="252" text-anchor="middle" class="s-sub">scale on depth</text>
+          <text x="440" y="266" text-anchor="middle" class="s-sub">scale to zero</text>
+          <text x="440" y="280" text-anchor="middle" class="s-sub">spot capacity</text>
+          <text x="440" y="304" text-anchor="middle" class="s-haz">must be idempotent</text>
+          <text x="440" y="320" text-anchor="middle" class="s-sub" fill="var(--hazard)">the same message will arrive twice</text>
+
+          <!-- fan out -->
+          <g fill="none" stroke="var(--line)" stroke-width="4.5">
+            <path d="M455,190 C560,190 570,58  680,58"/>
+            <path d="M455,190 C560,190 570,124 680,124"/>
+            <path d="M455,190 L680,190"/>
+            <path d="M455,190 C560,190 570,256 680,256"/>
+            <path d="M455,190 C560,190 570,322 680,322"/>
+          </g>
+          <g fill="var(--line)">
+            <rect x="680" y="52"  width="9" height="12"/>
+            <rect x="680" y="118" width="9" height="12"/>
+            <rect x="680" y="184" width="9" height="12"/>
+            <rect x="680" y="250" width="9" height="12"/>
+            <rect x="680" y="316" width="9" height="12"/>
+          </g>
+          <g class="s-name">
+            <text x="704" y="56">notify</text>
+            <text x="704" y="122">media</text>
+            <text x="704" y="188">AI</text>
+            <text x="704" y="254">documents</text>
+            <text x="704" y="320">integration</text>
+          </g>
+          <g class="s-sub">
+            <text x="704" y="71">email · SMS · push</text>
+            <text x="704" y="137">transcode → object storage → CDN</text>
+            <text x="704" y="203">embed → retrieve → rerank → generate · cap the cost and the iterations</text>
+            <text x="704" y="269">invoices · exports · reports</text>
+            <text x="704" y="335">outbound webhooks · third-party sync · retry with backoff</text>
+          </g>
+
+          <!-- dead letter siding -->
+          <path d="M440,205 L440,398 L716,398" fill="none" stroke="var(--hazard)" stroke-width="3.5"
+                stroke-dasharray="9 7" marker-end="url(#ah2h)"/>
+          <text x="456" y="392" class="s-haz">failed three times</text>
+          <text x="736" y="392" class="s-name" fill="var(--hazard)">dead letter queue</text>
+          <text x="736" y="407" class="s-sub">→ alarm → a human. Without this siding, failures vanish silently for months.</text>
+        </svg>
+      </div>
+      <figcaption><b>Every terminus on this branch is the same shape:</b> accept fast, queue, process idempotently, store the result, notify. Change the words and it is video, documents, invoices or AI — so learn the shape once and all five are one system.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ FIGURE 3 — SERVICE BANDS ============ -->
+  <section>
+    <h2><span>Fig. 3</span> Service across the whole line<i>four concerns that are not stations, because they touch all of them</i></h2>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 1400 336" role="img"
+             aria-label="Four bands running under all twenty-four stations: identity, observability, reliability and cost. Each spans the entire line rather than sitting at one station.">
+          <g stroke="var(--rule)" stroke-width="2">
+            <line x1="40" y1="12" x2="40" y2="26"/><line x1="97" y1="12" x2="97" y2="26"/>
+            <line x1="154" y1="12" x2="154" y2="26"/><line x1="211" y1="12" x2="211" y2="26"/>
+            <line x1="268" y1="12" x2="268" y2="26"/><line x1="325" y1="12" x2="325" y2="26"/>
+            <line x1="382" y1="12" x2="382" y2="26"/><line x1="439" y1="12" x2="439" y2="26"/>
+            <line x1="496" y1="12" x2="496" y2="26"/><line x1="553" y1="12" x2="553" y2="26"/>
+            <line x1="610" y1="12" x2="610" y2="26"/><line x1="667" y1="12" x2="667" y2="26"/>
+            <line x1="724" y1="12" x2="724" y2="26"/><line x1="781" y1="12" x2="781" y2="26"/>
+            <line x1="838" y1="12" x2="838" y2="26"/><line x1="895" y1="12" x2="895" y2="26"/>
+            <line x1="952" y1="12" x2="952" y2="26"/><line x1="1009" y1="12" x2="1009" y2="26"/>
+            <line x1="1066" y1="12" x2="1066" y2="26"/><line x1="1123" y1="12" x2="1123" y2="26"/>
+            <line x1="1180" y1="12" x2="1180" y2="26"/><line x1="1237" y1="12" x2="1237" y2="26"/>
+            <line x1="1294" y1="12" x2="1294" y2="26"/><line x1="1351" y1="12" x2="1351" y2="26"/>
+          </g>
+          <text x="40" y="44" class="s-num">01</text>
+          <text x="1351" y="44" text-anchor="end" class="s-num">24</text>
+          <text x="695" y="44" text-anchor="middle" class="s-sub">every station on fig. 1</text>
+
+          <rect x="40" y="58" width="1311" height="60" fill="var(--z1)"/>
+          <rect x="40" y="126" width="1311" height="60" fill="var(--z2)"/>
+          <rect x="40" y="194" width="1311" height="60" fill="var(--z4)"/>
+          <rect x="40" y="262" width="1311" height="60" fill="var(--z5)"/>
+          <g stroke="var(--line)" stroke-width="4">
+            <line x1="40" y1="58" x2="40" y2="118"/><line x1="40" y1="126" x2="40" y2="186"/>
+            <line x1="40" y1="194" x2="40" y2="254"/><line x1="40" y1="262" x2="40" y2="322"/>
+          </g>
+
+          <text x="60" y="80" class="s-name">Identity</text>
+          <text x="60" y="98" class="s-sub">IAM · authentication · authorisation · secrets · least privilege</text>
+          <text x="60" y="112" class="s-sub" fill="var(--hazard)">there is no perimeter to be inside of — a credential works from anywhere on earth</text>
+
+          <text x="60" y="148" class="s-name">Observability</text>
+          <text x="60" y="166" class="s-sub">metrics alarm · logs investigate · traces find the slow hop · SLO → error budget → burn rate</text>
+          <text x="60" y="180" class="s-sub" fill="var(--fast)">one request id, created at station 11 and carried to station 24 — the cheapest decision here</text>
+
+          <text x="60" y="216" class="s-name">Reliability</text>
+          <text x="60" y="234" class="s-sub">two zones, each able to serve peak alone · a rollback someone has actually used · replication is not a backup</text>
+          <text x="60" y="248" class="s-sub" fill="var(--hazard)">a timeout and a fallback on every arrow in fig. 1 — a hung dependency takes the whole service down</text>
+
+          <text x="60" y="284" class="s-name">Cost</text>
+          <text x="60" y="302" class="s-sub">compute · egress at station 23 · per-request charges · log ingestion · NAT gateways · idle capacity</text>
+          <text x="60" y="316" class="s-sub" fill="var(--hazard)">autoscaling with no upper bound turns a traffic attack into a financial one</text>
+        </svg>
+      </div>
+      <figcaption>These are drawn as bands rather than stops because a request meets each of them at every single station. Anything on this figure that exists only at one place in your system is a gap.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ FIGURE 4 — DELIVERY ============ -->
+  <section>
+    <h2><span>Fig. 4</span> The line under construction<i>none of fig. 1 exists until something puts it there</i></h2>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 1400 268" role="img"
+             aria-label="The delivery road: editor, git, pull request, artefact built once, infrastructure, deploy, production. A return line beneath shows rollback: a feature flag in seconds, the previous image in minutes, and a database migration which does not come back.">
+          <defs>
+            <marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/>
+            </marker>
+            <marker id="ah4h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/>
+            </marker>
+          </defs>
+
+          <line x1="70" y1="72" x2="1330" y2="72" stroke="var(--line)" stroke-width="7" marker-end="url(#ah4)"/>
+          <line x1="70" y1="55" x2="70" y2="89" stroke="var(--line)" stroke-width="7"/>
+          <g stroke="var(--paper)" stroke-width="3.5">
+            <line x1="280" y1="60" x2="280" y2="84"/>
+            <line x1="490" y1="60" x2="490" y2="84"/>
+            <line x1="910" y1="60" x2="910" y2="84"/>
+            <line x1="1120" y1="60" x2="1120" y2="84"/>
+          </g>
+          <circle cx="700" cy="72" r="12" fill="var(--paper)" stroke="var(--fast)" stroke-width="5"/>
+
+          <g text-anchor="middle">
+            <text x="70"   y="42" class="s-name">editor</text>
+            <text x="280"  y="42" class="s-name">git</text>
+            <text x="490"  y="42" class="s-name">pull request</text>
+            <text x="700"  y="42" class="s-name" fill="var(--fast)">artefact</text>
+            <text x="910"  y="42" class="s-name">infrastructure</text>
+            <text x="1120" y="42" class="s-name">deploy</text>
+            <text x="1330" y="42" class="s-name">production</text>
+          </g>
+          <g text-anchor="middle" class="s-sub">
+            <text x="70"   y="110">you write it</text>
+            <text x="280"  y="110">immutable snapshots</text>
+            <text x="280"  y="124">short-lived branches</text>
+            <text x="490"  y="110">lint · tests · scan · build</text>
+            <text x="490"  y="124">human review, small diffs only</text>
+            <text x="700"  y="110">built once, tagged by commit</text>
+            <text x="700"  y="124">the same bytes everywhere</text>
+            <text x="910"  y="110">plan on the request</text>
+            <text x="910"  y="124">apply on merge · OIDC, no keys</text>
+            <text x="1120" y="110">canary 5% → promote or revert</text>
+            <text x="1120" y="124">the feature stays off, behind a flag</text>
+            <text x="1330" y="110">this is now</text>
+            <text x="1330" y="124">stations 08–16</text>
+          </g>
+
+          <line x1="1330" y1="188" x2="82" y2="188" stroke="var(--hazard)" stroke-width="5" marker-end="url(#ah4h)"/>
+          <text x="1330" y="170" text-anchor="end" class="s-haz">the road runs both ways — and that is the point</text>
+          <g class="s-sub">
+            <text x="100" y="212">a feature flag <tspan class="s-name">seconds</tspan> · the previous image <tspan class="s-name">minutes</tspan> · a database migration <tspan class="s-name" fill="var(--hazard)">does not come back</tspan></text>
+            <text x="100" y="232" fill="var(--hazard)">So: expand, migrate, contract — across three releases. Never ship a destructive migration with the code that needs it.</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption><b>The artefact is drawn as an interchange because it is one:</b> the same bytes leave it towards staging and towards production. Build it twice and you no longer know what you tested.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ HAZARD BOARD ============ -->
+  <section>
+    <h2><span>Board</span> What waits at each station<i>the map to reread in six months</i></h2>
+    <table class="board">
+      <caption>Shaded rows are the five that cause most real damage. None of them are exotic.</caption>
+      <thead>
+        <tr><th scope="col">Stop</th><th scope="col">Station</th><th scope="col">What waits there</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>01</td><td>browser</td><td>A blocked event loop freezes the page before the request is even sent. No loading state, so the user clicks three times.</td></tr>
+        <tr><td>02</td><td>DNS</td><td>A time-to-live of hours, so failover takes hours too. A client library that resolves once and caches it forever.</td></tr>
+        <tr><td>03</td><td>TCP + TLS</td><td><em>An expired certificate</em> — one of the most common self-inflicted outages there is. No connection reuse, so you pay the handshake every time.</td></tr>
+        <tr><td>04</td><td>the request</td><td>A session token in local storage, plus one cross-site scripting bug, equals account takeover. No idempotency key on a request that spends money.</td></tr>
+        <tr><td>05</td><td>the network</td><td>Packet loss presents as inexplicable slowness. You cannot fix this layer, only design around it.</td></tr>
+        <tr><td>06</td><td>CDN edge</td><td>Nothing cached, so every request travels the whole route and you pay full egress. Worse: a <em>personalised</em> page cached and served to everyone.</td></tr>
+        <tr><td>07</td><td>VPC</td><td>A database reachable from the internet. A rule open to the whole world on an admin port. Everything in one availability zone.</td></tr>
+        <tr class="crit"><td>08</td><td>load balancer</td><td><strong>A health check so deep that one slow database removes every backend at once</strong> — a degradation becomes a total outage, and nothing can recover. Also: an idle timeout that cuts a long report; draining shorter than the slowest request; retries amplifying overload into collapse.</td></tr>
+        <tr><td>09</td><td>proxy</td><td>A body size limit rejecting uploads with an unhelpful error. Too few worker processes, so requests queue invisibly before your code runs.</td></tr>
+        <tr><td>10</td><td>runtime</td><td>One blocking call stalls everything. A thread pool eaten by a slow dependency, with nothing left for healthy requests. A leak that only shows after six hours.</td></tr>
+        <tr><td>11</td><td>middleware</td><td>The order is wrong and credentials end up in your logs. No request id created here, which makes every later investigation manual.</td></tr>
+        <tr><td>12</td><td>routing</td><td>Business logic and database queries living in the controller, untestable and unreusable.</td></tr>
+        <tr><td>13</td><td>authentication</td><td>A long-lived stateless token, so logout does not actually work. A fast password hash, so a leaked table is an immediate mass takeover.</td></tr>
+        <tr class="crit"><td>14</td><td>authorisation</td><td><strong>Change the id in the URL and get someone else’s data.</strong> The most common serious application flaw in existence, and the easiest one to test for. Authentication was checked; authorisation was forgotten.</td></tr>
+        <tr><td>15</td><td>validation</td><td>Trusting a price or a role sent by the client. SQL built by concatenation. A URL the server will fetch without an allowlist. A file trusted by its extension.</td></tr>
+        <tr class="crit"><td>16</td><td>logic</td><td><strong>No timeout on a downstream call</strong> — a dependency that hangs rather than refuses holds your threads until every worker is blocked, and one non-essential feature takes the whole service down. Also: a multi-step process with no compensation, leaving records half-finished.</td></tr>
+        <tr class="crit"><td>17</td><td>cache</td><td><strong>A cache key without the user or tenant in it</strong> — a data leak dressed as an optimisation. Also: caching used to hide a query that simply needed an index.</td></tr>
+        <tr class="crit"><td>18</td><td>ORM</td><td><strong>The N+1 query.</strong> One query, then one more per row: four hundred round trips for a single page, created by a lazy-loaded association inside a loop.</td></tr>
+        <tr><td>19</td><td>database</td><td>A missing index turning forty milliseconds into four seconds. Connection pool exhausted, so a healthy database looks down. A long transaction holding locks and blocking everything behind it.</td></tr>
+        <tr><td>—</td><td>the floor</td><td>CPU credits, disk throughput and memory limits produce throttling that looks exactly like slow code. Check the credit balance before you profile the query.</td></tr>
+        <tr class="crit"><td>21</td><td>queue, worker</td><td><strong>Not idempotent, so the customer is charged twice.</strong> Also: no dead letter queue, so failures vanish silently for months; a visibility timeout shorter than the job, so two workers do the same work.</td></tr>
+        <tr><td>22</td><td>the response</td><td>A stack trace or internal version returned in an error. Two hundred OK with an error inside the body, so nothing can alert on it. An unpaginated list that grows with your success.</td></tr>
+        <tr><td>23</td><td>egress</td><td>Large files proxied through your application instead of handed off with a signed URL. Full egress paid because nothing caches in front.</td></tr>
+        <tr><td>24</td><td>the render</td><td>A forty-five millisecond API inside a four-second page. Unsized images causing layout shift. One blocking third-party script.</td></tr>
+        <tr><td>all</td><td>across the line</td><td>A destructive migration shipped with the code that needs it. One leaked long-lived credential. Backups in the same account, never once restored. Alerts nobody reads. A rollback path nobody has ever used.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ THE FIVE ============ -->
+  <section>
+    <div class="five">
+      <h3>Audit these five this week — and test them, do not reason about them</h3>
+      <ol>
+        <li><span><b>Station 14 · missing authorisation.</b> Change an id in a URL. Does it work? Go and try it now, on your own system.</span></li>
+        <li><span><b>Station 17 · a cache key without a tenant.</b> Read one cache key out loud. Whose data can it return?</span></li>
+        <li><span><b>Station 21 · a non-idempotent money handler.</b> What happens if this message arrives twice?</span></li>
+        <li><span><b>Station 18 · an N+1 query.</b> Count the queries your busiest page issues. Does the number grow with rows?</span></li>
+        <li><span><b>Station 08 · a health check that is too deep.</b> Does it fail when the database does? Then it can remove every backend at once.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ COLOPHON ============ -->
+  <footer class="colophon">
+    <h2><span>In short</span> The whole line in six sentences</h2>
+    <ol class="six">
+      <li>A click becomes a network request, and DNS, TCP and TLS all happen before one byte of it reaches you.</li>
+      <li>It should be answered as early as possible — at the edge or in the cache — because everything past there costs money.</li>
+      <li>Your application asks three questions in order: who are you, may you, is this valid — and only then does your product.</li>
+      <li>The database is almost always the real bottleneck, standing on a floor of CPU, memory, disk and kernel.</li>
+      <li>Anything slow does not belong in the request at all; it goes on a queue, and then it must be idempotent.</li>
+      <li>All of it is wrapped in four things that are not stations: identity, observability, reliability and cost.</li>
+    </ol>
+    <p class="credit">
+      <span>Print: A2 landscape, 12&nbsp;mm margins</span>
+      <span>Companion: The Complete System Map.md — 24 stations, every concept linked</span>
+      <span>Software Engineering Handbook · 206 notes</span>
+    </p>
+  </footer>
+
+</div>

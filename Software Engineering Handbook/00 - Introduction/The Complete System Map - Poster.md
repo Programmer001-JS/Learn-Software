@@ -7,6 +7,7 @@
 | **Category** | Map *(wide format — built for printing)* |
 | **Width** | Every diagram is **≤ 134 columns**. A3 landscape at 10 pt, or A4 landscape at 7–8 pt. |
 | **Companion** | [The Complete System Map](The%20Complete%20System%20Map.md) — the station-by-station detail and all the links |
+| **Vector version** | [The Complete System Map - Poster.html](The%20Complete%20System%20Map%20-%20Poster.html) — the same journey as a transit map, in colour, printable at A2. Open it in a browser and press print. |
 | **Related notes** | [README](README.md) · [How To Use This Handbook](How%20To%20Use%20This%20Handbook.md) · [Diagrams](../17%20-%20Personal%20Knowledge%20Base/Diagrams.md) |
 
 ---
