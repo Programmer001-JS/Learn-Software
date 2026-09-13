@@ -1,0 +1,1491 @@
+<meta charset="utf-8">
+<title>Atlas of Backend Design — seven sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 07 Backend Design Patterns · seven sheets</p>
+  <h1>Atlas of <em>Backend Design</em></h1>
+  <p class="thesis">One request, POST /orders, and every layer it crosses between the socket and the database. Sheet 1 is the route that request travels; sheets 2 to 4 magnify its stations; sheets 5 to 7 look at the same code from above — how its objects are wired, what the recurring shapes are called, and how the whole thing is arranged in rings. <strong>Every pattern in this folder exists to answer one question: when a requirement changes, how much code has to change with it?</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 7</span>
+    <span><b>Numbered steps</b> 135</span>
+    <span><b>Read first</b> Sheet 1 end to end, then the sheet holding the layer you are about to change</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Request Line</h4><p>POST /orders from socket to database and back: twenty stops, seven exits that end the journey with a status code before any row is written.</p><em>Transit diagram</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Gatehouse</h4><p>Middleware as nested rings where order is a security decision, and the router as a directory that never checks who is allowed in.</p><em>Cutaway section</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>The Boundary Checkpoints</h4><p>Validation, authorisation and business rules are three different questions, asked at three different places, failing with three different codes.</p><em>Decision tree</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>The Rulebook and the Archive</h4><p>Four doors into one service, one transaction per use case, and a repository interface that lets storage change without the rules noticing.</p><em>Process plant</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>The Wiring Diagram</h4><p>Dependency injection, lifetimes, and the inverted arrow that SOLID is really about — plus the singleton that serves one user's data to another.</p><em>Wiring diagram</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>The Pattern Ladder</h4><p>From an if to a Strategy to an AbstractRequestHandlerFactoryBuilder. Climb one rung per real variation, never in anticipation.</p><em>Ladder plate</em></span></a>
+    <a href="#a7"><span class="n">7</span><span><h4>The Concentric Plan</h4><p>Clean Architecture's rings, ports and adapters, and DDD's bounded contexts and aggregates — the heavy machinery, and when it earns its cost.</p><em>Ring plan</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 300" role="img" aria-label="How the seven sheets fit together. Sheet 1, the request line, runs across the middle as the route POST /orders takes. Above it, sheet 2 magnifies the middleware and router stops, sheet 3 the validation and controller stops, and sheet 4 the service and repository stops. Below it, sheets 5, 6 and 7 look at the same code from above: how objects are wired, which named patterns appear, and the concentric architecture they add up to. A bar underneath marks the question every sheet answers: how much code changes when a requirement does.">
+        <rect x="30" y="118" width="1340" height="62" fill="var(--z3)"/>
+        <text x="46" y="144" class="s-zone" fill="var(--mute)">Sheet 1 — the route POST /orders takes, from socket to database and back</text>
+        <text x="46" y="164" class="s-sub">sheets 2–4 zoom into its stations; sheets 5–7 look down on the same code and name its structure</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M260,118 L260,80"/><path d="M700,118 L700,80"/><path d="M1140,118 L1140,80"/>
+          <path d="M260,180 L260,216"/><path d="M700,180 L700,216"/><path d="M1140,180 L1140,216"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="260" y="68">2 · the gatehouse</text>
+          <text x="700" y="68">3 · the boundary checkpoints</text>
+          <text x="1140" y="68">4 · the rulebook and the archive</text>
+          <text x="260" y="234">5 · the wiring diagram</text>
+          <text x="700" y="234">6 · the pattern ladder</text>
+          <text x="1140" y="234">7 · the concentric plan</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="260" y="50">stops 02 to 09 · middleware and router</text>
+          <text x="700" y="50">stops 10 and 11 · validation and controller</text>
+          <text x="1140" y="50">stops 12 to 16 · service and repository</text>
+          <text x="260" y="252">who constructs what, and for how long</text>
+          <text x="700" y="252">the recurring shapes, and their price</text>
+          <text x="1140" y="252">the rings everything above is arranged in</text>
+        </g>
+        <rect x="30" y="276" width="1340" height="10" fill="color-mix(in srgb,var(--fast) 26%,transparent)"/>
+        <text x="1370" y="270" text-anchor="end" class="s-note">Under every sheet — when a requirement changes, how much code changes with it?</text>
+      </svg>
+    </div>
+    <figcaption>Read it as one request and two altitudes. <b>At ground level</b> — sheets 1 to 4 — the question is where a check or a rule belongs, and what breaks when it sits in the wrong layer. <b>From above</b> — sheets 5 to 7 — the question is how much structure the code deserves. Most backend design mistakes are the right pattern applied at the wrong altitude: architecture where a function would do, or a function where a boundary was needed.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE REQUEST LINE ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Request Line</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Middleware · Routing · Validation · Controllers · Services · Repository Pattern</span>
+  </div>
+  <p class="thesis">One order, twenty stops, seven layers. The business logic is one station of twenty. <strong>Seven red spurs end the journey early with a status code, and each is cheaper the further left it sits — a request refused at stop 04 costs microseconds; the same request refused at stop 12 has already cost a database round trip.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 2160 800" role="img" aria-label="A transit map of one POST /orders request. Fourteen outbound stations run left to right through seven zones: the caller, the middleware pipeline, the router, the validation boundary, the controller, the service and the repository. Seven dashed red spurs drop from the rate limit, authentication, authorisation, route match, parameter conversion, validation and service stations to the return line, labelled 429, 401, 403, 404 or 405, 400, 422 and 409. A purple note above the service shows that a CLI command, a queue consumer and a cron job enter at the same station. The line loops down at the repository and returns right to left through commit, event publishing, DTO mapping, the 201 status, the reverse middleware pipeline and the error handler to the response.">
+        <defs>
+          <marker id="p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <text x="40" y="52" class="s-zone" fill="var(--line)">The hot path · POST /orders, from the socket to the database and back</text>
+        <text x="40" y="72" class="s-sub">Every station is a layer from this folder. Stops 02–07 are middleware, 08–09 the router, 10 validation, 11 the controller, 12–13 the service, 14 the repository.</text>
+
+        <rect x="1470" y="34" width="420" height="106" fill="var(--z6)" stroke="var(--learn)" stroke-width="2" stroke-dasharray="7 6"/>
+        <text x="1484" y="56" class="s-learn">Station 12 has four doors, not one</text>
+        <text x="1484" y="76" class="s-sub">HTTP is one entry point. A CLI command, a queue consumer</text>
+        <text x="1484" y="90" class="s-sub">and a cron job call the same service method — so the rules</text>
+        <text x="1484" y="104" class="s-sub">and object-level authorisation must live there, never</text>
+        <text x="1484" y="118" class="s-sub">only in the controller at 11. Sheet 4 draws all four doors.</text>
+        <path d="M1660,140 L1660,188" fill="none" stroke="var(--learn)" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#p3)"/>
+
+        <rect x="30" y="150" width="140" height="180" fill="var(--z1)"/>
+        <rect x="170" y="150" width="840" height="180" fill="var(--z2)"/>
+        <rect x="1010" y="150" width="280" height="180" fill="var(--z3)"/>
+        <rect x="1290" y="150" width="160" height="180" fill="var(--z4)"/>
+        <rect x="1450" y="150" width="150" height="180" fill="var(--z5)"/>
+        <rect x="1600" y="150" width="280" height="180" fill="var(--z6)"/>
+        <rect x="1880" y="150" width="250" height="180" fill="var(--z1)"/>
+        <g class="s-zone" fill="var(--mute)">
+          <text x="42" y="172">The caller</text><text x="182" y="172">Middleware pipeline</text><text x="1022" y="172">The router</text>
+          <text x="1302" y="172">Boundary</text><text x="1462" y="172">Controller</text><text x="1612" y="172">Service</text><text x="1892" y="172">Repository</text>
+        </g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="170" y1="150" x2="170" y2="330"/><line x1="1010" y1="150" x2="1010" y2="330"/><line x1="1290" y1="150" x2="1290" y2="330"/>
+          <line x1="1450" y1="150" x2="1450" y2="330"/><line x1="1600" y1="150" x2="1600" y2="330"/><line x1="1880" y1="150" x2="1880" y2="330"/>
+        </g>
+
+        <line x1="70" y1="290" x2="2070" y2="290" stroke="var(--line)" stroke-width="7"/>
+        <line x1="70" y1="273" x2="70" y2="307" stroke="var(--line)" stroke-width="7"/>
+        <path d="M2070,290 C2124,290 2124,680 2070,680" fill="none" stroke="var(--line)" stroke-width="7"/>
+        <line x1="2070" y1="680" x2="82" y2="680" stroke="var(--line)" stroke-width="7" marker-end="url(#p1)"/>
+
+        <g class="st"><circle cx="90" cy="290" r="9"/><circle cx="230" cy="290" r="9"/><circle cx="370" cy="290" r="9"/><circle cx="650" cy="290" r="9"/><circle cx="1510" cy="290" r="9"/><circle cx="1800" cy="290" r="9"/><circle cx="1960" cy="290" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3.5"><circle cx="510" cy="290" r="11"/><circle cx="790" cy="290" r="11"/><circle cx="930" cy="290" r="11"/><circle cx="1070" cy="290" r="11"/><circle cx="1210" cy="290" r="11"/><circle cx="1350" cy="290" r="11"/></g>
+        <rect x="1636" y="274" width="48" height="32" rx="4" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <g stroke="var(--fast)" stroke-width="1.5" fill="none"><path d="M1644,284 h32"/><path d="M1644,290 h32"/><path d="M1644,296 h32"/></g>
+
+        <g class="s-num">
+          <text x="44" y="206">01</text><text x="184" y="206">02</text><text x="324" y="206">03</text><text x="464" y="206">04</text><text x="604" y="206">05</text><text x="744" y="206">06</text><text x="884" y="206">07</text><text x="1024" y="206">08</text><text x="1164" y="206">09</text><text x="1304" y="206">10</text><text x="1464" y="206">11</text><text x="1614" y="206">12</text><text x="1754" y="206">13</text><text x="1914" y="206">14</text>
+        </g>
+        <g class="s-lab">
+          <text x="44" y="224">POST /orders</text><text x="184" y="224">request ID</text><text x="324" y="224">logging · CORS</text><text x="464" y="224">rate limit</text><text x="604" y="224">parse the body</text><text x="744" y="224">authenticate</text><text x="884" y="224">authorise route</text><text x="1024" y="224">route match</text><text x="1164" y="224">convert params</text><text x="1304" y="224">validate</text><text x="1464" y="224">controller</text><text x="1614" y="224">service</text><text x="1754" y="224">begin transaction</text><text x="1914" y="224">repository</text>
+        </g>
+        <g class="s-sub">
+          <text x="44" y="242">a JSON body, a token,</text><text x="44" y="256">hostile until proven</text>
+          <text x="184" y="242">attached first, so</text><text x="184" y="256">every log line joins</text>
+          <text x="324" y="242">method, path, status;</text><text x="324" y="256">browser origins</text>
+          <text x="464" y="242">before auth, or brute</text><text x="464" y="256">force is never slowed</text>
+          <text x="604" y="242">capped at 100 KB</text><text x="604" y="256">before any parsing</text>
+          <text x="744" y="242">token verified,</text><text x="744" y="256">req.user attached</text>
+          <text x="884" y="242">may this user create</text><text x="884" y="256">orders at all?</text>
+          <text x="1024" y="242">method + path, in</text><text x="1024" y="256">registration order</text>
+          <text x="1164" y="242">"42" becomes 42 —</text><text x="1164" y="256">or it never arrives</text>
+          <text x="1304" y="242">shape, types, ranges,</text><text x="1304" y="256">all errors at once</text>
+          <text x="1464" y="242">one service call,</text><text x="1464" y="256">no rules, no SQL</text>
+          <text x="1614" y="242">is order 42 theirs?</text><text x="1614" y="256">stock, price, limits</text>
+          <text x="1754" y="242">one use case,</text><text x="1754" y="256">one transaction</text>
+          <text x="1914" y="242">parameterised SQL,</text><text x="1914" y="256">rows → Order objects</text>
+        </g>
+
+        <g fill="none" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="9 7" marker-end="url(#p2)">
+          <path d="M510,301 L510,674"/><path d="M790,301 L790,674"/><path d="M930,301 L930,674"/><path d="M1070,301 L1070,674"/><path d="M1210,301 L1210,674"/><path d="M1350,301 L1350,674"/><path d="M1660,306 L1660,674"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5">
+          <rect x="482" y="400" width="56" height="24" rx="3"/><rect x="762" y="400" width="56" height="24" rx="3"/><rect x="902" y="520" width="56" height="24" rx="3"/><rect x="1030" y="400" width="80" height="24" rx="3"/><rect x="1182" y="520" width="56" height="24" rx="3"/><rect x="1322" y="400" width="56" height="24" rx="3"/><rect x="1632" y="460" width="56" height="24" rx="3"/>
+        </g>
+        <g class="s-haz" text-anchor="middle" font-size="12">
+          <text x="510" y="417">429</text><text x="790" y="417">401</text><text x="930" y="537">403</text><text x="1070" y="417">404 / 405</text><text x="1210" y="537">400</text><text x="1350" y="417">422</text><text x="1660" y="477">409</text>
+        </g>
+        <g class="s-sub" style="fill:var(--hazard)">
+          <text x="518" y="442">cheapest rejection,</text><text x="518" y="456">done first</text>
+          <text x="798" y="442">unknown caller</text>
+          <text x="938" y="562">known, not allowed</text>
+          <text x="1078" y="442">no path, or</text><text x="1078" y="456">wrong method</text>
+          <text x="1218" y="562">handler never runs</text>
+          <text x="1358" y="442">field errors,</text><text x="1358" y="456">no database call</text>
+          <text x="1668" y="502">OutOfStockError —</text><text x="1668" y="516">a domain exception</text>
+        </g>
+
+        <text x="40" y="400" class="s-haz">Seven ways out before a row is written</text>
+        <text x="40" y="420" class="s-sub">Every early exit still travels the return line — back through</text>
+        <text x="40" y="434" class="s-sub">the reverse pipeline and the error handler — so even a 401</text>
+        <text x="40" y="448" class="s-sub">carries a request ID and a clean body, never a stack trace.</text>
+        <text x="40" y="476" class="s-note">Cheap rejections first.</text>
+        <text x="40" y="492" class="s-sub" style="fill:var(--fast)">Parsing a 10 MB body before the rate limit means the</text>
+        <text x="40" y="506" class="s-sub" style="fill:var(--fast)">attacker got you to do the expensive part anyway.</text>
+
+        <rect x="1830" y="380" width="230" height="200" fill="var(--band)" stroke="var(--line)" stroke-width="2" stroke-dasharray="7 6"/>
+        <text x="1844" y="402" class="s-lab" font-size="11.5">Why 13 sits in the service</text>
+        <text x="1844" y="422" class="s-sub">The controller does not know</text>
+        <text x="1844" y="436" class="s-sub">which writes belong together;</text>
+        <text x="1844" y="450" class="s-sub">a repository is too narrow.</text>
+        <text x="1844" y="464" class="s-sub">The use case is the unit that</text>
+        <text x="1844" y="478" class="s-sub">must succeed or fail whole.</text>
+        <text x="1844" y="502" class="s-haz" font-size="10.5">"Check stock, then reserve"</text>
+        <text x="1844" y="516" class="s-haz" font-size="10.5">as two separate queries is a</text>
+        <text x="1844" y="530" class="s-haz" font-size="10.5">race condition, not a rule.</text>
+        <text x="1844" y="556" class="s-sub" style="fill:var(--line)">It needs the transaction or a</text>
+        <text x="1844" y="570" class="s-sub" style="fill:var(--line)">database constraint.</text>
+
+        <g class="st"><circle cx="1900" cy="680" r="9"/><circle cx="1760" cy="680" r="9"/><circle cx="1580" cy="680" r="9"/><circle cx="860" cy="680" r="9"/></g>
+        <circle cx="1440" cy="680" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <circle cx="300" cy="680" r="13" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3.5"/>
+        <line x1="90" y1="663" x2="90" y2="697" stroke="var(--line)" stroke-width="7"/>
+        <g class="s-num"><text x="1854" y="710">15</text><text x="1714" y="710">16</text><text x="1534" y="710">17</text><text x="1394" y="710">18</text><text x="814" y="710">19</text><text x="254" y="710">20</text></g>
+        <g class="s-lab"><text x="1854" y="728">commit</text><text x="1714" y="728">publish event</text><text x="1534" y="728">map to DTO</text><text x="1394" y="728">201 Created</text><text x="814" y="728">reverse pipeline</text><text x="254" y="728">error handler</text><text x="110" y="728">the response</text></g>
+        <g class="s-sub">
+          <text x="1854" y="744">order + stock</text><text x="1854" y="758">together, or neither</text>
+          <text x="1714" y="744">OrderCreated — only</text><text x="1714" y="758">after the commit</text>
+          <text x="1534" y="744">declared fields only,</text><text x="1534" y="758">never the ORM entity</text>
+          <text x="1394" y="744">Location: /orders/42</text><text x="1394" y="758">status chosen here</text>
+          <text x="814" y="744">headers, compression,</text><text x="814" y="758">duration logged</text>
+          <text x="254" y="744">outermost: anything</text><text x="254" y="758">thrown → clean 500</text>
+          <text x="110" y="744">with the request ID,</text><text x="110" y="758">and nothing leaked</text>
+        </g>
+        <text x="2130" y="790" text-anchor="end" class="s-sub">Everything left of stop 11 is identical for every endpoint and written once. Everything right of it is this endpoint's actual job.</text>
+      </svg>
+    </div>
+    <figcaption><b>Three things on this map surprise people.</b> The business logic is one station of twenty — most of the code a request touches is shared plumbing. Authorisation appears twice, at 07 and at 12, because "may you create orders" and "is order 42 yours" are different questions, and only the first can be answered before the object is loaded. And the event at 16 is drawn after the commit at 15 on purpose: published earlier, it announces an order a rollback may yet erase.</figcaption>
+  </figure>
+  <div class="gaz">
+    <h3>Step key — every stop on this sheet, and what it does</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>POST /orders</h4><p>A method, a path, a body and a bearer token. Treat all four as hostile — including requests from your own frontend, because anyone can send the same bytes with curl.</p></div>
+      <div><h4><span>02</span>Request ID</h4><p>A correlation id generated before anything else runs and attached to the request, every log line and every error body. Registered first so nothing downstream logs without it.</p></div>
+      <div><h4><span>03</span>Logging and CORS</h4><p>Method, path, status and duration — never whole bodies or headers, which carry passwords and tokens. CORS decides which browser origins may call the API at all.</p></div>
+      <div><h4><span>04</span>Rate limit · 429</h4><p>Throttle abusive callers before authentication, or brute-force login attempts are never slowed. Check how X-Forwarded-For is trusted, or a forged header resets the counter.</p></div>
+      <div><h4><span>05</span>Parse the body</h4><p>JSON into an object, with a size limit enforced before parsing — 100 KB here. A limit applied after parsing has already paid the cost it was meant to avoid.</p></div>
+      <div><h4><span>06</span>Authenticate · 401</h4><p>Verify the token and attach the identity (req.user, HttpContext.User). Everything downstream relies on it, and nothing downstream re-checks it.</p></div>
+      <div><h4><span>07</span>Authorise the route · 403</h4><p>A coarse check: may this user create orders at all? It must come after 06 — authorising an unknown user always fails or always passes.</p></div>
+      <div><h4><span>08</span>Route match · 404 / 405</h4><p>Walk registered routes in order, first match wins. No path matched is 404; the path matched but not the method is 405. Sheet 2 shows why /users/me must be registered before /users/:id.</p></div>
+      <div><h4><span>09</span>Convert params · 400</h4><p>"42" becomes the integer 42; if conversion fails the handler never runs. The router has chosen a handler — it has decided nothing about permission.</p></div>
+      <div><h4><span>10</span>Validate · 422</h4><p>The body is checked against an explicit allow-list schema: shape, types, ranges, lengths, with every field error returned at once. Past this line the object is typed and trusted.</p></div>
+      <div><h4><span>11</span>Controller</h4><p>Extract parameters, call one service method, map the result, pick the status. Five lines, no branching, no queries. If a cron job could not reuse this endpoint's logic, logic is stuck here.</p></div>
+      <div><h4><span>12</span>Service · 409</h4><p>Object-level authorisation (is this account theirs?), then business rules: stock, pricing, discounts, limits. A violation raises a domain exception such as OutOfStockError — never an HTTP error.</p></div>
+      <div><h4><span>13</span>Begin transaction</h4><p>One use case, one transaction, opened by the service through a unit of work. Persisting the order and reserving the stock either both happen or neither does.</p></div>
+      <div><h4><span>14</span>Repository</h4><p>order_repo.add(order): the only layer that knows SQL. Queries are parameterised, eager loading is applied in one place, and rows come back as domain objects.</p></div>
+      <div><h4><span>15</span>Commit</h4><p>The transaction closes. Database constraints act as the last line of defence here, catching anything validation and business rules let slip through.</p></div>
+      <div><h4><span>16</span>Publish event</h4><p>OrderCreated goes to the event bus after the commit, so no listener ever reacts to an order that was rolled back. Publish identifiers, not sensitive payloads.</p></div>
+      <div><h4><span>17</span>Map to DTO</h4><p>The domain Order becomes an OrderDto listing exactly the fields that may leave. Returning the ORM entity leaks every column anyone ever adds, and can trigger lazy loads mid-serialisation.</p></div>
+      <div><h4><span>18</span>201 Created</h4><p>The status code and headers such as Location: /orders/42 are chosen on the HTTP side of the boundary. The service returned an object and knows nothing about either.</p></div>
+      <div><h4><span>19</span>Reverse pipeline</h4><p>The same middleware crossed again, outward: response headers, compression, and the timing log that measured everything between the way in and the way out.</p></div>
+      <div><h4><span>20</span>Error handler · 500</h4><p>Registered outermost so it wraps everything. Maps domain exceptions to status codes centrally and turns anything unexpected into a clean 500 carrying the request ID — never a stack trace.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The route is not the permission</b>
+    <p>Stops 06 to 09 establish who the caller is and which function will run. None of them checks that order 42 belongs to this caller. That object-level check lives at stop 12 or nowhere — and its absence is the single most common serious API vulnerability there is.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE GATEHOUSE ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Gatehouse</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · Middleware · Routing</span>
+  </div>
+  <p class="thesis">Stops 02 to 09 of sheet 1, opened up. Above, middleware drawn as what it really is — rings around the handler, crossed once inward and once outward. Below, the router drawn as what it really is — a lookup table. <strong>Middleware order is a security decision, not a formatting one; and a route existing is never permission to call it.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A cutaway of the request gatehouse. Top left, seven nested rings around a handler: error handler outermost, then request ID, logging, CORS, rate limiting, authentication and authorisation, with an arrow entering from the top and leaving from the bottom. Top middle, the five-line timing middleware showing code before and after next, and how five frameworks name the same idea. Top right, a correct middleware order beside a broken one with three marked faults. Bottom, the anatomy of a route URL with six labelled parts, the route matching order bug where /users/me is shadowed by /users/:id, RESTful conventions, and a flow of every outcome of a route lookup: 404, 405, 400, or a typed handler call that still has not been authorised.">
+        <defs>
+          <marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="m2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="m3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- ONION -->
+        <text x="40" y="42" class="s-zone" fill="var(--line)">The onion · middleware wraps the handler</text>
+        <g stroke="var(--line)" stroke-width="1.5">
+          <rect x="46" y="70" width="500" height="390" fill="var(--z3)"/>
+          <rect x="70" y="94" width="452" height="342" fill="var(--z2)"/>
+          <rect x="94" y="118" width="404" height="294" fill="var(--z1)"/>
+          <rect x="118" y="142" width="356" height="246" fill="var(--z2)"/>
+          <rect x="142" y="166" width="308" height="198" fill="var(--z4)"/>
+          <rect x="166" y="190" width="260" height="150" fill="var(--z5)"/>
+          <rect x="190" y="214" width="212" height="102" fill="var(--z6)"/>
+        </g>
+        <rect x="214" y="238" width="164" height="54" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g class="s-lab" font-size="11">
+          <text x="56" y="86">01 error handler</text><text x="80" y="110">02 request ID</text><text x="104" y="134">03 logging</text>
+          <text x="128" y="158">04 CORS</text><text x="152" y="182">05 rate limit</text><text x="176" y="206">06 authentication</text><text x="200" y="230">07 authorisation</text>
+        </g>
+        <text x="224" y="260" class="s-lab" style="fill:var(--fast)">08 handler</text>
+        <text x="224" y="278" class="s-sub">business logic only</text>
+        <path d="M330,52 L330,234" fill="none" stroke="var(--line)" stroke-width="3" marker-end="url(#m1)"/>
+        <path d="M330,294 L330,474" fill="none" stroke="var(--fast)" stroke-width="3" marker-end="url(#m3)"/>
+        <text x="338" y="62" class="s-note" style="fill:var(--line)">request in — code before next()</text>
+        <text x="338" y="490" class="s-note">response out — code after next()</text>
+        <text x="46" y="490" class="s-sub">rings crossed twice</text>
+
+        <!-- CODE -->
+        <rect x="580" y="56" width="320" height="196" fill="var(--z3)"/>
+        <text x="596" y="80" class="s-zone" fill="var(--mute)">Before and after next()</text>
+        <g class="s-mono">
+          <text x="596" y="104">async function timing(req, res, next) {</text>
+          <text x="596" y="120">  const start = Date.now();   // way in</text>
+          <text x="596" y="136">  await next();                // inside</text>
+          <text x="596" y="152">  const ms = Date.now() - start;</text>
+          <text x="596" y="168">  logger.info({ path: req.path, ms });</text>
+          <text x="596" y="184">}</text>
+        </g>
+        <text x="596" y="208" class="s-sub">Everything inside next() — every inner ring</text>
+        <text x="596" y="222" class="s-sub">and the handler — runs between those lines.</text>
+        <text x="596" y="240" class="s-note">That is the entire pattern.</text>
+
+        <rect x="580" y="268" width="320" height="210" fill="var(--z2)"/>
+        <text x="596" y="292" class="s-zone" fill="var(--mute)">Same idea, every framework</text>
+        <g class="s-lab" font-size="11"><text x="596" y="316">Express</text><text x="596" y="336">ASP.NET Core</text><text x="596" y="356">NestJS</text><text x="596" y="376">Django</text><text x="596" y="396">Envoy, Linkerd</text></g>
+        <g class="s-sub"><text x="706" y="316">routes are middleware too</text><text x="706" y="336">the middleware pipeline</text><text x="706" y="356">guards, interceptors, pipes</text><text x="706" y="376">CSRF, sessions, headers</text><text x="706" y="396">network layer, out of process</text></g>
+        <text x="596" y="424" class="s-note">Cheapest rejections first.</text>
+        <text x="596" y="442" class="s-sub">Each layer runs on every request; ten of them</text>
+        <text x="596" y="456" class="s-sub">is measurable. Scope heavy ones to the routes</text>
+        <text x="596" y="470" class="s-sub">that need them.</text>
+
+        <!-- ORDER -->
+        <rect x="920" y="56" width="450" height="422" fill="var(--band)"/>
+        <text x="936" y="80" class="s-zone" fill="var(--hazard)">Order is everything</text>
+        <text x="936" y="104" class="s-lab" style="fill:var(--line)">CORRECT</text>
+        <text x="1160" y="104" class="s-haz">BROKEN</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="936" y="116" width="200" height="28"/><rect x="936" y="150" width="200" height="28"/><rect x="936" y="184" width="200" height="28"/><rect x="936" y="218" width="200" height="28"/>
+          <rect x="936" y="252" width="200" height="28"/><rect x="936" y="286" width="200" height="28"/><rect x="936" y="320" width="200" height="28"/>
+        </g>
+        <rect x="936" y="354" width="200" height="28" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+        <g class="s-lab" font-size="11">
+          <text x="948" y="135">01 error handler</text><text x="948" y="169">02 request ID</text><text x="948" y="203">03 logging</text><text x="948" y="237">04 CORS</text>
+          <text x="948" y="271">05 rate limiting</text><text x="948" y="305">06 authentication</text><text x="948" y="339">07 authorisation</text><text x="948" y="373">08 handler</text>
+        </g>
+        <g fill="var(--paper)" stroke-width="1.5">
+          <rect x="1160" y="116" width="200" height="28" stroke="var(--hazard)"/>
+          <rect x="1160" y="150" width="200" height="28" stroke="var(--rule)"/>
+          <rect x="1160" y="184" width="200" height="28" stroke="var(--hazard)"/>
+          <rect x="1160" y="218" width="200" height="28" stroke="var(--rule)"/>
+          <rect x="1160" y="252" width="200" height="28" stroke="var(--hazard)" stroke-dasharray="5 4"/>
+        </g>
+        <g class="s-lab" font-size="11">
+          <text x="1172" y="135" fill="var(--hazard)">A  authorisation</text><text x="1172" y="169">authentication</text><text x="1172" y="203" fill="var(--hazard)">B  rate limiting</text><text x="1172" y="237">route POST /login</text><text x="1172" y="271" fill="var(--hazard)">C  security headers</text>
+        </g>
+        <g class="s-sub" style="fill:var(--hazard)">
+          <text x="1160" y="304">A · checks permissions before</text><text x="1160" y="318">    it knows who the user is</text>
+          <text x="1160" y="338">B · after auth: failed logins</text><text x="1160" y="352">    are never throttled</text>
+          <text x="1160" y="372">C · registered after the route,</text><text x="1160" y="386">    so it silently never runs</text>
+        </g>
+        <text x="936" y="412" class="s-lab" font-size="11">Four rules that hold in every framework</text>
+        <text x="936" y="430" class="s-sub">Error handler outermost, so it catches everything inside. Request ID</text>
+        <text x="936" y="444" class="s-sub">first, so every log line correlates. Rate limit before authentication.</text>
+        <text x="936" y="458" class="s-sub">Authentication before authorisation. Apply globally, opt out.</text>
+
+        <!-- ROUTER -->
+        <line x1="30" y1="506" x2="1370" y2="506" stroke="var(--ink)" stroke-width="2"/>
+        <text x="40" y="528" class="s-zone" fill="var(--line)">The router · a building directory in the lobby, not the lock on the door</text>
+
+        <rect x="30" y="540" width="670" height="190" fill="var(--z1)"/>
+        <text x="46" y="562" class="s-lab" font-size="11">The parts of a route</text>
+        <text x="60" y="598" class="s-mono" style="font-size:20px">POST /api/v1/users/42/orders?limit=10</text>
+        <g stroke="var(--line)" stroke-width="3">
+          <line x1="60" y1="608" x2="106" y2="608"/><line x1="120" y1="608" x2="202" y2="608"/><line x1="206" y1="608" x2="274" y2="608"/>
+          <line x1="278" y1="608" x2="310" y2="608"/><line x1="314" y1="608" x2="394" y2="608"/><line x1="398" y1="608" x2="504" y2="608"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="1.2">
+          <line x1="84" y1="610" x2="84" y2="624"/><line x1="162" y1="610" x2="162" y2="660"/><line x1="240" y1="610" x2="240" y2="624"/>
+          <line x1="294" y1="610" x2="294" y2="660"/><line x1="354" y1="610" x2="354" y2="624"/><line x1="450" y1="610" x2="450" y2="660"/>
+        </g>
+        <g class="s-lab" font-size="11" text-anchor="middle">
+          <text x="84" y="638">09 method</text><text x="162" y="674">10 version prefix</text><text x="240" y="638">11 resource</text>
+          <text x="294" y="674">12 path parameter</text><text x="354" y="638">13 nested resource</text><text x="450" y="674">14 query string</text>
+        </g>
+        <text x="530" y="592" class="s-sub">one string,</text>
+        <text x="530" y="606" class="s-sub">six separate jobs</text>
+        <text x="46" y="702" class="s-note">A path identifies a thing; a query string modifies how you see it.</text>
+        <text x="46" y="718" class="s-sub">/users/42 is a user, ?fields=name changes the view of it. Anything required belongs in the path.</text>
+
+        <rect x="720" y="540" width="650" height="190" fill="var(--z3)"/>
+        <text x="736" y="562" class="s-lab" font-size="11">Registration order, first match wins</text>
+        <text x="736" y="604" class="s-haz">BROKEN</text>
+        <text x="896" y="604" class="s-lab" style="fill:var(--line)">CORRECT</text>
+        <rect x="736" y="614" width="140" height="26" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="736" y="646" width="140" height="26" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="5 4"/>
+        <rect x="896" y="614" width="140" height="26" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="896" y="646" width="140" height="26" fill="var(--paper)" stroke="var(--rule)"/>
+        <g class="s-mono"><text x="746" y="631">GET /users/:id</text><text x="746" y="663" fill="var(--hazard)">GET /users/me</text><text x="906" y="631">GET /users/me</text><text x="906" y="663">GET /users/:id</text></g>
+        <text x="736" y="580" class="s-sub">request: GET /users/me</text>
+        <text x="736" y="692" class="s-sub" style="fill:var(--hazard)">unreachable: :id</text>
+        <text x="736" y="706" class="s-sub" style="fill:var(--hazard)">matches "me" first</text>
+        <text x="896" y="692" class="s-sub">specific before generic</text>
+        <text x="896" y="706" class="s-sub">(Next.js: no order)</text>
+
+        <text x="1066" y="562" class="s-lab" font-size="11">RESTful conventions</text>
+        <g class="s-mono">
+          <text x="1066" y="584">GET    /orders          list</text>
+          <text x="1066" y="600">POST   /orders          create</text>
+          <text x="1066" y="616">GET    /orders/42       read</text>
+          <text x="1066" y="632">PUT    /orders/42       replace</text>
+          <text x="1066" y="648">PATCH  /orders/42       modify</text>
+          <text x="1066" y="664">DELETE /orders/42       delete</text>
+          <text x="1066" y="680">GET    /orders/42/items nested</text>
+        </g>
+        <text x="1066" y="702" class="s-sub" style="fill:var(--hazard)">Not /users/42/activate — that is RPC</text>
+        <text x="1066" y="716" class="s-sub" style="fill:var(--hazard)">dressed as REST. Nest one level at most.</text>
+
+        <rect x="30" y="746" width="1340" height="146" fill="var(--band)"/>
+        <text x="46" y="770" class="s-zone" fill="var(--mute)">Every outcome of a route lookup</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="46" y="782" width="150" height="40"/><rect x="250" y="782" width="150" height="40"/><rect x="470" y="782" width="170" height="40"/>
+          <rect x="710" y="782" width="170" height="40"/><rect x="950" y="782" width="200" height="40" stroke="var(--fast)"/>
+        </g>
+        <rect x="1200" y="782" width="170" height="40" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="6 4"/>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#m1)">
+          <path d="M196,802 L244,802"/><path d="M400,802 L464,802"/><path d="M640,802 L704,802"/><path d="M880,802 L944,802"/>
+        </g>
+        <path d="M1150,802 L1194,802" stroke="var(--hazard)" stroke-width="2.5" fill="none" marker-end="url(#m2)"/>
+        <g class="s-lab" font-size="11.5">
+          <text x="56" y="807">router walks routes</text><text x="260" y="807">path matched?</text><text x="480" y="807">method matched?</text>
+          <text x="720" y="807">params convert?</text><text x="960" y="807">18 handler(id=42, …)</text><text x="1210" y="807" fill="var(--hazard)">authorisation?</text>
+        </g>
+        <g stroke="var(--hazard)" stroke-width="2.5" fill="none" marker-end="url(#m2)">
+          <path d="M325,822 L325,842"/><path d="M555,822 L555,842"/><path d="M795,822 L795,842"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="2">
+          <rect x="250" y="846" width="150" height="30"/><rect x="470" y="846" width="170" height="30"/><rect x="710" y="846" width="170" height="30"/>
+        </g>
+        <g class="s-haz" font-size="11"><text x="260" y="866">15 · 404 · no route</text><text x="480" y="866">16 · 405 · wrong method</text><text x="720" y="866">17 · 400 · bad param</text></g>
+        <text x="960" y="846" class="s-sub">typed arguments — the handler</text>
+        <text x="960" y="860" class="s-sub">never parses a URL itself</text>
+        <text x="1200" y="846" class="s-sub" style="fill:var(--hazard)">not decided by routing —</text>
+        <text x="1200" y="860" class="s-sub" style="fill:var(--hazard)">sheet 1, stops 07 and 12</text>
+        <text x="46" y="846" class="s-sub">matching is a trie or</text>
+        <text x="46" y="860" class="s-sub">compiled regex: never</text>
+        <text x="46" y="874" class="s-sub">the slow part</text>
+      </svg>
+    </div>
+    <figcaption><b>The useful mental model:</b> middleware is airport security — every passenger, the same checks, in a fixed order, so nobody at the gate re-checks the passport. The router is the building directory — it tells you Accounts is on the third floor and checks nothing. Bugs on this sheet are almost all silent: a misordered ring, a shadowed route and an unregistered guard all run without an error or a warning.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the rings and the routes</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Error handler</h4><p>Outermost ring, so it catches exceptions from every layer inside. Maps them to status codes and must never send a stack trace to the client.</p></div>
+      <div><h4><span>02</span>Request ID</h4><p>First inner ring. A correlation id every downstream log line and error response can carry, which is what makes a production incident traceable at all.</p></div>
+      <div><h4><span>03</span>Logging</h4><p>Method, path, status, duration. Never request bodies or headers wholesale — passwords and tokens end up in log storage with far weaker access control than the database.</p></div>
+      <div><h4><span>04</span>CORS</h4><p>Declares which browser origins may call this API. It restricts browsers only; curl and servers ignore it, so it is never a substitute for authentication.</p></div>
+      <div><h4><span>05</span>Rate limiting</h4><p>Before authentication, so login brute force is throttled. Before body parsing too — a cheap rejection placed after expensive work saves nothing.</p></div>
+      <div><h4><span>06</span>Authentication</h4><p>Identifies the caller and attaches the identity for everything downstream. Registered globally; routes that need no auth opt out explicitly, never the reverse.</p></div>
+      <div><h4><span>07</span>Authorisation</h4><p>Decides whether this identity may proceed — which is meaningless until 06 has run. Only coarse, role-level checks can live here; object ownership needs the loaded object.</p></div>
+      <div><h4><span>08</span>Handler</h4><p>The only business-specific code inside the onion. Business rules must not migrate outward into middleware, where they become invisible to anyone reading the handler.</p></div>
+      <div><h4><span>09</span>Method</h4><p>The action: GET, POST, PUT, PATCH, DELETE. Together with the path it is the key the router matches on — the same path with two methods is two routes.</p></div>
+      <div><h4><span>10</span>Version prefix</h4><p>/v1/, /v2/: routing used to keep an old contract alive while a new one exists beside it. An API gateway routes on prefixes like this to entirely different services.</p></div>
+      <div><h4><span>11</span>Resource</h4><p>A plural noun naming a collection. Verbs in paths (/getUser) and inconsistent singular-plural naming are the conventions most often broken.</p></div>
+      <div><h4><span>12</span>Path parameter</h4><p>A required identifier, extracted and converted. Validate it before it builds a file path (traversal), and prefer UUIDs where sequential ids let attackers walk your data.</p></div>
+      <div><h4><span>13</span>Nested resource</h4><p>At most one level. /users/1/orders/2/items/3/comments couples the URL to a hierarchy that will change; /items/3/comments survives it.</p></div>
+      <div><h4><span>14</span>Query string</h4><p>Optional filtering, sorting, pagination. Never tokens or secrets: URLs are written to server logs, proxy logs and browser history.</p></div>
+      <div><h4><span>15</span>404 Not Found</h4><p>No registered path matched. Also the right answer for a resource that exists but whose existence is itself sensitive — a 403 would confirm it.</p></div>
+      <div><h4><span>16</span>405 Method Not Allowed</h4><p>The path matched but not the method: DELETE on a route registered only for GET. A different fault from 404, and worth distinguishing for clients.</p></div>
+      <div><h4><span>17</span>400 Bad Request</h4><p>Parameter conversion failed — "abc" where an integer id was declared. Rejected before the handler runs, so the handler never defends itself against it.</p></div>
+      <div><h4><span>18</span>Handler call</h4><p>getUserOrders(id=42, status="pending"): a function call with typed arguments. What it is not is an authorisation decision — that happens after this, or not at all.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Silent by design</b>
+    <p>In Express, a security middleware registered after a route never runs for that route — no error, no warning. The same router that shadows /users/me gives no warning either. Write the chain and the route table out in order once, check the four rules against them, and verify that a brand-new route gets authentication without anyone remembering to add it.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — THE BOUNDARY CHECKPOINTS ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Boundary Checkpoints</h2>
+    <span class="form">Decision tree</span>
+    <span class="cov">Covers · Validation · Controllers</span>
+  </div>
+  <p class="thesis">Stops 10 to 12 of sheet 1, drawn as the questions they ask. "Is it well-formed?", "may this user do it?" and "does the domain allow it?" sound like one check and are three — asked in different layers, failing with different codes. <strong>Validate once at the edge with an allow-list, then trust your own types; everything the controller does beyond translating HTTP is logic nobody else can reuse.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A decision tree for one request body. The top row runs left to right: untrusted input, body within the size limit, parses as JSON, matches the schema, a trusted typed object, the controller, and may this user act on this object. Each no branch drops to a red rejection: unparsed rejection, 400, 422 and 403. A dashed line marks the trust boundary after the schema check. The second row runs right to left: does the domain allow it, the repository write, database constraints, map to a DTO, and 201 Created, with rejections 409 and a constraint violation. Below, panels compare the three kinds of checking, show one schema and a field-level error body, contrast allow-lists with deny-lists and client with server checks, classify the lines of a fat controller, map domain exceptions to status codes, and show mass assignment and response DTOs.">
+        <defs>
+          <marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="40" y="42" class="s-zone" fill="var(--line)">One body, six questions · yes runs along the line, no drops to a status code</text>
+        <g class="s-zone" fill="var(--mute)"><text x="230" y="94">Validation</text><text x="990" y="94">Controller</text><text x="1180" y="94">Service</text></g>
+        <line x1="780" y1="60" x2="780" y2="236" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="8 6"/>
+        <text x="788" y="70" class="s-note">the boundary · right of it, input is trusted</text>
+
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5">
+          <rect x="40" y="102" width="150" height="56" fill="var(--z3)"/>
+          <rect x="230" y="102" width="150" height="56" stroke="var(--line)"/><rect x="420" y="102" width="150" height="56" stroke="var(--line)"/><rect x="610" y="102" width="150" height="56" stroke="var(--line)"/>
+          <rect x="990" y="102" width="150" height="56" fill="var(--z5)"/><rect x="1180" y="102" width="150" height="56" stroke="var(--line)"/>
+          <rect x="1180" y="250" width="150" height="56" stroke="var(--line)"/><rect x="990" y="250" width="150" height="56" fill="var(--z2)"/>
+          <rect x="800" y="250" width="150" height="56" stroke="var(--line)"/><rect x="610" y="250" width="150" height="56" fill="var(--z5)"/><rect x="420" y="250" width="150" height="56" fill="var(--z4)"/>
+        </g>
+        <rect x="800" y="102" width="150" height="56" fill="var(--z1)" stroke="var(--line)" stroke-width="3"/>
+        <g class="s-lab" font-size="11.5">
+          <text x="50" y="124">01 untrusted input</text><text x="240" y="124">02 body ≤ limit?</text><text x="430" y="124">03 parses?</text><text x="620" y="124">04 matches schema?</text>
+          <text x="810" y="124">05 trusted object</text><text x="1000" y="124">06 controller</text><text x="1190" y="124">07 may this user?</text>
+          <text x="1190" y="272">08 domain allows?</text><text x="1000" y="272">09 repository write</text><text x="810" y="272">10 constraints ok?</text>
+          <text x="620" y="272">11 map to DTO</text><text x="430" y="272">12 201 Created</text>
+        </g>
+        <g class="s-sub">
+          <text x="50" y="142">HTTP, queue, webhook</text><text x="240" y="142">checked before parsing</text><text x="430" y="142">valid JSON syntax</text><text x="620" y="142">shape, types, ranges</text>
+          <text x="810" y="142">a typed CreateOrder</text><text x="1000" y="142">one service call</text><text x="1190" y="142">this object, not a role</text>
+          <text x="1190" y="290">stock, limits, state</text><text x="1000" y="290">inside the transaction</text><text x="810" y="290">unique, not null, FK</text>
+          <text x="620" y="290">declared fields only</text><text x="430" y="290">Location: /orders/42</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#v1)">
+          <path d="M190,130 L224,130"/><path d="M380,130 L414,130"/><path d="M570,130 L604,130"/><path d="M760,130 L794,130"/><path d="M950,130 L984,130"/><path d="M1140,130 L1174,130"/>
+          <path d="M1330,130 C1368,130 1368,278 1336,278"/>
+          <path d="M1180,278 L1146,278"/><path d="M990,278 L956,278"/><path d="M800,278 L766,278"/><path d="M610,278 L576,278"/>
+        </g>
+        <g stroke="var(--hazard)" stroke-width="2.5" fill="none" marker-end="url(#v2)">
+          <path d="M305,158 L305,182"/><path d="M495,158 L495,182"/><path d="M685,158 L685,182"/><path d="M1255,158 L1255,182"/>
+          <path d="M1255,306 L1255,326"/><path d="M875,306 L875,326"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="2">
+          <rect x="230" y="186" width="150" height="44"/><rect x="420" y="186" width="150" height="44"/><rect x="610" y="186" width="150" height="44"/><rect x="1180" y="186" width="150" height="44"/>
+          <rect x="1180" y="330" width="150" height="44"/><rect x="800" y="330" width="150" height="44"/>
+        </g>
+        <g class="s-haz" font-size="11">
+          <text x="240" y="204">rejected unread</text><text x="430" y="204">400 · malformed</text><text x="620" y="204">422 · field errors</text><text x="1190" y="204">403 · or 404</text>
+          <text x="1190" y="348">409 · conflict</text><text x="810" y="348">constraint violation</text>
+        </g>
+        <g class="s-sub" style="fill:var(--hazard)">
+          <text x="240" y="220">memory is not spent</text><text x="430" y="220">not even JSON</text><text x="620" y="220">every one, at once</text><text x="1190" y="220">if existence is secret</text>
+          <text x="1190" y="364">OutOfStockError</text><text x="810" y="364">should never be first</text>
+        </g>
+        <text x="40" y="268" class="s-lab" font-size="11">Only after yes to all of it</text>
+        <text x="40" y="286" class="s-sub">is a row written and a body returned.</text>
+        <text x="40" y="300" class="s-sub">Each no to the left is cheaper than</text>
+        <text x="40" y="314" class="s-sub">the one to its right.</text>
+
+        <!-- MIDDLE PANELS -->
+        <rect x="30" y="400" width="440" height="240" fill="var(--z3)"/>
+        <text x="46" y="424" class="s-zone" fill="var(--mute)">13 · Three kinds of checking</text>
+        <g class="s-sub"><text x="46" y="450">kind</text><text x="150" y="450">question</text><text x="306" y="450">where</text><text x="410" y="450">fails</text></g>
+        <line x1="46" y1="458" x2="454" y2="458" stroke="var(--rule)"/>
+        <g class="s-lab" font-size="11"><text x="46" y="480">Validation</text><text x="46" y="534">Business rule</text><text x="46" y="588">Authorisation</text></g>
+        <g class="s-sub"><text x="150" y="480">is it well-formed?</text><text x="306" y="480">the boundary</text><text x="150" y="534">allowed by the domain?</text><text x="306" y="534">the service</text><text x="150" y="588">may this user do it?</text><text x="306" y="588">service, or mw</text></g>
+        <g class="s-mono"><text x="410" y="480">400/422</text><text x="410" y="534">409/422</text><text x="410" y="588">403</text></g>
+        <g class="s-sub" style="fill:var(--fast)"><text x="150" y="496">"email must be a valid address"</text><text x="150" y="550">"you cannot cancel a shipped order"</text><text x="150" y="604">"this order is not yours"</text></g>
+        <text x="46" y="628" class="s-note">Valid is not the same question as welcome.</text>
+
+        <rect x="490" y="400" width="440" height="240" fill="var(--z1)"/>
+        <text x="506" y="424" class="s-zone" fill="var(--line)">14 · One schema, three jobs</text>
+        <g class="s-mono">
+          <text x="506" y="446">class CreateOrder(BaseModel):</text>
+          <text x="506" y="462">    email: EmailStr</text>
+          <text x="506" y="478">    quantity: int = Field(gt=0, le=100)</text>
+          <text x="506" y="494">    notes: str | None = Field(max_length=500)</text>
+        </g>
+        <text x="506" y="514" class="s-sub">Validator, static type and documentation in one declaration —</text>
+        <text x="506" y="528" class="s-sub">Pydantic, Zod — so the checks cannot drift from the types.</text>
+        <text x="506" y="552" class="s-lab" font-size="11">15 · The error body</text>
+        <g class="s-mono">
+          <text x="506" y="570">{ "error": "validation_failed",</text>
+          <text x="506" y="584">  "fields": [</text>
+          <text x="506" y="598">    { "field": "email", "message": "invalid address" },</text>
+          <text x="506" y="612">    { "field": "quantity", "message": "1 to 100" } ],</text>
+          <text x="506" y="626">  "request_id": "req_8f3a" }</text>
+        </g>
+
+        <rect x="950" y="400" width="420" height="240" fill="var(--z4)"/>
+        <text x="966" y="424" class="s-zone" fill="var(--mute)">16 · Allow-list, never deny-list</text>
+        <text x="966" y="450" class="s-haz">deny-list</text>
+        <text x="966" y="466" class="s-mono">"reject anything containing &lt;script&gt;"</text>
+        <text x="966" y="482" class="s-sub" style="fill:var(--hazard)">misses one case; attackers only need one</text>
+        <text x="966" y="506" class="s-lab" style="fill:var(--line)">allow-list</text>
+        <text x="966" y="522" class="s-mono">"a-z, 0-9, hyphen, max 50 chars"</text>
+        <text x="966" y="538" class="s-sub">anything unexpected is rejected by default</text>
+        <text x="966" y="564" class="s-lab" font-size="11">17 · Where each check runs</text>
+        <rect x="966" y="574" width="50" height="16" fill="var(--cool)" opacity=".7"/>
+        <rect x="966" y="594" width="150" height="16" fill="var(--line)" opacity=".85"/>
+        <rect x="966" y="614" width="100" height="16" fill="var(--fast)" opacity=".8"/>
+        <g class="s-sub"><text x="1130" y="586">client · UX only, optional</text><text x="1130" y="606">server · mandatory, always</text><text x="1130" y="626">database · last line of defence</text></g>
+
+        <!-- BOTTOM PANELS -->
+        <rect x="30" y="660" width="440" height="232" fill="var(--band)"/>
+        <text x="46" y="684" class="s-zone" fill="var(--hazard)">18 · A fat controller, line by line</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="46" y="706">data = request.json</text><text x="46" y="722">if not data.get('items'): ...</text><text x="46" y="738">stock = db.query(Stock)...</text>
+          <text x="46" y="754">if user.tier == 'gold': ...</text><text x="46" y="770">db.add(order); db.commit()</text><text x="46" y="786">send_email(...)</text><text x="46" y="802">return jsonify(...)</text>
+        </g>
+        <g class="s-sub">
+          <text x="300" y="706" fill="var(--line)">HTTP · stays</text><text x="300" y="722" fill="var(--hazard)">validation · belongs at 04</text><text x="300" y="738" fill="var(--hazard)">query · belongs at 09</text>
+          <text x="300" y="754" fill="var(--hazard)">rule · belongs at 08</text><text x="300" y="770" fill="var(--hazard)">transaction · service</text><text x="300" y="786" fill="var(--hazard)">side effect · service</text><text x="300" y="802" fill="var(--line)">HTTP · stays</text>
+        </g>
+        <text x="46" y="828" class="s-lab" font-size="11" style="fill:var(--line)">The thin version</text>
+        <text x="46" y="846" class="s-mono">order = await service.create(user, body)</text>
+        <text x="46" y="862" class="s-mono">return OrderDto.from_domain(order)</text>
+        <text x="46" y="882" class="s-note">Could a cron job reuse this without a rewrite?</text>
+
+        <rect x="490" y="660" width="440" height="232" fill="var(--z2)"/>
+        <text x="506" y="684" class="s-zone" fill="var(--mute)">19 · Domain exception → status code</text>
+        <g class="s-mono">
+          <text x="506" y="712">NotFoundError</text><text x="506" y="732">PermissionDeniedError</text><text x="506" y="752">ValidationError</text>
+          <text x="506" y="772">ConflictError</text><text x="506" y="792">RateLimitError</text><text x="506" y="812">anything else</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#v1)">
+          <path d="M680,708 L730,708"/><path d="M680,728 L730,728"/><path d="M680,748 L730,748"/><path d="M680,768 L730,768"/><path d="M680,788 L730,788"/>
+        </g>
+        <path d="M680,808 L730,808" stroke="var(--hazard)" stroke-width="2" fill="none" marker-end="url(#v2)"/>
+        <g class="s-mono"><text x="742" y="712">404</text><text x="742" y="732">403</text><text x="742" y="752">422</text><text x="742" y="772">409</text><text x="742" y="792">429</text><text x="742" y="812" fill="var(--hazard)">500</text></g>
+        <g class="s-sub"><text x="780" y="772">out of stock</text><text x="780" y="812">logged with request ID</text></g>
+        <text x="506" y="842" class="s-sub">Services raise domain errors; one global handler translates.</text>
+        <text x="506" y="858" class="s-sub" style="fill:var(--hazard)">A service raising HTTPException cannot run from a queue consumer.</text>
+        <text x="506" y="878" class="s-sub">@ControllerAdvice · exception filters · @app.exception_handler</text>
+
+        <rect x="950" y="660" width="420" height="232" fill="var(--z5)"/>
+        <text x="966" y="684" class="s-zone" fill="var(--hazard)">20 · Mass assignment</text>
+        <text x="966" y="706" class="s-mono">PATCH /users/42 {"email": "a@b.c",</text>
+        <text x="966" y="720" class="s-mono" style="fill:var(--hazard)">                 "is_admin": true}</text>
+        <text x="966" y="746" class="s-haz">✗ User(**body)</text>
+        <text x="1120" y="746" class="s-sub" style="fill:var(--hazard)">any column is settable</text>
+        <text x="966" y="770" class="s-lab" style="fill:var(--line)">✓ input schema</text>
+        <text x="1120" y="770" class="s-sub">only listed fields exist</text>
+        <text x="966" y="806" class="s-lab" font-size="11">21 · Response DTO, never the entity</text>
+        <text x="966" y="826" class="s-sub">An ORM entity serialises every column — password_hash,</text>
+        <text x="966" y="840" class="s-sub">the field someone adds next year — and may lazy-load</text>
+        <text x="966" y="854" class="s-sub">relations mid-response. A DTO lists what may leave.</text>
+        <text x="966" y="878" class="s-haz" font-size="10.5">A data-leak defence, not tidiness.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the tree from the right-hand end first:</b> every question on it is there because a row written on bad input costs more than a request refused. Then read the bottom row of panels as the controller's contract — typed input in, one call, domain errors translated centrally, and only declared fields out.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the checkpoints and their vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Untrusted input</h4><p>Every trust boundary, not just HTTP: queue messages, webhook payloads, file uploads, environment variables and responses from third-party APIs all get validated.</p></div>
+      <div><h4><span>02</span>Size limit</h4><p>Strings, arrays and whole bodies are capped before parsing. Without limits a single request is a memory-exhaustion attack.</p></div>
+      <div><h4><span>03</span>Parse</h4><p>Malformed syntax is a 400. Keep it distinct from 422, which is a well-formed request whose content is invalid.</p></div>
+      <div><h4><span>04</span>Schema check</h4><p>Shape, types, ranges, lengths and allowed values, declared once. Beware catastrophic regexes (ReDoS), validate uploads by content not extension, and validate URLs before fetching them (SSRF).</p></div>
+      <div><h4><span>05</span>Trusted object</h4><p>Past the boundary, code stops defending itself. Internal layers do not re-validate the same shape — duplicated rules drift apart.</p></div>
+      <div><h4><span>06</span>Controller</h4><p>Receives typed input and an authenticated user, calls one service method. Also called handler, resource, view or endpoint depending on the framework.</p></div>
+      <div><h4><span>07</span>Object authorisation</h4><p>order.user_id != user.id → PermissionDeniedError. Middleware knew who you were; only code holding the object can know whether it is yours. Most often forgotten in controllers.</p></div>
+      <div><h4><span>08</span>Business rule</h4><p>Not enough stock, a shipped order cannot be cancelled. Needs the domain and usually the database, so it can never live in the validation schema.</p></div>
+      <div><h4><span>09</span>Repository write</h4><p>Happens inside the service's transaction, through a repository — never a query written in the controller.</p></div>
+      <div><h4><span>10</span>Database constraints</h4><p>Unique keys, not-null, foreign keys: the last line of defence. If they are the first thing to reject bad data, the checks above them are missing.</p></div>
+      <div><h4><span>11</span>Map to DTO</h4><p>An explicit response object with declared fields. Mapping tools (MapStruct, AutoMapper, Pydantic) help; copying every field automatically defeats the purpose.</p></div>
+      <div><h4><span>12</span>201 Created</h4><p>Status code, Location header and body chosen in the controller: 200, 201, 204 or 404 are HTTP decisions the service never makes.</p></div>
+      <div><h4><span>13</span>Three kinds of checking</h4><p>Validation (400/422, boundary), business rules (409/422, service), authorisation (403, middleware or service). Separating them tells you exactly where each rule belongs.</p></div>
+      <div><h4><span>14</span>Schema-driven validation</h4><p>Pydantic, Zod, class-validator, FluentValidation, JSON Schema. Better than hand-written ifs because the schema is also the type and the documentation.</p></div>
+      <div><h4><span>15</span>Error response</h4><p>All field errors at once, a machine-readable code and a request_id. A client that must submit five times to find five problems is using a bad API.</p></div>
+      <div><h4><span>16</span>Allow-list</h4><p>Define what is acceptable and reject everything else. Every filter built by blocking known-bad patterns has eventually been bypassed.</p></div>
+      <div><h4><span>17</span>Client vs server</h4><p>Browser validation is a user-experience feature. curl, mobile apps and other services never saw your form, so every rule is enforced again on the server.</p></div>
+      <div><h4><span>18</span>Fat controller</h4><p>The version every tutorial writes because it fits on one slide. Its logic cannot be tested without an HTTP server, reused by a job, or read without wading through parsing.</p></div>
+      <div><h4><span>19</span>Exception mapping</h4><p>NotFound 404, PermissionDenied 403, Validation 422, Conflict 409, RateLimit 429, anything else 500. One central handler, not a try/except per endpoint.</p></div>
+      <div><h4><span>20</span>Mass assignment</h4><p>Binding a request body straight onto a model lets the caller set is_admin, role or account_balance. Bind to an input schema listing exactly the accepted fields.</p></div>
+      <div><h4><span>21</span>Response DTO</h4><p>The most common accidental data-leak path is returning an entity. Validation is not sanitisation either: output escaping, not input checks, prevents XSS.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The honest counter-argument</b>
+    <p>For a genuinely trivial endpoint — one insert, no rules — a service that only forwards to a repository is ceremony, and a thin controller calling the repository directly is honest. Judge by whether there are business rules to protect. Validation at the boundary, however, is never optional.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — THE RULEBOOK AND THE ARCHIVE ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>The Rulebook and the Archive</h2>
+    <span class="form">Process plant</span>
+    <span class="cov">Covers · Services · Repository Pattern</span>
+  </div>
+  <p class="thesis">Stops 12 to 16 of sheet 1, drawn as a plant. Four intakes feed one rulebook; the rulebook asks an archive for objects and never learns how they are shelved. <strong>The service is the only layer that knows which writes belong together, and the repository is the only layer that knows SQL — swap either responsibility into the other and both become untestable.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A process plant. On the left, four intakes — an HTTP controller, a CLI command, a queue consumer and a cron job — converge on one service. The service runs nine stages left to right: authorise, load via repositories, apply business rules, begin a transaction, persist the order, reserve stock, commit, publish the OrderCreated event, and return a domain object. A band marks the transaction around stages five to eight, and three hazard notes mark a rule violation, the check-then-reserve race and publishing before commit. Below left, the service depends on an OrderRepository interface defined by the domain, implemented across a boundary by a SQL repository, a cached decorator and an in-memory test repository, with a unit of work coordinating them. Below right, the same query scattered across services compared with one repository method. Along the bottom, active record versus DAO versus repository, anemic versus rich domain models, and a checklist of when the pattern earns its place.">
+        <defs>
+          <marker id="r4a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="r4b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="r4c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <!-- INTAKES -->
+        <text x="40" y="42" class="s-zone" fill="var(--learn)">01 · Four intakes</text>
+        <g fill="var(--z6)" stroke="var(--learn)" stroke-width="2">
+          <rect x="40" y="100" width="170" height="40"/><rect x="40" y="150" width="170" height="40"/><rect x="40" y="200" width="170" height="40"/><rect x="40" y="250" width="170" height="40"/>
+        </g>
+        <g class="s-lab" font-size="11.5"><text x="52" y="125">HTTP controller</text><text x="52" y="175">CLI command</text><text x="52" y="225">queue consumer</text><text x="52" y="275">nightly cron job</text></g>
+        <g stroke="var(--learn)" stroke-width="2.5" fill="none" marker-end="url(#r4c)">
+          <path d="M210,120 C236,120 232,172 252,172"/><path d="M210,170 L252,172"/><path d="M210,220 C236,220 232,172 252,172"/><path d="M210,270 C240,270 232,172 252,172"/>
+        </g>
+        <text x="40" y="316" class="s-sub">four entry points, one</text>
+        <text x="40" y="330" class="s-sub">implementation of the rules</text>
+
+        <!-- SERVICE PLANT -->
+        <rect x="240" y="60" width="1130" height="276" fill="var(--z1)"/>
+        <text x="256" y="84" class="s-zone" fill="var(--line)">The service · OrderService.create(user, cmd)</text>
+        <text x="256" y="102" class="s-sub">Note what is absent: no request object, no status codes, no SQL, no JSON. It does not know which door it was called through.</text>
+        <rect x="620" y="112" width="496" height="124" fill="var(--z4)" stroke="var(--fast)" stroke-width="2" stroke-dasharray="7 5"/>
+        <text x="630" y="128" class="s-note">one use case · one transaction · the boundary</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="256" y="140" width="116" height="64"/><rect x="380" y="140" width="116" height="64"/><rect x="504" y="140" width="116" height="64"/>
+          <rect x="628" y="140" width="116" height="64" stroke="var(--fast)"/><rect x="752" y="140" width="116" height="64"/><rect x="876" y="140" width="116" height="64"/>
+          <rect x="1000" y="140" width="116" height="64" stroke="var(--fast)"/><rect x="1124" y="140" width="116" height="64"/><rect x="1248" y="140" width="116" height="64"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#r4a)">
+          <path d="M372,172 L378,172"/><path d="M496,172 L502,172"/><path d="M620,172 L626,172"/><path d="M744,172 L750,172"/><path d="M868,172 L874,172"/><path d="M992,172 L998,172"/><path d="M1116,172 L1122,172"/><path d="M1240,172 L1246,172"/>
+        </g>
+        <g class="s-num"><text x="264" y="156">02</text><text x="388" y="156">03</text><text x="512" y="156">04</text><text x="636" y="156">05</text><text x="760" y="156">06</text><text x="884" y="156">07</text><text x="1008" y="156">08</text><text x="1132" y="156">09</text><text x="1256" y="156">10</text></g>
+        <g class="s-lab" font-size="11.5"><text x="264" y="176">authorise</text><text x="388" y="176">load</text><text x="512" y="176">apply rules</text><text x="636" y="176">BEGIN</text><text x="760" y="176">persist order</text><text x="884" y="176">reserve stock</text><text x="1008" y="176">COMMIT</text><text x="1132" y="176">publish event</text><text x="1256" y="176">return Order</text></g>
+        <g class="s-sub" font-size="10.5"><text x="264" y="194">account theirs?</text><text x="388" y="194">via repositories</text><text x="512" y="194">stock, pricing</text><text x="636" y="194">unit of work</text><text x="760" y="194">orders.add()</text><text x="884" y="194">stock.reserve()</text><text x="1008" y="194">both, or neither</text><text x="1132" y="194">OrderCreated</text><text x="1256" y="194">domain, not DTO</text></g>
+
+        <path d="M562,204 L562,246" stroke="var(--hazard)" stroke-width="2.5" stroke-dasharray="6 4" fill="none" marker-end="url(#r4b)"/>
+        <text x="504" y="264" class="s-haz">rule violated</text>
+        <text x="504" y="280" class="s-sub" style="fill:var(--hazard)">OutOfStockError —</text>
+        <text x="504" y="294" class="s-sub" style="fill:var(--hazard)">domain, not HTTP</text>
+        <text x="752" y="264" class="s-haz">check-then-reserve</text>
+        <text x="752" y="280" class="s-sub" style="fill:var(--hazard)">as two queries is a race: it</text>
+        <text x="752" y="294" class="s-sub" style="fill:var(--hazard)">needs the transaction or a</text>
+        <text x="752" y="308" class="s-sub" style="fill:var(--hazard)">database-level constraint</text>
+        <text x="1124" y="264" class="s-haz">publish before commit</text>
+        <text x="1124" y="280" class="s-sub" style="fill:var(--hazard)">announces an order that a</text>
+        <text x="1124" y="294" class="s-sub" style="fill:var(--hazard)">rollback then erases</text>
+        <text x="256" y="264" class="s-lab" font-size="11">authorise here,</text>
+        <text x="256" y="280" class="s-sub">not only in the</text>
+        <text x="256" y="294" class="s-sub">controller: the queue</text>
+        <text x="256" y="308" class="s-sub">door has no controller</text>
+
+        <!-- ARCHIVE -->
+        <rect x="30" y="356" width="770" height="296" fill="var(--z3)"/>
+        <text x="46" y="380" class="s-zone" fill="var(--mute)">The archive · a collection over storage</text>
+        <rect x="320" y="392" width="200" height="44" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <text x="332" y="410" class="s-lab" font-size="11.5">11 OrderService</text>
+        <text x="332" y="426" class="s-sub" font-size="10.5">asks what, never how</text>
+        <path d="M420,436 L420,452" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#r4a)"/>
+        <text x="430" y="450" class="s-sub" font-size="10.5">depends on</text>
+        <rect x="270" y="456" width="300" height="80" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="282" y="474" class="s-lab" font-size="11" style="fill:var(--line)">12 the interface, owned by the domain</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="282" y="492">get(id) -&gt; Order | None</text>
+          <text x="282" y="508">add(order) -&gt; None</text>
+          <text x="282" y="524">pending_for(user_id) -&gt; list[Order]</text>
+        </g>
+        <line x1="40" y1="552" x2="790" y2="552" stroke="var(--fast)" stroke-width="2" stroke-dasharray="9 6"/>
+        <text x="46" y="546" class="s-note">interface boundary</text>
+        <text x="600" y="546" class="s-sub" style="fill:var(--fast)">arrows point up, into the domain</text>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5">
+          <rect x="50" y="572" width="220" height="44"/><rect x="300" y="572" width="220" height="44"/><rect x="550" y="572" width="220" height="44"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#r4a)">
+          <path d="M160,572 L330,540"/><path d="M410,572 L420,540"/><path d="M660,572 L510,540"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="62" y="590">13 SqlOrderRepository</text><text x="312" y="590">14 CachedOrderRepo</text><text x="562" y="590">15 InMemoryOrderRepo</text></g>
+        <g class="s-sub" font-size="10.5"><text x="62" y="606">SQLAlchemy lives only here</text><text x="312" y="606">Redis in front of SQL</text><text x="562" y="606">a dict, for tests</text></g>
+        <g class="s-sub"><text x="62" y="636">parameterised · eager loads</text><text x="312" y="636">a Decorator: callers unchanged</text><text x="562" y="636">service tests in milliseconds</text></g>
+        <rect x="600" y="392" width="180" height="60" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="612" y="410" class="s-lab" font-size="11">16 unit of work</text>
+        <text x="612" y="426" class="s-sub" font-size="10.5">several repositories,</text>
+        <text x="612" y="440" class="s-sub" font-size="10.5">one transaction</text>
+        <path d="M600,440 L574,470" stroke="var(--fast)" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+        <text x="46" y="410" class="s-sub">The service is constructed with</text>
+        <text x="46" y="424" class="s-sub">the interface. Which of the three</text>
+        <text x="46" y="438" class="s-sub">it receives is decided at startup —</text>
+        <text x="46" y="452" class="s-sub">sheet 5, the composition root.</text>
+        <text x="46" y="490" class="s-sub" style="fill:var(--hazard)">Tenant filter and "not deleted"</text>
+        <text x="46" y="504" class="s-sub" style="fill:var(--hazard)">enforced here, once — or they</text>
+        <text x="46" y="518" class="s-sub" style="fill:var(--hazard)">eventually leak.</text>
+
+        <!-- N+1 -->
+        <rect x="820" y="356" width="550" height="296" fill="var(--z2)"/>
+        <text x="836" y="380" class="s-zone" fill="var(--mute)">17 · The same query, in four places</text>
+        <text x="836" y="404" class="s-haz" font-size="11">without · in every service</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="836" y="424">session.query(Order)</text>
+          <text x="836" y="440">  .join(Item)</text>
+          <text x="836" y="456">  .filter(Order.user_id == uid)</text>
+          <text x="836" y="472">  .filter(Order.status == 'pending')</text>
+          <text x="836" y="488">  .all()</text>
+        </g>
+        <text x="900" y="488" class="s-sub" style="fill:var(--hazard)">← this copy forgot joinedload</text>
+        <text x="1112" y="404" class="s-lab" font-size="11" style="fill:var(--line)">with · one method</text>
+        <text x="1112" y="424" class="s-mono">repo.pending_for(uid)</text>
+        <text x="1112" y="448" class="s-sub">eager loading applied once;</text>
+        <text x="1112" y="462" class="s-sub">callers cannot forget it</text>
+        <line x1="836" y1="506" x2="1354" y2="506" stroke="var(--rule)"/>
+        <text x="836" y="528" class="s-lab" font-size="11">N+1, the invisible bill</text>
+        <text x="836" y="546" class="s-sub">for order in orders: repo.items_for(order.id) looks innocent and sends a query per</text>
+        <text x="836" y="560" class="s-sub">row — 200 orders, 201 queries. Load the collection in one call, work on it in memory.</text>
+        <text x="836" y="586" class="s-haz" font-size="11">find_all() then filter in Python</text>
+        <text x="836" y="602" class="s-sub" style="fill:var(--hazard)">a full table scan dressed as clean code — the natural result of a generic Repository&lt;T&gt;</text>
+        <text x="836" y="628" class="s-note">The strongest practical argument for the pattern: fix the query once.</text>
+
+        <!-- BOTTOM -->
+        <rect x="30" y="672" width="440" height="196" fill="var(--z4)"/>
+        <text x="46" y="696" class="s-zone" fill="var(--mute)">18 · Three ways to save an order</text>
+        <g class="s-mono" font-size="10.5"><text x="46" y="724">order.save()</text><text x="46" y="776">orderDao.insert(row)</text><text x="46" y="828">repo.add(order)</text></g>
+        <g class="s-lab" font-size="11"><text x="200" y="724">Active Record</text><text x="200" y="776">DAO</text><text x="200" y="828" fill="var(--line)">Repository</text></g>
+        <g class="s-sub">
+          <text x="200" y="740">the object saves itself — Django,</text><text x="200" y="754">Eloquent; couples domain to storage</text>
+          <text x="200" y="792">table-oriented, close to SQL,</text><text x="200" y="806">hands back rows</text>
+          <text x="200" y="844">collection-shaped, one per aggregate,</text><text x="200" y="858">returns domain objects</text>
+        </g>
+
+        <rect x="490" y="672" width="440" height="196" fill="var(--z1)"/>
+        <text x="506" y="696" class="s-zone" fill="var(--line)">19 · Where the rules live</text>
+        <text x="506" y="722" class="s-lab" font-size="11">Anemic model + thick service</text>
+        <text x="506" y="738" class="s-sub">entities hold data, services hold every rule.</text>
+        <text x="506" y="752" class="s-sub">Simpler, procedural, fine for CRUD-heavy systems.</text>
+        <text x="506" y="778" class="s-lab" font-size="11">Rich domain model</text>
+        <text x="506" y="794" class="s-sub">entities enforce their own invariants; services</text>
+        <text x="506" y="808" class="s-sub">orchestrate. Scales better in complex domains.</text>
+        <text x="506" y="834" class="s-note">Start with services. Move a rule into the entity</text>
+        <text x="506" y="850" class="s-note">the day the same invariant appears in two services.</text>
+
+        <rect x="950" y="672" width="420" height="196" fill="var(--band)"/>
+        <text x="966" y="696" class="s-zone" fill="var(--mute)">20 · Does the layer earn its file?</text>
+        <text x="966" y="720" class="s-lab" font-size="11" style="fill:var(--line)">earns it</text>
+        <g class="s-sub">
+          <text x="966" y="738">· rules must be tested without a database</text>
+          <text x="966" y="752">· complex queries reused by several services</text>
+          <text x="966" y="766">· a cache or new store may sit in front</text>
+          <text x="966" y="780">· the domain model differs from the schema</text>
+        </g>
+        <text x="966" y="804" class="s-haz" font-size="11">ceremony</text>
+        <g class="s-sub" style="fill:var(--hazard)">
+          <text x="966" y="822">· every method a one-line pass-through to the ORM</text>
+          <text x="966" y="836">· a generic Repository&lt;T&gt; with findAll, findById, save</text>
+          <text x="966" y="850">· a small CRUD app where the ORM model is the domain</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption><b>The mental model:</b> the controller is the receptionist, the service is the company's rulebook, and the repository is the librarian — you ask for "everything this author published since 2020" and never learn whether it came from a shelf or microfiche. The rulebook does not care whether the request arrived by phone, email or in person, which is exactly why it can be applied consistently to all three.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the plant and the archive</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Four intakes</h4><p>HTTP, CLI, queue consumer, cron. If a rule can only be reached through an HTTP request, it will eventually be reimplemented — differently — in one of the other three.</p></div>
+      <div><h4><span>02</span>Authorise</h4><p>In or above the service, never only in the controller: the consumer that also cancels orders has no controller. The service raises PermissionDeniedError; HTTP maps it.</p></div>
+      <div><h4><span>03</span>Load</h4><p>Everything needed, through injected repositories — never concrete database code. Load collections in one call; a repository call inside a loop is a hidden N+1.</p></div>
+      <div><h4><span>04</span>Apply rules</h4><p>Stock, pricing, discounts, limits, in domain language. Violations raise domain exceptions like OutOfStockError, which sheet 3 maps to 409.</p></div>
+      <div><h4><span>05</span>Begin</h4><p>The transaction opens in the service. A controller does not know which writes belong together; a single repository is too fine-grained to decide.</p></div>
+      <div><h4><span>06</span>Persist the order</h4><p>orders.add(order) participates in the ambient transaction. The repository writes; it does not decide.</p></div>
+      <div><h4><span>07</span>Reserve stock</h4><p>A second repository in the same unit of work. "Check stock, then reserve" as two unguarded queries lets two buyers take the last item.</p></div>
+      <div><h4><span>08</span>Commit</h4><p>Both writes succeed or neither survives. Without a clear boundary, a failure between them leaves a partial write in production.</p></div>
+      <div><h4><span>09</span>Publish event</h4><p>OrderCreated after commit, so nothing reacts to a rolled-back order. This is also where audit logging belongs: the service knows what happened; a controller only knows a request arrived.</p></div>
+      <div><h4><span>10</span>Return a domain object</h4><p>Not a DTO, not a status code. Mapping to the response shape is the caller's job, because a CLI and an HTTP endpoint want different shapes of the same result.</p></div>
+      <div><h4><span>11</span>Service as dependent</h4><p>Takes the repository interface in its constructor. Beware services calling services calling services: if A always needs B, they may be one use case, or B may be a domain object.</p></div>
+      <div><h4><span>12</span>Repository interface</h4><p>Collection-like — get, add, pending_for — and defined by the domain. The dependency points from storage toward the business: the core idea of Clean Architecture on sheet 7.</p></div>
+      <div><h4><span>13</span>SQL implementation</h4><p>The one place SQLAlchemy, Prisma or Entity Framework appears. Parameterised queries only — the layer allowed to write raw SQL is exactly where injection is most likely.</p></div>
+      <div><h4><span>14</span>Cached decorator</h4><p>Wraps the SQL repository and satisfies the same interface, so adding a cache or a read replica changes no caller at all.</p></div>
+      <div><h4><span>15</span>In-memory implementation</h4><p>The payoff: the same service, handed a dictionary-backed repository, runs its tests with no database in milliseconds instead of seconds.</p></div>
+      <div><h4><span>16</span>Unit of Work</h4><p>Coordinates several repositories inside one transaction and commits them together. Spring's @Transactional puts the boundary on the service method itself.</p></div>
+      <div><h4><span>17</span>One query, one place</h4><p>Scattered ORM syntax means the same query written four ways, one without eager loading. A repository method fixes the N+1 once. Never expose raw query builders, or the encapsulation is gone.</p></div>
+      <div><h4><span>18</span>Active Record, DAO, Repository</h4><p>order.save() couples the object to storage; a DAO is table-shaped; a repository is collection-shaped and domain-typed. One repository per aggregate, not per table.</p></div>
+      <div><h4><span>19</span>Anemic or rich</h4><p>Both schools are defensible. Rules in services is simpler; rules in entities scales. Repetition of one invariant across services is the signal to move it.</p></div>
+      <div><h4><span>20</span>The honest objection</h4><p>An ORM is already a repository. The pattern earns its place for complex domains, fast tests, reused queries and tenant filtering — and is pure ceremony in a small CRUD app. Write down which you have.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — THE WIRING DIAGRAM ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>The Wiring Diagram</h2>
+    <span class="form">Wiring diagram</span>
+    <span class="cov">Covers · Dependency Injection · SOLID Principles</span>
+  </div>
+  <p class="thesis">Sheet 4 said the service receives its repository. This sheet shows who hands it over, how long each part lives, and the five class-level rules that make the swap possible. <strong>A chef handed ingredients can cook anywhere; one sent shopping can only cook near the usual shop. Every principle here buys that flexibility with indirection — worth it only where things actually vary.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 890" role="img" aria-label="A wiring diagram. Top left, a composition root at startup creates a SQL order repository and an SMTP email sender, which are injected into OrderService, which is injected into OrderController. Top middle, the same OrderService wired in a test with an in-memory repository and a fake email sender, feeding assertions. Top right, the three forms of injection and how five frameworks provide containers. Middle, a lifetime chart over three requests: one singleton bar spanning all of them, one scoped bar per request, and short transient ticks. Beside it, the captive dependency hazard: a singleton holding request A's database session, read by requests B and C. Bottom, five panels for the SOLID principles, ending with dependency inversion drawn as an arrow to the database reversed into an interface the database implements.">
+        <defs>
+          <marker id="w5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="w5b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="w5c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <!-- A PRODUCTION -->
+        <rect x="30" y="56" width="530" height="314" fill="var(--z1)"/>
+        <text x="46" y="80" class="s-zone" fill="var(--line)">Production · wired once, at startup</text>
+        <rect x="185" y="96" width="190" height="44" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="197" y="114" class="s-lab" font-size="11.5">01 composition root</text>
+        <text x="197" y="130" class="s-sub" font-size="10.5">knows every concrete type</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="50" y="176" width="200" height="44"/><rect x="310" y="176" width="200" height="44"/>
+          <rect x="180" y="256" width="200" height="44"/><rect x="180" y="316" width="200" height="44"/>
+        </g>
+        <g class="s-lab" font-size="11.5"><text x="62" y="194">02 SqlOrderRepository</text><text x="322" y="194">02 SmtpEmailSender</text><text x="192" y="274">03 OrderService</text><text x="192" y="334">04 OrderController</text></g>
+        <g class="s-sub" font-size="10.5"><text x="62" y="210">scoped · one per request</text><text x="322" y="210">singleton · stateless</text><text x="192" y="290">constructor(repo, email)</text><text x="192" y="350">constructor(service)</text></g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#w5a)">
+          <path d="M280,140 L150,172"/><path d="M280,140 L410,172"/>
+          <path d="M150,220 L250,252"/><path d="M410,220 L310,252"/>
+          <path d="M280,300 L280,312"/>
+        </g>
+        <text x="290" y="164" class="s-sub" style="fill:var(--line)">creates</text>
+        <text x="362" y="246" class="s-sub" style="fill:var(--line)">injected into</text>
+        <text x="396" y="306" class="s-sub">Nothing below 01 constructs</text>
+        <text x="396" y="320" class="s-sub">its own collaborators. Swap</text>
+        <text x="396" y="334" class="s-sub">a line in one file and every</text>
+        <text x="396" y="348" class="s-sub">consumer gets the new part.</text>
+
+        <!-- B TESTS -->
+        <rect x="580" y="56" width="320" height="314" fill="var(--z6)"/>
+        <text x="596" y="80" class="s-zone" fill="var(--learn)">Tests · other ingredients</text>
+        <g fill="var(--paper)" stroke="var(--learn)" stroke-width="2">
+          <rect x="596" y="106" width="290" height="34"/><rect x="596" y="148" width="290" height="34"/>
+          <rect x="661" y="214" width="160" height="40"/><rect x="661" y="280" width="160" height="34"/>
+        </g>
+        <g class="s-lab" font-size="11.5"><text x="608" y="128">05 InMemoryOrderRepo</text><text x="608" y="170">05 FakeEmailSender</text><text x="673" y="232">OrderService</text><text x="673" y="302">assertions</text></g>
+        <text x="673" y="247" class="s-sub" font-size="10.5">the very same class</text>
+        <g stroke="var(--learn)" stroke-width="2.5" fill="none" marker-end="url(#w5c)"><path d="M741,182 L741,210"/><path d="M741,254 L741,276"/></g>
+        <text x="596" y="336" class="s-sub">No mock.patch on import paths, no real SMTP,</text>
+        <text x="596" y="350" class="s-sub">no database — constructed with fakes, it runs</text>
+        <text x="596" y="364" class="s-sub">in milliseconds.</text>
+
+        <!-- C FORMS -->
+        <rect x="920" y="56" width="450" height="314" fill="var(--z3)"/>
+        <text x="936" y="80" class="s-zone" fill="var(--mute)">Three forms, and the container</text>
+        <text x="936" y="106" class="s-lab" font-size="11.5" style="fill:var(--line)">06 constructor injection</text>
+        <text x="936" y="122" class="s-sub">the default — requirements explicit, object immutable</text>
+        <text x="936" y="146" class="s-lab" font-size="11.5">07 method injection</text>
+        <text x="936" y="162" class="s-sub">passed to one method, for one operation only</text>
+        <text x="936" y="186" class="s-lab" font-size="11.5" style="fill:var(--hazard)">08 property injection</text>
+        <text x="936" y="202" class="s-sub" style="fill:var(--hazard)">set after construction — the object can exist half-built</text>
+        <line x1="936" y1="214" x2="1354" y2="214" stroke="var(--rule)"/>
+        <text x="936" y="236" class="s-lab" font-size="11.5">09 containers wire the graph by type</text>
+        <g class="s-lab" font-size="11"><text x="936" y="258">Spring</text><text x="936" y="276">ASP.NET Core</text><text x="936" y="294">NestJS</text><text x="936" y="312">FastAPI</text><text x="936" y="330">Go, much Python</text></g>
+        <g class="s-sub"><text x="1060" y="258">the original, annotation-driven</text><text x="1060" y="276">built in · IServiceCollection</text><text x="1060" y="294">built in, Angular-style</text><text x="1060" y="312">Depends() — functions, not classes</text><text x="1060" y="330">none: plain constructor arguments</text></g>
+        <text x="936" y="352" class="s-note">Passing constructor arguments is DI.</text>
+        <text x="1196" y="352" class="s-sub">A container is optional.</text>
+
+        <!-- SCOPES -->
+        <rect x="30" y="390" width="850" height="240" fill="var(--z2)"/>
+        <text x="46" y="414" class="s-zone" fill="var(--mute)">Lifetimes · three requests on one server</text>
+        <g class="s-lab" font-size="11.5"><text x="46" y="454">10 singleton</text><text x="46" y="504">11 scoped</text><text x="46" y="554">12 transient</text></g>
+        <g class="s-sub" font-size="10.5"><text x="46" y="468">one, forever</text><text x="46" y="518">one per request</text><text x="46" y="568">new every time</text></g>
+        <rect x="170" y="440" width="690" height="30" fill="var(--line)" opacity=".85"/>
+        <text x="182" y="459" class="s-sub" style="fill:var(--paper)">one instance for the application lifetime · stateless services, configuration, the email sender</text>
+        <g fill="var(--fast)" opacity=".85"><rect x="190" y="490" width="190" height="30"/><rect x="420" y="490" width="190" height="30"/><rect x="650" y="490" width="190" height="30"/></g>
+        <g class="s-sub" style="fill:var(--paper)"><text x="200" y="509">request A · db session</text><text x="430" y="509">request B · db session</text><text x="660" y="509">request C · current user</text></g>
+        <g fill="var(--cool)" opacity=".8">
+          <rect x="200" y="540" width="8" height="30"/><rect x="236" y="540" width="8" height="30"/><rect x="300" y="540" width="8" height="30"/><rect x="336" y="540" width="8" height="30"/>
+          <rect x="452" y="540" width="8" height="30"/><rect x="478" y="540" width="8" height="30"/><rect x="560" y="540" width="8" height="30"/><rect x="702" y="540" width="8" height="30"/><rect x="730" y="540" width="8" height="30"/><rect x="800" y="540" width="8" height="30"/>
+        </g>
+        <line x1="170" y1="590" x2="860" y2="590" stroke="var(--ink)" stroke-width="1.5" marker-end="url(#w5a)"/>
+        <text x="860" y="606" class="s-sub" text-anchor="end">time</text>
+        <text x="170" y="618" class="s-sub">Scoped instances are disposed when their request ends, and the database session closes with them.</text>
+
+        <!-- CAPTIVE -->
+        <rect x="900" y="390" width="470" height="240" fill="var(--band)"/>
+        <text x="916" y="414" class="s-zone" fill="var(--hazard)">13 · The captive dependency</text>
+        <rect x="916" y="432" width="220" height="70" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="928" y="452" class="s-lab" font-size="11.5">ReportService</text>
+        <text x="1030" y="452" class="s-sub" font-size="10.5">singleton</text>
+        <rect x="928" y="474" width="196" height="20" fill="var(--z5)" stroke="var(--fast)" stroke-width="1.5"/>
+        <text x="936" y="488" class="s-mono" font-size="10">session ← request A</text>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"><rect x="1200" y="432" width="150" height="30"/><rect x="1200" y="472" width="150" height="30"/></g>
+        <g class="s-lab" font-size="11"><text x="1212" y="452">request B</text><text x="1212" y="492">request C</text></g>
+        <g stroke="var(--hazard)" stroke-width="2.5" fill="none" marker-end="url(#w5b)"><path d="M1200,447 L1142,468"/><path d="M1200,487 L1142,484"/></g>
+        <text x="916" y="526" class="s-sub" style="fill:var(--hazard)">B and C read through A's database session and A's</text>
+        <text x="916" y="540" class="s-sub" style="fill:var(--hazard)">user context: one user's data, served to another.</text>
+        <text x="916" y="562" class="s-haz">intermittent · load-dependent · hard to reproduce</text>
+        <text x="916" y="586" class="s-sub">A security bug, not only a correctness bug. Rule: a longer-lived</text>
+        <text x="916" y="600" class="s-sub">object may never hold a shorter-lived one — audit what every</text>
+        <text x="916" y="614" class="s-sub">singleton keeps in its fields.</text>
+
+        <!-- SOLID -->
+        <line x1="30" y1="642" x2="1370" y2="642" stroke="var(--ink)" stroke-width="2"/>
+        <g fill="var(--z4)"><rect x="30" y="650" width="264" height="232"/><rect x="299" y="650" width="264" height="232"/><rect x="568" y="650" width="264" height="232"/><rect x="837" y="650" width="264" height="232"/></g>
+        <rect x="1106" y="650" width="264" height="232" fill="var(--z1)"/>
+        <g class="s-lab" font-size="11.5"><text x="46" y="674">14 S · Single Responsibility</text><text x="315" y="674">15 O · Open/Closed</text><text x="584" y="674">16 L · Liskov Substitution</text><text x="853" y="674">17 I · Interface Segregation</text><text x="1122" y="674" fill="var(--line)">18 D · Dependency Inversion</text></g>
+
+        <rect x="46" y="688" width="110" height="84" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <g class="s-mono" font-size="10.5"><text x="54" y="704" fill="var(--hazard)">class User</text><text x="54" y="720">save()</text><text x="54" y="736">send_email()</text><text x="54" y="752">generate_pdf()</text><text x="54" y="766">validate()</text></g>
+        <path d="M160,730 L174,730" stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#w5a)"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5"><rect x="180" y="688" width="104" height="18"/><rect x="180" y="712" width="104" height="18"/><rect x="180" y="736" width="104" height="18"/><rect x="180" y="760" width="104" height="18"/></g>
+        <g class="s-mono" font-size="10"><text x="186" y="701">User</text><text x="186" y="725">UserRepository</text><text x="186" y="749">EmailSender</text><text x="186" y="773">InvoicePdf</text></g>
+        <text x="46" y="800" class="s-sub">User changed with the database, the mail</text>
+        <text x="46" y="814" class="s-sub">provider, the PDF library or the rules.</text>
+        <text x="46" y="838" class="s-note">one reason = one stakeholder</text>
+        <text x="46" y="856" class="s-sub">finance rules and marketing emails</text>
+        <text x="46" y="870" class="s-sub">change on different schedules</text>
+
+        <g class="s-mono" font-size="10.5"><text x="315" y="704">if m == "stripe": ...</text><text x="315" y="720">elif m == "paypal": ...</text><text x="315" y="736" fill="var(--hazard)">elif m == "klarna": ...</text></g>
+        <text x="315" y="752" class="s-sub" style="fill:var(--hazard)">every new provider edits this function</text>
+        <g class="s-mono" font-size="10.5"><text x="315" y="778" fill="var(--line)">PaymentMethod</text><text x="315" y="794">├ StripePayment</text><text x="315" y="810">├ PayPalPayment</text><text x="315" y="826" fill="var(--fast)">└ KlarnaPayment  ← new file</text></g>
+        <text x="315" y="850" class="s-note">Extend by adding, not editing.</text>
+        <text x="315" y="868" class="s-sub">untouched paths cannot break · sheet 6</text>
+
+        <g class="s-mono" font-size="10.5"><text x="584" y="704">rect.set_width(5)</text><text x="584" y="720">rect.set_height(4)</text><text x="584" y="736">assert rect.area() == 20</text></g>
+        <text x="584" y="762" class="s-lab" font-size="11" style="fill:var(--line)">Rectangle ✓ area 20</text>
+        <text x="584" y="782" class="s-haz">Square ✗ area 16</text>
+        <text x="584" y="806" class="s-sub">Square breaks a promise its base made.</text>
+        <text x="584" y="820" class="s-sub">No stronger preconditions, no weaker</text>
+        <text x="584" y="834" class="s-sub">postconditions, no new exceptions.</text>
+        <text x="584" y="858" class="s-haz" font-size="11">Need isinstance? Already broken.</text>
+
+        <rect x="853" y="688" width="108" height="64" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <g class="s-mono" font-size="10.5"><text x="861" y="704" fill="var(--hazard)">Worker</text><text x="861" y="720">work()</text><text x="861" y="734">eat()</text><text x="861" y="748">sleep()</text></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5"><rect x="977" y="690" width="110" height="20"/><rect x="977" y="716" width="110" height="20"/><rect x="977" y="742" width="110" height="20"/></g>
+        <g class="s-mono" font-size="10"><text x="985" y="704">Workable</text><text x="985" y="730">Feedable</text><text x="985" y="756">Sleepable</text></g>
+        <text x="853" y="772" class="s-mono" style="fill:var(--hazard)">Robot.eat() → throws</text>
+        <text x="853" y="790" class="s-mono" style="fill:var(--line)">Robot implements Workable</text>
+        <text x="853" y="816" class="s-sub">No client depends on methods it never</text>
+        <text x="853" y="830" class="s-sub">calls. A 14-method repository forces</text>
+        <text x="853" y="844" class="s-sub">14-method fakes in every test.</text>
+        <text x="853" y="866" class="s-note">The friction is the signal.</text>
+
+        <text x="1122" y="696" class="s-haz" font-size="11">without</text>
+        <g fill="var(--paper)" stroke-width="1.5"><rect x="1122" y="704" width="100" height="26" stroke="var(--rule)"/><rect x="1256" y="704" width="100" height="26" stroke="var(--hazard)"/></g>
+        <path d="M1222,717 L1252,717" stroke="var(--hazard)" stroke-width="2" fill="none" marker-end="url(#w5b)"/>
+        <text x="1122" y="752" class="s-lab" font-size="11" style="fill:var(--line)">with</text>
+        <g fill="var(--paper)" stroke-width="1.5"><rect x="1122" y="760" width="100" height="26" stroke="var(--rule)"/><rect x="1244" y="760" width="112" height="26" stroke="var(--line)" stroke-width="2"/><rect x="1244" y="810" width="112" height="26" stroke="var(--rule)"/></g>
+        <path d="M1222,773 L1240,773" stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#w5a)"/>
+        <path d="M1300,810 L1300,790" stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#w5a)"/>
+        <g class="s-mono" font-size="10"><text x="1128" y="721">OrderService</text><text x="1262" y="721">PostgresRepo</text><text x="1128" y="777">OrderService</text><text x="1250" y="777">OrderRepository</text><text x="1262" y="827">PostgresRepo</text></g>
+        <text x="1122" y="806" class="s-sub">implements ↑</text>
+        <text x="1122" y="856" class="s-sub">The arrow into the database inverted:</text>
+        <text x="1122" y="870" class="s-sub">storage now depends on the domain.</text>
+      </svg>
+    </div>
+    <figcaption><b>The five letters are really one question</b> — when requirements change, how much code changes with them? — and D answers it for the rest: the injected repository on sheet 4, the ports on sheet 7 and every fake in your test suite exist only because a class depended on an interface instead of a concrete type. Treat SOLID as five questions to ask of a class that hurts, not a scorecard for one that does not.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — wiring, lifetimes, and the five principles</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Composition root</h4><p>Application startup: the one place that names concrete types and wires the object graph. Keeping that knowledge in one file is most of the benefit of DI.</p></div>
+      <div><h4><span>02</span>Concrete implementations</h4><p>SqlOrderRepository, SmtpEmailSender — anything touching the outside world: databases, HTTP clients, email, clocks, random numbers, file systems. Exactly what tests replace.</p></div>
+      <div><h4><span>03</span>The injected service</h4><p>Declares what it needs in its constructor and never builds it. Without DI, OrderService hard-wires PostgreSQL and SMTP, and its tests send real email.</p></div>
+      <div><h4><span>04</span>The injected controller</h4><p>Receives the service the same way. The chain Controller ← Service ← Repository ← connection is assembled outside all three.</p></div>
+      <div><h4><span>05</span>Test doubles</h4><p>InMemoryOrderRepo and FakeEmailSender through the same constructor. They must never be reachable in production — a profile that swaps in a no-op authoriser should fail loudly.</p></div>
+      <div><h4><span>06</span>Constructor injection</h4><p>The default: dependencies are visible in the signature and fixed for the object's life. A constructor needing six of them is a design signal — the class does too much; DI only made it visible.</p></div>
+      <div><h4><span>07</span>Method injection</h4><p>A dependency passed to the one method that needs it, for something a single operation uses.</p></div>
+      <div><h4><span>08</span>Property injection</h4><p>Set after construction. Avoid it: between construction and assignment the object exists in an invalid state.</p></div>
+      <div><h4><span>09</span>Container</h4><p>Reads type declarations and wires the graph. Useful for large graphs; errors surface at startup or, worse, first use. Dagger and Micronaut resolve at compile time; Spring pays at boot.</p></div>
+      <div><h4><span>10</span>Singleton scope</h4><p>One instance for the application's lifetime: stateless services and configuration. The DI-registered replacement for the Singleton pattern's global state.</p></div>
+      <div><h4><span>11</span>Scoped</h4><p>One instance per request: the database session, the current user. Disposed when the request ends.</p></div>
+      <div><h4><span>12</span>Transient</h4><p>A new instance on every resolution: lightweight, stateful helpers. Do not inject value objects at all — a Money is simply constructed.</p></div>
+      <div><h4><span>13</span>Captive dependency</h4><p>A scoped dependency injected into a singleton captures the first request's session and reuses it forever — data leaking between users under concurrency. Inject secrets as a config object, not strings scattered across classes.</p></div>
+      <div><h4><span>14</span>Single Responsibility</h4><p>One reason to change, meaning one stakeholder. Vague enough that two engineers will disagree in good faith; not "one method per class".</p></div>
+      <div><h4><span>15</span>Open/Closed</h4><p>Open to extension, closed to modification: a new payment provider is a new class. It assumes you can predict the variation — guess wrong and you built the wrong extension point.</p></div>
+      <div><h4><span>16</span>Liskov Substitution</h4><p>Any subtype must work wherever its base does, without the caller knowing. Square inheriting Rectangle compiles and breaks the area promise.</p></div>
+      <div><h4><span>17</span>Interface Segregation</h4><p>Many small interfaces beat one large one. Python Protocols, Go and TypeScript interfaces give much of this for free through structural typing.</p></div>
+      <div><h4><span>18</span>Dependency Inversion</h4><p>High-level policy depends on abstractions; low-level detail implements them. The principle behind DI, repositories and Clean Architecture — the one with the largest structural consequences.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Indirection hides where checks happen</b>
+    <p>SOLID taken to its extreme yields one method per class, interfaces with one implementation, and a request you can only follow by opening nine files. Apply it where code actually changes — and keep security controls explicit and shallow, because a question like "where is this authorised?" that needs five interfaces traced is a question nobody audits.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — THE PATTERN LADDER ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>The Pattern Ladder</h2>
+    <span class="form">Ladder plate</span>
+    <span class="cov">Covers · Design Patterns · SOLID Principles</span>
+  </div>
+  <p class="thesis">Seven levels of structure for one problem — charging a customer — drawn in the order a codebase should reach them. Every rung adds a file, an interface or a layer that every future reader pays for. <strong>Refactor into a pattern; do not design into one. The pattern's benefit is only collected if the variation it anticipated actually arrives.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 870" role="img" aria-label="A staircase of seven rungs rising left to right for one payment problem: inline code, a function, an if-elif, a Strategy, a Strategy with a Factory, stacked decorators, and an AbstractRequestHandlerFactoryBuilder. An arrow above marks rising indirection and cognitive load. The fourth rung is highlighted as where a third, frequently changing provider earns the pattern; the top two are marked as hazards. Text to the left contrasts the healthy trigger for climbing with the unhealthy one. Below, a table of the three pattern families and the eight patterns used in practice, a strip showing the patterns already present in one request, and a panel on Singleton and language-specific patterns.">
+        <defs>
+          <marker id="l6a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="l6b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <line x1="40" y1="480" x2="1350" y2="480" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M600,56 L1330,56" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="8 6" fill="none" marker-end="url(#l6a)"/>
+        <text x="600" y="44" class="s-note">indirection · files · cognitive load · paid on every future read</text>
+
+        <text x="40" y="96" class="s-lab">What moves you up a rung</text>
+        <text x="40" y="116" class="s-sub">"This if/elif has grown to eight branches and</text>
+        <text x="40" y="130" class="s-sub">changes weekly" → extract a Strategy. The pain came first.</text>
+        <text x="40" y="160" class="s-haz">What must not</text>
+        <text x="40" y="180" class="s-sub" style="fill:var(--hazard)">"We should use patterns here" → a factory producing</text>
+        <text x="40" y="194" class="s-sub" style="fill:var(--hazard)">one type, an interface with one implementation.</text>
+        <text x="40" y="226" class="s-note">The third time you write the same conditional,</text>
+        <text x="40" y="242" class="s-note">the pattern is justified. The first time, it is speculation.</text>
+
+        <g>
+          <rect x="40" y="420" width="170" height="60" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="225" y="370" width="170" height="110" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="410" y="320" width="170" height="160" fill="var(--z2)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="595" y="260" width="170" height="220" fill="var(--z5)" stroke="var(--fast)" stroke-width="3"/>
+          <rect x="780" y="200" width="170" height="280" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="965" y="140" width="170" height="340" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="1150" y="80" width="190" height="400" fill="var(--band)" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="7 5"/>
+        </g>
+        <g class="s-num"><text x="52" y="438">01</text><text x="237" y="388">02</text><text x="422" y="338">03</text><text x="607" y="278">04</text><text x="792" y="218">05</text><text x="977" y="158">06</text><text x="1162" y="98">07</text></g>
+        <g class="s-lab" font-size="12.5">
+          <text x="52" y="456">inline code</text><text x="237" y="406">a function</text><text x="422" y="356">an if / elif</text><text x="607" y="296">a Strategy</text><text x="792" y="236">Strategy + Factory</text><text x="977" y="176">stacked decorators</text>
+          <text x="1162" y="116" fill="var(--hazard)">AbstractRequest–</text><text x="1162" y="132" fill="var(--hazard)">HandlerFactoryBuilder</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="472">one provider, one call</text>
+          <text x="237" y="424">charge(amount) names</text><text x="237" y="438">the step and costs</text><text x="237" y="452">almost nothing</text>
+          <text x="422" y="374">two providers: an if is</text><text x="422" y="388">honest and readable.</text><text x="422" y="402">The second time is not</text><text x="422" y="416">a pattern yet either.</text>
+          <text x="607" y="314">the chain has grown to</text><text x="607" y="328">eight branches, weekly</text><text x="607" y="342">→ extract PaymentMethod.</text><text x="607" y="356">A new provider is a new</text><text x="607" y="370">class, no edits: Open/</text><text x="607" y="384">Closed, delivered by DI</text>
+          <text x="792" y="254">implementation picked</text><text x="792" y="268">from configuration —</text><text x="792" y="282">earned when several are</text><text x="792" y="296">chosen at runtime</text>
+          <text x="977" y="194">cache, retry, log, auth</text><text x="977" y="208">and metrics wrapping</text><text x="977" y="222">one repository call</text>
+          <text x="1162" y="150">a factory producing one</text><text x="1162" y="164">type, an interface with</text><text x="1162" y="178">one implementation,</text><text x="1162" y="192">forever</text>
+        </g>
+        <text x="607" y="410" class="s-note" font-size="11">the usual sweet spot</text>
+        <text x="607" y="426" class="s-sub" style="fill:var(--fast)">the most useful pattern</text>
+        <text x="607" y="440" class="s-sub" style="fill:var(--fast)">in the catalogue</text>
+        <text x="792" y="322" class="s-haz" font-size="10.5">a config value can</text>
+        <text x="792" y="336" class="s-haz" font-size="10.5">silently select the</text>
+        <text x="792" y="350" class="s-haz" font-size="10.5">insecure variant</text>
+        <text x="977" y="250" class="s-haz" font-size="10.5">where is authorisation</text>
+        <text x="977" y="264" class="s-haz" font-size="10.5">enforced? a question</text>
+        <text x="977" y="278" class="s-haz" font-size="10.5">nobody can answer is</text>
+        <text x="977" y="292" class="s-haz" font-size="10.5">one nobody audits</text>
+        <text x="1162" y="222" class="s-haz" font-size="10.5">indirection with no</text>
+        <text x="1162" y="236" class="s-haz" font-size="10.5">variation behind it.</text>
+        <text x="1162" y="264" class="s-sub">complexity paid on every</text>
+        <text x="1162" y="278" class="s-sub">change; the benefit never</text>
+        <text x="1162" y="292" class="s-sub">collected</text>
+        <text x="52" y="506" class="s-note">Stop at the lowest rung that removes the pain you have actually felt — at least twice.</text>
+        <text x="52" y="522" class="s-sub">Patterns are code-level. They say nothing about system architecture; confusing the two is how a CRUD service gets a factory for every noun.</text>
+
+        <!-- CATALOGUE -->
+        <rect x="30" y="544" width="540" height="310" fill="var(--z3)"/>
+        <text x="46" y="568" class="s-zone" fill="var(--mute)">The catalogue · 1994, and the part you will use</text>
+        <g class="s-lab" font-size="11"><text x="46" y="592">08 Creational</text><text x="46" y="610">09 Structural</text><text x="46" y="628">10 Behavioural</text></g>
+        <g class="s-sub"><text x="150" y="592">how objects are made · Factory, Builder, Singleton, Prototype</text><text x="150" y="610">how they compose · Adapter, Decorator, Facade, Proxy, Composite</text><text x="150" y="628">how they interact · Strategy, Observer, Command, Template, State</text></g>
+        <line x1="46" y1="640" x2="554" y2="640" stroke="var(--rule)"/>
+        <g class="s-sub"><text x="46" y="658">pattern</text><text x="160" y="658">problem it solves</text><text x="370" y="658">where you have seen it</text></g>
+        <g class="s-lab" font-size="11">
+          <text x="46" y="680">11 Strategy</text><text x="46" y="700">12 Factory</text><text x="46" y="720">13 Adapter</text><text x="46" y="740">14 Decorator</text>
+          <text x="46" y="760">15 Observer</text><text x="46" y="780">16 Facade</text><text x="46" y="800">17 Repository</text><text x="46" y="820">18 Builder</text>
+        </g>
+        <g class="s-sub">
+          <text x="160" y="680">swap an algorithm at runtime</text><text x="160" y="700">create without naming the class</text><text x="160" y="720">make an interface fit</text><text x="160" y="740">add behaviour, class unchanged</text>
+          <text x="160" y="760">notify many listeners</text><text x="160" y="780">one door over a subsystem</text><text x="160" y="800">abstract data storage</text><text x="160" y="820">build complex objects in steps</text>
+          <text x="370" y="680">payments, pricing rules</text><text x="370" y="700">parsers by file type</text><text x="370" y="720">wrapping a vendor SDK</text><text x="370" y="740">middleware, cached repo</text>
+          <text x="370" y="760">domain events, pub/sub</text><text x="370" y="780">a service over repositories</text><text x="370" y="800">sheet 4</text><text x="370" y="820">query builders, fixtures</text>
+        </g>
+        <text x="46" y="844" class="s-note">Use the names freely: vocabulary is the cheapest, most valuable part.</text>
+
+        <!-- ONE REQUEST -->
+        <rect x="590" y="544" width="420" height="310" fill="var(--z1)"/>
+        <text x="606" y="568" class="s-zone" fill="var(--line)">19 · Already in one request</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="606" y="584" width="150" height="22"/><rect x="606" y="614" width="150" height="22"/><rect x="606" y="644" width="150" height="22"/><rect x="606" y="674" width="150" height="22"/>
+          <rect x="606" y="704" width="150" height="22"/><rect x="606" y="734" width="150" height="22"/><rect x="606" y="764" width="150" height="22"/><rect x="606" y="794" width="150" height="22"/>
+        </g>
+        <g class="s-mono"><text x="614" y="599">Request</text><text x="614" y="629">middleware</text><text x="614" y="659">Controller</text><text x="614" y="689">OrderService</text><text x="614" y="719">PaymentMethod</text><text x="614" y="749">CachedOrderRepo</text><text x="614" y="779">Database</text><text x="614" y="809">OrderCreated</text></g>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none" marker-end="url(#l6b)">
+          <path d="M681,606 L681,612"/><path d="M681,636 L681,642"/><path d="M681,666 L681,672"/><path d="M681,696 L681,702"/><path d="M681,726 L681,732"/><path d="M681,756 L681,762"/><path d="M681,786 L681,792"/>
+        </g>
+        <g class="s-sub"><text x="770" y="629" fill="var(--line)">Chain of Responsibility + Decorator</text><text x="770" y="659">translation — no pattern needed</text><text x="770" y="689" fill="var(--line)">Facade over several repositories</text><text x="770" y="719" fill="var(--line)">Strategy, chosen at runtime</text><text x="770" y="749" fill="var(--line)">Decorator around SqlOrderRepo</text><text x="770" y="809" fill="var(--line)">Observer — listeners react alone</text></g>
+        <text x="606" y="832" class="s-sub">Also: React components are Composite;</text>
+        <text x="606" y="846" class="s-sub">ORMs are Data Mapper or Active Record.</text>
+
+        <!-- SINGLETON -->
+        <rect x="1030" y="544" width="340" height="310" fill="var(--band)"/>
+        <text x="1046" y="568" class="s-zone" fill="var(--hazard)">20 · Singleton</text>
+        <text x="1046" y="590" class="s-sub">The most overused, most regretted pattern:</text>
+        <g class="s-sub" style="fill:var(--hazard)"><text x="1046" y="608">· global mutable state</text><text x="1046" y="622">· dependencies hidden from constructors</text><text x="1046" y="636">· tests that depend on run order</text><text x="1046" y="650">· request state leaking between users</text></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5"><rect x="1046" y="664" width="308" height="24"/><rect x="1046" y="700" width="308" height="24" stroke-width="2.5"/></g>
+        <path d="M1200,688 L1200,696" stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#l6b)"/>
+        <text x="1056" y="681" class="s-lab" font-size="11">need one shared instance?</text>
+        <text x="1056" y="717" class="s-lab" font-size="11" style="fill:var(--line)">register a singleton in the container</text>
+        <text x="1046" y="742" class="s-sub">Same lifetime, but the dependency stays explicit</text>
+        <text x="1046" y="756" class="s-sub">and replaceable — sheet 5, stop 10.</text>
+        <text x="1046" y="784" class="s-lab" font-size="11">21 · The language changes the answer</text>
+        <text x="1046" y="802" class="s-sub">In Python a function is often a better Strategy</text>
+        <text x="1046" y="816" class="s-sub">than a class. Many 1994 patterns work around</text>
+        <text x="1046" y="830" class="s-sub">limits of that era's languages — the catalogue</text>
+        <text x="1046" y="844" class="s-sub">is a vocabulary, not a checklist.</text>
+      </svg>
+    </div>
+    <figcaption><b>Design patterns are chess openings:</b> knowing them by name lets two engineers discuss a position in three words, and playing one because you memorised it — without reading the board — loses games. The ladder is also a review question: for each rung in a pull request, name the variation that already exists behind it.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the rungs and the catalogue</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Inline code</h4><p>One provider, called directly. Correct for as long as there is one — structure here is speculation about a future that may never arrive.</p></div>
+      <div><h4><span>02</span>A function</h4><p>Name the step. The cheapest abstraction there is, and in Python or TypeScript often the entire Strategy pattern already.</p></div>
+      <div><h4><span>03</span>An if / elif</h4><p>Two variants in one visible place. Every future provider edits this function and risks breaking the others — tolerable at two, a smell at eight.</p></div>
+      <div><h4><span>04</span>Strategy</h4><p>PaymentMethod with StripePayment and PayPalPayment behind it, injected into Checkout. Adding a provider adds a class. Open/Closed made concrete, and dependency injection by another name.</p></div>
+      <div><h4><span>05</span>Strategy + Factory</h4><p>The implementation is chosen at runtime from configuration or input. Justified once several exist; a factory producing one type is ceremony, and a misread config can pick an insecure variant.</p></div>
+      <div><h4><span>06</span>Stacked decorators</h4><p>Each layer adds behaviour without touching the class. In a very hot path the nesting costs cycles; everywhere it costs the ability to see where checks happen.</p></div>
+      <div><h4><span>07</span>Pattern as decoration</h4><p>Patterns applied to demonstrate knowledge: an interface with exactly one implementation, forever. Complexity paid on every change, benefit never collected.</p></div>
+      <div><h4><span>08</span>Creational</h4><p>How objects are made — Factory, Builder, Singleton, Prototype. In a DI codebase, the container absorbs most of this family.</p></div>
+      <div><h4><span>09</span>Structural</h4><p>How objects compose — Adapter, Decorator, Facade, Proxy, Composite. The family backend code uses most, usually without naming it.</p></div>
+      <div><h4><span>10</span>Behavioural</h4><p>How objects interact — Strategy, Observer, Command, Template Method, State.</p></div>
+      <div><h4><span>11</span>Strategy</h4><p>Swap an algorithm at runtime: payment providers, sorting, pricing rules. The most useful pattern in the catalogue.</p></div>
+      <div><h4><span>12</span>Factory</h4><p>Create objects without naming the concrete class: parsers by file type, drivers by configuration.</p></div>
+      <div><h4><span>13</span>Adapter</h4><p>Make an incompatible interface fit. Wrapping a third-party SDK is what makes replacing the vendor possible later.</p></div>
+      <div><h4><span>14</span>Decorator</h4><p>Add behaviour without changing the class: middleware, or a cache around a repository that no caller notices.</p></div>
+      <div><h4><span>15</span>Observer</h4><p>Notify many listeners of one event: domain events, pub/sub, UI reactivity — and the basis of event-driven architecture.</p></div>
+      <div><h4><span>16</span>Facade</h4><p>One simple interface over a complex subsystem — a service over several repositories is the everyday example.</p></div>
+      <div><h4><span>17</span>Repository</h4><p>Abstract data storage behind a collection-like interface. Sheet 4 draws it in full, including when it is ceremony.</p></div>
+      <div><h4><span>18</span>Builder</h4><p>Construct complex objects step by step: query builders and test fixtures.</p></div>
+      <div><h4><span>19</span>Patterns already present</h4><p>Middleware is Chain of Responsibility plus Decorator, the service a Facade, the payment method a Strategy, the cached repository a Decorator, the domain event an Observer.</p></div>
+      <div><h4><span>20</span>Singleton</h4><p>Global mutable state, hidden dependencies, order-dependent tests and trouble under concurrency. Need one instance? Register it as a singleton in the container instead.</p></div>
+      <div><h4><span>21</span>Language-shaped patterns</h4><p>Many classic patterns patch limits of 1994-era languages. Read real implementations — Django middleware, SQLAlchemy, Spring — and Fowler's enterprise patterns, closer to backend reality.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 7 — THE CONCENTRIC PLAN ══════════════════════ -->
+<div class="sheet" id="a7">
+  <div class="plate">
+    <span class="no">Sheet 7</span>
+    <h2>The Concentric Plan</h2>
+    <span class="form">Ring plan</span>
+    <span class="cov">Covers · Clean Architecture · Domain Driven Design</span>
+  </div>
+  <p class="thesis">Sheets 1 to 6 arranged as a building. Business rules at the centre, plumbing on the outside, every dependency pointing inward; and inside the centre, a model drawn with the locals rather than from a satellite. <strong>This is the heaviest machinery in the folder: its language and value objects are nearly free everywhere, and its rings and aggregates are worth their cost only where the rules genuinely are the product.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A ring plan. Top left, four concentric rings — frameworks and drivers, interface adapters, use cases, entities — with arrows pointing inward. Top middle, a hexagonal application with driving adapters HTTP, CLI, queue and cron calling in through ports on the left, and driven adapters PostgreSQL, Redis, email and S3 called through ports on the right. Top right, a decision tree asking whether the domain is complex enough, the daily costs of the architecture and the signs it was applied as folder names. Bottom left, three bounded contexts each with its own model of customer, connected by identifiers and events, with an anti-corruption layer in front of a legacy system. Bottom middle, an Order aggregate root with order lines and the calls that respect or bypass its invariants. Bottom right, ubiquitous language, value objects, and the honest split of what to adopt where.">
+        <defs>
+          <marker id="c7a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="c7b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="c7c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- RINGS -->
+        <rect x="30" y="56" width="490" height="444" fill="var(--band)"/>
+        <text x="46" y="80" class="s-zone" fill="var(--line)">The dependency rule</text>
+        <circle cx="275" cy="290" r="200" fill="var(--z3)" stroke="var(--line)" stroke-width="2"/>
+        <circle cx="275" cy="290" r="152" fill="var(--z2)" stroke="var(--line)" stroke-width="2"/>
+        <circle cx="275" cy="290" r="104" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <circle cx="275" cy="290" r="56" fill="var(--z5)" stroke="var(--fast)" stroke-width="3"/>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="275" y="108">01 frameworks &amp; drivers</text><text x="275" y="160">02 interface adapters</text><text x="275" y="210">03 use cases</text><text x="275" y="290">04 entities</text></g>
+        <g class="s-sub" text-anchor="middle"><text x="275" y="306">invariants only</text><text x="275" y="380">rules, authorise</text><text x="275" y="428">controllers, repos</text><text x="275" y="474">web, ORM, DB, queues</text></g>
+        <g stroke="var(--fast)" stroke-width="3" fill="none" marker-end="url(#c7c)">
+          <path d="M136,151 L231,246"/><path d="M414,151 L319,246"/><path d="M136,429 L231,334"/><path d="M414,429 L319,334"/>
+        </g>
+        <text x="46" y="492" class="s-note">arrows point inward only</text>
+        <text x="360" y="492" class="s-sub">the database is a plugin</text>
+
+        <!-- PORTS -->
+        <rect x="540" y="56" width="460" height="444" fill="var(--z2)"/>
+        <text x="556" y="80" class="s-zone" fill="var(--mute)">05–07 · Ports and adapters</text>
+        <text x="556" y="100" class="s-sub">the same idea as the rings, under a clearer name</text>
+        <polygon points="870,270 820,357 720,357 670,270 720,183 820,183" fill="var(--z1)" stroke="var(--line)" stroke-width="3"/>
+        <text x="770" y="262" class="s-big" text-anchor="middle">APP</text>
+        <text x="770" y="280" class="s-sub" text-anchor="middle">use cases + entities</text>
+        <g fill="var(--z6)" stroke="var(--learn)" stroke-width="2">
+          <rect x="556" y="176" width="96" height="28"/><rect x="556" y="222" width="96" height="28"/><rect x="556" y="268" width="96" height="28"/><rect x="556" y="314" width="96" height="28"/>
+        </g>
+        <g fill="var(--z4)" stroke="var(--fast)" stroke-width="2">
+          <rect x="888" y="176" width="96" height="28"/><rect x="888" y="222" width="96" height="28"/><rect x="888" y="268" width="96" height="28"/><rect x="888" y="314" width="96" height="28"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="566" y="195">HTTP</text><text x="566" y="241">CLI</text><text x="566" y="287">queue</text><text x="566" y="333">cron</text><text x="898" y="195">PostgreSQL</text><text x="898" y="241">Redis</text><text x="898" y="287">email</text><text x="898" y="333">S3</text></g>
+        <g stroke="var(--learn)" stroke-width="2.5" fill="none" marker-end="url(#c7a)"><path d="M652,190 L708,190"/><path d="M652,236 L684,236"/><path d="M652,282 L670,282"/><path d="M652,328 L696,328"/></g>
+        <g stroke="var(--fast)" stroke-width="2.5" fill="none" marker-end="url(#c7c)"><path d="M830,190 L884,190"/><path d="M856,236 L884,236"/><path d="M869,282 L884,282"/><path d="M844,328 L884,328"/></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="709" y="185" width="10" height="10"/><rect x="685" y="231" width="10" height="10"/><rect x="671" y="277" width="10" height="10"/><rect x="697" y="323" width="10" height="10"/><rect x="820" y="185" width="10" height="10"/><rect x="846" y="231" width="10" height="10"/><rect x="859" y="277" width="10" height="10"/><rect x="833" y="323" width="10" height="10"/></g>
+        <g class="s-lab" font-size="11"><text x="556" y="392" fill="var(--learn)">05 driving side</text><text x="740" y="392">06 ports</text><text x="888" y="392" fill="var(--fast)">07 driven side</text></g>
+        <g class="s-sub"><text x="556" y="408">things that call you</text><text x="740" y="408">interfaces</text><text x="888" y="408">things you call</text></g>
+        <text x="556" y="440" class="s-sub">A port is an interface the inside defines; an adapter implements it.</text>
+        <text x="556" y="454" class="s-sub">The app cannot tell whether a request came over HTTP or from cron —</text>
+        <text x="556" y="468" class="s-sub">so the same use case applies identical rules to both.</text>
+        <text x="556" y="490" class="s-note">REST → gRPC, Postgres → DynamoDB: adapters only.</text>
+
+        <!-- COST -->
+        <rect x="1020" y="56" width="350" height="444" fill="var(--z4)"/>
+        <text x="1036" y="80" class="s-zone" fill="var(--hazard)">08 · Does it earn its cost?</text>
+        <rect x="1036" y="94" width="318" height="46" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <text x="1048" y="113" class="s-lab" font-size="11.5">Complex domain, with real rules</text>
+        <text x="1048" y="130" class="s-lab" font-size="11.5">that will outlive the framework?</text>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#c7a)"><path d="M1120,140 L1110,166"/></g>
+        <path d="M1270,140 L1280,166" stroke="var(--hazard)" stroke-width="2.5" fill="none" marker-end="url(#c7b)"/>
+        <rect x="1036" y="170" width="150" height="66" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="1204" y="170" width="150" height="66" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="1046" y="190" class="s-lab" style="fill:var(--line)">YES</text>
+        <text x="1046" y="208" class="s-sub">Clean Architecture</text><text x="1046" y="222" class="s-sub">earns its cost</text>
+        <text x="1214" y="190" class="s-haz">NO</text>
+        <text x="1214" y="208" class="s-sub">controller → service →</text><text x="1214" y="222" class="s-sub">repository is honest</text>
+        <text x="1036" y="264" class="s-lab" font-size="11.5">What you pay, every day</text>
+        <g class="s-sub"><text x="1036" y="282">· many more files and interfaces</text><text x="1036" y="296">· mapping: domain ↔ DTO ↔ ORM ↔ request</text><text x="1036" y="310">· one CRUD endpoint touches six files</text><text x="1036" y="324">· steep onboarding for newcomers</text><text x="1036" y="338">· database independence almost never used</text></g>
+        <text x="1036" y="366" class="s-haz">Applied as folder names</text>
+        <g class="s-sub" style="fill:var(--hazard)"><text x="1036" y="384">· a domain/ folder that imports Django</text><text x="1036" y="398">· ORM entities leaking inward</text><text x="1036" y="412">· mappers copying every field outward</text><text x="1036" y="426">· nobody can say where authorisation is</text></g>
+        <text x="1036" y="456" class="s-lab" font-size="11.5">09 · Enforce the rule in CI</text>
+        <text x="1036" y="474" class="s-sub">ArchUnit · import-linter · dependency-cruiser</text>
+        <text x="1036" y="490" class="s-sub">fail the build when the inside imports the outside</text>
+
+        <!-- CONTEXTS -->
+        <line x1="30" y1="516" x2="1370" y2="516" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="30" y="526" width="610" height="360" fill="var(--z1)"/>
+        <text x="46" y="550" class="s-zone" fill="var(--line)">10 · Bounded contexts · one word, three models</text>
+        <text x="331" y="578" class="s-big" text-anchor="middle">"customer"</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="46" y="592" width="170" height="104"/><rect x="246" y="592" width="170" height="104"/><rect x="446" y="592" width="170" height="104"/></g>
+        <g class="s-zone" fill="var(--line)"><text x="58" y="614">Sales</text><text x="258" y="614">Billing</text><text x="458" y="614">Support</text></g>
+        <g class="s-sub">
+          <text x="58" y="636">lead source</text><text x="58" y="652">deal stage</text><text x="58" y="668">assigned rep</text>
+          <text x="258" y="636">payment method</text><text x="258" y="652">tax ID</text><text x="258" y="668">credit limit</text>
+          <text x="458" y="636">ticket history</text><text x="458" y="652">satisfaction score</text><text x="458" y="668">preferred channel</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="2" stroke-dasharray="4 4"><line x1="216" y1="644" x2="246" y2="644"/><line x1="416" y1="644" x2="446" y2="644"/></g>
+        <text x="46" y="718" class="s-sub">Connected by customer_id and domain events — not one Customer table with forty</text>
+        <text x="46" y="732" class="s-sub">nullable columns, the most common cause of a data model nobody can change.</text>
+        <rect x="46" y="750" width="250" height="52" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="58" y="770" class="s-lab" font-size="11.5">11 anti-corruption layer</text>
+        <text x="58" y="788" class="s-sub">translates their model into yours</text>
+        <rect x="446" y="750" width="170" height="52" fill="var(--band)" stroke="var(--rule)" stroke-width="2" stroke-dasharray="6 4"/>
+        <text x="458" y="770" class="s-lab" font-size="11.5">legacy CRM</text>
+        <text x="458" y="788" class="s-sub">its concepts, not ours</text>
+        <path d="M446,776 L302,776" stroke="var(--fast)" stroke-width="2.5" fill="none" marker-end="url(#c7c)"/>
+        <text x="46" y="830" class="s-note">12 · The strongest guide to microservice boundaries there is —</text>
+        <text x="46" y="846" class="s-sub" style="fill:var(--fast)">better than splitting by technical layer or by the org chart. EventStorming is how teams find them.</text>
+        <text x="46" y="872" class="s-sub" style="fill:var(--hazard)">Contexts also limit blast radius: compromised support should not reach billing data.</text>
+
+        <!-- AGGREGATE -->
+        <rect x="660" y="526" width="350" height="360" fill="var(--z3)"/>
+        <text x="676" y="550" class="s-zone" fill="var(--mute)">13 · The aggregate rule</text>
+        <rect x="690" y="564" width="150" height="34" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="702" y="586" class="s-lab" font-size="11.5">Order · the root</text>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"><rect x="730" y="612" width="130" height="24"/><rect x="730" y="644" width="130" height="24"/></g>
+        <g class="s-mono"><text x="740" y="628">OrderLine</text><text x="740" y="660">OrderLine</text></g>
+        <path d="M708,598 L708,656 L730,656 M708,624 L730,624" stroke="var(--line)" stroke-width="1.5" fill="none"/>
+        <text x="870" y="580" class="s-sub">root enforces:</text>
+        <text x="870" y="596" class="s-sub">· max 50 lines</text>
+        <text x="870" y="610" class="s-sub">· total ≤ credit limit</text>
+        <text x="870" y="624" class="s-sub">· available in region</text>
+        <text x="676" y="694" class="s-mono" style="fill:var(--line)">✓ order.add_line(sku, 3)</text>
+        <text x="690" y="708" class="s-sub">the root checks every invariant</text>
+        <text x="676" y="730" class="s-mono" style="fill:var(--hazard)">✗ order.lines.append(line)</text>
+        <text x="690" y="744" class="s-sub" style="fill:var(--hazard)">invariant bypassed</text>
+        <text x="676" y="766" class="s-mono" style="fill:var(--hazard)">✗ orderLineRepo.save(line)</text>
+        <text x="690" y="780" class="s-sub" style="fill:var(--hazard)">no repository for a non-root entity</text>
+        <text x="676" y="806" class="s-lab" font-size="11.5">14 · One transaction, one aggregate</text>
+        <text x="676" y="824" class="s-sub">Two aggregates changed atomically? The boundaries</text>
+        <text x="676" y="838" class="s-sub">are wrong — or publish OrderPlaced after commit and</text>
+        <text x="676" y="852" class="s-sub">let Billing react in its own transaction, eventually.</text>
+        <text x="676" y="874" class="s-haz" font-size="10.5">Events carry identifiers, never sensitive payloads.</text>
+
+        <!-- LANGUAGE -->
+        <rect x="1030" y="526" width="340" height="360" fill="var(--z6)"/>
+        <text x="1046" y="550" class="s-zone" fill="var(--learn)">15 · Ubiquitous language</text>
+        <text x="1046" y="568" class="s-sub">"when a policy lapses, claims are frozen"</text>
+        <g class="s-sub"><text x="1046" y="588" fill="var(--hazard)">code says</text><text x="1230" y="588" fill="var(--line)">domain says</text></g>
+        <g class="s-mono"><text x="1046" y="606" fill="var(--hazard)">UserManager.process()</text><text x="1046" y="622" fill="var(--hazard)">status_id = 3</text><text x="1046" y="638" fill="var(--hazard)">flag_b = true</text><text x="1230" y="606">Policy.lapse()</text><text x="1230" y="622">LAPSED</text><text x="1230" y="638">Claim.freeze()</text></g>
+        <text x="1046" y="668" class="s-lab" font-size="11.5">16 · Value objects</text>
+        <text x="1046" y="688" class="s-mono" style="fill:var(--hazard)">transfer(100, "EUR", b, a)</text>
+        <text x="1046" y="702" class="s-sub" style="fill:var(--hazard)">arguments swapped — compiles fine</text>
+        <text x="1046" y="722" class="s-mono" style="fill:var(--line)">transfer(Money(100, EUR), b, a)</text>
+        <text x="1046" y="736" class="s-sub">typed arguments — a type error</text>
+        <text x="1046" y="756" class="s-note">No framework, a class of bugs gone.</text>
+        <text x="1046" y="784" class="s-lab" font-size="11.5">17 · The honest split</text>
+        <rect x="1046" y="794" width="308" height="20" fill="var(--line)" opacity=".85"/>
+        <rect x="1046" y="820" width="308" height="20" fill="var(--fast)" opacity=".85"/>
+        <rect x="1046" y="846" width="308" height="20" fill="var(--hazard)" opacity=".75"/>
+        <g class="s-sub" style="fill:var(--paper)"><text x="1054" y="808">everywhere: language + value objects</text><text x="1054" y="834">complex domains: aggregates, contexts</text><text x="1054" y="860">CRUD apps: none — nothing to protect</text></g>
+        <text x="1046" y="882" class="s-sub">Without domain experts it is invention, not modelling.</text>
+      </svg>
+    </div>
+    <figcaption><b>Clean Architecture is a building with the plumbing on the outside:</b> replace the boiler without touching the bedrooms — and a garden shed does not need it. DDD is the floor plan drawn with the people who live there. The most convincing proof either was done well is the test suite: the whole core running end to end on in-memory adapters, no database, no HTTP server, in milliseconds.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — rings, ports, contexts and aggregates</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Frameworks and drivers</h4><p>The web framework, ORM, database, queues and external APIs. The parts most likely to change, deliberately kept at the edge where replacing them touches nothing inside.</p></div>
+      <div><h4><span>02</span>Interface adapters</h4><p>Controllers, presenters and repository implementations: translation between the outside world's shapes and the use cases' shapes.</p></div>
+      <div><h4><span>03</span>Use cases</h4><p>Application operations such as CreateOrderUseCase. They authorise, so every delivery mechanism is subject to the same rules, and they define the repository interfaces they need.</p></div>
+      <div><h4><span>04</span>Entities</h4><p>Core business objects and invariants, knowing nothing at all. No entity imports a framework — that single violation is the clearest sign the architecture is only folder names.</p></div>
+      <div><h4><span>05</span>Driving adapters</h4><p>Things that call the application: HTTP, CLI, queue consumers, cron. Each converts its input into a use-case call.</p></div>
+      <div><h4><span>06</span>Ports</h4><p>Interfaces defined by the inside — a Python Protocol, a Go or TypeScript interface. Dependency inversion from sheet 5 is the mechanism that makes the arrows point inward.</p></div>
+      <div><h4><span>07</span>Driven adapters</h4><p>Things the application calls: PostgreSQL, Redis, email, S3. Swapping REST for gRPC or Postgres for DynamoDB touches only these.</p></div>
+      <div><h4><span>08</span>The cost question</h4><p>The most over-applied architecture in the handbook. Worth it for complex, long-lived domains with several delivery mechanisms; for CRUD apps and prototypes it is paying for optionality you will never exercise.</p></div>
+      <div><h4><span>09</span>Enforcement</h4><p>ArchUnit, import-linter and dependency-cruiser turn "inner rings import nothing outer" from a convention into a failing build.</p></div>
+      <div><h4><span>10</span>Bounded context</h4><p>A boundary inside which one word has one meaning. "Customer" in Sales, Billing and Support are three models linked by identity — and the best guide to service boundaries.</p></div>
+      <div><h4><span>11</span>Anti-corruption layer</h4><p>Translates an external or legacy model into yours so its concepts do not leak in, and stops untrusted external data entering the domain unchecked.</p></div>
+      <div><h4><span>12</span>Context map</h4><p>How contexts relate — shared kernel, customer and supplier, anti-corruption layer. EventStorming is the workshop technique for discovering them.</p></div>
+      <div><h4><span>13</span>Aggregate root</h4><p>The only entry point to a cluster of objects and the enforcer of its invariants. An order total that may not exceed the credit limit, enforced here, cannot be bypassed by any controller, job or script.</p></div>
+      <div><h4><span>14</span>One transaction per aggregate</h4><p>Cross-aggregate consistency travels by domain event, after commit, eventually. Aggregates that are too large load enormous graphs for one field; CQRS often appears to separate reads.</p></div>
+      <div><h4><span>15</span>Ubiquitous language</h4><p>One vocabulary in conversation, docs, code, tables and endpoints. The moment someone says "what the business calls a lapse, we call status 3", knowledge has started leaking.</p></div>
+      <div><h4><span>16</span>Value object</h4><p>Defined by its values and immutable: Money(10, EUR), Address, AccountId. Cures primitive obsession with no framework — dataclass(frozen=True) is enough.</p></div>
+      <div><h4><span>17</span>The honest split</h4><p>Language and value objects everywhere; aggregates, bounded contexts and the full tactical toolkit only where complexity justifies them; anemic entities with every rule in services is not DDD.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The closing loop</b>
+    <p>POST /orders on sheet 1 enters through a driving adapter on this sheet; the checkpoints of sheet 3 sit in the adapter ring; the rulebook of sheet 4 is the use-case ring; the wiring of sheet 5 is what lets its ports receive adapters; the patterns of sheet 6 are the joints between rings. Build the rings only as thick as the domain demands — the goal was always code that is cheap to change, never code that looks architected.</p>
+  </div>
+</div>
+
+</div>

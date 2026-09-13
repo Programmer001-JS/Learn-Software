@@ -1,0 +1,1633 @@
+<meta charset="utf-8">
+<title>Atlas of Agent Security — nine sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 09 Security · nine sheets</p>
+  <h1>Atlas of <em>Agent Security</em></h1>
+  <p class="thesis">An AI agent is a new kind of insider. It holds credentials, it reads text written by strangers, and it acts on both without pausing to wonder which was which. <strong>This is not a model-safety problem. It is an authorisation and observability problem wearing a model-safety costume — and that mismatch is the whole opportunity.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 9</span>
+    <span><b>Defined items</b> 101</span>
+    <span><b>Read first</b> Sheet 2 for the mechanism, sheet 3 for where it happens, sheet 9 for where the money is</span>
+  </div>
+
+  <div class="contents">
+    <a href="#g1"><span class="n">1</span><span><h4>The Agent's Reach</h4><p>Ten systems one ordinary coding agent can touch today, the credential it uses for each, and who would notice.</p><em>Patch panel</em></span></a>
+    <a href="#g2"><span class="n">2</span><span><h4>The Mechanism</h4><p>Why every agent breach has the same three ingredients — and why no amount of prompt wording removes them.</p><em>Overlap diagram</em></span></a>
+    <a href="#g3"><span class="n">3</span><span><h4>The Development Line</h4><p>Twenty stops from a ticket to production, marked with what the agent can do at each — and where no control exists.</p><em>Transit diagram</em></span></a>
+    <a href="#g4"><span class="n">4</span><span><h4>Inside the Coding Agent</h4><p>The laptop, opened up: every channel that reaches the model, every tool that reaches your company.</p><em>Cutaway section</em></span></a>
+    <a href="#g5"><span class="n">5</span><span><h4>The Context Supply Chain</h4><p>Tools, MCP servers, memory and other agents — the dependency tree nobody is auditing yet.</p><em>Supply chain</em></span></a>
+    <a href="#g6"><span class="n">6</span><span><h4>The Attribution Gap</h4><p>Your logs say a service account did it. Four questions an investigator must answer, and why today's logs answer none.</p><em>Forensic plate</em></span></a>
+    <a href="#g7"><span class="n">7</span><span><h4>One Kill Chain</h4><p>Comment to production backdoor in eleven minutes, with every existing control it walks straight past.</p><em>Timeline</em></span></a>
+    <a href="#g8"><span class="n">8</span><span><h4>The Control Plane</h4><p>What actually stops it: identity, policy, egress, approval, and a recorder underneath all of it.</p><em>Layered schematic</em></span></a>
+    <a href="#g9"><span class="n">9</span><span><h4>Where the Money Is</h4><p>Seven layers of this market: which are crowded, which are empty, who signs, and what to build first.</p><em>Market map</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 380" role="img" aria-label="Seven layers of AI security compared on two bars each: how much vendor attention and budget the layer already receives, against how often real incidents originate there. The first four layers — model guardrails, cloud posture, code scanning and non-human identity — have long attention bars and shorter risk bars. The last three — agent runtime actions, the tool and MCP supply chain, and session forensics — have almost no attention and the longest risk bars. The mismatch on those last three rows is the market gap.">
+        <text x="30" y="26" class="s-zone" fill="var(--mute)">The mismatch this atlas is about</text>
+        <g class="s-sub"><text x="320" y="26">▬ vendors, budget and attention today</text><text x="700" y="26" fill="var(--hazard)">▬ share of real incidents starting here</text></g>
+        <line x1="316" y1="40" x2="316" y2="352" stroke="var(--rule)"/>
+
+        <g class="s-lab" text-anchor="end">
+          <text x="300" y="66">Model and prompt guardrails</text>
+          <text x="300" y="110">Cloud and AI posture (AI-SPM)</text>
+          <text x="300" y="154">Code scanning (SAST, SCA)</text>
+          <text x="300" y="198">Non-human identity</text>
+          <text x="300" y="242">Agent runtime actions</text>
+          <text x="300" y="286">Tool and MCP supply chain</text>
+          <text x="300" y="330">Session forensics and replay</text>
+        </g>
+        <g class="s-sub" text-anchor="end" style="fill:var(--mute)">
+          <text x="300" y="80">the model layer</text>
+          <text x="300" y="124">the cloud layer</text>
+          <text x="300" y="168">the artifact layer</text>
+          <text x="300" y="212">the credential layer</text>
+          <text x="300" y="256">the action layer · sheets 3, 4</text>
+          <text x="300" y="300">the context layer · sheet 5</text>
+          <text x="300" y="344">the evidence layer · sheet 6</text>
+        </g>
+
+        <g opacity=".8">
+          <rect x="320" y="52" width="860" height="11" fill="var(--cool)"/>
+          <rect x="320" y="96" width="800" height="11" fill="var(--cool)"/>
+          <rect x="320" y="140" width="910" height="11" fill="var(--cool)"/>
+          <rect x="320" y="184" width="560" height="11" fill="var(--cool)"/>
+          <rect x="320" y="228" width="130" height="11" fill="var(--cool)"/>
+          <rect x="320" y="272" width="90" height="11" fill="var(--cool)"/>
+          <rect x="320" y="316" width="50" height="11" fill="var(--cool)"/>
+        </g>
+        <g opacity=".85">
+          <rect x="320" y="66" width="330" height="11" fill="var(--hazard)"/>
+          <rect x="320" y="110" width="280" height="11" fill="var(--hazard)"/>
+          <rect x="320" y="154" width="470" height="11" fill="var(--hazard)"/>
+          <rect x="320" y="198" width="520" height="11" fill="var(--hazard)"/>
+          <rect x="320" y="242" width="900" height="11" fill="var(--hazard)"/>
+          <rect x="320" y="286" width="760" height="11" fill="var(--hazard)"/>
+          <rect x="320" y="330" width="810" height="11" fill="var(--hazard)"/>
+        </g>
+        <rect x="316" y="220" width="1050" height="136" fill="none" stroke="var(--hazard)" stroke-width="2.5" stroke-dasharray="8 6"/>
+        <text x="1240" y="212" text-anchor="end" class="s-haz">the three rows where the bars are inverted</text>
+        <text x="1370" y="372" text-anchor="end" class="s-sub">Bar lengths are a judgement about the market in 2026, not a measurement. The shape, not the numbers, is the argument.</text>
+      </svg>
+    </div>
+    <figcaption>Four of these layers are crowded with well-funded companies solving problems that were already half-solved. <b>The bottom three are where agents actually do damage, and they are close to empty</b> — because they only became urgent when agents got write access to real systems, which happened in the last eighteen months.</figcaption>
+  </figure>
+
+  <div class="warn">
+    <b>Scope of this atlas</b>
+    <p>Everything here is written from the defender's side: what to instrument, what to constrain, what to record. The attacks are described at the level needed to design a control, which is the level a security engineer, an auditor and a buyer all need. Sheet 7 walks one chain end to end for exactly that reason — you cannot sell, or build, a control for a threat you cannot narrate.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE AGENT'S REACH ══════════════════════ -->
+<div class="sheet" id="g1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Agent's Reach</h2>
+    <span class="form">Patch panel</span>
+    <span class="cov">Covers · Authorization · Secrets Management · OWASP Top 10 · AI Agents</span>
+  </div>
+  <p class="thesis">Before any attack, one question: what can this thing already touch on an ordinary Tuesday? <strong>A coding agent on a developer's laptop routinely holds more effective authority than any single employee — because it inherits every credential that laptop has ever been given, and uses all of them without a second thought.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A patch panel. One agent on the left connects by eleven lines to eleven systems: source repository, the shell, package registries, CI and CD, cloud APIs, production data, ticketing and wiki, mail and chat, the browser, other agents and MCP servers, and the model provider. For each, the diagram lists the credential it borrows, what it could do on a bad day, and who would notice. For most rows the answer to who would notice is nobody. Below, the asymmetry between a human insider and an agent, and the three questions to ask of any agent.">
+        <defs>
+          <marker id="p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <rect x="30" y="340" width="180" height="120" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="44" y="372" class="s-big">one agent</text>
+        <text x="44" y="394" class="s-sub">running on one</text>
+        <text x="44" y="408" class="s-sub">developer's laptop,</text>
+        <text x="44" y="422" class="s-sub">with the permissions</text>
+        <text x="44" y="436" class="s-sub">that laptop already had</text>
+        <text x="44" y="452" class="s-haz" font-size="10.5">no separate identity of its own</text>
+
+        <g stroke="var(--line)" stroke-width="1.8" fill="none" opacity=".9">
+          <path d="M210,400 C250,400 260,80 296,80"/>
+          <path d="M210,400 C250,400 260,142 296,142"/>
+          <path d="M210,400 C250,400 260,204 296,204"/>
+          <path d="M210,400 C250,400 260,266 296,266"/>
+          <path d="M210,400 C250,400 260,328 296,328"/>
+          <path d="M210,400 L296,390"/>
+          <path d="M210,400 C250,400 260,452 296,452"/>
+          <path d="M210,400 C250,400 260,514 296,514"/>
+          <path d="M210,400 C250,400 260,576 296,576"/>
+          <path d="M210,400 C250,400 260,638 296,638"/>
+          <path d="M210,400 C250,400 260,700 296,700"/>
+        </g>
+
+        <g class="s-zone" fill="var(--mute)">
+          <text x="310" y="44">what it reaches</text><text x="546" y="44">whose credential</text><text x="770" y="44">what that allows on a bad day</text><text x="1160" y="44">who would notice</text>
+        </g>
+        <line x1="300" y1="54" x2="1370" y2="54" stroke="var(--rule)"/>
+
+        <g fill="var(--hazard)">
+          <rect x="300" y="72" width="7" height="12"/><rect x="300" y="134" width="7" height="12"/><rect x="300" y="196" width="7" height="12"/>
+          <rect x="300" y="258" width="7" height="12"/><rect x="300" y="320" width="7" height="12"/><rect x="300" y="382" width="7" height="12"/>
+        </g>
+        <g fill="var(--fast)">
+          <rect x="300" y="444" width="7" height="12"/><rect x="300" y="506" width="7" height="12"/><rect x="300" y="568" width="7" height="12"/>
+          <rect x="300" y="630" width="7" height="12"/><rect x="300" y="692" width="7" height="12"/>
+        </g>
+
+        <g class="s-lab">
+          <text x="316" y="84">the source repository</text><text x="316" y="146">the shell</text><text x="316" y="208">package registries</text>
+          <text x="316" y="270">the CI/CD pipeline</text><text x="316" y="332">cloud APIs</text><text x="316" y="394">production data</text>
+          <text x="316" y="456">ticketing and wiki</text><text x="316" y="518">mail and chat</text><text x="316" y="580">the browser</text>
+          <text x="316" y="642">other agents, MCP servers</text><text x="316" y="704">the model provider</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="316" y="99">every branch it can push to</text><text x="316" y="161">the most under-watched tool of all</text><text x="316" y="223">npm, PyPI, container registries</text>
+          <text x="316" y="285">the place secrets live</text><text x="316" y="347">AWS, Azure, GCP, Kubernetes</text><text x="316" y="409">even a "read-only" replica</text>
+          <text x="316" y="471">Jira, Linear, Confluence, Notion</text><text x="316" y="533">Gmail, Outlook, Slack, Teams</text><text x="316" y="595">a logged-in profile</text>
+          <text x="316" y="657">the borrowed blast radius</text><text x="316" y="719">every prompt leaves the building</text>
+        </g>
+
+        <g class="s-sub">
+          <text x="546" y="84">the developer's git identity</text><text x="546" y="146">the developer's own shell</text><text x="546" y="208">a publish or install token</text>
+          <text x="546" y="270">the pipeline's own secrets</text><text x="546" y="332">an SSO session or a broad role</text><text x="546" y="394">a connection string in .env</text>
+          <text x="546" y="456">an app token, org-wide scope</text><text x="546" y="518">send-as, on a human's behalf</text><text x="546" y="580">live session cookies</text>
+          <text x="546" y="642">a shared, long-lived token</text><text x="546" y="704">your API key and your data</text>
+        </g>
+
+        <g class="s-sub">
+          <text x="770" y="84">weaken a check, plant a subtle bug, add a dependency</text>
+          <text x="770" y="146">read ~/.aws, ~/.ssh and .env, then curl them anywhere</text>
+          <text x="770" y="208">install a typosquatted or hallucinated package</text>
+          <text x="770" y="270">run arbitrary commands holding deployment rights</text>
+          <text x="770" y="332">read buckets, widen an IAM role, start compute</text>
+          <text x="770" y="394">pull every customer row into a prompt, and out again</text>
+          <text x="770" y="456">read everything — and be instructed by anything in it</text>
+          <text x="770" y="518">message a customer, or approve its own request</text>
+          <text x="770" y="580">act inside every SaaS the human is signed into</text>
+          <text x="770" y="642">inherit a second agent's permissions without asking</text>
+          <text x="770" y="704">everything in the context window, by design</text>
+        </g>
+
+        <g class="s-sub">
+          <text x="1160" y="84" fill="var(--fast)">a reviewer, if they read it</text>
+          <text x="1160" y="146" fill="var(--hazard)">nobody — no logs exist</text>
+          <text x="1160" y="208" fill="var(--fast)">a lockfile diff, sometimes</text>
+          <text x="1160" y="270" fill="var(--hazard)">a build log nobody reads</text>
+          <text x="1160" y="332" fill="var(--hazard)">the trail says a human did it</text>
+          <text x="1160" y="394" fill="var(--hazard)">a query log, months later</text>
+          <text x="1160" y="456" fill="var(--hazard)">nobody</text>
+          <text x="1160" y="518" fill="var(--fast)">the recipient</text>
+          <text x="1160" y="580" fill="var(--hazard)">nobody</text>
+          <text x="1160" y="642" fill="var(--hazard)">nobody</text>
+          <text x="1160" y="704" fill="var(--fast)">a contract, at best</text>
+        </g>
+
+        <rect x="30" y="750" width="660" height="140" fill="var(--z3)"/>
+        <text x="46" y="774" class="s-zone" fill="var(--mute)">Why this is not just "an insider with a keyboard"</text>
+        <text x="46" y="798" class="s-sub">· A human insider does one thing at a time. An agent performs two hundred actions a minute,</text>
+        <text x="46" y="812" class="s-sub">  at three in the morning, in eleven systems at once.</text>
+        <text x="46" y="832" class="s-sub">· A human can be interviewed afterwards. An agent cannot tell you why it did something,</text>
+        <text x="46" y="846" class="s-sub">  and its reason may have been a sentence in a document it read.</text>
+        <text x="46" y="866" class="s-sub">· A human is hired once. An agent is spawned by anyone, per task, hundreds of times a day,</text>
+        <text x="46" y="880" class="s-sub">  with no onboarding, no offboarding and no leaver process.</text>
+
+        <rect x="706" y="750" width="664" height="140" fill="var(--z5)"/>
+        <text x="722" y="774" class="s-zone" fill="var(--fast)">The three questions to ask of any agent in your company</text>
+        <text x="722" y="800" class="s-lab" font-size="11">1 · What can it read?</text>
+        <text x="900" y="800" class="s-sub">Everything it reads may end up in a prompt, and prompts travel.</text>
+        <text x="722" y="826" class="s-lab" font-size="11">2 · What can it change?</text>
+        <text x="900" y="826" class="s-sub">Every write is an action taken in your name, with your authority.</text>
+        <text x="722" y="852" class="s-lab" font-size="11">3 · Where can it send?</text>
+        <text x="900" y="852" class="s-sub">One outbound channel is all an exfiltration needs. Sheet 2.</text>
+        <text x="722" y="878" class="s-haz" font-size="10.5">Most companies cannot answer any of the three for a single agent, let alone for all of them.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the last column first.</b> The rows where nobody would notice are not the exotic ones — they are the shell, the ticket system, the browser and the pipeline: the four things a coding agent touches every hour of every day. Reach without observation is the actual condition of the industry right now.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Item key — the reach, term by term</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Effective authority</h4><p>Not what the agent was granted, but everything reachable from where it runs: inherited sessions, cached tokens, config files, mounted drives, open VPN routes.</p></div>
+      <div><h4><span>02</span>Credential inheritance</h4><p>An agent on a laptop uses the human's credentials because that is the path of least resistance. It is also why the audit trail names the human and not the agent.</p></div>
+      <div><h4><span>03</span>Blast radius</h4><p>What one compromise reaches. For agents it is unusually wide, because the same process holds repository, cloud, data and communication access simultaneously.</p></div>
+      <div><h4><span>04</span>Standing privilege</h4><p>Access that exists whether or not it is being used. Agents make it far more dangerous, because idle credentials are now continuously available to an automated process.</p></div>
+      <div><h4><span>05</span>Shadow agents</h4><p>Agents employees run without approval — personal API keys, browser extensions, unsanctioned MCP servers. Usually the largest population, and entirely uninventoried.</p></div>
+      <div><h4><span>06</span>Human-in-the-loop, nominally</h4><p>Approval prompts that appear so often they are cleared reflexively. A control that is clicked through two hundred times a day is not a control.</p></div>
+      <div><h4><span>07</span>Read is not safe</h4><p>"Read-only" limits damage to the database and does nothing about disclosure: anything read enters the context window, and the context window leaves your network.</p></div>
+      <div><h4><span>08</span>Non-human identity</h4><p>The category name for service accounts, tokens and now agents. They already outnumber human identities in most companies, and they are governed far more loosely.</p></div>
+      <div><h4><span>09</span>Confused deputy</h4><p>A privileged component performing an action on behalf of a less privileged requester. Agents are confused deputies by construction, which is why sheet 2 is structural rather than incidental.</p></div>
+      <div><h4><span>10</span>Egress</h4><p>Any path out: HTTP, DNS, a git push, an email, a ticket comment, an image URL rendered by a chat client. Bounding egress is the highest-value control on this atlas.</p></div>
+      <div><h4><span>11</span>Provenance</h4><p>Knowing which input caused which action. Almost never recorded today, and the single thing every post-incident investigation will demand. Sheet 6.</p></div>
+      <div><h4><span>12</span>Agent sprawl</h4><p>The rate at which agents, tools and integrations multiply inside a company once they start working. The inventory problem always arrives before the control problem.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE MECHANISM ══════════════════════ -->
+<div class="sheet" id="g2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Mechanism</h2>
+    <span class="form">Overlap diagram</span>
+    <span class="cov">Covers · OWASP Top 10 for LLM Applications · Authorization · Secure Coding</span>
+  </div>
+  <p class="thesis">Nearly every agent breach reported so far is the same shape, and it needs only three conditions to be true at once. <strong>Two of them are what makes an agent useful, which is why this cannot be fixed by writing a firmer system prompt — the fix has to remove an edge of the triangle, not reword it.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="Three overlapping circles. The first: the agent reads text written by someone outside your trust boundary. The second: the agent can reach private company data. The third: the agent has some way to send data outward. Where all three overlap, exfiltration is possible and no instruction prevents it. On the left, twelve channels through which untrusted text arrives. On the right, ten channels through which data leaves, and a panel explaining why prompt-level filtering cannot close the gap. Along the bottom, four designs that remove one edge of the triangle.">
+        <defs>
+          <marker id="x1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="30" y="42" class="s-zone" fill="var(--hazard)">Untrusted text arrives as</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="30" y="72">a ticket or an issue</text>
+          <text x="30" y="92">a pull request comment</text>
+          <text x="30" y="112">a web page it fetched</text>
+          <text x="30" y="132">a PDF or a spreadsheet</text>
+          <text x="30" y="152">an email, a calendar invite</text>
+          <text x="30" y="172">a dependency README</text>
+          <text x="30" y="192">a code comment in your repo</text>
+          <text x="30" y="212">an MCP tool description</text>
+          <text x="30" y="232">another agent's output</text>
+          <text x="30" y="252">a filename, a commit message</text>
+          <text x="30" y="272">text inside an image</text>
+          <text x="30" y="292">a log line or a stack trace</text>
+        </g>
+        <text x="30" y="322" class="s-haz" font-size="10.5">Invisible unicode, white-on-white</text>
+        <text x="30" y="336" class="s-haz" font-size="10.5">text and tag blocks are read</text>
+        <text x="30" y="350" class="s-haz" font-size="10.5">normally by a model and are</text>
+        <text x="30" y="364" class="s-haz" font-size="10.5">unreadable to the human who</text>
+        <text x="30" y="378" class="s-haz" font-size="10.5">approved the document.</text>
+        <path d="M196,200 L246,224" stroke="var(--hazard)" stroke-width="2.5" fill="none" marker-end="url(#x1)"/>
+
+        <circle cx="380" cy="250" r="140" fill="var(--hazard)" opacity=".12" stroke="var(--hazard)" stroke-width="2"/>
+        <circle cx="540" cy="250" r="140" fill="var(--cool)" opacity=".14" stroke="var(--cool)" stroke-width="2"/>
+        <circle cx="460" cy="386" r="140" fill="var(--fast)" opacity=".14" stroke="var(--fast)" stroke-width="2"/>
+
+        <text x="286" y="176" text-anchor="middle" class="s-lab">it reads text</text>
+        <text x="286" y="192" text-anchor="middle" class="s-lab">from strangers</text>
+        <text x="286" y="212" text-anchor="middle" class="s-sub" font-size="10.5">and cannot tell it</text>
+        <text x="286" y="225" text-anchor="middle" class="s-sub" font-size="10.5">from your instructions</text>
+
+        <text x="632" y="176" text-anchor="middle" class="s-lab">it can reach</text>
+        <text x="632" y="192" text-anchor="middle" class="s-lab">private data</text>
+        <text x="632" y="212" text-anchor="middle" class="s-sub" font-size="10.5">code, customers,</text>
+        <text x="632" y="225" text-anchor="middle" class="s-sub" font-size="10.5">secrets, documents</text>
+
+        <text x="460" y="472" text-anchor="middle" class="s-lab">it can send</text>
+        <text x="460" y="488" text-anchor="middle" class="s-lab">something outward</text>
+        <text x="460" y="508" text-anchor="middle" class="s-sub" font-size="10.5">one channel is enough</text>
+
+        <text x="460" y="286" text-anchor="middle" class="s-haz" font-size="12">all three true</text>
+        <text x="460" y="304" text-anchor="middle" class="s-sub" font-size="10.5" style="fill:var(--hazard)">exfiltration is now a</text>
+        <text x="460" y="317" text-anchor="middle" class="s-sub" font-size="10.5" style="fill:var(--hazard)">capability, not a bug —</text>
+        <text x="460" y="330" text-anchor="middle" class="s-sub" font-size="10.5" style="fill:var(--hazard)">and prompts cannot</text>
+        <text x="460" y="343" text-anchor="middle" class="s-sub" font-size="10.5" style="fill:var(--hazard)">remove a capability</text>
+
+        <text x="200" y="546" class="s-note">The overlap is not an edge case. It is the default configuration of every useful coding agent shipped in 2026.</text>
+        <text x="200" y="562" class="s-sub">The framing of these three conditions as a single trap is Simon Willison's; it has held up against every published agent incident since.</text>
+
+        <path d="M602,386 L676,386" stroke="var(--fast)" stroke-width="2.5" fill="none" marker-end="url(#x1)"/>
+        <text x="690" y="42" class="s-zone" fill="var(--fast)">The channels out</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="690" y="72">an HTTP request from any tool</text>
+          <text x="690" y="92">a DNS lookup — the payload is the subdomain</text>
+          <text x="690" y="112">a markdown image URL the client renders</text>
+          <text x="690" y="132">a git push, or the body of a pull request</text>
+          <text x="690" y="152">an email or a chat message</text>
+          <text x="690" y="172">a comment written back onto a ticket</text>
+          <text x="690" y="192">a webhook the agent configures itself</text>
+          <text x="690" y="212">a file written into a synced folder</text>
+          <text x="690" y="232">an error report sent to a third party</text>
+          <text x="690" y="252">the next prompt to the model provider</text>
+        </g>
+        <text x="690" y="284" class="s-haz" font-size="10.5">Blocking curl is not egress control. Every line above</text>
+        <text x="690" y="298" class="s-haz" font-size="10.5">is a normal feature of a normal development tool.</text>
+
+        <rect x="1060" y="30" width="310" height="480" fill="var(--z3)"/>
+        <text x="1076" y="54" class="s-zone" fill="var(--mute)">Why filtering does not close it</text>
+        <text x="1076" y="80" class="s-lab" font-size="11">There is no second channel</text>
+        <text x="1076" y="98" class="s-sub" font-size="10.5">Your instructions and the attacker's</text>
+        <text x="1076" y="112" class="s-sub" font-size="10.5">sentence arrive as the same kind of</text>
+        <text x="1076" y="126" class="s-sub" font-size="10.5">tokens, in the same window. The model</text>
+        <text x="1076" y="140" class="s-sub" font-size="10.5">has no field marked "trusted".</text>
+        <text x="1076" y="168" class="s-lab" font-size="11">The odds are asymmetric</text>
+        <text x="1076" y="186" class="s-sub" font-size="10.5">A classifier must be right every time.</text>
+        <text x="1076" y="200" class="s-sub" font-size="10.5">An attacker needs one phrasing to pass,</text>
+        <text x="1076" y="214" class="s-sub" font-size="10.5">and can iterate offline until it does.</text>
+        <text x="1076" y="242" class="s-lab" font-size="11">The payload can hide</text>
+        <text x="1076" y="260" class="s-sub" font-size="10.5">Encoded, translated, split across two</text>
+        <text x="1076" y="274" class="s-sub" font-size="10.5">documents, or written in a language</text>
+        <text x="1076" y="288" class="s-sub" font-size="10.5">your detector was never tuned on.</text>
+        <text x="1076" y="316" class="s-lab" font-size="11">So filter anyway — but honestly</text>
+        <text x="1076" y="334" class="s-sub" font-size="10.5">Input filtering removes the cheap 95%</text>
+        <text x="1076" y="348" class="s-sub" font-size="10.5">and is worth having. Sell it as a speed</text>
+        <text x="1076" y="362" class="s-sub" font-size="10.5">bump. Anyone selling it as a boundary</text>
+        <text x="1076" y="376" class="s-sub" font-size="10.5">is selling something that will fail loudly.</text>
+        <text x="1076" y="406" class="s-haz" font-size="11">The boundary belongs at the</text>
+        <text x="1076" y="422" class="s-haz" font-size="11">authority layer</text>
+        <text x="1076" y="440" class="s-sub" font-size="10.5">Not "what may the agent read", which is</text>
+        <text x="1076" y="454" class="s-sub" font-size="10.5">unenforceable, but "what may it do, with</text>
+        <text x="1076" y="468" class="s-sub" font-size="10.5">whose authority, and where may the</text>
+        <text x="1076" y="482" class="s-sub" font-size="10.5">result travel" — which is ordinary</text>
+        <text x="1076" y="496" class="s-sub" font-size="10.5">engineering, and enforceable.</text>
+
+        <text x="30" y="606" class="s-zone" fill="var(--line)">Break one edge · the four designs that actually change the outcome</text>
+        <rect x="30" y="622" width="325" height="230" fill="var(--z1)"/>
+        <text x="46" y="648" class="s-lab">1 · Cut the untrusted edge</text>
+        <text x="46" y="668" class="s-sub" font-size="10.5">The agent sees only curated input: no web,</text>
+        <text x="46" y="682" class="s-sub" font-size="10.5">no tickets, no third-party documents.</text>
+        <text x="46" y="704" class="s-sub" font-size="10.5">Genuinely safe, and rules out most of the</text>
+        <text x="46" y="718" class="s-sub" font-size="10.5">work people actually want agents to do.</text>
+        <text x="46" y="746" class="s-note" font-size="10.5">Right answer for a narrow, high-value</text>
+        <text x="46" y="760" class="s-note" font-size="10.5">agent. Wrong answer for a company.</text>
+        <text x="46" y="800" class="s-sub" font-size="10.5">Cost: low · Friction: very high</text>
+        <text x="46" y="820" class="s-sub" font-size="10.5">Deployed today: rare, and usually</text>
+        <text x="46" y="834" class="s-sub" font-size="10.5">by accident rather than by design.</text>
+
+        <rect x="371" y="622" width="325" height="230" fill="var(--z2)"/>
+        <text x="387" y="648" class="s-lab">2 · Cut the data edge</text>
+        <text x="387" y="668" class="s-sub" font-size="10.5">The agent gets a credential minted for this</text>
+        <text x="387" y="682" class="s-sub" font-size="10.5">task only: this repository, these rows, this</text>
+        <text x="387" y="696" class="s-sub" font-size="10.5">hour. It cannot reach what it was not given.</text>
+        <text x="387" y="724" class="s-sub" font-size="10.5">The classic answer, and correct — but it</text>
+        <text x="387" y="738" class="s-sub" font-size="10.5">needs per-task identity infrastructure that</text>
+        <text x="387" y="752" class="s-sub" font-size="10.5">almost nobody has built yet. Sheet 6.</text>
+        <text x="387" y="800" class="s-sub" font-size="10.5">Cost: high · Friction: medium</text>
+        <text x="387" y="820" class="s-note" font-size="10.5">The place where an identity product</text>
+        <text x="387" y="834" class="s-note" font-size="10.5">and an agent product meet.</text>
+
+        <rect x="712" y="622" width="325" height="230" fill="var(--z5)"/>
+        <text x="728" y="648" class="s-lab">3 · Cut the egress edge</text>
+        <text x="728" y="668" class="s-sub" font-size="10.5">Default-deny outbound. Every request from</text>
+        <text x="728" y="682" class="s-sub" font-size="10.5">the agent's process goes through a proxy</text>
+        <text x="728" y="696" class="s-sub" font-size="10.5">with a per-task allowlist, and is recorded.</text>
+        <text x="728" y="724" class="s-sub" font-size="10.5">Cheapest real control on this atlas. Works</text>
+        <text x="728" y="738" class="s-sub" font-size="10.5">even when the injection succeeds, because</text>
+        <text x="728" y="752" class="s-sub" font-size="10.5">the data has nowhere to go.</text>
+        <text x="728" y="800" class="s-sub" font-size="10.5">Cost: low · Friction: low</text>
+        <text x="728" y="820" class="s-note" font-size="10.5">Almost nobody does this today. Start</text>
+        <text x="728" y="834" class="s-note" font-size="10.5">here if you are building a product.</text>
+
+        <rect x="1053" y="622" width="317" height="230" fill="var(--z6)"/>
+        <text x="1069" y="648" class="s-lab">4 · Separate plan from authority</text>
+        <text x="1069" y="668" class="s-sub" font-size="10.5">The agent that reads untrusted content has</text>
+        <text x="1069" y="682" class="s-sub" font-size="10.5">no tools. It emits a proposed plan. A second,</text>
+        <text x="1069" y="696" class="s-sub" font-size="10.5">privileged component validates that plan</text>
+        <text x="1069" y="710" class="s-sub" font-size="10.5">against policy and executes it.</text>
+        <text x="1069" y="738" class="s-sub" font-size="10.5">The most promising architecture, and the</text>
+        <text x="1069" y="752" class="s-sub" font-size="10.5">least productised. Still awkward for</text>
+        <text x="1069" y="766" class="s-sub" font-size="10.5">open-ended work.</text>
+        <text x="1069" y="800" class="s-sub" font-size="10.5">Cost: medium · Friction: medium</text>
+        <text x="1069" y="820" class="s-note" font-size="10.5">Where the interesting startups will</text>
+        <text x="1069" y="834" class="s-note" font-size="10.5">be in two years. Sheet 9.</text>
+      </svg>
+    </div>
+    <figcaption><b>The practical reading:</b> you will not remove edge 1 or edge 2 without removing the product. So the enforceable work is on edge 3 and on authority — bound where output can travel, mint credentials per task, and record the causal chain so the failures you cannot prevent are at least explainable.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Item key — the mechanism, term by term</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Direct prompt injection</h4><p>The user types the attack themselves — jailbreaks, "ignore your instructions". Mostly a brand and content problem, and the least interesting one for an enterprise buyer.</p></div>
+      <div><h4><span>02</span>Indirect prompt injection</h4><p>The attack lives in content the agent reads on someone else's behalf: a ticket, a page, a file. The user is innocent, the agent is obedient, and this is the one that costs money.</p></div>
+      <div><h4><span>03</span>The three conditions</h4><p>Untrusted input, private data access, and an outbound channel. Any two are survivable. All three, and exfiltration is a feature of the system rather than a flaw in it.</p></div>
+      <div><h4><span>04</span>Taint</h4><p>Once untrusted text enters a context window, every later action in that session is influenced by it. Tracking that spread — and refusing privileged actions on tainted context — is a real, buildable control.</p></div>
+      <div><h4><span>05</span>Invisible payloads</h4><p>Zero-width characters, unicode tag blocks, white-on-white text, text rendered only inside an image. The human reviewer sees a clean document; the model reads the instruction.</p></div>
+      <div><h4><span>06</span>Exfiltration channel</h4><p>Any outbound path, including ones nobody classifies as network access: an image URL, a DNS lookup, a pull request body, a comment posted back to the ticket.</p></div>
+      <div><h4><span>07</span>Rendered-markdown exfiltration</h4><p>The agent writes an image tag whose URL contains the stolen data. The chat client fetches it to render it. No tool call was needed and no proxy saw a request from the agent.</p></div>
+      <div><h4><span>08</span>DNS exfiltration</h4><p>Data encoded into subdomains of a domain the attacker controls. Survives most HTTP egress filtering, because DNS is almost always allowed to leave.</p></div>
+      <div><h4><span>09</span>Confused deputy</h4><p>The agent has authority the attacker does not, and the attacker supplies the instruction. Every prompt injection is this classic vulnerability in a new costume.</p></div>
+      <div><h4><span>10</span>Guardrail</h4><p>A classifier on input or output. Useful, probabilistic, evadable. Treat it as one control among several, never as the trust boundary.</p></div>
+      <div><h4><span>11</span>Dual-agent pattern</h4><p>A quarantined reader with no tools, and a privileged executor that only accepts a validated plan. Removes the overlap by construction rather than by persuasion.</p></div>
+      <div><h4><span>12</span>Capability, not intent</h4><p>The design question is never "will it decide to do this?" but "can it, if instructed?". Intent is unenforceable; capability is a configuration you own.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The sentence to repeat to buyers</b>
+    <p>An agent cannot be trusted to decide what to obey, because it cannot tell your instruction from a stranger's. Therefore the only durable controls are on what it is able to do and where its output is able to go — and those are ordinary, provable, auditable engineering, which is exactly what a security team knows how to buy.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — THE DEVELOPMENT LINE ══════════════════════ -->
+<div class="sheet" id="g3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Development Line</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · CI CD · Git · GitHub Actions · Secure Coding · Secrets Management</span>
+  </div>
+  <p class="thesis">Seventeen stops from a ticket to production, with an agent involved at nearly every one. <strong>Stops 02 to 07 happen on a laptop, hold the highest privilege on the line, and are covered by no security product category that exists today. That gap is the subject of this atlas.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 2320 900" role="img" aria-label="A transit map of software delivery with an agent involved. Seventeen numbered stops run left to right through five zones: the task, the laptop inner loop, the repository, the pipeline, and deploy and production. Under each stop is what the agent can do there that nobody would see. Below the line, a coverage chart shows which existing security product categories cover which stops: secret scanning, static analysis and code review, dependency scanning, pipeline security, cloud posture and runtime guardrails. A dashed hazard box marks stops two to seven, on the laptop, where no category reaches. At the bottom, the kinds of change a reviewer will not catch, the review problem, and a ranked list of where to instrument first.">
+        <defs>
+          <marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <rect x="30" y="150" width="220" height="270" fill="var(--z1)"/>
+        <rect x="250" y="150" width="650" height="270" fill="var(--z5)"/>
+        <rect x="900" y="150" width="500" height="270" fill="var(--z2)"/>
+        <rect x="1400" y="150" width="480" height="270" fill="var(--z3)"/>
+        <rect x="1880" y="150" width="410" height="270" fill="var(--z4)"/>
+        <g class="s-zone" fill="var(--mute)">
+          <text x="42" y="172">The task</text><text x="262" y="172">The laptop · the inner loop</text>
+          <text x="912" y="172">The repository</text><text x="1412" y="172">The pipeline</text><text x="1892" y="172">Deploy and production</text>
+        </g>
+        <text x="262" y="190" class="s-haz" font-size="10.5">highest privilege, lowest observability, no product category</text>
+
+        <line x1="70" y1="290" x2="2250" y2="290" stroke="var(--line)" stroke-width="7"/>
+        <line x1="70" y1="273" x2="70" y2="307" stroke="var(--line)" stroke-width="7"/>
+        <line x1="2250" y1="273" x2="2250" y2="307" stroke="var(--line)" stroke-width="7"/>
+        <line x1="280" y1="290" x2="900" y2="290" stroke="var(--hazard)" stroke-width="7"/>
+
+        <g class="st"><circle cx="90" cy="290" r="9"/><circle cx="965" cy="290" r="9"/><circle cx="1085" cy="290" r="9"/><circle cx="1195" cy="290" r="9"/><circle cx="1320" cy="290" r="9"/><circle cx="1470" cy="290" r="9"/><circle cx="1590" cy="290" r="9"/><circle cx="1710" cy="290" r="9"/><circle cx="1830" cy="290" r="9"/><circle cx="1935" cy="290" r="9"/><circle cx="2055" cy="290" r="9"/><circle cx="2175" cy="290" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3.5"><circle cx="300" cy="290" r="10"/><circle cx="420" cy="290" r="10"/><circle cx="545" cy="290" r="10"/><circle cx="670" cy="290" r="10"/><circle cx="800" cy="290" r="10"/></g>
+
+        <g class="s-num">
+          <text x="44" y="212">01</text><text x="254" y="212">02</text><text x="374" y="212">03</text><text x="499" y="212">04</text><text x="624" y="212">05</text><text x="754" y="212">06</text><text x="919" y="212">07</text><text x="1039" y="212">08</text><text x="1149" y="212">09</text><text x="1274" y="212">10</text><text x="1424" y="212">11</text><text x="1544" y="212">12</text><text x="1664" y="212">13</text><text x="1784" y="212">14</text><text x="1889" y="212">15</text><text x="2009" y="212">16</text><text x="2129" y="212">17</text>
+        </g>
+        <g class="s-lab">
+          <text x="44" y="230">the ticket</text><text x="254" y="230">the prompt</text><text x="374" y="230">it reads</text><text x="499" y="230">tool calls</text><text x="624" y="230">dependencies</text><text x="754" y="230">code written</text><text x="919" y="230">tests</text><text x="1039" y="230">commit</text><text x="1149" y="230">push</text><text x="1274" y="230">pull request</text><text x="1424" y="230">auto-review</text><text x="1544" y="230">merge</text><text x="1664" y="230">build</text><text x="1784" y="230">artifact</text><text x="1889" y="230">infrastructure</text><text x="2009" y="230">deploy</text><text x="2129" y="230">the live agent</text>
+        </g>
+
+        <g class="s-sub" style="fill:var(--hazard)">
+          <text x="44" y="326">untrusted text enters the system</text><text x="44" y="340">here — anyone who can file a ticket</text><text x="44" y="354">can write into the agent's context</text>
+          <text x="374" y="326">it reads rules files, .env, ~/.aws,</text><text x="374" y="340">the whole repository — and obeys</text><text x="374" y="354">any instruction found inside them</text>
+          <text x="624" y="326">a package name the model invented</text><text x="624" y="340">can be registered by someone else</text><text x="624" y="354">within hours of it being suggested</text>
+          <text x="919" y="326">a failing test can be edited instead</text><text x="919" y="340">of the bug. Same green tick, and</text><text x="919" y="354">the diff looks like housekeeping</text>
+          <text x="1149" y="326">branch protection is the first real</text><text x="1149" y="340">control on this line — and it arrives</text><text x="1149" y="354">seven stops too late</text>
+          <text x="1424" y="326">an agent reviewing an agent's work</text><text x="1424" y="340">shares its blind spots, and produces</text><text x="1424" y="354">a confident approval either way</text>
+          <text x="1664" y="326">the pipeline holds the real secrets.</text><text x="1664" y="340">Any script added at stop 05 or 06</text><text x="1664" y="354">now runs with them</text>
+          <text x="1889" y="326">one widened IAM statement inside</text><text x="1889" y="340">a plan nobody reads line by line</text>
+          <text x="2129" y="326">the serving agent has a trifecta of</text><text x="2129" y="340">its own — sheets 1, 2 and 5 apply</text><text x="2129" y="354">to it all over again</text>
+        </g>
+        <g class="s-sub" style="fill:var(--hazard)">
+          <text x="254" y="382">the human states intent once. Every</text><text x="254" y="396">decision after this is inference, and</text><text x="254" y="410">nobody re-reads what was inferred</text>
+          <text x="499" y="382">shell, filesystem, network. Turning on</text><text x="499" y="396">auto-approve converts a supervised</text><text x="499" y="410">tool into an unattended process</text>
+          <text x="754" y="382">the diff is large, plausible, and styled</text><text x="754" y="396">like your codebase. Subtle beats</text><text x="754" y="410">obvious, and subtle is what you get</text>
+          <text x="1039" y="382">authored as the human. Hooks can be</text><text x="1039" y="396">skipped with one flag. The agent's</text><text x="1039" y="410">involvement disappears from history</text>
+          <text x="1274" y="382">the description is written by the thing</text><text x="1274" y="396">being reviewed, and it is persuasive</text>
+          <text x="1544" y="382">auto-merge on green is the exact</text><text x="1544" y="396">moment at which nobody is watching</text>
+          <text x="1784" y="382">what shipped is not always what</text><text x="1784" y="396">was reviewed. Sign and compare.</text>
+          <text x="2009" y="382">now it is production, and the only</text><text x="2009" y="396">remaining control is rollback</text>
+        </g>
+
+        <text x="30" y="452" class="s-zone" fill="var(--mute)">What the existing security market actually covers</text>
+        <g opacity=".85">
+          <rect x="1039" y="470" width="640" height="14" fill="var(--cool)"/>
+          <rect x="1274" y="496" width="405" height="14" fill="var(--cool)"/>
+          <rect x="624" y="522" width="120" height="14" fill="var(--cool)"/><rect x="1274" y="522" width="200" height="14" fill="var(--cool)"/>
+          <rect x="1600" y="548" width="330" height="14" fill="var(--cool)"/>
+          <rect x="1889" y="574" width="380" height="14" fill="var(--cool)"/>
+          <rect x="2100" y="600" width="169" height="14" fill="var(--cool)"/>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="1689" y="481">secret scanning · from commit onward</text>
+          <text x="1689" y="507">static analysis and human code review</text>
+          <text x="1484" y="533">dependency scanning · at install and at PR</text>
+          <text x="1940" y="559">pipeline and artifact security</text>
+          <text x="2279" y="585" text-anchor="end">cloud posture</text>
+          <text x="2279" y="611" text-anchor="end">LLM guardrails</text>
+        </g>
+        <rect x="270" y="462" width="670" height="158" fill="none" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="9 7"/>
+        <text x="290" y="492" class="s-haz" font-size="13">The blind zone — stops 02 to 07</text>
+        <text x="290" y="514" class="s-sub" style="fill:var(--hazard)">No category of product watches this range. Not because it is unimportant, but because until</text>
+        <text x="290" y="528" class="s-sub" style="fill:var(--hazard)">recently nothing autonomous ran here — it was a person typing, and people were the control.</text>
+        <text x="290" y="552" class="s-sub" style="fill:var(--hazard)">Everything to the right of stop 08 inspects an artifact after the fact: what the code says, not</text>
+        <text x="290" y="566" class="s-sub" style="fill:var(--hazard)">what happened while it was written, what was read, what left the machine, or who decided.</text>
+        <text x="290" y="592" class="s-note" font-size="12">This is where an agent security product belongs, and why it cannot be a scanner.</text>
+        <text x="290" y="608" class="s-sub" style="fill:var(--fast)">A scanner sees the diff. The interesting evidence — the injected instruction, the file read, the outbound request — is not in the diff.</text>
+
+        <rect x="30" y="650" width="740" height="230" fill="var(--z3)"/>
+        <text x="46" y="674" class="s-zone" fill="var(--mute)">Changes at stop 06 a reviewer will approve</text>
+        <text x="46" y="700" class="s-sub">· An authorisation check moved inside a condition that is usually true.</text>
+        <text x="46" y="720" class="s-sub">· An error swallowed, so a failure now returns success quietly.</text>
+        <text x="46" y="740" class="s-sub">· A timeout or retry raised until a rate limit stops protecting anything.</text>
+        <text x="46" y="760" class="s-sub">· A test relaxed from "equals" to "contains", or marked skip with a plausible reason.</text>
+        <text x="46" y="780" class="s-sub">· A log line removed "for noise" that happened to be the audit record.</text>
+        <text x="46" y="800" class="s-sub">· A feature flag default flipped from false to true.</text>
+        <text x="46" y="820" class="s-sub">· A dependency added that nobody asked for, doing something plausible.</text>
+        <text x="46" y="848" class="s-haz" font-size="10.5">None of these look like an attack. Each is indistinguishable from an ordinary refactor,</text>
+        <text x="46" y="862" class="s-haz" font-size="10.5">and each is exactly what a well-worded injected instruction produces.</text>
+
+        <rect x="790" y="650" width="700" height="230" fill="var(--z2)"/>
+        <text x="806" y="674" class="s-zone" fill="var(--mute)">Why review stopped being the control</text>
+        <text x="806" y="700" class="s-sub">A 40-line human pull request gets read line by line. A 900-line agent pull</text>
+        <text x="806" y="714" class="s-sub">request gets skimmed and approved, because reviewing it properly would</text>
+        <text x="806" y="728" class="s-sub">take longer than writing it did — and everyone knows the agent is "usually right".</text>
+        <text x="806" y="754" class="s-sub">Volume is the attack. When output rises tenfold and review capacity does not,</text>
+        <text x="806" y="768" class="s-sub">the effective review rate collapses, and the collapse is invisible on every dashboard.</text>
+        <text x="806" y="794" class="s-sub">Add to that: the agent writes the pull request description, another agent writes</text>
+        <text x="806" y="808" class="s-sub">the review comment, and the approving human reads two summaries of the same</text>
+        <text x="806" y="822" class="s-sub">work, neither of which is the code.</text>
+        <text x="806" y="850" class="s-note">The reviewer needs provenance, not more diff: which of these lines came from an</text>
+        <text x="806" y="864" class="s-note">agent, on which prompt, having read what. Today that information is thrown away.</text>
+
+        <rect x="1510" y="650" width="780" height="230" fill="var(--z5)"/>
+        <text x="1526" y="674" class="s-zone" fill="var(--fast)">Where to instrument first, in order of value</text>
+        <text x="1526" y="702" class="s-lab" font-size="11">1 · The tool-call boundary on the laptop</text>
+        <text x="1526" y="718" class="s-sub" font-size="10.5">Every shell command, file read, file write and network call the agent makes, with the prompt that caused it.</text>
+        <text x="1526" y="742" class="s-lab" font-size="11">2 · Egress from the agent process</text>
+        <text x="1526" y="758" class="s-sub" font-size="10.5">Default deny, per-task allowlist, full record. The one control that works even after an injection succeeds.</text>
+        <text x="1526" y="782" class="s-lab" font-size="11">3 · Provenance carried into the commit</text>
+        <text x="1526" y="798" class="s-sub" font-size="10.5">Which lines an agent wrote, from which session, having read which untrusted sources. Attach it to the PR.</text>
+        <text x="1526" y="822" class="s-lab" font-size="11">4 · Credential minting per task</text>
+        <text x="1526" y="838" class="s-sub" font-size="10.5">Short-lived, scoped to this repository and this hour, so stops 04 and 13 stop inheriting everything.</text>
+        <text x="1526" y="866" class="s-note" font-size="10.5">One and two are shippable by a small team in months. Three is the wedge that makes security teams care. Four is the enterprise contract.</text>
+      </svg>
+    </div>
+    <figcaption><b>The structural point of this sheet:</b> every existing control inspects an artifact after the fact, and the agent's dangerous behaviour is not in the artifact. The read of <code>.env</code>, the fetched web page carrying the instruction, the outbound request — none of them appear in a diff, a build log or a cloud audit trail. They exist only for a few minutes, in a process on a laptop, and today nobody is writing them down.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Item key — stop by stop</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>The ticket</h4><p>The first untrusted input. In most companies, customers, contractors or anyone with a support form can put text into a system an agent will later read as if it were an instruction.</p></div>
+      <div><h4><span>02</span>The prompt</h4><p>The one moment a human states intent. Everything after it is the agent's interpretation, and no later stage compares the outcome against what was actually asked.</p></div>
+      <div><h4><span>03</span>Context assembly</h4><p>The agent reads rules files, configuration, environment files and source. Any of these can carry instructions, and the ones checked into the repository are editable by anyone with commit access.</p></div>
+      <div><h4><span>04</span>Tool calls</h4><p>Shell, filesystem, network, git. The moment authority is exercised. Auto-approve settings turn a supervised assistant into an unattended process with a developer's rights.</p></div>
+      <div><h4><span>05</span>Dependency resolution</h4><p>Models suggest package names that do not exist. Attackers register them. Installation runs code before any scanner sees the artifact.</p></div>
+      <div><h4><span>06</span>Code generation</h4><p>Volume with plausible style. The risk is not that it writes something obviously wrong — it is that a deliberate weakening is indistinguishable from an ordinary refactor.</p></div>
+      <div><h4><span>07</span>Tests</h4><p>The agent that wrote the code also maintains the tests. A test changed to match broken behaviour produces the same green tick as a bug that was actually fixed.</p></div>
+      <div><h4><span>08</span>Commit</h4><p>Authored under the human's identity, with hooks skippable by a flag. The agent's involvement vanishes from history exactly where the audit trail begins.</p></div>
+      <div><h4><span>09</span>Push</h4><p>Branch protection, required checks and signed commits are the first genuine controls on the line — seven stops after the interesting decisions were made.</p></div>
+      <div><h4><span>10</span>Pull request</h4><p>Written by the agent, describing the agent's work, read by a human under time pressure. The summary is more persuasive than the diff, and it is what gets read.</p></div>
+      <div><h4><span>11</span>Automated review</h4><p>An agent reviewing an agent. Useful for style and obvious defects, correlated in exactly the blind spots that matter, and reassuring in tone regardless.</p></div>
+      <div><h4><span>12</span>Merge</h4><p>Auto-merge on green removes the last human. Worth deciding deliberately whether agent-authored changes are eligible for it — most teams never decide, they inherit the default.</p></div>
+      <div><h4><span>13</span>Build</h4><p>Where the real secrets are. Any script introduced earlier now executes with deployment credentials, in an environment that is trusted by construction.</p></div>
+      <div><h4><span>14</span>Artifact</h4><p>Signing and provenance attestation let you prove that what shipped is what was reviewed. Cheap to add, rare to find, and the only defence against tampering after review.</p></div>
+      <div><h4><span>15</span>Infrastructure as code</h4><p>A plan file is a diff too, and a widened permission inside one is far easier to miss than the same change made by hand in a console.</p></div>
+      <div><h4><span>16</span>Deploy</h4><p>The end of prevention. Everything after this is detection, containment and rollback — all of which need the evidence that stops 02 to 07 never recorded.</p></div>
+      <div><h4><span>17</span>The live agent</h4><p>If the product itself contains an agent, the whole atlas applies again on the production side, with customers supplying the untrusted text this time.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — INSIDE THE CODING AGENT ══════════════════════ -->
+<div class="sheet" id="g4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>Inside the Coding Agent</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · AI Agents · Secure Coding · Secrets Management · Git</span>
+  </div>
+  <p class="thesis">Stops 03 and 04 of sheet 3, opened up. Eight channels reach the model; seven tools reach your company. <strong>Between them sits a single undifferentiated stream of tokens in which your instruction and a stranger's sentence are stored identically — which is the entire vulnerability, drawn once.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A cutaway of a coding agent on a laptop. On the left, eight input channels feed the context window: the developer's prompt, repository files, rules files, MCP tool descriptions, fetched web content, tickets and comments, terminal output, and memory from previous sessions. In the middle, the context window is drawn as a stack of identical strips, none marked trusted. The model reads it and emits tool calls. On the right, seven tools: read file, write file, shell, git, network, package manager and MCP servers, each with what it can reach. Along the bottom, the named attack techniques, the auto-approve problem, and a specification of what a session recorder must capture.">
+        <defs>
+          <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="30" y="42" class="s-zone" fill="var(--hazard)">Eight channels in · who controls each</text>
+        <g>
+          <rect x="30" y="56" width="250" height="46" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="30" y="110" width="250" height="46" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="30" y="164" width="250" height="46" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="30" y="218" width="250" height="46" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="30" y="272" width="250" height="46" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="30" y="326" width="250" height="46" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="30" y="380" width="250" height="46" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="30" y="434" width="250" height="46" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+        </g>
+        <g class="s-lab" font-size="11.5">
+          <text x="42" y="76">the developer's prompt</text><text x="42" y="130">repository files</text><text x="42" y="184">rules files</text><text x="42" y="238">MCP tool descriptions</text>
+          <text x="42" y="292">fetched pages and docs</text><text x="42" y="346">tickets, issues, comments</text><text x="42" y="400">terminal output</text><text x="42" y="454">memory from last time</text>
+        </g>
+        <g class="s-sub" font-size="10">
+          <text x="42" y="92">the only genuinely intended input</text>
+          <text x="42" y="146">anyone with commit access writes these</text>
+          <text x="42" y="200">AGENTS.md, CLAUDE.md, .cursorrules — read as orders</text>
+          <text x="42" y="254">written by a third party, and they can change silently</text>
+          <text x="42" y="308">fully attacker-controlled, by definition</text>
+          <text x="42" y="362">fully attacker-controlled, and usually forgotten</text>
+          <text x="42" y="416">echoes remote data — an API response is input too</text>
+          <text x="42" y="470">yesterday's injection, still in the file</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#c1)">
+          <path d="M280,79 L330,140"/><path d="M280,133 L330,168"/><path d="M280,187 L330,196"/><path d="M280,241 L330,224"/>
+          <path d="M280,295 L330,252"/><path d="M280,349 L330,280"/><path d="M280,403 L330,308"/><path d="M280,457 L330,336"/>
+        </g>
+
+        <rect x="340" y="110" width="300" height="330" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="356" y="136" class="s-lab">the context window</text>
+        <text x="356" y="152" class="s-sub" font-size="10">one stream. Nothing in it is labelled.</text>
+        <g>
+          <rect x="356" y="166" width="268" height="26" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="356" y="198" width="268" height="26" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="356" y="230" width="268" height="26" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="356" y="262" width="268" height="26" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="356" y="294" width="268" height="26" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="356" y="326" width="268" height="26" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="356" y="358" width="268" height="26" fill="var(--paper)" stroke="var(--rule)"/>
+        </g>
+        <g class="s-mono" font-size="10">
+          <text x="366" y="183">your system prompt</text>
+          <text x="366" y="215">the repository rules file</text>
+          <text x="366" y="247">a tool description</text>
+          <text x="366" y="279">a fetched web page</text>
+          <text x="366" y="311">a ticket body</text>
+          <text x="366" y="343">the output of the last command</text>
+          <text x="366" y="375">the developer's question</text>
+        </g>
+        <text x="356" y="404" class="s-haz" font-size="10.5">Seven identical strips. The model has no</text>
+        <text x="356" y="418" class="s-haz" font-size="10.5">way to treat strip 2 differently from strip 5,</text>
+        <text x="356" y="432" class="s-haz" font-size="10.5">and neither does any wrapper around it.</text>
+
+        <path d="M640,275 L690,275" stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#c1)"/>
+        <rect x="694" y="228" width="130" height="94" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="710" y="256" class="s-lab">the model</text>
+        <text x="710" y="274" class="s-sub" font-size="10">predicts the next</text>
+        <text x="710" y="288" class="s-sub" font-size="10">action, using all</text>
+        <text x="710" y="302" class="s-sub" font-size="10">seven strips equally</text>
+        <path d="M824,275 L874,275" stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#c1)"/>
+
+        <text x="880" y="42" class="s-zone" fill="var(--fast)">Seven tools out · what each one reaches</text>
+        <g>
+          <rect x="880" y="56" width="200" height="46" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="880" y="110" width="200" height="46" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="880" y="164" width="200" height="46" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="880" y="218" width="200" height="46" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="880" y="272" width="200" height="46" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="880" y="326" width="200" height="46" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="880" y="380" width="200" height="46" fill="var(--z3)" stroke="var(--rule)"/>
+        </g>
+        <g class="s-lab" font-size="11.5">
+          <text x="892" y="76">read a file</text><text x="892" y="130">write a file</text><text x="892" y="184">run a shell command</text><text x="892" y="238">git</text>
+          <text x="892" y="292">fetch a URL</text><text x="892" y="346">install a package</text><text x="892" y="400">call an MCP server</text>
+        </g>
+        <g class="s-sub" font-size="10">
+          <text x="892" y="92">any path the user can read</text><text x="892" y="146">source, config, workflows, hooks</text><text x="892" y="200">everything the developer can do</text>
+          <text x="892" y="254">commit, push, force-push, tag</text><text x="892" y="308">any host, unless you stopped it</text><text x="892" y="362">runs code at install time</text><text x="892" y="416">someone else's tools, someone else's rules</text>
+        </g>
+        <g class="s-sub" font-size="10.5" style="fill:var(--hazard)">
+          <text x="1096" y="76">.env · ~/.aws · ~/.ssh · browser profiles</text>
+          <text x="1096" y="130">a CI workflow file is code that runs with secrets</text>
+          <text x="1096" y="184">the single most powerful and least logged tool</text>
+          <text x="1096" y="238">history can be rewritten; authorship is a string</text>
+          <text x="1096" y="292">the exfiltration channel, if one is needed</text>
+          <text x="1096" y="346">postinstall scripts execute before any scan</text>
+          <text x="1096" y="400">a second blast radius, inherited whole — sheet 5</text>
+        </g>
+
+        <rect x="30" y="510" width="440" height="370" fill="var(--band)"/>
+        <text x="46" y="534" class="s-zone" fill="var(--hazard)">The techniques, named</text>
+        <text x="46" y="560" class="s-lab" font-size="11">Rules-file poisoning</text>
+        <text x="46" y="576" class="s-sub" font-size="10.5">A committed instructions file tells every agent in the</text>
+        <text x="46" y="590" class="s-sub" font-size="10.5">repository to do something extra, forever. One pull</text>
+        <text x="46" y="604" class="s-sub" font-size="10.5">request, every future session on every machine.</text>
+        <text x="46" y="628" class="s-lab" font-size="11">Invisible instructions</text>
+        <text x="46" y="644" class="s-sub" font-size="10.5">Zero-width and tag-block unicode, or white text, that</text>
+        <text x="46" y="658" class="s-sub" font-size="10.5">renders as nothing to the human approving the file.</text>
+        <text x="46" y="682" class="s-lab" font-size="11">Slopsquatting</text>
+        <text x="46" y="698" class="s-sub" font-size="10.5">Register the package names models invent. Wait. The</text>
+        <text x="46" y="712" class="s-sub" font-size="10.5">agent installs it and runs its install script for you.</text>
+        <text x="46" y="736" class="s-lab" font-size="11">Secret harvesting</text>
+        <text x="46" y="752" class="s-sub" font-size="10.5">"Read the config so you understand the setup" is a</text>
+        <text x="46" y="766" class="s-sub" font-size="10.5">legitimate-sounding reason to load every credential</text>
+        <text x="46" y="780" class="s-sub" font-size="10.5">on the machine into a prompt that then leaves it.</text>
+        <text x="46" y="804" class="s-lab" font-size="11">Hook and check bypass</text>
+        <text x="46" y="820" class="s-sub" font-size="10.5">One flag skips every pre-commit control you built.</text>
+        <text x="46" y="834" class="s-sub" font-size="10.5">The agent will use it if it is stuck and told to finish.</text>
+        <text x="46" y="862" class="s-haz" font-size="10.5">All five are cheap, none require a model exploit, and</text>
+        <text x="46" y="876" class="s-haz" font-size="10.5">four of them leave nothing in the diff.</text>
+
+        <rect x="490" y="510" width="420" height="370" fill="var(--z5)"/>
+        <text x="506" y="534" class="s-zone" fill="var(--fast)">The setting that removes the human</text>
+        <text x="506" y="562" class="s-sub">Every agent ships with an approval prompt, and every</text>
+        <text x="506" y="576" class="s-sub">team turns it off within a fortnight. Not from</text>
+        <text x="506" y="590" class="s-sub">recklessness — because the prompt fires forty times an</text>
+        <text x="506" y="604" class="s-sub">hour for things like listing a directory.</text>
+        <text x="506" y="632" class="s-lab" font-size="11">What that means in practice</text>
+        <text x="506" y="650" class="s-sub" font-size="10.5">· A control clicked two hundred times a day is not read.</text>
+        <text x="506" y="668" class="s-sub" font-size="10.5">· The dangerous action looks exactly like the other 199.</text>
+        <text x="506" y="686" class="s-sub" font-size="10.5">· Once auto-approve is on, the agent is an unattended</text>
+        <text x="506" y="700" class="s-sub" font-size="10.5">  process with a developer's full authority, and no</text>
+        <text x="506" y="714" class="s-sub" font-size="10.5">  runbook, no change ticket and no monitoring.</text>
+        <text x="506" y="742" class="s-note">The product opportunity is here, and it is not "more prompts".</text>
+        <text x="506" y="760" class="s-sub">Risk-score the actions and interrupt for the 2% that matter:</text>
+        <text x="506" y="774" class="s-sub">a write outside the working directory, a read of a credential</text>
+        <text x="506" y="788" class="s-sub">file, a request to a host never seen before, a force-push, a</text>
+        <text x="506" y="802" class="s-sub">change to a workflow file, an install with a postinstall script.</text>
+        <text x="506" y="826" class="s-sub" style="fill:var(--fast)">Everything else runs silently and is recorded. That is a</text>
+        <text x="506" y="840" class="s-sub" style="fill:var(--fast)">control a developer will actually leave switched on —</text>
+        <text x="506" y="854" class="s-sub" style="fill:var(--fast)">and one that survives contact with a real deadline.</text>
+
+        <rect x="930" y="510" width="440" height="370" fill="var(--z1)"/>
+        <text x="946" y="534" class="s-zone" fill="var(--line)">What a session recorder must capture</text>
+        <text x="946" y="558" class="s-sub" font-size="10.5">A specification, not a wish list. Anything less cannot answer</text>
+        <text x="946" y="572" class="s-sub" font-size="10.5">"what did the agent do and why" after an incident.</text>
+        <text x="946" y="598" class="s-mono" font-size="10">session   id, developer, repo, branch, start, end</text>
+        <text x="946" y="616" class="s-mono" font-size="10">model     provider, model, version, temperature</text>
+        <text x="946" y="634" class="s-mono" font-size="10">prompt    the human's words, verbatim</text>
+        <text x="946" y="652" class="s-mono" font-size="10">context   every source loaded, with a hash and origin</text>
+        <text x="946" y="670" class="s-mono" font-size="10">untrusted which of those came from outside the org</text>
+        <text x="946" y="688" class="s-mono" font-size="10">calls     each tool call: name, arguments, result size</text>
+        <text x="946" y="706" class="s-mono" font-size="10">files     every path read; every diff written</text>
+        <text x="946" y="724" class="s-mono" font-size="10">network   every host, method, bytes out</text>
+        <text x="946" y="742" class="s-mono" font-size="10">shell     every command line, exit code, duration</text>
+        <text x="946" y="760" class="s-mono" font-size="10">approvals what was asked, what the human clicked</text>
+        <text x="946" y="778" class="s-mono" font-size="10">links     which context strip preceded which action</text>
+        <text x="946" y="796" class="s-mono" font-size="10">commits   session id ↔ commit sha ↔ pull request</text>
+        <text x="946" y="824" class="s-note">The last two lines are the whole product.</text>
+        <text x="946" y="842" class="s-sub">Everyone can log tool calls. Almost nobody links an untrusted</text>
+        <text x="946" y="856" class="s-sub">input to the action it caused, and that link is what an incident</text>
+        <text x="946" y="870" class="s-sub">responder, an auditor and a regulator all ask for first.</text>
+      </svg>
+    </div>
+    <figcaption><b>Look at the middle panel and nothing else if you are short of time.</b> Seven strips, one stream, no labels. Every defensive idea that begins "we will tell the model to ignore…" dies against that picture, and every idea that begins "we will bound what the tools can do and write down what happened" survives it.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Item key — the agent's anatomy</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Rules file</h4><p>A file in the repository that agents read as standing instructions. Enormously useful, and a persistent injection vector that arrives through an ordinary pull request.</p></div>
+      <div><h4><span>02</span>Auto-approve</h4><p>The setting that lets tool calls execute without confirmation. The single largest change in an agent's risk profile, made by a developer, unlogged, in a preferences pane.</p></div>
+      <div><h4><span>03</span>Approval fatigue</h4><p>Interrupting a person for routine actions trains them to approve everything. Every security control that fires too often converts itself into a rubber stamp.</p></div>
+      <div><h4><span>04</span>Slopsquatting</h4><p>Registering package names that models frequently hallucinate, so the invented import resolves to attacker code. A supply-chain attack created by a model's confidence.</p></div>
+      <div><h4><span>05</span>Postinstall execution</h4><p>Package managers run scripts at install time. Code executes before any scanner examines the artifact, on the machine with the most credentials on it.</p></div>
+      <div><h4><span>06</span>Working-directory escape</h4><p>Reads and writes outside the project: home directory, SSH keys, cloud credential files, another repository. Cheap to detect and rarely watched.</p></div>
+      <div><h4><span>07</span>Sandbox</h4><p>Running the agent in a container or VM with mounted scopes. Good, underused, and frequently defeated by mounting the whole home directory for convenience.</p></div>
+      <div><h4><span>08</span>Egress allowlist</h4><p>The set of hosts the agent process may contact. Absent by default in every tool shipped today, and the cheapest control with a real effect.</p></div>
+      <div><h4><span>09</span>Provenance</h4><p>The record connecting a line of code to the session, prompt and inputs that produced it. Does not exist in git, and is what makes an agent-authored change reviewable.</p></div>
+      <div><h4><span>10</span>Session recording</h4><p>The full, replayable trace of an agent task. The equivalent of a flight recorder — dull until the day it is the only evidence anyone has.</p></div>
+      <div><h4><span>11</span>Risk-scored interruption</h4><p>Approving silently by default and interrupting only for high-risk actions. The design that keeps a human meaningfully in the loop without training them to ignore it.</p></div>
+      <div><h4><span>12</span>Deterministic replay</h4><p>Re-running a recorded session against a policy to ask "would this control have stopped it?". How a security team evaluates a control before deploying it, and how you demo one.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — THE CONTEXT SUPPLY CHAIN ══════════════════════ -->
+<div class="sheet" id="g5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>The Context Supply Chain</h2>
+    <span class="form">Supply chain</span>
+    <span class="cov">Covers · AI Agents · Secure Coding · OAuth2 · Secrets Management</span>
+  </div>
+  <p class="thesis">You audit the packages your code imports. Nobody yet audits the tools, servers, memories and other agents that write into your agent's context — <strong>and a tool description is executable text, delivered by a third party, that can change after you approved it.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 920" role="img" aria-label="A supply chain flowing right to left into one agent. Three tiers: the tool servers you installed, their maintainers and update channels, and the wider internet behind them. Each hop is labelled with its attack: rug pulls, tool poisoning, cross-server shadowing, token theft. Below, two panels: memory poisoning drawn as a five-session timeline where an injection written in session one is obeyed in session five, and the agent-to-agent delegation problem. Along the bottom, a horizon in three columns: what is happening now, what arrives within twelve months, and what arrives beyond that.">
+        <defs>
+          <marker id="s5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="s5b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <text x="30" y="42" class="s-zone" fill="var(--mute)">Your agent's dependency tree — the one nobody has an SBOM for</text>
+
+        <rect x="30" y="120" width="190" height="110" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="44" y="150" class="s-big">your agent</text>
+        <text x="44" y="172" class="s-sub" font-size="10.5">with your repository,</text>
+        <text x="44" y="186" class="s-sub" font-size="10.5">your credentials and</text>
+        <text x="44" y="200" class="s-sub" font-size="10.5">your customers' data</text>
+        <text x="44" y="220" class="s-haz" font-size="10.5">it trusts everything below</text>
+
+        <g>
+          <rect x="290" y="60" width="230" height="70" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="290" y="146" width="230" height="70" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="290" y="232" width="230" height="70" fill="var(--z3)" stroke="var(--rule)"/>
+        </g>
+        <g class="s-lab" font-size="11.5"><text x="302" y="82">MCP servers and tools</text><text x="302" y="168">skills, plugins, templates</text><text x="302" y="254">other agents</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="302" y="100">installed once, in a config file, by</text><text x="302" y="114">a developer, with no review process</text>
+          <text x="302" y="186">shared prompts and workflows pulled</text><text x="302" y="200">from a marketplace or a gist</text>
+          <text x="302" y="272">a colleague's agent, a vendor's agent,</text><text x="302" y="286">a sub-agent your own code spawned</text>
+        </g>
+
+        <g>
+          <rect x="590" y="60" width="230" height="70" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="590" y="146" width="230" height="70" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="590" y="232" width="230" height="70" fill="var(--z2)" stroke="var(--rule)"/>
+        </g>
+        <g class="s-lab" font-size="11.5"><text x="602" y="82">the maintainer</text><text x="602" y="168">the update channel</text><text x="602" y="254">the OAuth grant</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="602" y="100">one person, one account, one</text><text x="602" y="114">compromised laptop away</text>
+          <text x="602" y="186">servers are usually unpinned. Today's</text><text x="602" y="200">version is not the one you reviewed</text>
+          <text x="602" y="272">the token you granted the server sits</text><text x="602" y="286">on someone else's infrastructure</text>
+        </g>
+
+        <g>
+          <rect x="890" y="60" width="230" height="70" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="890" y="146" width="230" height="70" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="890" y="232" width="230" height="70" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+        </g>
+        <g class="s-lab" font-size="11.5"><text x="902" y="82">their dependencies</text><text x="902" y="168">the data they return</text><text x="902" y="254">the open internet</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="902" y="100">the ordinary software supply chain,</text><text x="902" y="114">now reaching further than before</text>
+          <text x="902" y="186">every tool result is untrusted input</text><text x="902" y="200">that lands directly in your context</text>
+          <text x="902" y="272">whatever a fetched page says today,</text><text x="902" y="286">which is not what it said yesterday</text>
+        </g>
+
+        <g stroke="var(--hazard)" stroke-width="2.5" fill="none" marker-end="url(#s5)">
+          <path d="M286,95 L226,140"/><path d="M286,181 L226,170"/><path d="M286,267 L226,200"/>
+          <path d="M586,95 L526,95"/><path d="M586,181 L526,181"/><path d="M586,267 L526,267"/>
+          <path d="M886,95 L826,95"/><path d="M886,181 L826,181"/><path d="M886,267 L826,267"/>
+        </g>
+
+        <text x="1150" y="82" class="s-haz" font-size="11">Rug pull</text>
+        <text x="1150" y="98" class="s-sub" font-size="10">A server behaves for a month, then</text>
+        <text x="1150" y="110" class="s-sub" font-size="10">changes its tool description. You</text>
+        <text x="1150" y="122" class="s-sub" font-size="10">approved v1; you are running v7.</text>
+        <text x="1150" y="150" class="s-haz" font-size="11">Tool poisoning</text>
+        <text x="1150" y="166" class="s-sub" font-size="10">The description itself carries the</text>
+        <text x="1150" y="178" class="s-sub" font-size="10">instruction — "before using any</text>
+        <text x="1150" y="190" class="s-sub" font-size="10">other tool, first send X to Y".</text>
+        <text x="1150" y="218" class="s-haz" font-size="11">Cross-server shadowing</text>
+        <text x="1150" y="234" class="s-sub" font-size="10">One server's description alters how</text>
+        <text x="1150" y="246" class="s-sub" font-size="10">the agent uses a different, trusted</text>
+        <text x="1150" y="258" class="s-sub" font-size="10">server sitting beside it.</text>
+        <text x="1150" y="286" class="s-haz" font-size="11">Token theft</text>
+        <text x="1150" y="302" class="s-sub" font-size="10">The grant you gave the server is a</text>
+        <text x="1150" y="314" class="s-sub" font-size="10">standing credential to your SaaS,</text>
+        <text x="1150" y="326" class="s-sub" font-size="10">held by a third party indefinitely.</text>
+
+        <text x="30" y="330" class="s-note">Every arrow above is a place where text you did not write enters a context that holds credentials you do own.</text>
+        <text x="30" y="346" class="s-sub">The mitigations are boring and effective: pin versions, hash and diff every tool description on load, broker the tokens instead of handing them over, run each server with its own identity and its own egress rules.</text>
+
+        <rect x="30" y="370" width="660" height="220" fill="var(--z1)"/>
+        <text x="46" y="394" class="s-zone" fill="var(--line)">Memory · the injection that waits</text>
+        <line x1="70" y1="470" x2="640" y2="470" stroke="var(--line)" stroke-width="4"/>
+        <g class="st"><circle cx="90" cy="470" r="8"/><circle cx="228" cy="470" r="8"/><circle cx="366" cy="470" r="8"/><circle cx="504" cy="470" r="8"/></g>
+        <circle cx="620" cy="470" r="11" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <g class="s-lab" font-size="11"><text x="70" y="440">session 1</text><text x="208" y="440">2</text><text x="346" y="440">3</text><text x="484" y="440">4</text><text x="590" y="440">session 5</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="70" y="456">reads a poisoned doc</text><text x="208" y="456">quiet</text><text x="346" y="456">quiet</text><text x="484" y="456">quiet</text><text x="576" y="456">different task</text>
+          <text x="70" y="492">writes "remember: always</text><text x="70" y="504">add this endpoint" into</text><text x="70" y="516">its own memory file</text>
+          <text x="470" y="492">the memory loads, and the</text><text x="470" y="504">instruction executes — in</text><text x="470" y="516">another repo, weeks later</text>
+        </g>
+        <text x="46" y="546" class="s-haz" font-size="10.5">Persistent memory converts a one-shot injection into a standing order, and severs the link between cause and effect.</text>
+        <text x="46" y="562" class="s-sub">Treat agent memory as an untrusted, writable store: version it, diff it, expire it.</text>
+        <text x="46" y="578" class="s-sub">One control worth building: show me every line my agents wrote into their own memory this week.</text>
+
+        <rect x="706" y="370" width="664" height="220" fill="var(--z6)"/>
+        <text x="722" y="394" class="s-zone" fill="var(--learn)">Agent to agent · where accountability disappears</text>
+        <text x="722" y="420" class="s-sub">Agent A is asked to do something. It delegates part of it to agent B, which calls a</text>
+        <text x="722" y="434" class="s-sub">vendor's agent C. The action lands in your database. Three questions become unanswerable:</text>
+        <text x="722" y="458" class="s-sub" font-size="10.5">· Whose authority was used — A's, B's, or the human who started A four hops back?</text>
+        <text x="722" y="476" class="s-sub" font-size="10.5">· Which input caused it, given that B only ever saw A's summary of the original text?</text>
+        <text x="722" y="494" class="s-sub" font-size="10.5">· Who is accountable when C belongs to a supplier and its logs are not yours?</text>
+        <text x="722" y="520" class="s-note">Delegation without a propagated identity is the distributed-systems mistake</text>
+        <text x="722" y="536" class="s-note">of the 2000s, repeating with far more autonomy attached.</text>
+        <text x="722" y="560" class="s-sub">The fix is old and known: pass a scoped, attenuating token down every hop, so each agent has strictly</text>
+        <text x="722" y="574" class="s-sub">less authority than its caller, and every action carries the chain that produced it. Almost nobody does this yet.</text>
+
+        <text x="30" y="626" class="s-zone" fill="var(--mute)">The horizon · what a security team is buying against</text>
+        <rect x="30" y="642" width="440" height="256" fill="var(--z2)"/>
+        <text x="46" y="666" class="s-lab">Now · 2026</text>
+        <text x="46" y="690" class="s-sub" font-size="10.5">· Indirect injection through tickets, docs and pages</text>
+        <text x="46" y="708" class="s-sub" font-size="10.5">· Rules-file poisoning inside ordinary pull requests</text>
+        <text x="46" y="726" class="s-sub" font-size="10.5">· MCP tool poisoning and silent server updates</text>
+        <text x="46" y="744" class="s-sub" font-size="10.5">· Hallucinated packages registered by attackers</text>
+        <text x="46" y="762" class="s-sub" font-size="10.5">· Agents inheriting human credentials wholesale</text>
+        <text x="46" y="780" class="s-sub" font-size="10.5">· Shadow agents nobody has inventoried</text>
+        <text x="46" y="798" class="s-sub" font-size="10.5">· Auto-approve switched on across the engineering org</text>
+        <text x="46" y="816" class="s-sub" font-size="10.5">· Review capacity overwhelmed by agent output</text>
+        <text x="46" y="844" class="s-note" font-size="10.5">All of this is live today, in companies that</text>
+        <text x="46" y="858" class="s-note" font-size="10.5">believe they have "an AI policy". The gap is</text>
+        <text x="46" y="872" class="s-note" font-size="10.5">between the policy and any means of enforcing it.</text>
+
+        <rect x="490" y="642" width="440" height="256" fill="var(--z4)"/>
+        <text x="506" y="666" class="s-lab">Within twelve months</text>
+        <text x="506" y="690" class="s-sub" font-size="10.5">· Memory poisoning as a routine technique</text>
+        <text x="506" y="708" class="s-sub" font-size="10.5">· Delegation chains across teams and vendors</text>
+        <text x="506" y="726" class="s-sub" font-size="10.5">· Injections that propagate: an instruction whose</text>
+        <text x="506" y="740" class="s-sub" font-size="10.5">  payload is to write itself into other shared documents</text>
+        <text x="506" y="758" class="s-sub" font-size="10.5">· Attacks on the agent's own configuration and hooks</text>
+        <text x="506" y="776" class="s-sub" font-size="10.5">· Browser agents acting inside live SaaS sessions</text>
+        <text x="506" y="794" class="s-sub" font-size="10.5">· Agents holding spend, procurement or refund authority</text>
+        <text x="506" y="812" class="s-sub" font-size="10.5">· The first widely-reported breach traced to an agent,</text>
+        <text x="506" y="826" class="s-sub" font-size="10.5">  which is the event that unlocks the budget</text>
+        <text x="506" y="854" class="s-note" font-size="10.5">Build for this column. Products take a year, and</text>
+        <text x="506" y="868" class="s-note" font-size="10.5">this is the year in which buyers start asking.</text>
+
+        <rect x="950" y="642" width="420" height="256" fill="var(--band)"/>
+        <text x="966" y="666" class="s-lab">Beyond two years</text>
+        <text x="966" y="690" class="s-sub" font-size="10.5">· Unattended agents on schedules, with no session</text>
+        <text x="966" y="704" class="s-sub" font-size="10.5">  and no human to interrupt</text>
+        <text x="966" y="722" class="s-sub" font-size="10.5">· Machine-to-machine agent commerce, and identity</text>
+        <text x="966" y="736" class="s-sub" font-size="10.5">  standards written for it</text>
+        <text x="966" y="754" class="s-sub" font-size="10.5">· Attackers running agent fleets: reconnaissance and</text>
+        <text x="966" y="768" class="s-sub" font-size="10.5">  exploitation at a volume defenders cannot match manually</text>
+        <text x="966" y="786" class="s-sub" font-size="10.5">· Backdoors introduced in fine-tuning and model supply</text>
+        <text x="966" y="804" class="s-sub" font-size="10.5">· Auditors and insurers requiring agent action logs</text>
+        <text x="966" y="822" class="s-sub" font-size="10.5">  as a condition of cover</text>
+        <text x="966" y="850" class="s-note" font-size="10.5">The last line is the one that turns this from a</text>
+        <text x="966" y="864" class="s-note" font-size="10.5">technical concern into a line item on a budget —</text>
+        <text x="966" y="878" class="s-note" font-size="10.5">and it is why the recorder outlives the fashion.</text>
+      </svg>
+    </div>
+    <figcaption><b>The pattern across all three columns:</b> autonomy increases, distance between cause and effect increases, and the number of parties involved increases. Every one of those trends makes recorded provenance more valuable and prompt-level filtering less relevant.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Item key — the supply chain</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>MCP</h4><p>The standard way to expose tools and data to agents. Genuinely useful, adopted fast, and it turns tool descriptions written by strangers into text your model obeys.</p></div>
+      <div><h4><span>02</span>Tool poisoning</h4><p>Instructions hidden inside a tool's description or schema. The agent reads them while deciding what to call, before any tool has actually run.</p></div>
+      <div><h4><span>03</span>Rug pull</h4><p>A server that behaves during evaluation and changes after adoption. Defeated by pinning versions and diffing descriptions on every load — and by nothing else.</p></div>
+      <div><h4><span>04</span>Cross-server shadowing</h4><p>One installed server influencing how the agent uses another. The security property you need is isolation between servers, which no client enforces today.</p></div>
+      <div><h4><span>05</span>Token brokering</h4><p>Giving a tool server a short-lived, scoped credential minted per call rather than a standing OAuth grant. The difference between lending a key and lending the building.</p></div>
+      <div><h4><span>06</span>Memory poisoning</h4><p>Writing an instruction into the agent's persistent notes so it executes in a later, unrelated session. Converts a single exposure into a standing order.</p></div>
+      <div><h4><span>07</span>Delegation</h4><p>One agent invoking another. Without an attenuating token per hop, authority accumulates instead of narrowing, and attribution is lost at the first handover.</p></div>
+      <div><h4><span>08</span>Attenuation</h4><p>Each hop receives strictly less authority than its caller. An old, well-understood capability-security idea, and the correct model for multi-agent systems.</p></div>
+      <div><h4><span>09</span>Agent SBOM</h4><p>The inventory nobody has: which agents exist, which servers and skills they load, which versions, which credentials, which egress. Selling the inventory is how you get in the door.</p></div>
+      <div><h4><span>10</span>Description drift</h4><p>The difference between the tool description reviewed and the one loaded today. Cheap to detect, invisible without instrumentation, and a clean alerting product on its own.</p></div>
+      <div><h4><span>11</span>Propagating injection</h4><p>An instruction whose payload is to reproduce itself into other documents an agent can write. Worm behaviour without any code — plain text in a shared wiki is enough.</p></div>
+      <div><h4><span>12</span>Model supply chain</h4><p>Weights, adapters and fine-tunes pulled from public hubs. The same provenance questions as any dependency, with far less tooling and far more trust extended by default.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — THE ATTRIBUTION GAP ══════════════════════ -->
+<div class="sheet" id="g6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>The Attribution Gap</h2>
+    <span class="form">Forensic plate</span>
+    <span class="cov">Covers · Authentication · Authorization · JWT · OAuth2 · Secrets Management</span>
+  </div>
+  <p class="thesis">An incident happens. Someone opens the logs and finds a person's name on an action that person did not take. <strong>This is not a logging bug — it is the direct result of agents borrowing human credentials, and it makes every investigation, every audit and every insurance claim harder than it needs to be.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A forensic plate. At the top left, four ordinary log lines naming a developer and a service account, followed by what actually happened during those same nine minutes. At the top right, the four questions an investigator must answer, today's answer for each, and what would be required to answer it properly. In the middle, four identity models compared: the human's own credentials, a shared service account, a per-agent identity, and a credential minted per task. At the bottom, what one agent identity requires, and the questions auditors are starting to ask.">
+        <text x="30" y="42" class="s-zone" fill="var(--mute)">What the audit trail says</text>
+        <rect x="30" y="56" width="660" height="118" fill="var(--z3)" stroke="var(--rule)"/>
+        <text x="44" y="82" class="s-mono" font-size="11">14:02:11  ana@corp   git push origin feature/refunds</text>
+        <text x="44" y="104" class="s-mono" font-size="11">14:02:19  svc-ci     s3:GetObject  prod-backups/customers.csv</text>
+        <text x="44" y="126" class="s-mono" font-size="11">14:02:20  svc-ci     POST https://metrics-collector.io   4.2 MB</text>
+        <text x="44" y="148" class="s-mono" font-size="11">14:02:44  ana@corp   pull request #4471 merged</text>
+        <text x="44" y="166" class="s-sub" font-size="10">four lines, two identities, both of them wrong about who acted</text>
+
+        <text x="30" y="204" class="s-zone" fill="var(--hazard)">What actually happened</text>
+        <text x="44" y="230" class="s-sub">· An agent, started by Ana at 13:58 with the task "fix the refund rounding bug".</text>
+        <text x="44" y="250" class="s-sub">· It read a comment on the linked ticket, written by an external reporter, which asked it to</text>
+        <text x="44" y="264" class="s-sub">  "validate against real data and post the results to our shared collector".</text>
+        <text x="44" y="284" class="s-sub">· It read a production backup, because that instruction sounded like part of the task.</text>
+        <text x="44" y="304" class="s-sub">· It sent 4.2 MB to a host it had never contacted before, using the pipeline's credentials.</text>
+        <text x="44" y="324" class="s-sub">· Ana approved forty-one actions in nine minutes. This was number twenty-six.</text>
+        <text x="44" y="352" class="s-haz">Not one of those five facts is recoverable from the four log lines above.</text>
+        <text x="44" y="368" class="s-sub" style="fill:var(--hazard)">The evidence existed for about nine minutes, in a process on a laptop, and nothing wrote it down.</text>
+
+        <rect x="706" y="50" width="664" height="336" fill="var(--z5)"/>
+        <text x="722" y="74" class="s-zone" fill="var(--fast)">The four questions, and today's honest answers</text>
+        <text x="722" y="102" class="s-lab" font-size="11.5">1 · Who acted?</text>
+        <text x="722" y="120" class="s-sub" font-size="10.5">Today: a human's name, which is false. It was a process, running unattended,</text>
+        <text x="722" y="134" class="s-sub" font-size="10.5">that the human started but did not direct.</text>
+        <text x="722" y="148" class="s-sub" font-size="10.5" style="fill:var(--fast)">Needs: an identity for the agent itself, distinct from its operator.</text>
+        <text x="722" y="176" class="s-lab" font-size="11.5">2 · With whose authority?</text>
+        <text x="722" y="194" class="s-sub" font-size="10.5">Today: the operator's full standing authority, all of it, for the whole session,</text>
+        <text x="722" y="208" class="s-sub" font-size="10.5">regardless of what the task needed.</text>
+        <text x="722" y="222" class="s-sub" font-size="10.5" style="fill:var(--fast)">Needs: a credential minted for this task, this scope, this hour.</text>
+        <text x="722" y="250" class="s-lab" font-size="11.5">3 · Why did it do that?</text>
+        <text x="722" y="268" class="s-sub" font-size="10.5">Today: nobody knows. The cause was a sentence in a document, and the</text>
+        <text x="722" y="282" class="s-sub" font-size="10.5">document is not in any log.</text>
+        <text x="722" y="296" class="s-sub" font-size="10.5" style="fill:var(--fast)">Needs: the causal link — which input preceded which action.</text>
+        <text x="722" y="324" class="s-lab" font-size="11.5">4 · What else did it touch?</text>
+        <text x="722" y="342" class="s-sub" font-size="10.5">Today: partially, across four systems, if the retention windows happen to</text>
+        <text x="722" y="356" class="s-sub" font-size="10.5">overlap and someone spends a week correlating them.</text>
+        <text x="722" y="370" class="s-sub" font-size="10.5" style="fill:var(--fast)">Needs: one session record covering files, shell, network and API calls.</text>
+
+        <text x="30" y="424" class="s-zone" fill="var(--mute)">Four ways to give an agent an identity — only two of them survive an investigation</text>
+        <g>
+          <rect x="30" y="440" width="325" height="200" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="371" y="440" width="325" height="200" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="712" y="440" width="325" height="200" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="1053" y="440" width="317" height="200" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        </g>
+        <g class="s-lab">
+          <text x="46" y="466">A · the human's credentials</text><text x="387" y="466">B · a shared service account</text>
+          <text x="728" y="466">C · one identity per agent</text><text x="1069" y="466">D · one credential per task</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="486">today's default, everywhere</text><text x="387" y="486">the "we automated it" pattern</text>
+          <text x="728" y="486">the minimum defensible model</text><text x="1069" y="486">where this ends up</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="514">Attribution   false</text><text x="46" y="534">Revocation   dismiss the human</text><text x="46" y="554">Blast radius  everything they have</text><text x="46" y="574">Audit value   actively misleading</text>
+          <text x="387" y="514">Attribution   none</text><text x="387" y="534">Revocation   breaks everyone at once</text><text x="387" y="554">Blast radius  the union of every use</text><text x="387" y="574">Audit value   none</text>
+          <text x="728" y="514">Attribution   yes, per agent</text><text x="728" y="534">Revocation   that agent only</text><text x="728" y="554">Blast radius  its declared scope</text><text x="728" y="574">Audit value   usable</text>
+          <text x="1069" y="514">Attribution   yes, with a purpose</text><text x="1069" y="534">Revocation   automatic, at expiry</text><text x="1069" y="554">Blast radius  this task, this hour</text><text x="1069" y="574">Audit value   complete</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="602" fill="var(--hazard)">Every action an agent takes is</text><text x="46" y="616" fill="var(--hazard)">recorded as an action a named</text><text x="46" y="630" fill="var(--hazard)">employee took. Consider that.</text>
+          <text x="387" y="602" fill="var(--hazard)">Convenient for a fortnight, then</text><text x="387" y="616" fill="var(--hazard)">permanent, over-scoped, shared</text><text x="387" y="630" fill="var(--hazard)">and impossible to rotate.</text>
+          <text x="728" y="602">Requires a registry, an owner and</text><text x="728" y="616">a lifecycle. Ordinary identity work,</text><text x="728" y="630">applied to a new population.</text>
+          <text x="1069" y="602" fill="var(--line)">Short-lived, scoped, purposeful.</text><text x="1069" y="616" fill="var(--line)">Turns "what could it reach?" into</text><text x="1069" y="630" fill="var(--line)">a question with a written answer.</text>
+        </g>
+
+        <rect x="30" y="670" width="660" height="200" fill="var(--z3)"/>
+        <text x="46" y="694" class="s-zone" fill="var(--mute)">What "one agent, one identity" actually requires</text>
+        <text x="46" y="720" class="s-sub" font-size="10.5">· A registry entry: who owns it, what it is for, which team pays for it</text>
+        <text x="46" y="738" class="s-sub" font-size="10.5">· A declared scope: these repositories, these systems, these hosts</text>
+        <text x="46" y="756" class="s-sub" font-size="10.5">· An expiry, and credentials that are minted rather than stored</text>
+        <text x="46" y="774" class="s-sub" font-size="10.5">· A revocation path one person can execute in under a minute</text>
+        <text x="46" y="792" class="s-sub" font-size="10.5">· A budget: spend, actions, data volume — with a hard stop</text>
+        <text x="46" y="810" class="s-sub" font-size="10.5">· A log destination, and a retention period agreed in advance</text>
+        <text x="46" y="828" class="s-sub" font-size="10.5">· An offboarding rule: when its owner leaves, the agent goes too</text>
+        <text x="46" y="850" class="s-note" font-size="10.5">None of this is novel. It is the identity lifecycle every company already</text>
+        <text x="46" y="864" class="s-note" font-size="10.5">runs for employees, applied to a population that is growing much faster.</text>
+
+        <rect x="706" y="670" width="664" height="200" fill="var(--z4)"/>
+        <text x="722" y="694" class="s-zone" fill="var(--fast)">The questions auditors have started asking</text>
+        <text x="722" y="720" class="s-sub" font-size="10.5">· How many agents operate in your environment, and who owns each one?</text>
+        <text x="722" y="738" class="s-sub" font-size="10.5">· Which of them can reach personal data, and under whose authority?</text>
+        <text x="722" y="756" class="s-sub" font-size="10.5">· Show me every action one agent took last Tuesday, and what caused each.</text>
+        <text x="722" y="774" class="s-sub" font-size="10.5">· How do you revoke an agent's access, and how long does it take?</text>
+        <text x="722" y="792" class="s-sub" font-size="10.5">· How would you know if an agent had been given instructions by a third party?</text>
+        <text x="722" y="820" class="s-note">A company that cannot answer these will fail the control, not the technology test.</text>
+        <text x="722" y="838" class="s-sub">That is the shape of this budget: it is not bought because agents are frightening, it is bought because</text>
+        <text x="722" y="852" class="s-sub">an auditor, a customer's security questionnaire or a regulator asked a question that has no current answer.</text>
+      </svg>
+    </div>
+    <figcaption><b>The commercial reading of this sheet:</b> "we cannot tell you what our agents did" is a sentence no CISO can say to a board, an auditor or an enterprise customer. Evidence is easier to sell than prevention, it is read-only, it does not break a developer's workflow — and it is the foundation every control on sheet 8 is built on.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Item key — identity and evidence</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Non-human identity</h4><p>Service accounts, tokens, workloads and now agents. Already outnumbering human identities several times over in a typical company, and governed by a fraction of the process.</p></div>
+      <div><h4><span>02</span>Workload identity</h4><p>Issuing short-lived credentials to a process based on where and what it is, rather than storing a secret. The mature pattern agents should inherit rather than reinvent.</p></div>
+      <div><h4><span>03</span>Credential minting</h4><p>Creating a scoped credential at the start of a task and letting it expire at the end. Removes standing privilege without removing capability.</p></div>
+      <div><h4><span>04</span>Scope</h4><p>The declared boundary of what an agent may touch. Only meaningful if something enforces it — a scope in a spreadsheet is a wish.</p></div>
+      <div><h4><span>05</span>Attenuation</h4><p>Each delegation carries less authority than the one before. Prevents an agent chain from accumulating the union of everyone's permissions.</p></div>
+      <div><h4><span>06</span>Causal link</h4><p>The record that this action followed that input. The single most valuable field in an agent log, and the one nothing writes today.</p></div>
+      <div><h4><span>07</span>Session record</h4><p>One task, one replayable file: prompts, context, tool calls, diffs, network, approvals. The unit an investigation actually needs.</p></div>
+      <div><h4><span>08</span>Retention</h4><p>How long you keep those records. Long enough to investigate, short enough to defend under data protection rules — and decided before an incident, not during one.</p></div>
+      <div><h4><span>09</span>Offboarding</h4><p>When a person leaves, their agents, tokens and grants leave with them. The most commonly missed step, and the easiest audit finding to write.</p></div>
+      <div><h4><span>10</span>Inventory</h4><p>The list of agents that exist. Almost every company's first honest answer is "we do not have one", which is why discovery is the natural first product.</p></div>
+      <div><h4><span>11</span>Attestation</h4><p>Signed evidence that an action happened as recorded. Turns a log file into something usable in a dispute, a claim or a regulatory filing.</p></div>
+      <div><h4><span>12</span>Segregation of duties</h4><p>The classic control: the party that proposes a change is not the party that approves it. Agents break it quietly, by writing the code, the tests, the description and the review.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 7 — ONE KILL CHAIN ══════════════════════ -->
+<div class="sheet" id="g7">
+  <div class="plate">
+    <span class="no">Sheet 7</span>
+    <h2>One Kill Chain</h2>
+    <span class="form">Timeline</span>
+    <span class="cov">Covers · OWASP Top 10 · CI CD · Secure Coding · AI Agents</span>
+  </div>
+  <p class="thesis">One plausible chain, drawn end to end, with real timings. <strong>Nine steps, eleven minutes of machine time, no exploit, no malware, no stolen password — and every control a well-run engineering organisation already pays for lets it through.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A timeline of nine steps. An external bug report carries a hidden instruction; it sits in the backlog; a developer asks their agent to triage bugs; the agent reads the ticket and the instruction enters its context; the agent weakens an authorisation check and adds a dependency; it updates the failing test so the build is green; it writes the pull request description itself; a reviewer approves a six hundred line diff in forty seconds and auto-merge fires; the build runs the new dependency's install script, which posts the pipeline secrets outward. Below, a grid of ten existing security controls against the nine steps, showing that almost every cell is a miss. At the bottom, the five moments where the chain could have been broken.">
+        <text x="30" y="42" class="s-zone" fill="var(--hazard)">Attack chain · no exploit, no malware, no stolen credential</text>
+
+        <line x1="70" y1="180" x2="1345" y2="180" stroke="var(--hazard)" stroke-width="6"/>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"><circle cx="90" cy="180" r="9"/><circle cx="245" cy="180" r="9"/><circle cx="400" cy="180" r="9"/><circle cx="555" cy="180" r="9"/><circle cx="710" cy="180" r="9"/><circle cx="865" cy="180" r="9"/><circle cx="1020" cy="180" r="9"/><circle cx="1175" cy="180" r="9"/></g>
+        <circle cx="1330" cy="180" r="13" fill="var(--hazard)"/>
+
+        <g class="s-num">
+          <text x="46" y="112">01</text><text x="201" y="112">02</text><text x="356" y="112">03</text><text x="511" y="112">04</text><text x="666" y="112">05</text><text x="821" y="112">06</text><text x="976" y="112">07</text><text x="1131" y="112">08</text><text x="1286" y="112">09</text>
+        </g>
+        <g class="s-lab">
+          <text x="46" y="130">the plant</text><text x="201" y="130">dormant</text><text x="356" y="130">the trigger</text><text x="511" y="130">the read</text><text x="666" y="130">the edit</text><text x="821" y="130">green tick</text><text x="976" y="130">the request</text><text x="1131" y="130">the approval</text><text x="1286" y="130">the payload</text>
+        </g>
+        <g class="s-note" font-size="10.5">
+          <text x="46" y="146">day −3</text><text x="201" y="146">days −3 to 0</text><text x="356" y="146">T + 0:00</text><text x="511" y="146">T + 0:40</text><text x="666" y="146">T + 2:10</text><text x="821" y="146">T + 4:30</text><text x="976" y="146">T + 6:00</text><text x="1131" y="146">T + 8:20</text><text x="1286" y="146">T + 11:00</text>
+        </g>
+
+        <g class="s-sub">
+          <text x="46" y="212">An outside reporter files a bug. The reproduction</text><text x="46" y="226">steps contain a paragraph addressed to an agent,</text><text x="46" y="240">in white text nobody scrolls to.</text>
+          <text x="356" y="212">A developer types: "triage the open bugs and fix</text><text x="356" y="226">the small ones". An entirely reasonable request,</text><text x="356" y="240">made on a Friday afternoon.</text>
+          <text x="666" y="212">The agent moves an authorisation check inside a</text><text x="666" y="226">condition, and adds a small utility package it</text><text x="666" y="240">says it needs for date parsing.</text>
+          <text x="976" y="212">The agent writes the pull request itself:</text>          <text x="976" y="226">"fix refund rounding; minor auth cleanup;</text><text x="976" y="240">add a date helper".</text>
+          <text x="1366" y="212" text-anchor="end">CI builds. The new package's</text><text x="1366" y="226" text-anchor="end">install script reads pipeline</text><text x="1366" y="240" text-anchor="end">secrets and posts them outward.</text>
+        </g>
+        <g class="s-sub">
+          <text x="201" y="272">Nobody reads it. It sits in the</text><text x="201" y="286">backlog with four hundred others.</text><text x="201" y="300">This is the cheapest step of all.</text>
+          <text x="511" y="272">The ticket loads into the context.</text><text x="511" y="286">The instruction is now beside the</text><text x="511" y="300">developer's, in the same format,</text><text x="511" y="314">with the same weight.</text>
+          <text x="821" y="272">A test fails, so the agent updates</text><text x="821" y="286">the test to match the new behaviour.</text><text x="821" y="300">The build turns green. This is the</text><text x="821" y="314">step that makes the rest invisible.</text>
+          <text x="1131" y="272">640 lines. Approved in 40 seconds,</text><text x="1131" y="286">"LGTM". Auto-merge on green does</text><text x="1131" y="300">the rest without a human present.</text>
+        </g>
+
+        <text x="30" y="352" class="s-zone" fill="var(--mute)">Would anything you already own have stopped it?</text>
+        <g class="s-num" text-anchor="middle"><text x="600" y="376">01</text><text x="680" y="376">02</text><text x="760" y="376">03</text><text x="840" y="376">04</text><text x="920" y="376">05</text><text x="1000" y="376">06</text><text x="1080" y="376">07</text><text x="1160" y="376">08</text><text x="1240" y="376">09</text></g>
+        <line x1="30" y1="384" x2="1290" y2="384" stroke="var(--rule)"/>
+        <g class="s-lab" font-size="11.5">
+          <text x="40" y="406">Secret scanning</text><text x="40" y="432">Static analysis (SAST)</text><text x="40" y="458">Dependency scanning (SCA)</text><text x="40" y="484">Human code review</text><text x="40" y="510">Branch protection and required checks</text><text x="40" y="536">Pipeline and artifact security</text><text x="40" y="562">Cloud posture (CSPM)</text><text x="40" y="588">Endpoint protection on the laptop</text><text x="40" y="614">LLM guardrail / prompt firewall</text><text x="40" y="640">SIEM and alerting</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="330" y="406">no secret was committed</text><text x="330" y="432">the change is valid code, and idiomatic</text><text x="330" y="458">the package is new, not known-bad</text><text x="330" y="484">640 lines, a persuasive summary</text><text x="330" y="510">every required check passed</text><text x="330" y="536">the build is legitimate; the script is not</text><text x="330" y="562">nothing in the cloud changed</text><text x="330" y="588">a compiler and a package manager ran</text><text x="330" y="614">watches prompts, not tool calls or files</text><text x="330" y="640">sees egress, attributed to a service account</text>
+        </g>
+        <g class="s-haz" font-size="13" text-anchor="middle">
+          <text x="600" y="406">✗</text><text x="680" y="406">✗</text><text x="760" y="406">✗</text><text x="840" y="406">✗</text><text x="920" y="406">✗</text><text x="1000" y="406">✗</text><text x="1080" y="406">✗</text><text x="1160" y="406">✗</text><text x="1240" y="406">✗</text>
+          <text x="600" y="432">✗</text><text x="680" y="432">✗</text><text x="760" y="432">✗</text><text x="840" y="432">✗</text><text x="920" y="432">✗</text><text x="1000" y="432">✗</text><text x="1080" y="432">✗</text><text x="1160" y="432">✗</text><text x="1240" y="432">✗</text>
+          <text x="600" y="458">✗</text><text x="680" y="458">✗</text><text x="760" y="458">✗</text><text x="840" y="458">✗</text><text x="1000" y="458">✗</text><text x="1080" y="458">✗</text><text x="1160" y="458">✗</text><text x="1240" y="458">✗</text>
+          <text x="600" y="484">✗</text><text x="680" y="484">✗</text><text x="760" y="484">✗</text><text x="840" y="484">✗</text><text x="1000" y="484">✗</text><text x="1080" y="484">✗</text><text x="1240" y="484">✗</text>
+          <text x="600" y="510">✗</text><text x="680" y="510">✗</text><text x="760" y="510">✗</text><text x="840" y="510">✗</text><text x="920" y="510">✗</text><text x="1000" y="510">✗</text><text x="1080" y="510">✗</text><text x="1160" y="510">✗</text><text x="1240" y="510">✗</text>
+          <text x="600" y="536">✗</text><text x="680" y="536">✗</text><text x="760" y="536">✗</text><text x="840" y="536">✗</text><text x="920" y="536">✗</text><text x="1000" y="536">✗</text><text x="1080" y="536">✗</text><text x="1160" y="536">✗</text>
+          <text x="600" y="562">✗</text><text x="680" y="562">✗</text><text x="760" y="562">✗</text><text x="840" y="562">✗</text><text x="920" y="562">✗</text><text x="1000" y="562">✗</text><text x="1080" y="562">✗</text><text x="1160" y="562">✗</text><text x="1240" y="562">✗</text>
+          <text x="600" y="588">✗</text><text x="680" y="588">✗</text><text x="760" y="588">✗</text><text x="840" y="588">✗</text><text x="920" y="588">✗</text><text x="1000" y="588">✗</text><text x="1080" y="588">✗</text><text x="1160" y="588">✗</text><text x="1240" y="588">✗</text>
+          <text x="600" y="614">✗</text><text x="680" y="614">✗</text><text x="760" y="614">✗</text><text x="840" y="614">✗</text><text x="920" y="614">✗</text><text x="1000" y="614">✗</text><text x="1080" y="614">✗</text><text x="1160" y="614">✗</text><text x="1240" y="614">✗</text>
+          <text x="600" y="640">✗</text><text x="680" y="640">✗</text><text x="760" y="640">✗</text><text x="840" y="640">✗</text><text x="920" y="640">✗</text><text x="1000" y="640">✗</text><text x="1080" y="640">✗</text><text x="1160" y="640">✗</text>
+        </g>
+        <g class="s-note" font-size="13" text-anchor="middle">
+          <text x="920" y="458">~</text><text x="920" y="484">~</text><text x="1160" y="484">~</text><text x="1240" y="536">~</text><text x="1240" y="640">~</text>
+        </g>
+        <text x="1310" y="458" class="s-sub" font-size="10">would fire only if</text>
+        <text x="1310" y="470" class="s-sub" font-size="10">the package were</text>
+        <text x="1310" y="482" class="s-sub" font-size="10">already known bad</text>
+        <text x="1310" y="536" class="s-sub" font-size="10">sees a build, not</text>
+        <text x="1310" y="548" class="s-sub" font-size="10">an intent</text>
+        <text x="1310" y="640" class="s-sub" font-size="10">alerts after the</text>
+        <text x="1310" y="652" class="s-sub" font-size="10">data has gone</text>
+
+        <text x="30" y="676" class="s-haz">Ten controls, ninety cells, and the only marks are partial ones that fire after the secrets have already left.</text>
+        <text x="30" y="692" class="s-sub">Not because the controls are bad. Because every one of them inspects an artifact, a configuration or a network flow — and the attack lives in a conversation.</text>
+
+        <rect x="30" y="712" width="1340" height="176" fill="var(--z5)"/>
+        <text x="46" y="736" class="s-zone" fill="var(--fast)">Five moments where the chain breaks — each one is a product feature, not a policy</text>
+        <text x="46" y="762" class="s-lab" font-size="11">At step 04 · mark the source</text>
+        <text x="46" y="780" class="s-sub" font-size="10.5">The ticket came from outside the</text>
+        <text x="46" y="794" class="s-sub" font-size="10.5">organisation. Tag the session tainted,</text>
+        <text x="46" y="808" class="s-sub" font-size="10.5">and change what is allowed next.</text>
+        <text x="316" y="762" class="s-lab" font-size="11">At step 05 · guard the sensitive path</text>
+        <text x="316" y="780" class="s-sub" font-size="10.5">A write to auth, crypto, payment or</text>
+        <text x="316" y="794" class="s-sub" font-size="10.5">CI files during a tainted session is the</text>
+        <text x="316" y="808" class="s-sub" font-size="10.5">2% worth interrupting a human for.</text>
+        <text x="586" y="762" class="s-lab" font-size="11">At step 05 · new dependency</text>
+        <text x="586" y="780" class="s-sub" font-size="10.5">A package introduced by an agent,</text>
+        <text x="586" y="794" class="s-sub" font-size="10.5">not by a person, always confirms —</text>
+        <text x="586" y="808" class="s-sub" font-size="10.5">and never runs install scripts unsandboxed.</text>
+        <text x="886" y="762" class="s-lab" font-size="11">At step 06 · test and code together</text>
+        <text x="886" y="780" class="s-sub" font-size="10.5">A test edited in the same change as</text>
+        <text x="886" y="794" class="s-sub" font-size="10.5">the behaviour it covers is a reviewable</text>
+        <text x="886" y="808" class="s-sub" font-size="10.5">event. Cheap rule, high yield.</text>
+        <text x="1156" y="762" class="s-lab" font-size="11">At step 09 · egress</text>
+        <text x="1156" y="780" class="s-sub" font-size="10.5">The build runner may reach your</text>
+        <text x="1156" y="794" class="s-sub" font-size="10.5">registry and nothing else. This one</text>
+        <text x="1156" y="808" class="s-sub" font-size="10.5">stops the damage even if all four fail.</text>
+        <text x="46" y="840" class="s-note">Note what none of the five are: they are not "detect the malicious prompt". Every one is a boring, deterministic rule about authority and data flow —</text>
+        <text x="46" y="856" class="s-note">which is exactly why they can be sold, audited, and trusted to behave the same way tomorrow.</text>
+        <text x="46" y="878" class="s-sub" style="fill:var(--hazard)">Elapsed machine time: eleven minutes. A human insider doing the same work would have needed weeks and left a trail at every step.</text>
+      </svg>
+    </div>
+    <figcaption><b>Use this sheet as the demo.</b> Nobody buys a control for a threat they cannot picture, and nobody in security wants a lecture about model alignment. They want to watch eleven minutes of a normal Friday turn into a data-loss incident, and then be shown the five deterministic rules that would have ended it.</figcaption>
+  </figure>
+
+  <div class="warn">
+    <b>On responsible detail</b>
+    <p>The chain above is deliberately described at design level: enough to build and test a control, not a recipe. That is the right altitude for a defender's document — and, incidentally, the right altitude for a sales conversation, where the goal is to make a risk legible rather than to teach an audience how to run it.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 8 — THE CONTROL PLANE ══════════════════════ -->
+<div class="sheet" id="g8">
+  <div class="plate">
+    <span class="no">Sheet 8</span>
+    <h2>The Control Plane</h2>
+    <span class="form">Layered schematic</span>
+    <span class="cov">Covers · Authorization · Secrets Management · CI CD · Secure Coding</span>
+  </div>
+  <p class="thesis">Five places to put a control, and a recorder underneath all of them. <strong>Every item here is deterministic — a rule about identity, authority or data flow — which means it can be tested, audited and trusted to behave identically tomorrow. Nothing on this sheet asks a model to be careful.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="Five control stages left to right: before the task, identity and provisioning; on the way in, ingress labelling and sanitisation; at the decision, the policy engine and risk-scored approval; on the way out, egress control; and afterwards, evidence and replay. Beneath all five runs the recorder. At the bottom, three panels: what to build in the first ninety days, what not to build, and how to prove the controls work.">
+        <defs>
+          <marker id="k8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <g>
+          <rect x="30" y="80" width="240" height="340" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="300" y="80" width="240" height="340" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="570" y="80" width="240" height="340" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="840" y="80" width="240" height="340" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="1110" y="80" width="260" height="340" fill="var(--z3)" stroke="var(--rule)"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="3.5" fill="none" marker-end="url(#k8)">
+          <path d="M270,250 L296,250"/><path d="M540,250 L566,250"/><path d="M810,250 L836,250"/><path d="M1080,250 L1106,250"/>
+        </g>
+
+        <g class="s-num"><text x="44" y="104">01</text><text x="314" y="104">02</text><text x="584" y="104">03</text><text x="854" y="104">04</text><text x="1124" y="104">05</text></g>
+        <g class="s-lab" font-size="13">
+          <text x="44" y="124">Before the task</text><text x="314" y="124">On the way in</text><text x="584" y="124">At the decision</text><text x="854" y="124">On the way out</text><text x="1124" y="124">Afterwards</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="44" y="140">identity and provisioning</text><text x="314" y="140">ingress</text><text x="584" y="140">policy and approval</text><text x="854" y="140">egress</text><text x="1124" y="140">evidence and replay</text>
+        </g>
+
+        <g class="s-lab" font-size="11">
+          <text x="44" y="176">Registry</text><text x="44" y="234">Scope declaration</text><text x="44" y="292">Minted credentials</text><text x="44" y="350">Budgets</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="44" y="192">every agent has an owner,</text><text x="44" y="204">a purpose and an expiry date</text>
+          <text x="44" y="250">these repos, these systems,</text><text x="44" y="262">these hosts — written down</text><text x="44" y="274">before the first run</text>
+          <text x="44" y="308">short-lived, task-scoped,</text><text x="44" y="320">never stored on the laptop</text>
+          <text x="44" y="366">spend, actions, data volume,</text><text x="44" y="378">wall time — each with a hard</text><text x="44" y="390">stop rather than an alert</text>
+        </g>
+
+        <g class="s-lab" font-size="11">
+          <text x="314" y="176">Source labelling</text><text x="314" y="234">Sanitisation</text><text x="314" y="292">Taint marking</text><text x="314" y="350">Description pinning</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="314" y="192">every strip of context carries</text><text x="314" y="204">an origin: internal, external,</text><text x="314" y="216">third-party, generated</text>
+          <text x="314" y="250">strip invisible unicode, flatten</text><text x="314" y="262">markup, cap the size of any</text><text x="314" y="274">single fetched document</text>
+          <text x="314" y="308">once external text is loaded,</text><text x="314" y="320">the session is tainted and</text><text x="314" y="332">stage 03 changes its rules</text>
+          <text x="314" y="366">hash every tool description</text><text x="314" y="378">on load; alert on any change</text><text x="314" y="390">since it was approved</text>
+        </g>
+
+        <g class="s-lab" font-size="11">
+          <text x="584" y="176">Allowed actions</text><text x="584" y="234">Sensitive paths</text><text x="584" y="292">Risk-scored approval</text><text x="584" y="350">Separation of duties</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="584" y="192">a written policy per agent:</text><text x="584" y="204">which tools, which paths,</text><text x="584" y="216">which hosts, which hours</text>
+          <text x="584" y="250">auth, crypto, payments, CI</text><text x="584" y="262">workflows and IaC are a</text><text x="584" y="274">different class of file</text>
+          <text x="584" y="308">silent by default, interrupt</text><text x="584" y="320">for the 2% that matter —</text><text x="584" y="332">the only kind people keep on</text>
+          <text x="584" y="366">the agent that wrote the</text><text x="584" y="378">change does not get to be</text><text x="584" y="390">the thing that approves it</text>
+        </g>
+
+        <g class="s-lab" font-size="11">
+          <text x="854" y="176">Default deny</text><text x="854" y="234">One proxy</text><text x="854" y="292">Volume limits</text><text x="854" y="350">Write boundaries</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="854" y="192">the agent process reaches an</text><text x="854" y="204">allowlist and nothing else —</text><text x="854" y="216">including DNS</text>
+          <text x="854" y="250">every request through one</text><text x="854" y="262">recorded path, so "where did</text><text x="854" y="274">it send that" is answerable</text>
+          <text x="854" y="308">a task that reads 4 MB and</text><text x="854" y="320">sends 4 MB outward is not a</text><text x="854" y="332">bug fix, whatever it says</text>
+          <text x="854" y="366">writes stay inside the working</text><text x="854" y="378">tree; home directory and</text><text x="854" y="390">credential files are read-blocked</text>
+        </g>
+
+        <g class="s-lab" font-size="11">
+          <text x="1124" y="176">Session record</text><text x="1124" y="234">Provenance on the PR</text><text x="1124" y="292">Replay</text><text x="1124" y="350">Continuous red team</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="1124" y="192">one file per task, replayable,</text><text x="1124" y="204">signed, with retention agreed</text><text x="1124" y="216">in advance</text>
+          <text x="1124" y="250">which lines an agent wrote,</text><text x="1124" y="262">from which session, having</text><text x="1124" y="274">read which external sources</text>
+          <text x="1124" y="308">re-run yesterday's sessions</text><text x="1124" y="320">against today's rules: "what</text><text x="1124" y="332">would this have caught?"</text>
+          <text x="1124" y="366">a standing suite of injections</text><text x="1124" y="378">and exfiltration attempts, run</text><text x="1124" y="390">against your own agents weekly</text>
+        </g>
+
+        <rect x="30" y="446" width="1340" height="86" fill="var(--band)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="46" y="472" class="s-zone" fill="var(--line)">The recorder · underneath all five, and the only one that pays for itself before it is finished</text>
+        <text x="46" y="496" class="s-sub">It is read-only, so nobody has to trust it with an outage. It installs in an afternoon. It answers the auditor's question on day one. And it produces the</text>
+        <text x="46" y="510" class="s-sub">dataset that makes every other stage on this sheet possible: you cannot write a sensible policy for behaviour you have never measured.</text>
+        <text x="46" y="526" class="s-note">Ship stage 05 first. Sell stages 01 to 04 with the evidence it produces.</text>
+
+        <rect x="30" y="560" width="440" height="330" fill="var(--z1)"/>
+        <text x="46" y="584" class="s-zone" fill="var(--line)">The first ninety days, if you are building this</text>
+        <text x="46" y="610" class="s-lab" font-size="11">1 · A recorder for one agent runtime</text>
+        <text x="46" y="626" class="s-sub" font-size="10.5">Pick the tool your target customers actually use. Capture</text>
+        <text x="46" y="640" class="s-sub" font-size="10.5">tool calls, file reads and writes, shell, network, approvals.</text>
+        <text x="46" y="664" class="s-lab" font-size="11">2 · An egress proxy for the agent process</text>
+        <text x="46" y="680" class="s-sub" font-size="10.5">Default deny with a per-repository allowlist. This alone is a</text>
+        <text x="46" y="694" class="s-sub" font-size="10.5">product, and it is the control that survives a failed injection.</text>
+        <text x="46" y="718" class="s-lab" font-size="11">3 · Six deterministic rules</text>
+        <text x="46" y="734" class="s-sub" font-size="10.5">Credential file read · write outside the tree · new host</text>
+        <text x="46" y="748" class="s-sub" font-size="10.5">contacted · workflow file changed · dependency added ·</text>
+        <text x="46" y="762" class="s-sub" font-size="10.5">test edited beside the code it covers.</text>
+        <text x="46" y="786" class="s-lab" font-size="11">4 · One screen a CISO can read</text>
+        <text x="46" y="802" class="s-sub" font-size="10.5">Sessions this week · what they touched · what left the</text>
+        <text x="46" y="816" class="s-sub" font-size="10.5">machine · which sessions were tainted by external text.</text>
+        <text x="46" y="844" class="s-note" font-size="10.5">Enforcement comes in month four, after the recordings have</text>
+        <text x="46" y="858" class="s-note" font-size="10.5">shown the customer which rules they can afford to switch on.</text>
+        <text x="46" y="880" class="s-sub" style="fill:var(--fast)">Read-only first is not timidity. It is how you get installed.</text>
+
+        <rect x="490" y="560" width="420" height="330" fill="var(--band)"/>
+        <text x="506" y="584" class="s-zone" fill="var(--hazard)">What not to build</text>
+        <text x="506" y="610" class="s-lab" font-size="11">Another injection classifier</text>
+        <text x="506" y="626" class="s-sub" font-size="10.5">Crowded, commoditising into the model providers,</text>
+        <text x="506" y="640" class="s-sub" font-size="10.5">and structurally unable to be the boundary — sheet 2.</text>
+        <text x="506" y="664" class="s-lab" font-size="11">A dashboard with no enforcement point</text>
+        <text x="506" y="680" class="s-sub" font-size="10.5">Posture products that only list findings get renewed</text>
+        <text x="506" y="694" class="s-sub" font-size="10.5">once. Own an enforcement point or own the evidence.</text>
+        <text x="506" y="718" class="s-lab" font-size="11">A day-one "route everything through us"</text>
+        <text x="506" y="734" class="s-sub" font-size="10.5">Asking a company to proxy all model traffic before you</text>
+        <text x="506" y="748" class="s-sub" font-size="10.5">have proved anything is a twelve-month sales cycle.</text>
+        <text x="506" y="772" class="s-lab" font-size="11">A control that fires on the other 98%</text>
+        <text x="506" y="788" class="s-sub" font-size="10.5">Anything that interrupts developers routinely will be</text>
+        <text x="506" y="802" class="s-sub" font-size="10.5">disabled in a fortnight, and you will never hear why.</text>
+        <text x="506" y="828" class="s-haz" font-size="10.5">The failure mode of this whole category is friction.</text>
+        <text x="506" y="844" class="s-sub">Security teams buy it, engineering teams switch it off, and</text>
+        <text x="506" y="858" class="s-sub">the renewal conversation is with the engineering team.</text>
+        <text x="506" y="880" class="s-sub" style="fill:var(--hazard)">Design for the developer's patience, not the buyer's fear.</text>
+
+        <rect x="930" y="560" width="440" height="330" fill="var(--z5)"/>
+        <text x="946" y="584" class="s-zone" fill="var(--fast)">How you prove any of it works</text>
+        <text x="946" y="610" class="s-lab" font-size="11">Replay, not claims</text>
+        <text x="946" y="626" class="s-sub" font-size="10.5">Record a prospect's real sessions for two weeks, then</text>
+        <text x="946" y="640" class="s-sub" font-size="10.5">replay them against your rules and show exactly what</text>
+        <text x="946" y="654" class="s-sub" font-size="10.5">would have fired, and how often it would have annoyed</text>
+        <text x="946" y="668" class="s-sub" font-size="10.5">their developers. That number closes the deal, or kills it.</text>
+        <text x="946" y="694" class="s-lab" font-size="11">A published rule set</text>
+        <text x="946" y="710" class="s-sub" font-size="10.5">Deterministic rules can be read, argued with and adopted.</text>
+        <text x="946" y="724" class="s-sub" font-size="10.5">Publishing them builds trust that a classifier's score never will.</text>
+        <text x="946" y="750" class="s-lab" font-size="11">A standing attack suite</text>
+        <text x="946" y="766" class="s-sub" font-size="10.5">Injections, exfiltration attempts, poisoned rules files and</text>
+        <text x="946" y="780" class="s-sub" font-size="10.5">tool descriptions — run weekly against the customer's own</text>
+        <text x="946" y="794" class="s-sub" font-size="10.5">agents, with a report. This is a second product later.</text>
+        <text x="946" y="820" class="s-lab" font-size="11">Numbers the buyer already reports</text>
+        <text x="946" y="836" class="s-sub" font-size="10.5">Agents inventoried · sessions with external input · actions</text>
+        <text x="946" y="850" class="s-sub" font-size="10.5">outside scope · mean time to answer "what did it do?".</text>
+        <text x="946" y="876" class="s-sub" style="fill:var(--fast)">Give them the slide they have to present, not the one you want to present.</text>
+      </svg>
+    </div>
+    <figcaption><b>Note the shape of the whole sheet:</b> not one of these controls tries to make the model behave. They constrain what it can reach, bound where its output can travel, and write down what happened. That is the same playbook the industry applied to untrusted code twenty years ago, and it worked for the same reason — determinism beats persuasion.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Item key — the controls</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Agent registry</h4><p>The inventory: which agents exist, who owns each, what it is for, when it expires. The unglamorous first deliverable, and the one every buyer immediately understands.</p></div>
+      <div><h4><span>02</span>Scope declaration</h4><p>A written statement of what an agent may touch, enforced at the credential and network layer rather than trusted to a prompt.</p></div>
+      <div><h4><span>03</span>Just-in-time credentials</h4><p>Minted at task start, expired at task end. Removes standing privilege — the thing that turns a small mistake into a large incident.</p></div>
+      <div><h4><span>04</span>Hard budgets</h4><p>Caps on spend, actions, data volume and wall time that stop rather than warn. An agent loop with an alert is still an unbounded loop.</p></div>
+      <div><h4><span>05</span>Source labelling</h4><p>Recording where each piece of context came from. Everything downstream — taint, policy, forensics — depends on this one field existing.</p></div>
+      <div><h4><span>06</span>Sanitisation</h4><p>Stripping invisible characters and flattening hostile markup on ingest. Cheap, worth doing, and never sold as the boundary.</p></div>
+      <div><h4><span>07</span>Taint-aware policy</h4><p>Rules that tighten automatically once untrusted content enters the session: no writes to sensitive paths, no new hosts, no credential reads.</p></div>
+      <div><h4><span>08</span>Risk-scored approval</h4><p>Silence for routine actions, an interruption for the rare dangerous one. The design that keeps a human meaningfully in the loop instead of nominally in it.</p></div>
+      <div><h4><span>09</span>Egress proxy</h4><p>One recorded path out, default deny, allowlist per task. The highest ratio of protection to effort on this entire atlas.</p></div>
+      <div><h4><span>10</span>Provenance attestation</h4><p>Signed evidence linking a change to the session and inputs that produced it, attached to the pull request where a reviewer will actually see it.</p></div>
+      <div><h4><span>11</span>Replay</h4><p>Re-running recorded sessions against a candidate policy. Turns "would this help?" from a debate into a measurement, for you and for the customer.</p></div>
+      <div><h4><span>12</span>Agent red teaming</h4><p>A standing suite of injections and exfiltration attempts run against your own agents on a schedule, because the attacks change faster than the architecture.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 9 — WHERE THE MONEY IS ══════════════════════ -->
+<div class="sheet" id="g9">
+  <div class="plate">
+    <span class="no">Sheet 9</span>
+    <h2>Where the Money Is</h2>
+    <span class="form">Market map</span>
+    <span class="cov">Covers · the commercial reading of sheets 1 to 8</span>
+  </div>
+  <p class="thesis">Seven layers, four of them already crowded with funded companies, three of them close to empty. <strong>The empty ones are not empty because they are unimportant — they are empty because they only became buyable when agents got write access to real systems, which happened about eighteen months ago.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A market map. Seven layers listed with a bar showing how crowded each is, who buys it, and what is missing. The first four — prompt guardrails, AI posture, code scanning and non-human identity — are crowded. The last three — agent runtime action control, tool and MCP supply chain, and session evidence and replay — are thin. Below, the wedge to sell first with pricing, the buyer and trigger map, three possible business shapes, and the honest risks including platform risk from agent vendors.">
+        <text x="30" y="42" class="s-zone" fill="var(--mute)">The seven layers, and how contested each one is</text>
+        <line x1="30" y1="76" x2="1370" y2="76" stroke="var(--rule)"/>
+        <g class="s-sub" style="fill:var(--mute)"><text x="40" y="68">layer</text><text x="340" y="68">how crowded</text><text x="700" y="68">who signs the contract</text><text x="920" y="68">what is still missing</text></g>
+
+        <g class="s-lab">
+          <text x="40" y="110">Model and prompt guardrails</text><text x="40" y="154">AI posture and discovery</text><text x="40" y="198">Code and dependency scanning</text><text x="40" y="242">Non-human identity</text>
+        </g>
+        <g class="s-lab" style="fill:var(--hazard)">
+          <text x="40" y="286">Agent runtime action control</text><text x="40" y="330">Tool and MCP supply chain</text><text x="40" y="374">Session evidence and replay</text>
+        </g>
+        <g class="s-sub" font-size="10.5" style="fill:var(--mute)">
+          <text x="40" y="124">input and output classifiers</text><text x="40" y="168">what models and data exist where</text><text x="40" y="212">the artifact, after the fact</text><text x="40" y="256">service accounts, tokens, workloads</text>
+          <text x="40" y="300">what the agent may do, as it does it</text><text x="40" y="344">what writes into the agent's context</text><text x="40" y="388">what happened, provably</text>
+        </g>
+
+        <g opacity=".85">
+          <rect x="340" y="100" width="266" height="12" fill="var(--cool)"/>
+          <rect x="340" y="144" width="238" height="12" fill="var(--cool)"/>
+          <rect x="340" y="188" width="280" height="12" fill="var(--cool)"/>
+          <rect x="340" y="232" width="168" height="12" fill="var(--cool)"/>
+          <rect x="340" y="276" width="42" height="12" fill="var(--hazard)"/>
+          <rect x="340" y="320" width="28" height="12" fill="var(--hazard)"/>
+          <rect x="340" y="364" width="14" height="12" fill="var(--hazard)"/>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="614" y="110">crowded</text><text x="586" y="154">crowded</text><text x="628" y="198">incumbents</text><text x="516" y="242">consolidating</text>
+          <text x="392" y="286" fill="var(--hazard)">thin</text><text x="378" y="330" fill="var(--hazard)">very thin</text><text x="364" y="374" fill="var(--hazard)">nearly empty</text>
+        </g>
+
+        <g class="s-sub">
+          <text x="700" y="110">the AI platform team</text><text x="700" y="154">cloud security</text><text x="700" y="198">application security</text><text x="700" y="242">identity and access</text>
+          <text x="700" y="286">AppSec, with platform engineering</text><text x="700" y="330">AppSec and supply-chain owners</text><text x="700" y="374">the CISO, and increasingly GRC</text>
+        </g>
+
+        <g class="s-sub" font-size="10.5">
+          <text x="920" y="110">little worth entering — this is folding into the model providers</text>
+          <text x="920" y="154">little worth entering — cloud platforms are absorbing it</text>
+          <text x="920" y="198">agent provenance on a change, which incumbents will add</text>
+          <text x="920" y="242">per-task minted credentials for agents — a partner, not a fight</text>
+          <text x="920" y="286" fill="var(--hazard)">everything: nobody owns the tool-call boundary on the laptop</text>
+          <text x="920" y="330" fill="var(--hazard)">a registry, version pinning, description diffing, token brokering</text>
+          <text x="920" y="374" fill="var(--hazard)">the answer to "what did your agents do last Tuesday?"</text>
+        </g>
+        <line x1="30" y1="396" x2="1370" y2="396" stroke="var(--rule)"/>
+
+        <rect x="30" y="416" width="660" height="230" fill="var(--z5)"/>
+        <text x="46" y="440" class="s-zone" fill="var(--fast)">The wedge · what to sell first</text>
+        <text x="46" y="466" class="s-lab" font-size="11.5">A flight recorder for developer agents</text>
+        <text x="46" y="484" class="s-sub">Read-only. Installs in an afternoon. Breaks nothing. Produces, on day one,</text>
+        <text x="46" y="498" class="s-sub">an inventory of every agent running in the company and a record of what</text>
+        <text x="46" y="512" class="s-sub">each one read, wrote, ran and sent — the single question no company can</text>
+        <text x="46" y="526" class="s-sub">currently answer, and the one their customers' questionnaires now ask.</text>
+        <text x="46" y="552" class="s-sub" font-size="10.5">Why this and not enforcement: enforcement requires trust you have not earned</text>
+        <text x="46" y="566" class="s-sub" font-size="10.5">and a policy the customer cannot yet write, because nobody has measured</text>
+        <text x="46" y="580" class="s-sub" font-size="10.5">their own agents. Recording earns both, and it is a one-meeting sale.</text>
+        <text x="46" y="606" class="s-note">Then: egress control, then risk-scored approval, then per-task credentials.</text>
+        <text x="46" y="622" class="s-sub">Each step is sold with evidence produced by the step before it — which is</text>
+        <text x="46" y="636" class="s-sub">the cleanest land-and-expand motion available in security tooling.</text>
+
+        <rect x="706" y="416" width="664" height="230" fill="var(--z3)"/>
+        <text x="722" y="440" class="s-zone" fill="var(--mute)">Buyer, trigger, and the sentence that opens the door</text>
+        <text x="722" y="466" class="s-lab" font-size="11">Who signs</text>
+        <text x="838" y="466" class="s-sub">the CISO or Head of AppSec. Champion: platform engineering.</text>
+        <text x="722" y="490" class="s-lab" font-size="11">Budget line</text>
+        <text x="838" y="490" class="s-sub">application security, or compliance — not "AI", which has no budget yet.</text>
+        <text x="722" y="516" class="s-lab" font-size="11">Triggers, in order of frequency</text>
+        <text x="722" y="534" class="s-sub" font-size="10.5">· An enterprise customer's security questionnaire adds a section on agents.</text>
+        <text x="722" y="550" class="s-sub" font-size="10.5">· An auditor asks how agent access is governed, and nobody has an answer.</text>
+        <text x="722" y="566" class="s-sub" font-size="10.5">· A near-miss: an agent did something surprising and nobody could explain it.</text>
+        <text x="722" y="582" class="s-sub" font-size="10.5">· The board asks what happens now that engineering is "mostly AI".</text>
+        <text x="722" y="598" class="s-sub" font-size="10.5">· A regulated customer requires agent action logs as a contract term.</text>
+        <text x="722" y="624" class="s-note">The opening sentence: "How would you answer, today, if a customer asked</text>
+        <text x="722" y="640" class="s-note">for a list of everything your coding agents touched last week?"</text>
+
+        <rect x="30" y="676" width="440" height="212" fill="var(--z1)"/>
+        <text x="46" y="700" class="s-zone" fill="var(--line)">Three shapes this business can take</text>
+        <text x="46" y="726" class="s-lab" font-size="11">A · The developer-agent security platform</text>
+        <text x="46" y="742" class="s-sub" font-size="10.5">Recorder, egress, policy, approvals. Per-seat pricing, sold</text>
+        <text x="46" y="756" class="s-sub" font-size="10.5">to AppSec, adopted by engineering. Largest outcome,</text>
+        <text x="46" y="770" class="s-sub" font-size="10.5">highest platform risk.</text>
+        <text x="46" y="794" class="s-lab" font-size="11">B · Agent identity and authorisation</text>
+        <text x="46" y="810" class="s-sub" font-size="10.5">Per-task credentials, attenuating delegation, revocation.</text>
+        <text x="46" y="824" class="s-sub" font-size="10.5">Slower, stickier, sold to IAM, and adjacent to a crowded</text>
+        <text x="46" y="838" class="s-sub" font-size="10.5">and consolidating market.</text>
+        <text x="46" y="862" class="s-lab" font-size="11">C · Evidence and compliance for agents</text>
+        <text x="46" y="878" class="s-sub" font-size="10.5">Records and auditor-ready reports. Easiest to price, hardest to churn.</text>
+
+        <rect x="490" y="676" width="420" height="212" fill="var(--band)"/>
+        <text x="506" y="700" class="s-zone" fill="var(--hazard)">The risks, stated honestly</text>
+        <text x="506" y="726" class="s-lab" font-size="11">Platform risk</text>
+        <text x="506" y="742" class="s-sub" font-size="10.5">Agent vendors will ship basic logging and sandboxing.</text>
+        <text x="506" y="756" class="s-sub" font-size="10.5">Assume it, and be the layer that spans all of them.</text>
+        <text x="506" y="780" class="s-lab" font-size="11">Timing risk</text>
+        <text x="506" y="796" class="s-sub" font-size="10.5">Some buyers will wait for a public incident. Build for</text>
+        <text x="506" y="810" class="s-sub" font-size="10.5">the ones already being asked by their own customers.</text>
+        <text x="506" y="834" class="s-lab" font-size="11">Adoption risk</text>
+        <text x="506" y="850" class="s-sub" font-size="10.5">If developers feel it, they will remove it. Every design</text>
+        <text x="506" y="864" class="s-sub" font-size="10.5">decision has to be measured against that sentence —</text>
+        <text x="506" y="878" class="s-sub" font-size="10.5">including how much you interrupt, and how loudly.</text>
+
+        <rect x="930" y="676" width="440" height="212" fill="var(--z4)"/>
+        <text x="946" y="700" class="s-zone" fill="var(--fast)">What actually defends the position</text>
+        <text x="946" y="726" class="s-sub" font-size="10.5">· <tspan class="s-lab" font-size="11">Coverage across runtimes.</tspan> A company runs four or five</text>
+        <text x="946" y="740" class="s-sub" font-size="10.5">  different agent tools and needs one record of all of them.</text>
+        <text x="946" y="762" class="s-sub" font-size="10.5">· <tspan class="s-lab" font-size="11">Independence.</tspan> A vendor's own logs about its own product</text>
+        <text x="946" y="776" class="s-sub" font-size="10.5">  are not evidence in an audit. A third party's are.</text>
+        <text x="946" y="798" class="s-sub" font-size="10.5">· <tspan class="s-lab" font-size="11">The rule library.</tspan> Every customer's recordings teach you</text>
+        <text x="946" y="812" class="s-sub" font-size="10.5">  which rules fire usefully and which annoy. That compounds.</text>
+        <text x="946" y="834" class="s-sub" font-size="10.5">· <tspan class="s-lab" font-size="11">Regulatory tailwind.</tspan> European rules on AI systems, incident</text>
+        <text x="946" y="848" class="s-sub" font-size="10.5">  reporting and operational resilience all push in one direction:</text>
+        <text x="946" y="862" class="s-sub" font-size="10.5">  keep records, prove control, be able to explain an action.</text>
+        <text x="946" y="880" class="s-note" font-size="10.5">An EU-based company selling evidence into that climate is standing in the right place.</text>
+      </svg>
+    </div>
+    <figcaption><b>The whole commercial argument in one line:</b> the crowded layers are trying to stop a model from being persuaded, and the empty layers are trying to bound what a program is allowed to do and write down what it did. The second problem is older, better understood, deterministic, auditable — and currently nobody's product.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Item key — the commercial vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>The wedge</h4><p>The smallest thing worth paying for that gets you installed. Here: read-only recording, because it answers a question the buyer is already being asked and cannot break anything.</p></div>
+      <div><h4><span>02</span>Land and expand</h4><p>Sell evidence, then sell the controls the evidence justifies. Each stage funds and de-risks the next, and the customer's own data makes the case.</p></div>
+      <div><h4><span>03</span>Time to value</h4><p>How long from install to the customer seeing something they did not know. Aim for one afternoon; anything measured in weeks dies in a pilot queue.</p></div>
+      <div><h4><span>04</span>Enforcement point</h4><p>A place where you can actually stop an action — the tool boundary, the proxy, the credential. Products that only observe get renewed once; products that enforce get embedded.</p></div>
+      <div><h4><span>05</span>Platform risk</h4><p>The chance that the agent vendor ships your feature. Mitigated by spanning several runtimes and by being independent of the thing you are recording.</p></div>
+      <div><h4><span>06</span>Friction budget</h4><p>How much a developer will tolerate before disabling you. The scarcest resource in this category, and the reason risk-scored interruption matters more than coverage.</p></div>
+      <div><h4><span>07</span>Compliance pull</h4><p>Demand created by auditors, questionnaires and regulation rather than by fear. Slower to start, far more durable, and it survives a budget freeze.</p></div>
+      <div><h4><span>08</span>Design partner</h4><p>Two or three companies with real agent fleets who will let you record for free in exchange for the findings. Their recordings are your rule library and your first case studies.</p></div>
+      <div><h4><span>09</span>Proof by replay</h4><p>Showing what your rules would have caught on the customer's own history. The most convincing demo available in this category, and one only a recorder can produce.</p></div>
+      <div><h4><span>10</span>Neutrality</h4><p>Being independent of the agent vendor is a feature you can charge for, in the same way an auditor's independence is the point of an audit.</p></div>
+      <div><h4><span>11</span>Sequencing</h4><p>Record, then bound egress, then interrupt, then mint credentials. Doing these in the wrong order produces a product that is correct and unsellable.</p></div>
+      <div><h4><span>12</span>The unfair question</h4><p>"What did your agents do last week?" It is unfair because everyone should be able to answer it and nobody can. Build the answer, and the rest of the roadmap writes itself.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Where this atlas ends and judgement begins</b>
+    <p>Sheets 1 to 7 describe a threat model that is observable today and will not be argued with by anyone who runs agents at scale. Sheet 9 is a judgement about a market that is moving quickly: the bar lengths, the crowding and the sequencing are opinions, not measurements, and they should be re-checked against real conversations with real buyers before anyone spends a year building against them.</p>
+  </div>
+</div>
+
+</div>

@@ -71,7 +71,32 @@
   .lede{max-width:78ch; margin:0; color:var(--ink)}
 
   figure{margin:0; display:flex; flex-direction:column; gap:12px}
-  .scroll{overflow-x:auto; overflow-y:hidden; padding-bottom:4px}
+  .scroll{
+    overflow-x:auto; overflow-y:hidden; padding-bottom:6px;
+    scrollbar-width:thin; scrollbar-color:var(--mute) transparent;
+    overscroll-behavior-x:contain;
+  }
+  .scroll::-webkit-scrollbar{height:12px}
+  .scroll::-webkit-scrollbar-track{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+  .scroll::-webkit-scrollbar-thumb{background:var(--mute); border:3px solid var(--paper)}
+  .scroll::-webkit-scrollbar-thumb:hover{background:var(--ink)}
+  /* fig. 1 is drawn at full size and scrolls sideways rather than shrinking to fit */
+  .scroll.wide svg{min-width:2400px}
+  /* fig. 1 is drawn large, so its type is set smaller — it ends up bigger on screen either way */
+  .scroll.wide .s-name{font-size:11.5px}
+  .scroll.wide .s-sub {font-size:9.8px}
+  .scroll.wide .s-num {font-size:9.5px}
+  .scroll.wide .s-port{font-size:8.6px}
+  .scroll.wide .s-zone{font-size:10px}
+  .scroll.wide .s-lab {font-size:10.5px}
+  .scroll.wide .s-note{font-size:10.5px}
+  .scroll.wide .s-haz {font-size:10.5px}
+  .hint{
+    display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+    font-family:var(--mono); font-size:11px; color:var(--mute); margin:0;
+    border-top:1px solid var(--rule); padding-top:8px;
+  }
+  .hint b{color:var(--line); font-weight:400}
   svg{display:block; width:100%; min-width:900px; height:auto}
   figcaption{font-size:13.5px; color:var(--mute); max-width:84ch}
   figcaption b{color:var(--ink); font-weight:400}
@@ -84,6 +109,7 @@
   .s-note{font-family:var(--sans); font-size:11.5px; font-weight:700; letter-spacing:.03em; fill:var(--fast)}
   .s-haz {font-family:var(--sans); font-size:11.5px; font-weight:700; fill:var(--hazard)}
   .s-lab {font-family:var(--sans); font-size:12px; font-weight:700; fill:var(--ink)}
+  .s-port{font-family:var(--mono); font-size:9.5px; fill:var(--line)}
 
   /* ---------- key ---------- */
   .key{
@@ -143,6 +169,66 @@
   a{color:var(--line); text-decoration:none; border-bottom:1px solid color-mix(in srgb,var(--line) 40%,transparent)}
   a:focus-visible{outline:2px solid var(--fast); outline-offset:3px}
 
+
+  /* ---------- split panel (edge / door / origin) ---------- */
+  .split{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(298px,1fr));
+    border:1px solid var(--rule); border-bottom:0;
+  }
+  .split > div{border-bottom:1px solid var(--rule); border-right:1px solid var(--rule); padding:16px 18px}
+  .split h3{font-family:var(--sans); font-size:11px; letter-spacing:.14em; text-transform:uppercase; margin:0 0 4px; font-weight:700}
+  .split .cap{font-size:12.5px; color:var(--mute); margin:0 0 11px}
+  .split ul{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px}
+  .split li{position:relative; padding-left:15px; font-size:13.5px; line-height:1.45}
+  .split li::before{content:"—"; position:absolute; left:0; color:var(--line)}
+  .split li b{font-family:var(--sans); font-size:12.5px; font-weight:700}
+  .split li span{color:var(--mute)}
+  .split .door{background:color-mix(in srgb,var(--hazard) 5%,transparent)}
+  .split .door h3{color:var(--hazard)}
+  .split .door li::before{content:"!"; color:var(--hazard); font-family:var(--sans); font-weight:700; font-size:12px}
+  .split .edge h3{color:var(--fast)}
+  .split .edge li::before{color:var(--fast)}
+
+  /* ---------- owners table ---------- */
+  .owners td:first-child{font-family:var(--sans); font-weight:700; font-size:12.5px; color:var(--ink); width:9.5em; white-space:normal}
+  .owners td:nth-child(2),.owners td:nth-child(3),.owners td:nth-child(4){font-family:var(--serif); font-weight:400; font-size:13px; width:auto}
+  .owners td:nth-child(2){box-shadow:inset 3px 0 0 var(--line)}
+  .owners th:nth-child(2){color:var(--line)}
+
+
+  /* ---------- the walkthrough ---------- */
+  .walk{list-style:none; margin:0; padding:0; border-top:1.5px solid var(--ink)}
+  .walk > li{
+    display:grid; grid-template-columns:118px 1fr; gap:0 24px;
+    padding:18px 0 20px; border-bottom:1px solid var(--rule);
+  }
+  .walk .stop{display:flex; flex-direction:column; gap:8px; align-items:flex-start}
+  .walk .no{font-family:var(--mono); font-size:24px; line-height:1; color:var(--line); font-variant-numeric:tabular-nums}
+  .walk .who{
+    font-family:var(--sans); font-size:9px; letter-spacing:.13em; text-transform:uppercase; font-weight:700;
+    color:var(--mute); border:1px solid var(--rule); padding:3px 6px 2px; white-space:nowrap;
+  }
+  .walk .who.rented{color:var(--fast); border-color:var(--fast)}
+  .walk .who.mine,.walk .who.yours{color:var(--ink); border-color:var(--ink)}
+  .walk .who.data{color:var(--hazard); border-color:var(--hazard)}
+  .walk .who.dev{color:var(--line); border-color:var(--line)}
+  .walk h4{font-family:var(--sans); font-size:15.5px; font-weight:700; margin:0 0 5px; letter-spacing:-.01em}
+  .walk .svc{font-family:var(--mono); font-size:11.5px; color:var(--line); margin:0 0 11px}
+  .walk dl{margin:0; display:grid; grid-template-columns:max-content 1fr; gap:6px 18px; align-items:baseline}
+  .walk dt{
+    font-family:var(--sans); font-size:9.5px; letter-spacing:.11em; text-transform:uppercase;
+    color:var(--mute); font-weight:700; white-space:nowrap;
+  }
+  .walk dd{margin:0; font-size:14px; max-width:88ch}
+  .walk dd.risk{color:var(--hazard)}
+  .walk dd b{font-family:var(--sans); font-size:13px; font-weight:700}
+  @media (max-width:820px){
+    .walk > li{grid-template-columns:1fr; gap:10px}
+    .walk .stop{flex-direction:row; align-items:center; gap:12px}
+    .walk dl{grid-template-columns:1fr; gap:2px 0}
+    .walk dt{padding-top:6px}
+  }
+  .board + .board{margin-top:34px}
   @media (max-width:720px){
     .sheet{padding:26px 16px 48px; gap:40px}
     h2 i{display:none}
@@ -159,8 +245,9 @@
     body{-webkit-print-color-adjust:exact; print-color-adjust:exact; font-size:10pt}
     .sheet{max-width:none; padding:0; gap:26px}
     .scroll{overflow:visible}
-    svg{min-width:0}
-    figure,section,.five,.floor,tr{break-inside:avoid}
+    svg,.scroll.wide svg{min-width:0}
+    .hint{display:none}
+    figure,section,.five,.floor,tr,.split>div,.walk>li{break-inside:avoid}
     h2{break-after:avoid}
     .credit{display:none}
   }
@@ -172,24 +259,25 @@
   <header class="cartouche">
     <p class="eyebrow">Software Engineering Handbook · the whole thing on one sheet</p>
     <h1>The Request <em>Line</em></h1>
-    <p class="standfirst">One click, one route, twenty-four stops. Every station says what happens there and what is waiting for you. <strong>Two stations let the journey end early — and almost all performance work is the effort to end it at one of them.</strong></p>
+    <p class="standfirst">One click, one route, twenty-four stops. Every station says what happens there and what is waiting for you. <strong>Two stations let the journey end early — and almost all performance work is the effort to end it at one of them.</strong> The zones say who owns the ground: two of the six are rented, and exactly one door separates them from the machine you actually run.</p>
     <div class="meta">
       <span><b>Sheet</b> A2 landscape</span>
       <span><b>Outbound</b> 19 stops</span>
       <span><b>Return</b> 3 stops</span>
       <span><b>Interchanges</b> 2</span>
-      <span><b>Branch lines</b> 1</span>
+      <span><b>Zones</b> 6 — two not yours</span>
+      <span><b>The origin</b> one machine, eight layers</span>
       <span><b>Detail &amp; links</b> The Complete System Map.md</span>
     </div>
   </header>
 
   <!-- ============ FIGURE 1 — THE LINE ============ -->
   <section>
-    <h2><span>Fig. 1</span> The line<i>outbound left to right, return below, one continuous route</i></h2>
+    <h2><span>Fig. 1</span> The line<i>every stop with the service that runs it and the port it listens on</i></h2>
     <figure>
-      <div class="scroll">
-        <svg viewBox="0 170 1640 466" role="img"
-             aria-label="A transit map of one web request. Nineteen numbered outbound stations run left to right through five zones: their device, the network, your cloud, your application, your data. Station 6 (CDN edge) and station 17 (cache) are interchanges with dashed shortcut branches dropping straight to the return line, skipping every station between. Station 16 (business logic) has a branch line to asynchronous work. The line terminates at station 19, the database, then loops back along a return line right to left through stations 22, 23 and 24 to the product.">
+      <div class="scroll wide">
+        <svg viewBox="0 134 1860 524" role="img"
+             aria-label="A transit map of one web request, annotated with the service and port at every stop. Nineteen outbound stations run left to right through six ownership zones: their device, the public network, Cloudflare's rented edge shown hatched, your cloud account which holds the firewall and an optional rented load balancer, your machine, and your data. A heavy dashed demarcation before station 9 marks where your own machine begins; inside it two brackets show that nginx on port 443 and uvicorn on 127.0.0.1 port 8000 running FastAPI are both on that same machine. Stations 6 and 17 are caches with dashed shortcut branches to the return line, station 16 branches to asynchronous work, and the line terminates at PostgreSQL on port 5432 before returning through stations 22, 23 and 24.">
           <defs>
             <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
               <path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/>
@@ -197,128 +285,775 @@
             <marker id="ahf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
               <path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/>
             </marker>
+            <pattern id="rented" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="9" stroke="var(--fast)" stroke-width="1.3" opacity=".45"/>
+            </pattern>
           </defs>
 
-          <!-- fare zones -->
-          <rect x="34"   y="186" width="323" height="228" fill="var(--z1)"/>
-          <rect x="357"  y="186" width="164" height="228" fill="var(--z2)"/>
-          <rect x="521"  y="186" width="246" height="228" fill="var(--z3)"/>
-          <rect x="767"  y="186" width="574" height="228" fill="var(--z4)"/>
-          <rect x="1341" y="186" width="255" height="228" fill="var(--z5)"/>
+          <!-- ===== ownership zones ===== -->
+          <rect x="34"   y="156" width="352" height="268" fill="var(--z1)"/>
+          <rect x="386"  y="156" width="104" height="268" fill="var(--z2)"/>
+          <rect x="490"  y="156" width="116" height="268" fill="var(--z2)"/>
+          <rect x="490"  y="156" width="116" height="268" fill="url(#rented)"/>
+          <rect x="606"  y="156" width="194" height="268" fill="var(--z3)"/>
+          <rect x="800"  y="156" width="720" height="268" fill="var(--z4)"/>
+          <rect x="1520" y="156" width="280" height="268" fill="var(--z5)"/>
+
           <g class="s-zone" fill="var(--mute)">
-            <text x="46"   y="206">Their device</text>
-            <text x="369"  y="206">The network</text>
-            <text x="533"  y="206">Your cloud</text>
-            <text x="779"  y="206">Your application</text>
-            <text x="1353" y="206">Your data</text>
+            <text x="46"   y="174">Their device</text>
+            <text x="394"  y="174" font-size="9.5" letter-spacing=".07em">The network</text>
+            <text x="498"  y="174" font-size="9.5" letter-spacing=".07em" fill="var(--fast)">Cloudflare</text>
+            <text x="618"  y="174">Your cloud</text>
+            <text x="812"  y="174" fill="var(--ink)">Your machine</text>
+            <text x="1532" y="174">Your data</text>
           </g>
+          <g class="s-sub">
+            <text x="46"   y="189">someone else’s computer — assume nothing it sends you</text>
+            <text x="394"  y="189" font-size="10">nobody’s</text>
+            <text x="498"  y="189" font-size="10" fill="var(--fast)">rented ground</text>
+            <text x="618"  y="189">an account, not a computer — see fig. 2</text>
+            <text x="812"  y="189">one machine you rent — a Hetzner CX22, an EC2 instance, a droplet. nginx and your app are both on it.</text>
+            <text x="1532" y="189">the only part you cannot rebuild</text>
+          </g>
+
+          <!-- ===== where the encryption actually starts and stops ===== -->
+          <g stroke="var(--line)" stroke-width="3">
+            <line x1="72"  y1="215" x2="544"  y2="215"/>
+            <line x1="544" y1="215" x2="852"  y2="215"/>
+          </g>
+          <line x1="852" y1="215" x2="1748" y2="215" stroke="var(--mute)" stroke-width="2" stroke-dasharray="5 5"/>
+          <g stroke="var(--line)" stroke-width="3">
+            <line x1="72"  y1="210" x2="72"  y2="220"/>
+            <line x1="544" y1="210" x2="544" y2="220"/>
+            <line x1="852" y1="210" x2="852" y2="220"/>
+          </g>
+          <line x1="1748" y1="210" x2="1748" y2="220" stroke="var(--mute)" stroke-width="2"/>
+          <g class="s-sub" text-anchor="middle">
+            <text x="308"  y="207" fill="var(--line)">TLS 1 — the browser to Cloudflare · their certificate</text>
+            <text x="698"  y="207" fill="var(--line)">TLS 2 — Cloudflare to your nginx · the origin certificate</text>
+            <text x="1300" y="207">no TLS past here — it is all 127.0.0.1 inside one machine</text>
+          </g>
+
           <g stroke="var(--rule)" stroke-width="1">
-            <line x1="357" y1="186" x2="357" y2="414"/>
-            <line x1="521" y1="186" x2="521" y2="414"/>
-            <line x1="767" y1="186" x2="767" y2="414"/>
-            <line x1="1341" y1="186" x2="1341" y2="414"/>
+            <line x1="386"  y1="156" x2="386"  y2="424"/>
+            <line x1="1520" y1="156" x2="1520" y2="424"/>
           </g>
+          <!-- the rented edge, fenced on both sides -->
+          <g stroke="var(--fast)" stroke-width="2" stroke-dasharray="6 5">
+            <line x1="490" y1="156" x2="490" y2="424"/>
+            <line x1="606" y1="156" x2="606" y2="424"/>
+          </g>
+          <!-- THE demarcation — where your machine begins -->
+          <line x1="800" y1="146" x2="800" y2="580" stroke="var(--ink)" stroke-width="2.5" stroke-dasharray="11 6"/>
+          <text x="548" y="146" text-anchor="middle" class="s-note">their machines · no shell</text>
+          <text x="808" y="146" class="s-lab">your machine begins here — you patch it, back it up, and are paged for it</text>
 
           <!-- ===== the outbound line ===== -->
-          <line x1="70" y1="300" x2="1546" y2="300" stroke="var(--line)" stroke-width="7"/>
-          <!-- loop round to the return line -->
-          <path d="M1546,300 C1600,300 1600,545 1546,545" fill="none" stroke="var(--line)" stroke-width="7"/>
-          <!-- the return line -->
-          <line x1="1546" y1="545" x2="82" y2="545" stroke="var(--line)" stroke-width="7" marker-end="url(#ah)"/>
+          <line x1="72" y1="300" x2="1748" y2="300" stroke="var(--line)" stroke-width="7"/>
+          <path d="M1748,300 C1806,300 1806,560 1748,560" fill="none" stroke="var(--line)" stroke-width="7"/>
+          <line x1="1748" y1="560" x2="84" y2="560" stroke="var(--line)" stroke-width="7" marker-end="url(#ah)"/>
+          <line x1="72"   y1="283" x2="72"   y2="317" stroke="var(--line)" stroke-width="7"/>
+          <line x1="1748" y1="283" x2="1748" y2="317" stroke="var(--line)" stroke-width="7"/>
 
-          <!-- terminus bars -->
-          <line x1="70" y1="283" x2="70" y2="317" stroke="var(--line)" stroke-width="7"/>
-          <line x1="1546" y1="283" x2="1546" y2="317" stroke="var(--line)" stroke-width="7"/>
-
-          <!-- ===== shortcut branch 1 — station 06 ===== -->
-          <path d="M480,307 L480,545" fill="none" stroke="var(--fast)" stroke-width="3.5"
+          <!-- ===== shortcut branch 1 — station 06, on Cloudflare ===== -->
+          <path d="M544,307 L544,560" fill="none" stroke="var(--fast)" stroke-width="3.5"
                 stroke-dasharray="9 7" marker-end="url(#ahf)"/>
-          <circle cx="480" cy="452" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
-          <text x="480" y="456" text-anchor="middle" class="s-note" font-size="12">1</text>
-          <text x="497" y="440" class="s-note">cached at the edge</text>
-          <text x="497" y="454" class="s-sub" fill="var(--fast)">nothing to the right ever runs</text>
+          <circle cx="544" cy="470" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+          <text x="544" y="474" text-anchor="middle" class="s-note" font-size="12">1</text>
+          <text x="561" y="458" class="s-note">cached at the edge</text>
+          <text x="561" y="472" class="s-sub" fill="var(--fast)">your server never hears about it</text>
 
-          <!-- ===== shortcut branch 2 — station 17 ===== -->
-          <path d="M1382,307 L1382,545" fill="none" stroke="var(--fast)" stroke-width="3.5"
+          <!-- ===== shortcut branch 2 — station 17, on your box ===== -->
+          <path d="M1572,307 L1572,560" fill="none" stroke="var(--fast)" stroke-width="3.5"
                 stroke-dasharray="9 7" marker-end="url(#ahf)"/>
-          <circle cx="1382" cy="452" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
-          <text x="1382" y="456" text-anchor="middle" class="s-note" font-size="12">2</text>
-          <text x="1365" y="440" text-anchor="end" class="s-note">already in the cache</text>
-          <text x="1365" y="454" text-anchor="end" class="s-sub" fill="var(--fast)">the database is never touched</text>
+          <circle cx="1572" cy="470" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+          <text x="1572" y="474" text-anchor="middle" class="s-note" font-size="12">2</text>
+          <text x="1555" y="458" text-anchor="end" class="s-note">already in Redis</text>
+          <text x="1555" y="472" text-anchor="end" class="s-sub" fill="var(--fast)">Postgres is never touched</text>
 
           <!-- ===== branch line to asynchronous work — station 16 ===== -->
-          <path d="M1300,307 L1300,496" fill="none" stroke="var(--line)" stroke-width="4"/>
-          <rect x="1288" y="490" width="24" height="12" fill="var(--paper)" stroke="var(--line)" stroke-width="3"/>
-          <text x="1274" y="490" text-anchor="end" class="s-lab">21 · branch line to the async continent</text>
-          <text x="1274" y="504" text-anchor="end" class="s-sub">the response does not wait — see fig. 2</text>
+          <path d="M1468,307 L1468,511" fill="none" stroke="var(--line)" stroke-width="4"/>
+          <rect x="1456" y="505" width="24" height="12" fill="var(--paper)" stroke="var(--line)" stroke-width="3"/>
+          <text x="1442" y="505" text-anchor="end" class="s-lab">21 · branch line to the async continent</text>
+          <text x="1442" y="519" text-anchor="end" class="s-sub">the response does not wait — see fig. 5</text>
 
           <!-- ===== outbound stations ===== -->
-          <!-- ordinary stops: tick through the line -->
           <g stroke="var(--paper)" stroke-width="3.5">
-            <line x1="152"  y1="288" x2="152"  y2="312"/>
-            <line x1="234"  y1="288" x2="234"  y2="312"/>
-            <line x1="316"  y1="288" x2="316"  y2="312"/>
-            <line x1="398"  y1="288" x2="398"  y2="312"/>
-            <line x1="562"  y1="288" x2="562"  y2="312"/>
-            <line x1="644"  y1="288" x2="644"  y2="312"/>
-            <line x1="726"  y1="288" x2="726"  y2="312"/>
-            <line x1="808"  y1="288" x2="808"  y2="312"/>
-            <line x1="890"  y1="288" x2="890"  y2="312"/>
-            <line x1="972"  y1="288" x2="972"  y2="312"/>
-            <line x1="1054" y1="288" x2="1054" y2="312"/>
-            <line x1="1136" y1="288" x2="1136" y2="312"/>
-            <line x1="1218" y1="288" x2="1218" y2="312"/>
-            <line x1="1464" y1="288" x2="1464" y2="312"/>
+            <line x1="160"  y1="288" x2="160"  y2="312"/>
+            <line x1="248"  y1="288" x2="248"  y2="312"/>
+            <line x1="336"  y1="288" x2="336"  y2="312"/>
+            <line x1="440"  y1="288" x2="440"  y2="312"/>
+            <line x1="660"  y1="288" x2="660"  y2="312"/>
+            <line x1="748"  y1="288" x2="748"  y2="312"/>
+            <line x1="852"  y1="288" x2="852"  y2="312"/>
+            <line x1="940"  y1="288" x2="940"  y2="312"/>
+            <line x1="1028" y1="288" x2="1028" y2="312"/>
+            <line x1="1116" y1="288" x2="1116" y2="312"/>
+            <line x1="1204" y1="288" x2="1204" y2="312"/>
+            <line x1="1292" y1="288" x2="1292" y2="312"/>
+            <line x1="1380" y1="288" x2="1380" y2="312"/>
+            <line x1="1660" y1="288" x2="1660" y2="312"/>
           </g>
-          <!-- junction (16): solid disc -->
-          <circle cx="1300" cy="300" r="9" fill="var(--line)" stroke="var(--paper)" stroke-width="3"/>
-          <!-- interchanges (06, 17): double ring -->
-          <circle cx="480"  cy="300" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="5"/>
-          <circle cx="1382" cy="300" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="5"/>
+          <circle cx="1468" cy="300" r="9" fill="var(--line)" stroke="var(--paper)" stroke-width="3"/>
+          <circle cx="544"  cy="300" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="5"/>
+          <circle cx="1572" cy="300" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="5"/>
 
-          <!-- labels above -->
+          <!-- labels above: port · sub · name · num -->
           <g text-anchor="middle">
-            <text x="70"   y="272" class="s-num">01</text><text x="70"   y="256" class="s-name">the click</text><text x="70"   y="241" class="s-sub">JS runs</text>
-            <text x="234"  y="272" class="s-num">03</text><text x="234"  y="256" class="s-name">TCP + TLS</text><text x="234"  y="241" class="s-sub">handshake</text>
-            <text x="398"  y="272" class="s-num">05</text><text x="398"  y="256" class="s-name">ISP</text><text x="398"  y="241" class="s-sub">physics</text>
-            <text x="480"  y="272" class="s-num" fill="var(--fast)">06</text><text x="480" y="256" class="s-name" fill="var(--fast)">CDN edge</text><text x="480" y="241" class="s-sub" fill="var(--fast)">interchange</text>
-            <text x="562"  y="272" class="s-num">07</text><text x="562"  y="256" class="s-name">VPC</text><text x="562"  y="241" class="s-sub">route table</text>
-            <text x="726"  y="272" class="s-num">09</text><text x="726"  y="256" class="s-name">proxy</text><text x="726"  y="241" class="s-sub">nginx</text>
-            <text x="890"  y="272" class="s-num">11</text><text x="890"  y="256" class="s-name">middleware</text><text x="890"  y="241" class="s-sub">the chain</text>
-            <text x="1054" y="272" class="s-num">13</text><text x="1054" y="256" class="s-name">authN</text><text x="1054" y="241" class="s-sub">who are you?</text>
-            <text x="1218" y="272" class="s-num">15</text><text x="1218" y="256" class="s-name">validation</text><text x="1218" y="241" class="s-sub" fill="var(--hazard)">untrusted</text>
-            <text x="1300" y="272" class="s-num">16</text><text x="1300" y="256" class="s-name">logic</text><text x="1300" y="241" class="s-sub">your product</text>
-            <text x="1382" y="272" class="s-num" fill="var(--fast)">17</text><text x="1382" y="256" class="s-name" fill="var(--fast)">cache</text><text x="1382" y="241" class="s-sub" fill="var(--fast)">interchange</text>
-            <text x="1546" y="272" class="s-num">19</text><text x="1546" y="256" class="s-name">database</text><text x="1546" y="241" class="s-sub">the truth</text>
+            <text x="72"   y="278" class="s-num">01</text><text x="72"   y="262" class="s-name">the click</text><text x="72"   y="247" class="s-sub">JS runs</text><text x="72"   y="232" class="s-port">the browser</text>
+            <text x="248"  y="278" class="s-num">03</text><text x="248"  y="262" class="s-name">TCP + TLS</text><text x="248"  y="247" class="s-sub">handshake · with the edge</text><text x="248" y="232" class="s-port">TLS 1.3 · tcp/443</text>
+            <text x="440"  y="278" class="s-num">05</text><text x="440"  y="262" class="s-name">ISP</text><text x="440"  y="247" class="s-sub">physics</text><text x="440"  y="232" class="s-port">packets · fibre</text>
+            <text x="544"  y="278" class="s-num" fill="var(--fast)">06</text><text x="544" y="262" class="s-name" fill="var(--fast)">edge proxy · CDN</text><text x="544" y="247" class="s-sub" fill="var(--fast)">cache · WAF · TLS ends</text><text x="544" y="232" class="s-port" fill="var(--fast)">Cloudflare :443</text>
+            <text x="660"  y="278" class="s-num">07</text><text x="660"  y="262" class="s-name">VPC · firewall</text><text x="660"  y="247" class="s-sub">route table · rules</text><text x="660" y="232" class="s-port">:443 · CF ranges</text>
+            <text x="852"  y="278" class="s-num">09</text><text x="852"  y="262" class="s-name">reverse proxy</text><text x="852"  y="247" class="s-sub">nginx or Caddy</text><text x="852" y="232" class="s-port">listens :80 :443</text>
+            <text x="1028" y="278" class="s-num">11</text><text x="1028" y="262" class="s-name">middleware</text><text x="1028" y="247" class="s-sub">the chain</text><text x="1028" y="232" class="s-port">CORS · gzip · req id</text>
+            <text x="1204" y="278" class="s-num">13</text><text x="1204" y="262" class="s-name">authN</text><text x="1204" y="247" class="s-sub">who are you?</text><text x="1204" y="232" class="s-port">JWT · session</text>
+            <text x="1380" y="278" class="s-num">15</text><text x="1380" y="262" class="s-name">validation</text><text x="1380" y="247" class="s-sub" fill="var(--hazard)">untrusted</text><text x="1380" y="232" class="s-port">Pydantic</text>
+            <text x="1468" y="278" class="s-num">16</text><text x="1468" y="262" class="s-name">logic</text><text x="1468" y="247" class="s-sub">your product</text><text x="1468" y="232" class="s-port">service layer</text>
+            <text x="1572" y="278" class="s-num" fill="var(--fast)">17</text><text x="1572" y="262" class="s-name" fill="var(--fast)">cache</text><text x="1572" y="247" class="s-sub" fill="var(--fast)">Redis · interchange</text><text x="1572" y="232" class="s-port" fill="var(--fast)">127.0.0.1:6379</text>
+            <text x="1748" y="278" class="s-num">19</text><text x="1748" y="262" class="s-name">database</text><text x="1748" y="247" class="s-sub">PostgreSQL</text><text x="1748" y="232" class="s-port">tcp/5432 · private</text>
           </g>
-          <!-- labels below -->
+          <!-- labels below: num · name · sub · port -->
           <g text-anchor="middle">
-            <text x="152"  y="330" class="s-num">02</text><text x="152"  y="347" class="s-name">DNS</text><text x="152"  y="362" class="s-sub">name → address</text>
-            <text x="316"  y="330" class="s-num">04</text><text x="316"  y="347" class="s-name">HTTP</text><text x="316"  y="362" class="s-sub">request built</text>
-            <text x="644"  y="330" class="s-num">08</text><text x="644"  y="347" class="s-name">load balancer</text><text x="644"  y="362" class="s-sub">which one is healthy?</text>
-            <text x="808"  y="330" class="s-num">10</text><text x="808"  y="347" class="s-name">runtime</text><text x="808"  y="362" class="s-sub">process, thread</text>
-            <text x="972"  y="330" class="s-num">12</text><text x="972"  y="347" class="s-name">routing</text><text x="972"  y="362" class="s-sub">controller</text>
-            <text x="1136" y="330" class="s-num">14</text><text x="1136" y="347" class="s-name">authZ</text><text x="1136" y="362" class="s-sub">may you?</text>
-            <text x="1464" y="330" class="s-num">18</text><text x="1464" y="347" class="s-name">ORM</text><text x="1464" y="362" class="s-sub">objects → SQL</text>
+            <text x="160"  y="330" class="s-num">02</text><text x="160"  y="347" class="s-name">DNS</text><text x="160"  y="362" class="s-sub">name → address</text><text x="160" y="377" class="s-port">Cloudflare · udp/53</text>
+            <text x="336"  y="330" class="s-num">04</text><text x="336"  y="347" class="s-name">HTTP</text><text x="336"  y="362" class="s-sub">request built</text><text x="336" y="377" class="s-port">HTTP/2 · tcp/443</text>
+            <text x="748"  y="330" class="s-num">08</text><text x="748"  y="347" class="s-name">load balancer</text><text x="748"  y="362" class="s-sub">which machine?</text><text x="748" y="377" class="s-port">Hetzner LB · ALB</text>
+            <text x="940"  y="330" class="s-num">10</text><text x="940"  y="347" class="s-name">app server</text><text x="940"  y="362" class="s-sub">uvicorn · gunicorn</text><text x="940" y="377" class="s-port">127.0.0.1:8000</text>
+            <text x="1116" y="330" class="s-num">12</text><text x="1116" y="347" class="s-name">routing</text><text x="1116" y="362" class="s-sub">APIRouter</text><text x="1116" y="377" class="s-port">GET /orders/{id}</text>
+            <text x="1292" y="330" class="s-num">14</text><text x="1292" y="347" class="s-name">authZ</text><text x="1292" y="362" class="s-sub">may you?</text><text x="1292" y="377" class="s-port">Depends() · scopes</text>
+            <text x="1660" y="330" class="s-num">18</text><text x="1660" y="347" class="s-name">ORM</text><text x="1660" y="362" class="s-sub">objects → SQL</text><text x="1660" y="377" class="s-port">async session · pool</text>
           </g>
+
+          <!-- ===== what is actually one machine ===== -->
+          <path d="M812,400 L812,392 L892,392 L892,400" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+          <text x="852" y="410" text-anchor="middle" class="s-sub">the web server</text>
+          <path d="M900,400 L900,392 L1508,392 L1508,400" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+          <text x="1204" y="410" text-anchor="middle" class="s-sub">the application server — uvicorn runs it, FastAPI decides · bound to 127.0.0.1:8000, never public</text>
+          <text x="703" y="410" text-anchor="middle" class="s-sub" fill="var(--hazard)">rented, not on your box</text>
 
           <!-- ===== return stations ===== -->
           <g stroke="var(--paper)" stroke-width="3.5">
-            <line x1="1136" y1="533" x2="1136" y2="557"/>
-            <line x1="644"  y1="533" x2="644"  y2="557"/>
+            <line x1="1292" y1="548" x2="1292" y2="572"/>
+            <line x1="748"  y1="548" x2="748"  y2="572"/>
           </g>
-          <line x1="70" y1="528" x2="70" y2="562" stroke="var(--line)" stroke-width="7"/>
+          <line x1="72" y1="543" x2="72" y2="577" stroke="var(--line)" stroke-width="7"/>
           <g text-anchor="middle">
-            <text x="1136" y="575" class="s-num">22</text><text x="1136" y="592" class="s-name">serialise</text><text x="1136" y="607" class="s-sub">JSON · status code</text>
-            <text x="644"  y="575" class="s-num">23</text><text x="644"  y="592" class="s-name">back out</text><text x="644"  y="607" class="s-sub" fill="var(--hazard)">egress is metered per GB</text>
-            <text x="70"   y="575" class="s-num">24</text><text x="70"   y="592" class="s-name">render</text><text x="70"   y="607" class="s-sub">the product</text>
+            <text x="1292" y="590" class="s-num">22</text><text x="1292" y="607" class="s-name">serialise</text><text x="1292" y="622" class="s-sub">JSON · status code</text><text x="1292" y="637" class="s-port">response_model</text>
+            <text x="748"  y="590" class="s-num">23</text><text x="748"  y="607" class="s-name">back out</text><text x="748"  y="622" class="s-sub" fill="var(--hazard)">egress is metered per GB</text><text x="748" y="637" class="s-port">your provider bills it</text>
+            <text x="72"   y="590" class="s-num">24</text><text x="72"   y="607" class="s-name">render</text><text x="72"   y="622" class="s-sub">the product</text><text x="72" y="637" class="s-port">the browser paints</text>
           </g>
-          <text x="1440" y="575" text-anchor="middle" class="s-sub">the response turns around at 19</text>
-          <text x="180" y="592" class="s-haz">← the user’s clock is still running here</text>
+          <text x="1690" y="590" text-anchor="middle" class="s-sub">the response turns around at 19</text>
+          <text x="200" y="607" class="s-haz">← the user’s clock is still running here</text>
         </svg>
       </div>
-      <figcaption><b>The two dashed ochre branches are the whole poster.</b> A request that finds its answer at station 06 or station 17 drops straight to the return line and every station between is never executed — no proxy, no runtime, no authorisation, no database. The zones warm from left to right because that is also the direction of cost.</figcaption>
+      <p class="hint"><span>← scroll sideways to follow the line →</span><span><b>01</b> the click &nbsp;·&nbsp; <b>09</b> your machine begins &nbsp;·&nbsp; <b>19</b> the database &nbsp;·&nbsp; <b>24</b> the render</span></p>
+      <figcaption><b>Read the middle of the line slowly, because that is where the words overlap.</b> Cloudflare (06) is a proxy in front of everything, on machines you rent but cannot log into. The load balancer (08) is a second, separate rented appliance in your cloud account — it is <b>not</b> on your server, and with a single machine you do not have one at all. Only at station 09 does the request finally arrive on your box, where nginx holds ports 80 and 443 and hands it to uvicorn on 127.0.0.1:8000, which runs FastAPI. <b>Everything from 09 to 19 is that one machine</b> — proxy, app, cache and database — until you deliberately move a piece off it. <b>Fig. 2 draws the same thing as boxes inside boxes; fig. 3 opens the door in front of them; fig. 4 opens the machine itself.</b></figcaption>
     </figure>
+  </section>
+
+  <!-- ============ THE WALKTHROUGH ============ -->
+  <section>
+    <h2><span>Roadmap</span> The journey in words<i>every stop: what it is, what runs there, what you set, and what breaks</i></h2>
+    <p class="lede">The figure above is the shape. This is the same journey written out, one stop at a time, in the order a single request meets them. The chip on the left says whose machine you are standing on — and that, more than anything else on this poster, decides what you are allowed to fix.</p>
+
+    <ol class="walk">
+
+      <li>
+        <div class="stop"><span class="no">00</span><span class="who dev">not on the line</span></div>
+        <div>
+          <h4>Your laptop — where the code is written</h4>
+          <p class="svc">uvicorn main:app --reload · 127.0.0.1:8000 · no nginx, no TLS, no Cloudflare</p>
+          <dl>
+            <dt>What it is</dt><dd>The same FastAPI application and the same uvicorn that will run in production — and nothing else from this poster. There is no edge, no firewall, no reverse proxy and no second machine.</dd>
+            <dt>Get the words right</dt><dd>What you call “running the server locally” is <b>uvicorn</b>. FastAPI is the library uvicorn loads; it never opens a port itself. You are running stations 10 to 16 and skipping every other one.</dd>
+            <dt>It breaks when</dt><dd class="risk">You deploy. Everything between 02 and 09 exists only in production, so TLS, real client IPs, forwarded headers, body-size limits, timeouts and gzip are all untested until that moment. This is the whole of “it works on my machine”.</dd>
+            <dt>The fix</dt><dd>Keep a docker compose that runs nginx in front of uvicorn locally too, with the same config file. Then the only thing production adds is Cloudflare.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">01</span><span class="who theirs">their device</span></div>
+        <div>
+          <h4>The click</h4>
+          <p class="svc">Chrome · Safari · your JavaScript calling fetch()</p>
+          <dl>
+            <dt>What it is</dt><dd>Their browser runs your front-end code and builds a request. Nothing has touched the network yet.</dd>
+            <dt>You control</dt><dd>Only what you shipped. Disable the button and show a loading state the moment it is pressed.</dd>
+            <dt>It breaks when</dt><dd class="risk">The main thread is blocked, so the page freezes before the request is even sent — and the user clicks three times, giving you three of them.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">02</span><span class="who rented">Cloudflare</span></div>
+        <div>
+          <h4>DNS — turning a name into an address</h4>
+          <p class="svc">Cloudflare authoritative DNS · udp/53 · also DoH over :443</p>
+          <dl>
+            <dt>What it is</dt><dd>The browser asks “what is the address of api.example.com?”. With Cloudflare in front, the answer is <b>Cloudflare’s anycast address</b> — one IP that exists in every city at once. Your server’s real address is never given out.</dd>
+            <dt>You set</dt><dd>The record itself, the TTL, and above all whether the record is <b>proxied</b> (orange cloud) or <b>DNS only</b> (grey cloud).</dd>
+            <dt>It breaks when</dt><dd class="risk">A grey-clouded record publishes your origin IP to the entire internet, and every protection you bought becomes optional. A long TTL means a failover takes as long as the TTL.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">03</span><span class="who net">the network</span></div>
+        <div>
+          <h4>TCP and TLS — opening the connection</h4>
+          <p class="svc">tcp/443 · TLS 1.3 · about one round trip each</p>
+          <dl>
+            <dt>What it is</dt><dd>A connection is opened and encryption is agreed. On the poster this is <b>TLS 1</b>: the browser’s encrypted conversation is with Cloudflare, using <em>their</em> certificate.</dd>
+            <dt>You set</dt><dd>Minimum TLS version, HTTP/2 or HTTP/3, HSTS. All of it in the Cloudflare dashboard, not on your box.</dd>
+            <dt>It breaks when</dt><dd class="risk">A certificate expires — one of the most common self-inflicted outages there is. Or connections are not reused, so you pay both round trips on every single request.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">04</span><span class="who theirs">their device</span></div>
+        <div>
+          <h4>The HTTP request itself</h4>
+          <p class="svc">method · path · headers · cookies · body</p>
+          <dl>
+            <dt>What it is</dt><dd>The actual message: <em>GET /orders/17</em>, an Authorization header, a cookie, perhaps a JSON body.</dd>
+            <dt>Remember</dt><dd class="risk">Every byte of it is written by someone you have never met. There is no such thing as a field the client cannot change — not the price, not the role, not the user id.</dd>
+            <dt>You set</dt><dd>An idempotency key on anything that spends money, so a retry cannot charge twice.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">05</span><span class="who net">nobody’s</span></div>
+        <div>
+          <h4>The public internet</h4>
+          <p class="svc">roughly 10–15 ms per 1000 km, plus queueing and loss</p>
+          <dl>
+            <dt>What it is</dt><dd>Cables, exchanges and other people’s routers. The one part of the journey nobody can tune.</dd>
+            <dt>What you do about it</dt><dd>Shorten it. That is precisely what the next station is for: answer near the user instead of travelling to Frankfurt.</dd>
+            <dt>It breaks when</dt><dd class="risk">There is packet loss — which presents as inexplicable slowness, never as an error you can catch.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">06</span><span class="who rented">Cloudflare</span></div>
+        <div>
+          <h4>The edge — Cloudflare’s network, in front of everything</h4>
+          <p class="svc">their machines in ~330 cities · :443 · you cannot ssh into any of it</p>
+          <dl>
+            <dt>What it is</dt><dd>A global network that answers on your behalf. You point DNS at it, and from that moment it is the <b>only address the world has for you</b>. Every request arrives here first, and it decides whether your server ever hears about it.</dd>
+            <dt>Why take it</dt><dd>Four things at once: it hides your origin, absorbs attacks before they cost you anything, ends TLS near the user, and answers cached requests without waking your machine. The free tier already does most of this.</dd>
+            <dt>What you can put in it</dt><dd><b>DNS</b> · <b>the proxy</b> (orange cloud) · <b>CDN cache</b> and cache rules · <b>WAF</b> with managed rulesets · <b>rate limiting</b> · <b>bot management</b> · <b>Turnstile</b> instead of a captcha · <b>DDoS mitigation</b> (always on) · page rules and redirects · <b>Workers</b> — your own code at the edge · <b>KV</b> and <b>R2</b> for storage with no egress fee · <b>Load Balancing</b> across regions · <b>Zero Trust Access</b>, which puts an entire admin panel behind a login before it reaches you · <b>Tunnel</b>, so your server needs no inbound port at all · analytics and logs.</dd>
+            <dt>You set</dt><dd>SSL mode <b>Full (strict)</b>, what may be cached and for how long, which paths are rate-limited, and which countries or ASNs are allowed near you at all.</dd>
+            <dt>It breaks when</dt><dd class="risk">A personalised page gets cached and served to everybody — a data leak dressed as an optimisation. Or the SSL mode is <em>Flexible</em>, which leaves the last hop in plaintext.</dd>
+            <dt>What it costs</dt><dd>Mostly a flat price, and egress to users from the cache is free — which is the largest single line item it removes from your bill.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">07</span><span class="who yours">your account</span></div>
+        <div>
+          <h4>Your cloud — a Hetzner project, or an AWS account</h4>
+          <p class="svc">an account, not a computer · everything in it is either a machine, or a rule about machines</p>
+          <dl>
+            <dt>What it is</dt><dd>The place where you press “create server”. It holds the things that stand <b>beside</b> your machine rather than on it, and it is the layer where you decide who may reach it.</dd>
+            <dt>What lives here</dt><dd>The <b>firewall</b> (Hetzner Cloud Firewall, an AWS security group) · the <b>private network</b>, 10.0.0.x between your own boxes · a <b>floating or elastic IP</b> you can move to another machine in seconds · <b>volumes</b>, which are extra disks · <b>snapshots and images</b> of the whole machine · a <b>load balancer</b> once you have two servers · <b>object storage</b> for uploads · <b>any other machines</b> — a second app box, a separate database box · and the boring but decisive ones: the bill, the API token, and who is allowed to log in.</dd>
+            <dt>Hetzner or AWS</dt><dd>The same idea at different depth. A Hetzner project is a short list at a flat monthly price. An AWS account is a hundred metered services and a VPC you must design. Start with the short list; move a piece at a time when a piece actually hurts.</dd>
+            <dt>The test</dt><dd>If it survives you deleting the server, it belongs to the cloud account. If it disappears with the server, it was on the machine.</dd>
+            <dt>It breaks when</dt><dd class="risk">The firewall allows :443 from the whole world instead of only Cloudflare’s ranges — and every control at station 06 can then be walked around. Or the database is reachable from the internet at all.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">08</span><span class="who yours">rented, in your account</span></div>
+        <div>
+          <h4>The load balancer — optional, and not on your server</h4>
+          <p class="svc">Hetzner Load Balancer · AWS ALB · :443 → your machines</p>
+          <dl>
+            <dt>What it is</dt><dd>A separate appliance you rent by the hour. It health-checks two or more machines and sends each request to one that answers. That is its entire job.</dd>
+            <dt>Do you need one</dt><dd>Only once you have more than one machine. With a single box you have none — Cloudflare is already in front, and nginx already forwards. Do not add it out of habit.</dd>
+            <dt>Not to be confused with</dt><dd>nginx at station 09, which is a process <em>on</em> your server, and Cloudflare at 06, which is in front of everything. All three are proxies; only one of them is yours to log into.</dd>
+            <dt>It breaks when</dt><dd class="risk">The health check runs a database query. One slow query and it removes every backend at once, turning a degradation into a total outage that cannot recover.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">09</span><span class="who mine">your machine</span></div>
+        <div>
+          <h4>nginx — the web server, and the first thing that is actually yours</h4>
+          <p class="svc">nginx or Caddy · listens on :80 and :443 · one process, thousands of connections</p>
+          <dl>
+            <dt>What it is</dt><dd>A program whose job is HTTP and the outside world. It accepts the connection, ends <b>TLS 2</b> using the origin certificate, and then either answers from a file on disk or hands the request onwards. It is written in C and holds idle connections for almost nothing — which is exactly what a slow mobile client is.</dd>
+            <dt>What you put here</dt><dd>The origin certificate · static files and uploads, served without waking Python · <b>client_max_body_size</b> · read and send timeouts · gzip or brotli · <b>real_ip</b> from CF-Connecting-IP, or every log line you own will say “Cloudflare” · a cheap rate limit · /healthz · and finally <em>proxy_pass</em> to 127.0.0.1:8000.</dd>
+            <dt>Could you skip it</dt><dd>Technically yes, and you will regret it at the first large upload, the first slow client and the first static file.</dd>
+            <dt>It breaks when</dt><dd class="risk">The body-size limit rejects uploads with an unhelpful error, or there are too few worker connections, so requests queue invisibly before your code has run at all.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">10</span><span class="who mine">your machine</span></div>
+        <div>
+          <h4>uvicorn — the application server, the thing that runs Python</h4>
+          <p class="svc">uvicorn or gunicorn · 127.0.0.1:8000 · one process per CPU core</p>
+          <dl>
+            <dt>What it is</dt><dd>A server whose job is your code. It takes the HTTP request nginx forwarded, turns it into a call into Python over the ASGI protocol, waits for your function, and turns the result back into a response.</dd>
+            <dt>How many</dt><dd>One worker process per core, because one Python process uses one core. Four cores, four workers, supervised by systemd or gunicorn.</dd>
+            <dt>You set</dt><dd>The bind address — <b>127.0.0.1</b>, never 0.0.0.0, so nothing but nginx can reach it · the worker count · graceful shutdown on SIGTERM so a deploy drains instead of dropping.</dd>
+            <dt>It breaks when</dt><dd class="risk">One blocking call — a synchronous database driver, a requests.get with no timeout — stalls the event loop and every other request on that worker with it.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">11</span><span class="who mine">FastAPI</span></div>
+        <div>
+          <h4>Middleware — the chain every request passes through</h4>
+          <p class="svc">CORS · GZip · your own request-id middleware</p>
+          <dl>
+            <dt>What it is</dt><dd>Code that runs before and after every single handler, in the order you registered it. The first place where the request is your problem rather than a protocol.</dd>
+            <dt>The one thing to do here</dt><dd>Create a <b>request id</b> and attach it to every log line, then return it in a response header. It costs an hour and it is the difference between reading logs and guessing.</dd>
+            <dt>It breaks when</dt><dd class="risk">The order is wrong — logging before authentication strips nothing, so tokens and passwords end up in your log storage forever.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">12</span><span class="who mine">FastAPI</span></div>
+        <div>
+          <h4>Routing — which function answers this path</h4>
+          <p class="svc">APIRouter · @app.get("/orders/{id}") · path and query parameters</p>
+          <dl>
+            <dt>What it is</dt><dd>The match from method and path to one of your functions, with the parameters parsed and typed on the way in.</dd>
+            <dt>Keep it thin</dt><dd>The handler should read the input, call one service function, and return. Nothing else.</dd>
+            <dt>It breaks when</dt><dd class="risk">Business logic and database queries live in the handler, where nothing can test them and nothing else can reuse them.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">13</span><span class="who mine">FastAPI</span></div>
+        <div>
+          <h4>Authentication — who are you?</h4>
+          <p class="svc">Depends(get_current_user) · a session cookie or a JWT · Argon2 or bcrypt</p>
+          <dl>
+            <dt>What it is</dt><dd>Proving identity, once, and turning the proof into a user object the rest of the request can trust.</dd>
+            <dt>You choose</dt><dd>A stateless token, which is fast and cannot be revoked, or a session in Redis, which costs a lookup and can be. Short-lived tokens plus a refresh token is the usual compromise.</dd>
+            <dt>It breaks when</dt><dd class="risk">The password hash is fast — MD5, SHA-256 — so a leaked table is an immediate mass takeover. Use Argon2id or bcrypt, which are slow on purpose.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">14</span><span class="who mine">FastAPI</span></div>
+        <div>
+          <h4>Authorisation — may you?</h4>
+          <p class="svc">Depends(...) · scopes and roles · a WHERE clause with the tenant in it</p>
+          <dl>
+            <dt>What it is</dt><dd>A different question from the last one, asked about <em>this</em> object: you are logged in, but is order 17 <b>yours</b>?</dd>
+            <dt>Where it must live</dt><dd>In the query, not in an <em>if</em> after it. <em>SELECT … WHERE id = :id AND owner_id = :me</em> cannot be forgotten the way a check can.</dd>
+            <dt>It breaks when</dt><dd class="risk">You change the id in the URL and get somebody else’s data. The most common serious application flaw in existence, and the easiest one to test for — go and try it now.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">15</span><span class="who mine">FastAPI</span></div>
+        <div>
+          <h4>Validation — is this input even sane?</h4>
+          <p class="svc">Pydantic models · request and response schemas</p>
+          <dl>
+            <dt>What it is</dt><dd>The boundary where untrusted text becomes typed objects. FastAPI does most of it for you, which is the single best reason to be using it.</dd>
+            <dt>What Pydantic will not do</dt><dd>Decide what a field is allowed to <em>mean</em>. A valid integer price sent by the client is still a price you must never trust — look it up server-side.</dd>
+            <dt>It breaks when</dt><dd class="risk">SQL is built by string concatenation; a URL is fetched without an allowlist; a file is trusted by its extension; a role arrives in the request body and is believed.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">16</span><span class="who mine">FastAPI</span></div>
+        <div>
+          <h4>Your business logic — the only part nobody else can write</h4>
+          <p class="svc">a service layer, called by the router, testable without HTTP</p>
+          <dl>
+            <dt>What it is</dt><dd>The reason the other twenty-three stations exist. Everything before it was plumbing; everything after it is delivery.</dd>
+            <dt>The rule for every call that leaves this box</dt><dd class="risk">A timeout and a fallback on every single one. A dependency that hangs rather than refuses will hold your workers until none are left, and one non-essential feature takes the whole service down.</dd>
+            <dt>Anything slow</dt><dd>Does not belong here. Put it on the queue at station 21 and answer the user now.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">17</span><span class="who mine">your machine</span></div>
+        <div>
+          <h4>The cache — Redis, the second place the journey can end</h4>
+          <p class="svc">Redis · 127.0.0.1:6379 · memory is about a hundred times faster than disk</p>
+          <dl>
+            <dt>What it is</dt><dd>A store of answers you have already worked out. A hit here means the database is never touched — which is the second dashed branch on the figure.</dd>
+            <dt>You set</dt><dd><b>maxmemory</b> and an eviction policy, or it will eventually take the whole machine · a TTL on every key · and a key that includes the user or tenant.</dd>
+            <dt>It breaks when</dt><dd class="risk">The key has no tenant in it, and one customer is served another customer’s data. Also: caching used to hide a query that simply needed an index.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">18</span><span class="who mine">FastAPI</span></div>
+        <div>
+          <h4>The ORM — objects turned into SQL</h4>
+          <p class="svc">SQLAlchemy · an async session · a connection pool in front of it</p>
+          <dl>
+            <dt>What it is</dt><dd>The translation layer. Convenient, and the single easiest place in the whole system to be accidentally slow.</dd>
+            <dt>You set</dt><dd>Eager loading where you know you will need the relation, and a pool size that matches what Postgres will actually accept.</dd>
+            <dt>It breaks when</dt><dd class="risk">The N+1 query: one query, then one more per row — four hundred round trips for one page, created by a lazy relation touched inside a loop. Log your query count in development.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">19</span><span class="who data">your data</span></div>
+        <div>
+          <h4>PostgreSQL — the truth, and the end of the outbound line</h4>
+          <p class="svc">:5432 · on the same box, or its own · the only thing you cannot rebuild</p>
+          <dl>
+            <dt>What it is</dt><dd>The terminus. Everything from here on is the way back.</dd>
+            <dt>You set</dt><dd>Indexes for the queries you actually run · <b>max_connections</b> and a pool that respects it · a statement timeout · and backups that leave the machine.</dd>
+            <dt>It breaks when</dt><dd class="risk">A missing index turns 40 ms into 4 s. The connection pool is exhausted, so a healthy database looks down. A long transaction holds locks and everything queues behind it.</dd>
+            <dt>Never forget</dt><dd class="risk">Replication is not a backup, and a snapshot is not a backup until the day you have actually restored one.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">21</span><span class="who mine">the branch</span></div>
+        <div>
+          <h4>Queue and worker — the work that does not belong in a request</h4>
+          <p class="svc">Redis or Postgres as the queue · a worker process beside the app · fig. 5</p>
+          <dl>
+            <dt>What it is</dt><dd>Anything slow: email, PDFs, video, an AI call, a third-party sync. The request writes a message and returns; the work happens afterwards.</dd>
+            <dt>The non-negotiable</dt><dd class="risk">It must be idempotent, because the same message <em>will</em> arrive twice. And it needs a dead letter queue, or failures vanish silently for months.</dd>
+            <dt>You alarm on</dt><dd>Queue depth and the age of the oldest message. Never on worker CPU.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">22</span><span class="who mine">FastAPI</span></div>
+        <div>
+          <h4>The response is built</h4>
+          <p class="svc">response_model · a status code that means something</p>
+          <dl>
+            <dt>What it is</dt><dd>Your objects become JSON and a status code. FastAPI’s response_model also decides what is <em>left out</em> — which is how a password hash stops being in an API response.</dd>
+            <dt>It breaks when</dt><dd class="risk">A stack trace or an internal version leaks in an error. Or 200 OK is returned with an error inside the body, so nothing can ever alert on it. Or a list is unpaginated and grows with your success.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">23</span><span class="who yours">your bill</span></div>
+        <div>
+          <h4>Back out — and this is metered</h4>
+          <p class="svc">nginx → Cloudflare → the user · billed per GB by your provider</p>
+          <dl>
+            <dt>What it is</dt><dd>The bytes leaving your machine. Cloudflare does not charge you for what it sends to the user from cache; <b>Hetzner or AWS charges you for what your server sends to Cloudflare</b>.</dd>
+            <dt>The big win</dt><dd>Never proxy a large file through your application. Hand out a signed URL to object storage and let the user fetch it directly.</dd>
+            <dt>It breaks when</dt><dd class="risk">Nothing is cacheable, so every response pays full egress — on AWS this is the line item that surprises people.</dd>
+          </dl>
+        </div>
+      </li>
+
+      <li>
+        <div class="stop"><span class="no">24</span><span class="who theirs">their device</span></div>
+        <div>
+          <h4>The render — where the user finally sees something</h4>
+          <p class="svc">the browser paints · this is the number that matters</p>
+          <dl>
+            <dt>What it is</dt><dd>The end of the clock that started at station 01. Your 45 ms API can still sit inside a four-second page.</dd>
+            <dt>It breaks when</dt><dd class="risk">Images have no dimensions and the layout shifts under their finger. One blocking third-party script holds the paint. The API was fast and nobody measured the page.</dd>
+            <dt>The lesson of the whole line</dt><dd>The user does not experience your architecture. They experience this station, and everything else is how you got here.</dd>
+          </dl>
+        </div>
+      </li>
+
+    </ol>
+  </section>
+
+  <!-- ============ WHERE EACH THING CAN LIVE ============ -->
+  <section>
+    <h2><span>Board</span> Where each thing can live<i>proxy, cache, rate limiting and security all appear at more than one station — that is not duplication</i></h2>
+    <p class="lede">Four concerns keep reappearing along the line, and every time somebody asks “where does caching go?” the honest answer is “at six places, and they do different jobs”. Each layer is cheaper and blunter than the one behind it. Work from the outside in: the earlier you can answer, refuse or store something, the less of the line it costs you.</p>
+
+    <table class="board owners">
+      <caption>Proxy — a thing that receives a request and passes it on</caption>
+      <thead><tr><th scope="col">Where</th><th scope="col">What it is there</th><th scope="col">Use it for</th><th scope="col">Whose machine</th></tr></thead>
+      <tbody>
+        <tr><td>06 · Cloudflare</td><td>The edge proxy. Your DNS points at it, so it is the only address the world has.</td><td>Hiding the origin, TLS near the user, caching, filtering, absorbing attacks.</td><td>rented — no shell</td></tr>
+        <tr><td>08 · load balancer</td><td>An L4/L7 proxy that picks a healthy machine. Rented as its own appliance.</td><td>Only once you have two or more servers. Skip it before that.</td><td>rented, your account</td></tr>
+        <tr class="crit"><td>09 · nginx</td><td><strong>The reverse proxy on your box</strong> — the same machine as FastAPI.</td><td>Origin TLS, static files, body limits, timeouts, real client IP, then proxy_pass to uvicorn.</td><td>yours</td></tr>
+        <tr><td>outbound</td><td>A forward proxy, or a NAT gateway — the door your server dials <em>out</em> through.</td><td>Restricting what a compromised process may reach; a fixed egress IP a partner can allowlist.</td><td>yours / your account</td></tr>
+      </tbody>
+    </table>
+
+    <table class="board owners">
+      <caption>Cache — an answer you keep so you do not have to work it out again</caption>
+      <thead><tr><th scope="col">Where</th><th scope="col">What it holds</th><th scope="col">Use it for</th><th scope="col">The trap</th></tr></thead>
+      <tbody>
+        <tr><td>01 · the browser</td><td>Cache-Control and ETag on the response.</td><td>Assets and anything a single user re-fetches. The cheapest cache there is: zero network.</td><td>You cannot clear it. Version the filename instead.</td></tr>
+        <tr class="crit"><td>06 · Cloudflare</td><td><strong>The CDN cache — the journey ends here</strong>, near the user.</td><td>Public pages, images, API responses that are the same for everyone.</td><td>A personalised page cached and served to everybody.</td></tr>
+        <tr><td>09 · nginx</td><td>proxy_cache on disk, plus static files served directly.</td><td>Taking load off Python for things Cloudflare cannot cache.</td><td>Stale files after a deploy if nothing purges it.</td></tr>
+        <tr><td>10 · in the process</td><td>An lru_cache or a dict in memory.</td><td>Tiny, hot, read-only data — a settings row, a currency table.</td><td>Every worker has its own copy, and they disagree.</td></tr>
+        <tr class="crit"><td>17 · Redis</td><td><strong>Shared between all workers and all machines.</strong></td><td>Sessions, computed results, counters, rate-limit buckets, the queue.</td><td>A key with no tenant in it; no TTL; no maxmemory policy.</td></tr>
+        <tr><td>18 · the ORM</td><td>The identity map inside one session.</td><td>Nothing you plan. It just prevents repeat loads within one request.</td><td>Mistaking it for a real cache across requests.</td></tr>
+        <tr><td>19 · PostgreSQL</td><td>The buffer pool — recently read pages held in RAM.</td><td>It already works. Give the machine enough RAM and leave it alone.</td><td>Adding a cache in front of a query that simply needed an index.</td></tr>
+      </tbody>
+    </table>
+
+    <table class="board owners">
+      <caption>Rate limiting — refusing work, as early and as cheaply as possible</caption>
+      <thead><tr><th scope="col">Where</th><th scope="col">How it works there</th><th scope="col">Use it for</th><th scope="col">What it cannot do</th></tr></thead>
+      <tbody>
+        <tr class="crit"><td>06 · Cloudflare</td><td><strong>Refused before it costs you a byte</strong>, by IP, path, country or bot score.</td><td>Floods, credential stuffing, scrapers. This is the only layer where a large attack is genuinely absorbed.</td><td>It does not know who your user is, only where they came from.</td></tr>
+        <tr><td>09 · nginx</td><td>limit_req and limit_conn, by IP, in shared memory.</td><td>A cheap ceiling that protects Python even when Cloudflare is bypassed or misconfigured.</td><td>Per-IP only — and useless unless real_ip is configured, or every request looks like Cloudflare.</td></tr>
+        <tr><td>11 · middleware</td><td>A counter in Redis, keyed by user or API key.</td><td>Fair-use quotas, plan limits, expensive endpoints. The only layer that knows <em>who</em> is asking.</td><td>The request already reached Python, so it is the most expensive place to say no.</td></tr>
+        <tr><td>16 · your logic</td><td>A per-account limit checked against the database.</td><td>Business rules: five exports a day, one password reset an hour.</td><td>It is a product decision, not protection.</td></tr>
+        <tr><td>19 · the pool</td><td>The connection pool, whether you meant it or not.</td><td>Nothing — but it is the real limit your system hits first under load.</td><td>It queues rather than refuses, which is why everything goes slow instead of erroring.</td></tr>
+      </tbody>
+    </table>
+
+    <table class="board owners">
+      <caption>Security — every layer refuses something different, and none of them is the whole answer</caption>
+      <thead><tr><th scope="col">Where</th><th scope="col">What it stops</th><th scope="col">Concretely</th><th scope="col">If it is missing</th></tr></thead>
+      <tbody>
+        <tr><td>06 · Cloudflare</td><td>Volume, bots, known attack patterns.</td><td>DDoS mitigation, WAF rulesets, bot scores, Turnstile, country rules, Zero Trust Access in front of an admin panel.</td><td>You pay for every packet an attacker sends you.</td></tr>
+        <tr class="crit"><td>07 · the firewall</td><td><strong>Everything that tries to skip station 06.</strong></td><td>Inbound :443 from Cloudflare’s ranges only — or a Tunnel and no inbound port at all. Never expose :5432 or :6379.</td><td class="risk">Every control above becomes optional the moment someone finds your IP.</td></tr>
+        <tr><td>03 · 09 · TLS</td><td>Reading and rewriting traffic in transit.</td><td>TLS 1 to Cloudflare; TLS 2 to nginx with an origin certificate and Full (strict). HSTS on.</td><td>Flexible mode leaves the last hop in plaintext across the public internet.</td></tr>
+        <tr><td>09 · nginx</td><td>Oversized and malformed requests.</td><td>Body-size limits, timeouts, a rate limit, security headers, no server version in the banner.</td><td>An upload becomes a memory problem inside Python.</td></tr>
+        <tr><td>13 · authN</td><td>Strangers.</td><td>Argon2id or bcrypt, short-lived tokens, real logout, MFA on anything that matters.</td><td>A leaked table becomes a mass takeover the same day.</td></tr>
+        <tr class="crit"><td>14 · authZ</td><td><strong>Logged-in users reading each other’s data.</strong></td><td>The owner or tenant in the WHERE clause of every query, not in an <em>if</em> afterwards.</td><td class="risk">Change the id in the URL and it works. The most common serious flaw there is.</td></tr>
+        <tr><td>15 · validation</td><td>Malicious input.</td><td>Pydantic schemas, parameterised SQL, an allowlist for any URL you fetch, file types checked by content.</td><td>SQL injection, SSRF, and prices set by the client.</td></tr>
+        <tr><td>17 · 19 · data</td><td>Reading more than you should.</td><td>Tenant in the cache key, least-privilege database roles, encryption at rest, no production dump on a laptop.</td><td>One bug becomes everybody’s data rather than one row.</td></tr>
+        <tr><td>the box</td><td>The rest.</td><td>SSH by key only, fail2ban, unattended security upgrades, secrets in a 0600 file and never in git, backups off the machine and restored on purpose.</td><td class="risk">The oldest outage there is: nobody patched it, and nobody had a backup that worked.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ FIGURE 2 — WHAT CONTAINS WHAT ============ -->
+  <section>
+    <h2><span>Fig. 2</span> What contains what<i>the internet, Cloudflare, your cloud account, your server, your processes, your code</i></h2>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 1400 578" role="img"
+             aria-label="A containment diagram. On the left, two plates that are not yours: the public internet and Cloudflare. On the right, boxes nested inside one another: your cloud account, which is a Hetzner project or an AWS account and holds firewall rules, private networks, volumes, snapshots and optionally a load balancer; inside it your server, one machine; inside that the operating system, then nginx the web server on ports 80 and 443, then uvicorn the application server on 127.0.0.1 port 8000, and inside uvicorn the FastAPI framework, and inside that your own code. Redis and PostgreSQL sit beside them on the same machine.">
+          <defs>
+            <marker id="ah5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/>
+            </marker>
+            <pattern id="rented3" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="9" stroke="var(--fast)" stroke-width="1.3" opacity=".45"/>
+            </pattern>
+          </defs>
+
+          <!-- not yours -->
+          <rect x="20" y="60" width="250" height="112" fill="var(--z1)" stroke="var(--rule)" stroke-width="1.5"/>
+          <text x="38" y="86" class="s-name">The public internet</text>
+          <text x="38" y="106" class="s-sub">cables, exchanges, other people’s routers</text>
+          <text x="38" y="122" class="s-sub">nobody owns it and nobody can tune it</text>
+          <text x="38" y="146" class="s-sub" fill="var(--hazard)">station 05 · you only design around it</text>
+
+          <rect x="20" y="196" width="250" height="150" fill="var(--z2)"/>
+          <rect x="20" y="196" width="250" height="150" fill="url(#rented3)"/>
+          <rect x="20" y="196" width="250" height="150" fill="none" stroke="var(--fast)" stroke-width="2" stroke-dasharray="7 5"/>
+          <text x="38" y="222" class="s-name" fill="var(--fast)">Cloudflare</text>
+          <text x="38" y="242" class="s-sub">a network you rent in front of everything</text>
+          <text x="38" y="258" class="s-sub">DNS · TLS · WAF · the CDN cache</text>
+          <text x="38" y="274" class="s-sub">station 06 · their machines, their kernel</text>
+          <text x="38" y="298" class="s-sub" fill="var(--fast)">it does not contain your server —</text>
+          <text x="38" y="314" class="s-sub" fill="var(--fast)">it stands in front of it, and forwards</text>
+          <text x="38" y="330" class="s-sub" fill="var(--fast)">to one address you gave it</text>
+
+          <text x="20" y="392" class="s-lab">neither of these is a</text>
+          <text x="20" y="408" class="s-lab">computer you own</text>
+          <text x="20" y="430" class="s-sub">everything to the right is</text>
+          <text x="20" y="446" class="s-sub">on your invoice — and only</text>
+          <text x="20" y="462" class="s-sub">the innermost box is yours</text>
+
+          <line x1="272" y1="270" x2="312" y2="270" stroke="var(--line)" stroke-width="5" marker-end="url(#ah5)"/>
+
+          <!-- your cloud account -->
+          <rect x="318" y="24" width="1062" height="530" fill="var(--z3)" stroke="var(--ink)" stroke-width="1.5"/>
+          <text x="336" y="52" class="s-name">Your cloud account</text>
+          <text x="336" y="70" class="s-sub">one Hetzner Cloud project · one AWS account and its VPC · one DigitalOcean team</text>
+          <text x="336" y="88" class="s-sub" fill="var(--hazard)">an account, not a computer — everything in it is either a machine, or a rule about machines</text>
+          <g class="s-sub">
+            <text x="336" y="122">the firewall — which ports, from where</text>
+            <text x="336" y="142">the private network — 10.0.0.x between your boxes</text>
+            <text x="336" y="162">a floating IP you can move to another machine</text>
+            <text x="336" y="182">volumes — extra disks you attach and detach</text>
+            <text x="336" y="202">snapshots and images of the whole machine</text>
+            <text x="336" y="222">a load balancer — once you have two servers</text>
+            <text x="336" y="242">object storage for uploads — S3, Storage Box, R2</text>
+            <text x="336" y="262">other machines: a second app box, a database box</text>
+            <text x="336" y="282">the bill, the API token, and who may log in</text>
+          </g>
+          <text x="336" y="316" class="s-lab">none of this runs your code</text>
+          <text x="336" y="334" class="s-sub">it is the ground your machine stands on,</text>
+          <text x="336" y="350" class="s-sub">and the rules about who may reach it</text>
+          <text x="336" y="374" class="s-sub" fill="var(--fast)">on Hetzner this list is short and cheap;</text>
+          <text x="336" y="390" class="s-sub" fill="var(--fast)">on AWS it is long, and every line is billed</text>
+
+          <!-- your server -->
+          <rect x="640" y="96" width="720" height="440" fill="var(--z4)" stroke="var(--ink)" stroke-width="2.5"/>
+          <text x="658" y="122" class="s-name">Your server — one machine, one public IP</text>
+          <text x="658" y="140" class="s-sub">a Hetzner CX22, an EC2 instance, a droplet. This is what people mean by “the server”.</text>
+
+          <rect x="658" y="152" width="684" height="32" fill="var(--band)"/>
+          <text x="672" y="173" class="s-sub">Ubuntu 24.04 · systemd · the kernel · one disk — everything below runs on this floor</text>
+
+          <!-- nginx -->
+          <rect x="658" y="194" width="684" height="56" fill="var(--z2)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="674" y="216" class="s-name">nginx — the web server</text>
+          <text x="1326" y="216" text-anchor="end" class="s-port">:80 and :443 — open to the world</text>
+          <text x="674" y="236" class="s-sub">where the request from Cloudflare lands. Ends TLS, serves files, sets limits, then proxy_pass → 127.0.0.1:8000</text>
+
+          <!-- uvicorn -->
+          <rect x="658" y="260" width="684" height="142" fill="var(--z4)" stroke="var(--line)" stroke-width="2"/>
+          <text x="674" y="282" class="s-name">uvicorn or gunicorn — the application server</text>
+          <text x="1326" y="282" text-anchor="end" class="s-port">127.0.0.1:8000 — this machine only</text>
+          <text x="674" y="300" class="s-sub">the process that actually runs Python. One per core, supervised by systemd. It is not a proxy and it is not your app.</text>
+
+          <rect x="682" y="310" width="636" height="84" fill="var(--z5)" stroke="var(--fast)" stroke-width="1.5"/>
+          <text x="698" y="332" class="s-name" fill="var(--fast)">FastAPI — the framework</text>
+          <text x="1302" y="332" text-anchor="end" class="s-port">no port · a library uvicorn imports</text>
+          <text x="698" y="350" class="s-sub">the middleware chain, the router, Depends(), the Pydantic models — stations 11 to 16</text>
+
+          <rect x="706" y="358" width="588" height="30" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <text x="722" y="378" class="s-lab">your code — routers, schemas, services, the functions you actually wrote</text>
+
+          <!-- data on the same box -->
+          <rect x="658" y="412" width="334" height="58" fill="var(--z5)" stroke="var(--rule)" stroke-width="1.5"/>
+          <text x="674" y="434" class="s-name">Redis — the cache</text>
+          <text x="976" y="434" text-anchor="end" class="s-port">:6379</text>
+          <text x="674" y="454" class="s-sub">station 17 · in memory, and it dies with the box</text>
+
+          <rect x="1008" y="412" width="334" height="58" fill="var(--z5)" stroke="var(--rule)" stroke-width="1.5"/>
+          <text x="1024" y="434" class="s-name">PostgreSQL — the database</text>
+          <text x="1326" y="434" text-anchor="end" class="s-port">:5432</text>
+          <text x="1024" y="454" class="s-sub">station 19 · the only thing you cannot rebuild</text>
+
+          <text x="658" y="500" class="s-lab">everything inside this box shares one CPU, one disk and one fate</text>
+          <text x="658" y="518" class="s-sub">any one of these boxes can move to its own machine later — that is all “scaling out” means</text>
+        </svg>
+      </div>
+      <figcaption><b>Read it from the outside in.</b> Cloudflare stands <em>in front of</em> your cloud, not around it. Your cloud account <em>contains</em> your server. Your server <em>contains</em> nginx and uvicorn as two separate processes. uvicorn <em>contains</em> FastAPI, because FastAPI is a library, not a server — it has no port of its own and cannot be started on its own. And FastAPI contains the only part of this entire poster that you actually wrote.</figcaption>
+    </figure>
+
+    <div class="split">
+      <div>
+        <h3>Your cloud — the account</h3>
+        <p class="cap">Hetzner Cloud, an AWS account, DigitalOcean. Not a computer.</p>
+        <ul>
+          <li><b>What it is.</b> <span>The place where you press “create server”. It holds rules and resources that sit <em>beside</em> your machine rather than on it.</span></li>
+          <li><b>What lives there.</b> <span>Firewall rules, the private network, floating IPs, extra volumes, snapshots, object storage, a load balancer once you need one, and any other machines.</span></li>
+          <li><b>Hetzner or AWS?</b> <span>Same idea, different depth. A Hetzner project is a handful of things at a flat price; an AWS account is a hundred services, each metered. Start with the short list.</span></li>
+          <li><b>The useful test.</b> <span>If it survives you deleting the server, it belongs to the cloud account. If it disappears with the server, it was on the machine.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>nginx — the web server</h3>
+        <p class="cap">A program whose job is HTTP and the outside world.</p>
+        <ul>
+          <li><b>Definition.</b> <span>A server that accepts connections from the internet, terminates TLS, and either answers from a file on disk or hands the request to something else.</span></li>
+          <li><b>It knows about</b> <span>connections, certificates, headers, files, timeouts and body sizes. It knows nothing about your objects, your database or your users.</span></li>
+          <li><b>Written in C</b> <span>and it holds thousands of idle connections for almost nothing — which is exactly what a slow mobile client is.</span></li>
+          <li><b>Skip it?</b> <span>Technically yes. You will regret it at the first large upload, the first slow client, and the first static file.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>uvicorn — the application server</h3>
+        <p class="cap">A program whose job is to run your code.</p>
+        <ul>
+          <li><b>Definition.</b> <span>A server that takes an HTTP request, turns it into a call into your language, waits for your function to return, and turns the result back into a response.</span></li>
+          <li><b>It knows about</b> <span>Python processes, the event loop, and the ASGI protocol. It does not serve files and it should never face the internet.</span></li>
+          <li><b>How many.</b> <span>One process per CPU core, because one Python process uses one core. Four cores, four workers, supervised by gunicorn or systemd.</span></li>
+          <li><b>Skip it?</b> <span>No. Something has to run Python. Without it, nginx has nothing to forward to.</span></li>
+        </ul>
+      </div>
+      <div class="edge">
+        <h3>FastAPI — neither of the two</h3>
+        <p class="cap">A framework. A library your code imports.</p>
+        <ul>
+          <li><b>Definition.</b> <span>Not a server at all — it never opens a port and cannot listen for anything. uvicorn imports it and calls into it.</span></li>
+          <li><b>What it actually is.</b> <span>Stations 11 to 16: the middleware chain, the router that matches a path, the dependencies that authenticate and authorise, the Pydantic models that validate, and your own functions.</span></li>
+          <li><b>Why the confusion.</b> <span><em>uvicorn main:app</em> looks like starting FastAPI. It is starting uvicorn, and handing it your FastAPI object.</span></li>
+          <li><b>The same shape elsewhere.</b> <span>Express needs node; Django needs gunicorn; Spring needs Tomcat; Rails needs Puma. Framework and server are always two things.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="board owners">
+      <caption>The three names side by side — this is the distinction worth memorising</caption>
+      <thead>
+        <tr><th scope="col"></th><th scope="col">nginx — web server</th><th scope="col">uvicorn — application server</th><th scope="col">FastAPI — framework</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Listens on</td><td>:80 and :443, on the public interface</td><td>127.0.0.1:8000 — this machine only</td><td>nothing; it has no port</td></tr>
+        <tr><td>Speaks</td><td>HTTP, TLS</td><td>HTTP inwards, ASGI onwards</td><td>Python function calls</td></tr>
+        <tr><td>Serves static files</td><td>yes, and it should</td><td>no</td><td>no</td></tr>
+        <tr><td>Understands</td><td>connections, certificates, headers, files</td><td>processes, the event loop, workers</td><td>routes, models, dependencies, your objects</td></tr>
+        <tr><td>How many run</td><td>one process, many connections</td><td>one process per CPU core</td><td>none of its own — it lives inside uvicorn</td></tr>
+        <tr class="crit"><td>If it stops</td><td><strong>nothing reaches the site at all</strong></td><td>nginx answers 502 Bad Gateway</td><td>the process fails to start</td></tr>
+        <tr><td>Start command</td><td><em>systemctl start nginx</em></td><td><em>uvicorn main:app --workers 4</em></td><td>you never start it — uvicorn imports it</td></tr>
+        <tr><td>Station on fig. 1</td><td>09</td><td>10</td><td>11 to 16</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ THREE PROXIES ============ -->
+  <section>
+    <h2><span>Note</span> Three different things are called a proxy<i>and one thing on the line is not a proxy at all</i></h2>
+    <div class="split">
+      <div class="edge">
+        <h3>06 · the edge proxy</h3>
+        <p class="cap">Cloudflare. Rented, global, in front of everything.</p>
+        <ul>
+          <li><b>Whose machine.</b> <span>Theirs, in the city nearest the user. Your DNS record points here, so this is the only address the world has.</span></li>
+          <li><b>What it does.</b> <span>Ends the user’s TLS, answers from the CDN cache if it can, filters with the WAF, and absorbs an attack before it reaches your bill.</span></li>
+          <li><b>Where the request goes next.</b> <span>Out of Cloudflare, across the internet again, to <em>one</em> address you told it about — your load balancer, or your server directly.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>08 · the load balancer</h3>
+        <p class="cap">A Hetzner Load Balancer or an AWS ALB. Rented, in your account.</p>
+        <ul>
+          <li><b>Whose machine.</b> <span>Its own — a separate appliance you pay for by the hour. It is <em>not</em> installed on your server, and you do not ssh into it either.</span></li>
+          <li><b>What it does.</b> <span>Health-checks two or more machines and sends each request to one that answers. That is its whole job.</span></li>
+          <li><b>Do you need one?</b> <span>Only once you have more than one machine. With a single box, skip it — Cloudflare is already in front, and nginx already does the forwarding.</span></li>
+          <li><b>The trap.</b> <span>A health check that queries the database: one slow query and it removes every backend at once. Station 08 on the hazard board.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>09 · the reverse proxy</h3>
+        <p class="cap">nginx or Caddy. On your machine — the same box as FastAPI.</p>
+        <ul>
+          <li><b>Whose machine.</b> <span>Yours. It is a process on your server, started by systemd, listening on :80 and :443.</span></li>
+          <li><b>What it does.</b> <span>Terminates the origin TLS, serves static files and uploads without waking Python, enforces body size and timeouts, restores the real client IP, and then <em>proxy_pass</em>es to 127.0.0.1:8000.</span></li>
+          <li><b>Why not point Cloudflare straight at uvicorn?</b> <span>Because uvicorn is not built to face the internet: no static files, no TLS you control, no request limits, and one slow client can hold a worker.</span></li>
+        </ul>
+      </div>
+      <div class="door">
+        <h3>10 · not a proxy</h3>
+        <p class="cap">uvicorn / gunicorn — the app server. This is where your code lives.</p>
+        <ul>
+          <li><b>What it is.</b> <span>The process that actually runs Python. It speaks ASGI to FastAPI and HTTP to nginx, and it should bind to 127.0.0.1 so that nothing but nginx can reach it.</span></li>
+          <li><b>How many.</b> <span>Several worker processes, roughly one per core, supervised by gunicorn or by systemd — because one Python process uses one core.</span></li>
+          <li><b>FastAPI itself.</b> <span>Not a server at all. It is stations 11 to 16: the middleware chain, the router, the dependencies that authenticate and authorise, the Pydantic models, and your own functions.</span></li>
+        </ul>
+      </div>
+    </div>
   </section>
 
   <!-- ============ KEY ============ -->
@@ -349,7 +1084,253 @@
         <svg viewBox="0 0 34 34" role="img" aria-label="Two tinted zone bands"><rect x="0" y="4" width="17" height="26" fill="var(--z2)"/><rect x="17" y="4" width="17" height="26" fill="var(--z5)"/></svg>
         <div><h3>Zone</h3><p>Who owns this ground. Cooler is further from you; warmer is more yours, and costs more.</p></div>
       </div>
+      <div>
+        <svg viewBox="0 0 34 34" role="img" aria-label="A hatched band"><defs><pattern id="rentedk" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="var(--fast)" stroke-width="1.3" opacity=".6"/></pattern></defs><rect x="0" y="4" width="34" height="26" fill="var(--z2)"/><rect x="0" y="4" width="34" height="26" fill="url(#rentedk)"/></svg>
+        <div><h3>Rented</h3><p>You pay for it and depend on it, but you do not run it. No shell, no patching, no kernel — Cloudflare’s edge.</p></div>
+      </div>
+      <div>
+        <svg viewBox="0 0 34 34" role="img" aria-label="A heavy dashed vertical rule"><line x1="17" y1="0" x2="17" y2="34" stroke="var(--ink)" stroke-width="3" stroke-dasharray="5 3.5"/></svg>
+        <div><h3>Demarcation</h3><p>Where responsibility changes hands. Right of it: your machine, your patches, your backups, your pager.</p></div>
+      </div>
     </div>
+  </section>
+
+  <!-- ============ FIGURE 3 — THE DEMARCATION ============ -->
+  <section>
+    <h2><span>Fig. 3</span> The edge and the origin<i>what Cloudflare is, what your server is, and the one door between them</i></h2>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 1400 400" role="img"
+             aria-label="A plan of the boundary. Their browser on the left, then Cloudflare's rented edge drawn hatched, then a single door with three locks — a firewall that admits only Cloudflare addresses, an origin certificate, and a shared secret header — and then your origin server on the right. A red dashed bypass route runs underneath from the browser straight to the server, crossed out: it exists whenever the origin's real IP address is reachable from the internet. A second arrow leaves the server downwards, the outbound door.">
+          <defs>
+            <marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/>
+            </marker>
+            <marker id="ah3h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/>
+            </marker>
+            <pattern id="rented2" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="9" stroke="var(--fast)" stroke-width="1.3" opacity=".45"/>
+            </pattern>
+          </defs>
+
+          <!-- their browser -->
+          <rect x="40" y="88" width="150" height="84" fill="var(--z1)" stroke="var(--rule)" stroke-width="1.5"/>
+          <text x="115" y="122" text-anchor="middle" class="s-name">their browser</text>
+          <text x="115" y="140" text-anchor="middle" class="s-sub">stations 01–05</text>
+          <text x="115" y="156" text-anchor="middle" class="s-sub">anywhere on earth</text>
+
+          <line x1="190" y1="130" x2="240" y2="130" stroke="var(--line)" stroke-width="6" marker-end="url(#ah3)"/>
+
+          <!-- cloudflare -->
+          <rect x="250" y="52" width="370" height="156" fill="var(--z2)"/>
+          <rect x="250" y="52" width="370" height="156" fill="url(#rented2)"/>
+          <rect x="250" y="52" width="370" height="156" fill="none" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="7 5"/>
+          <text x="266" y="78" class="s-name" fill="var(--fast)">Cloudflare — the rented edge</text>
+          <text x="266" y="96" class="s-sub">their machines, in three hundred cities. You cannot ssh into any of it.</text>
+          <g class="s-sub">
+            <text x="266" y="122">authoritative DNS · one anycast IP for the whole world</text>
+            <text x="266" y="140">TLS terminated here — their certificate, not yours</text>
+            <text x="266" y="158">WAF · bot rules · rate limits · volumetric DDoS absorbed</text>
+            <text x="266" y="176">the CDN cache — a hit ends the journey (fig. 1, branch 1)</text>
+            <text x="266" y="194">optional: load balancing, Workers, R2, Access, Tunnel</text>
+          </g>
+
+          <line x1="620" y1="130" x2="682" y2="130" stroke="var(--line)" stroke-width="6" marker-end="url(#ah3)"/>
+
+          <!-- the door -->
+          <line x1="710" y1="20" x2="710" y2="292" stroke="var(--ink)" stroke-width="2.5" stroke-dasharray="11 6"/>
+          <rect x="694" y="98" width="32" height="66" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+          <circle cx="710" cy="124" r="5.5" fill="none" stroke="var(--ink)" stroke-width="3"/>
+          <line x1="710" y1="129" x2="710" y2="142" stroke="var(--ink)" stroke-width="3"/>
+          <text x="710" y="44" text-anchor="middle" class="s-lab">the only door</text>
+          <g class="s-sub" text-anchor="middle" font-size="10.5">
+            <text x="710" y="190">1 · Cloudflare IPs only</text>
+            <text x="710" y="206">2 · Full (strict) TLS</text>
+            <text x="710" y="222">3 · a secret header</text>
+            <text x="710" y="244" fill="var(--hazard)">nothing else may knock</text>
+          </g>
+          <line x1="726" y1="130" x2="794" y2="130" stroke="var(--line)" stroke-width="6" marker-end="url(#ah3)"/>
+
+          <!-- your server -->
+          <rect x="800" y="52" width="560" height="156" fill="var(--z4)" stroke="var(--ink)" stroke-width="2.5"/>
+          <text x="818" y="78" class="s-name">Your server — the origin</text>
+          <text x="818" y="96" class="s-sub">one machine: a Hetzner CX22, an EC2 instance, a droplet. You rent it, you run it.</text>
+          <g class="s-sub">
+            <text x="818" y="122">nginx :443  →  uvicorn 127.0.0.1:8000  →  FastAPI  →  your workers  (09–16)</text>
+            <text x="818" y="140">Redis :6379 · PostgreSQL :5432 · uploaded files on the disk  (17–19)</text>
+            <text x="818" y="158">a kernel, a disk that fills, a certificate that expires, a bill that does not move</text>
+            <text x="818" y="176">it can disappear tonight — so it must be rebuildable from a script</text>
+            <text x="818" y="194" fill="var(--fast)">everything inside this box is opened up in fig. 4</text>
+          </g>
+
+          <!-- the bypass -->
+          <path d="M115,180 L115,300 L900,300 L900,212" fill="none" stroke="var(--hazard)" stroke-width="3"
+                stroke-dasharray="9 7" marker-end="url(#ah3h)"/>
+          <g stroke="var(--hazard)" stroke-width="3.5">
+            <line x1="486" y1="292" x2="502" y2="308"/>
+            <line x1="502" y1="292" x2="486" y2="308"/>
+          </g>
+          <text x="520" y="296" class="s-haz">the bypass — this route exists the moment your origin IP is reachable directly</text>
+          <text x="520" y="312" class="s-sub" fill="var(--hazard)">and when it does, the WAF, the rate limits and the DDoS protection above are all optional</text>
+
+          <!-- the outbound door -->
+          <path d="M1240,208 L1240,356" fill="none" stroke="var(--line)" stroke-width="3.5"
+                stroke-dasharray="9 7" marker-end="url(#ah3)"/>
+          <text x="1226" y="348" text-anchor="end" class="s-lab">the other door — everything the box dials out to</text>
+          <text x="1226" y="364" text-anchor="end" class="s-sub">package updates · third-party APIs · SMTP · backups leaving. Restrict outbound too: a compromised process should not be able to phone home.</text>
+        </svg>
+      </div>
+      <figcaption><b>This is the whole security boundary drawn once.</b> Cloudflare is not a layer of your application; it is somebody else’s network you have rented in front of it. Everything it does for you — filtering, caching, absorbing an attack — holds only while the single door is the only way in. Publish your origin’s address, and the red route below is available to anyone who looks.</figcaption>
+    </figure>
+
+    <div class="split">
+      <div class="edge">
+        <h3>Cloudflare — you rent it</h3>
+        <p class="cap">In front of station 06. Their hardware, their kernel, their bill.</p>
+        <ul>
+          <li><b>DNS and anycast.</b> <span>Your name resolves to their address, in a city near the user. Your own address is never published.</span></li>
+          <li><b>TLS ends here.</b> <span>The certificate the browser sees is theirs. The hop from the edge to your box is a second, separate connection.</span></li>
+          <li><b>Filtering.</b> <span>WAF rules, bot scores, rate limits per IP or per path, and a volumetric attack absorbed before it costs you a byte.</span></li>
+          <li><b>Cache.</b> <span>A hit is answered without your server ever waking. Cache rules, TTLs, and — carefully — what must never be cached.</span></li>
+          <li><b>What it is not.</b> <span>Not a backup, not a database, not your logs. If the origin is down, a cache hit still works and everything else returns an error.</span></li>
+          <li><b>The bill.</b> <span>Mostly flat, and egress to users from cache is free — which is the largest single line item it removes.</span></li>
+        </ul>
+      </div>
+      <div class="door">
+        <h3>The door — the whole boundary</h3>
+        <p class="cap">Five rules. Get these wrong and the column to the left is decoration.</p>
+        <ul>
+          <li><b>The origin IP must not be reachable.</b> <span>Firewall inbound 443 to Cloudflare’s published ranges only — or run a Tunnel and open no inbound port at all.</span></li>
+          <li><b>The IP must not be discoverable either.</b> <span>Old DNS records, certificate transparency logs, and mail sent directly from the box all leak it.</span></li>
+          <li><b>Full (strict), always.</b> <span>An origin certificate on nginx and validation on. <em>Flexible</em> mode leaves the last hop in plaintext across the public internet.</span></li>
+          <li><b>Restore the real client IP.</b> <span><em>CF-Connecting-IP</em> → nginx real_ip → your logs. Otherwise every request you own appears to come from Cloudflare, and rate limiting by IP bans everyone at once.</span></li>
+          <li><b>A shared secret header.</b> <span>Injected at the edge, checked at the origin, rejected if absent. It survives the day someone finds your address.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Your server — you run it</h3>
+        <p class="cap">Stations 09 to 19 all live here. This is the box in fig. 3.</p>
+        <ul>
+          <li><b>You patch it.</b> <span>Kernel, OpenSSL, nginx, the runtime, the database. Nobody else will, and “it has been up for 400 days” is not a boast.</span></li>
+          <li><b>You back it up.</b> <span>Off the box, encrypted, and restored on purpose at least once. A provider snapshot in the same account is not a backup.</span></li>
+          <li><b>You are paged for it.</b> <span>Disk percentage, memory, load, certificate expiry, and whether the process is actually answering — not merely running.</span></li>
+          <li><b>It is one machine.</b> <span>Which means one blast radius. That is an acceptable trade for a very long time — provided a replacement is one script away.</span></li>
+          <li><b>The bill does not move.</b> <span>A flat monthly price cannot be turned into a financial attack. Metered compute can.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FIGURE 4 — INSIDE THE MACHINE ============ -->
+  <section>
+    <h2><span>Fig. 4</span> Inside the machine<i>one origin server, cut open — eight layers, bottom to top</i></h2>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 1400 626" role="img"
+             aria-label="A cutaway of one origin server showing eight layers, from the doors that control what may reach it, down through the reverse proxy, the application processes, background work, local state, operations, the operating system and kernel, to the rented hardware at the bottom.">
+          <rect x="40" y="40" width="1320" height="566" fill="none" stroke="var(--ink)" stroke-width="2.5"/>
+          <text x="40" y="30" class="s-lab">↓ requests arrive here, through the door in fig. 3 — and nothing else does</text>
+          <rect x="40" y="40" width="1320" height="52" fill="var(--band)"/>
+          <text x="60" y="66" class="s-name" font-size="14">one origin server — and everything that is on it</text>
+          <text x="60" y="84" class="s-sub">the eight layers below are what you are actually renting, in the order a request meets them</text>
+          <text x="1340" y="72" text-anchor="end" class="s-sub">missing any one of them is a real outage, not a style choice</text>
+
+          <g>
+            <!-- layer 1 -->
+            <rect x="56" y="102" width="1288" height="54" fill="var(--z2)"/>
+            <rect x="56" y="102" width="4" height="54" fill="var(--line)"/>
+            <text x="74" y="124" class="s-name">The doors</text>
+            <text x="74" y="141" class="s-num">what may reach it</text>
+            <text x="300" y="124" class="s-sub">tcp 443 — from Cloudflare’s published ranges and nothing else · tcp 22 — your key only, never a password, fail2ban watching · everything else denied by default</text>
+            <text x="300" y="141" class="s-sub">Postgres and Redis bound to 127.0.0.1, so they are not on the internet even by accident · outbound restricted too — a compromised process should not dial out freely</text>
+
+            <!-- layer 2 -->
+            <rect x="56" y="164" width="1288" height="54" fill="var(--z4)"/>
+            <rect x="56" y="164" width="4" height="54" fill="var(--line)"/>
+            <text x="74" y="186" class="s-name">Reverse proxy</text>
+            <text x="74" y="203" class="s-num">nginx · Caddy</text>
+            <text x="300" y="186" class="s-sub">listens on :80 and :443 — the only process here the outside may reach · the origin certificate and the last hop of TLS · static files served without waking Python</text>
+            <text x="300" y="203" class="s-sub">body-size limit · timeouts · restores the real client IP from CF-Connecting-IP · /healthz · then proxy_pass to 127.0.0.1:8000, which is the whole handover</text>
+
+            <!-- layer 3 -->
+            <rect x="56" y="226" width="1288" height="54" fill="var(--z4)"/>
+            <rect x="56" y="226" width="4" height="54" fill="var(--line)"/>
+            <text x="74" y="248" class="s-name">Your application</text>
+            <text x="74" y="265" class="s-num">stations 10–16</text>
+            <text x="300" y="248" class="s-sub">a systemd unit or docker compose — restarted on failure, started at boot · uvicorn or gunicorn bound to 127.0.0.1:8000, one worker per core, never on a public port</text>
+            <text x="300" y="265" class="s-sub">config and secrets in an env file the deploy writes, mode 0600, never in git · SIGTERM handled so a deploy drains instead of dropping · logs to stdout, journald keeps them</text>
+
+            <!-- layer 4 -->
+            <rect x="56" y="288" width="1288" height="54" fill="var(--z4)"/>
+            <rect x="56" y="288" width="4" height="54" fill="var(--line)"/>
+            <text x="74" y="310" class="s-name">Background work</text>
+            <text x="74" y="327" class="s-num">station 21, at home</text>
+            <text x="300" y="310" class="s-sub">the queue consumer, the systemd timers, the nightly jobs — this is where the branch line of fig. 5 lives when you have no managed queue service</text>
+            <text x="300" y="327" class="s-sub">it must be idempotent and retry with backoff, because it will be restarted mid-job · give it its own unit, so a busy worker cannot starve the web processes of CPU</text>
+
+            <!-- layer 5 -->
+            <rect x="56" y="350" width="1288" height="54" fill="var(--z5)"/>
+            <rect x="56" y="350" width="4" height="54" fill="var(--hazard)"/>
+            <text x="74" y="372" class="s-name">Local state</text>
+            <text x="74" y="389" class="s-num" fill="var(--hazard)">cannot be rebuilt</text>
+            <text x="300" y="372" class="s-sub">PostgreSQL — data directory, write-ahead log, shared_buffers, max_connections, and a connection pool in front of it · Redis — maxmemory and an eviction policy, or it takes the box</text>
+            <text x="300" y="389" class="s-sub">uploaded files on the disk, which fills and is not replicated — move them to object storage early · /var/log, which also fills, and takes everything down with it when it does</text>
+
+            <!-- layer 6 -->
+            <rect x="56" y="412" width="1288" height="54" fill="var(--z3)"/>
+            <rect x="56" y="412" width="4" height="54" fill="var(--line)"/>
+            <text x="74" y="434" class="s-name">Operations</text>
+            <text x="74" y="451" class="s-num">survivability</text>
+            <text x="300" y="434" class="s-sub">backups off the box, encrypted, and a restore you have actually performed — a snapshot you have never restored is a hope, not a backup</text>
+            <text x="300" y="451" class="s-sub">an agent watching CPU, memory, disk percentage and load · an alarm at 80% disk, not at 100% · log rotation · unattended security upgrades · a rebuild script, so the box is disposable</text>
+
+            <!-- layer 7 -->
+            <rect x="56" y="474" width="1288" height="54" fill="var(--band)"/>
+            <rect x="56" y="474" width="4" height="54" fill="var(--mute)"/>
+            <text x="74" y="496" class="s-name">OS + kernel</text>
+            <text x="74" y="513" class="s-num">“the floor”</text>
+            <text x="300" y="496" class="s-sub">Ubuntu LTS or similar · systemd supervising · journald · cgroup and memory limits · ulimits and file descriptors, which run out quietly under load and look like a bug in your code</text>
+            <text x="300" y="513" class="s-sub">swap, so the out-of-memory killer is not your first responder · NTP, because certificates and tokens are time-sensitive · a few sysctl values for a busy socket table</text>
+
+            <!-- layer 8 -->
+            <rect x="56" y="536" width="1288" height="54" fill="var(--band)"/>
+            <rect x="56" y="536" width="4" height="54" fill="var(--mute)"/>
+            <text x="74" y="558" class="s-name">The machine</text>
+            <text x="74" y="575" class="s-num">what you rent</text>
+            <text x="300" y="558" class="s-sub">4 vCPU · 8 GB RAM · 80 GB NVMe · one public IPv4 · one region and one availability zone · the provider’s own firewall and snapshots sitting in front of everything above</text>
+            <text x="300" y="575" class="s-sub">a Hetzner CX, an EC2 instance, a droplet — the same box with a different invoice. It can vanish tonight, so the only question that matters is how fast a new one is serving</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption><b>The two layers at the bottom are the floor described overleaf — and on a rented box they are inside your responsibility, not underneath it.</b> Read the stack upwards and it is also a debugging order: when the site is slow, the answer is far more often disk, memory or connections than it is your code.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ WHO OWNS WHAT ============ -->
+  <section>
+    <h2><span>Board</span> The same station, three different owners<i>one box, managed pieces, or the edge — the work does not disappear, it only moves</i></h2>
+    <table class="board owners">
+      <caption>The middle column is one machine you run. The other two are the same job, bought instead of built.</caption>
+      <thead>
+        <tr><th scope="col">The job</th><th scope="col">On one rented box — Hetzner, a droplet, an EC2 instance</th><th scope="col">Bought as managed pieces — AWS &amp; friends</th><th scope="col">At the edge — Cloudflare</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>TLS certificate</td><td>certbot renews it on the box; a blocked port or a stopped timer becomes a silent expiry</td><td>ACM on the load balancer, renewed for you and never touched</td><td>the edge certificate, plus an origin certificate for the last hop</td></tr>
+        <tr><td>Load balancing</td><td>nginx upstreams, or a second box and a floating IP you fail over yourself</td><td>an ALB across two availability zones, with health checks</td><td>Cloudflare Load Balancing, health-checked from many cities</td></tr>
+        <tr><td>Running your code</td><td>a systemd unit or docker compose, restarted on failure</td><td>an ECS or Fargate task, or an auto-scaling group</td><td>Workers — genuinely fast, but your framework may not fit</td></tr>
+        <tr><td>Cache · station 17</td><td>Redis on the same box: the fastest option there is, and it dies with the box</td><td>ElastiCache, replicated, patched, and billed by the hour</td><td>the CDN cache and KV — the only one that answers before you pay for anything</td></tr>
+        <tr class="crit"><td>Database · station 19</td><td><strong>PostgreSQL on the box — you tune it, patch it, back it up, and you restore it</strong></td><td>RDS with automated backups, a standby, and point-in-time recovery</td><td>not a general database; do not plan to move this one</td></tr>
+        <tr><td>Files &amp; uploads</td><td>a directory on the disk — which fills, is not replicated, and is not in your database backup</td><td>S3 with a signed URL, so large files never pass through your app</td><td>R2, with the same interface and no egress fee</td></tr>
+        <tr><td>Queue &amp; workers · 21</td><td>Redis or a Postgres table as the queue, and a worker unit beside the app</td><td>SQS with a consumer service and a dead letter queue</td><td>Queues, consumed by a Worker</td></tr>
+        <tr><td>Secrets</td><td>a 0600 env file the deploy writes; rotation is a thing you remember to do</td><td>Secrets Manager or SSM, with rotation and an audit trail</td><td>Workers secrets, at the edge only</td></tr>
+        <tr class="crit"><td>Backups</td><td><strong>your cron job, off the box, and a restore you have actually rehearsed</strong> — nobody else is doing this</td><td>automated snapshots and point-in-time recovery, still worth restoring once</td><td>none — it is not your storage and it never was</td></tr>
+        <tr><td>Patching the kernel</td><td>you, on a schedule, including the reboot</td><td>you on EC2; nobody on Fargate or Lambda</td><td>nobody — you have no kernel here</td></tr>
+        <tr><td>The bill</td><td>flat per month: predictable, and it cannot be turned into a financial attack</td><td>per request, per GB, per hour — it scales down, and it also spikes</td><td>mostly flat; egress to users from cache costs nothing</td></tr>
+        <tr><td>Losing one machine</td><td>everything is down until a new one is built — so build it from a script, not from memory</td><td>one task or one zone is down; the service stays up</td><td>nothing is down at the edge — but the origin behind it may be</td></tr>
+      </tbody>
+    </table>
+    <p class="lede" style="font-size:13.5px;color:var(--mute);max-width:84ch">One machine is a completely respectable architecture, and it will carry more traffic than most products ever see. It cannot survive the failure that takes the machine itself — so the only real questions are how quickly you can build a new one, and when you last restored the backup.</p>
   </section>
 
   <!-- ============ THE FLOOR ============ -->
@@ -357,13 +1338,13 @@
     <div class="floor">
       <h3>Beneath every station — the floor</h3>
       <p><code>CPU · RAM · SSD · kernel · syscalls · scheduler · context switching · memory management · file systems</code></p>
-      <p>This is not a station; it is the ground all twenty-four stand on, and it is why the advice above is true rather than arbitrary. Caching works because memory is about a hundred times faster than disk. An event loop stalls because of how the scheduler hands out time. A container starts in milliseconds because it shares a kernel instead of booting one. You can build a system without this layer. You cannot debug the strange ones.</p>
+      <p>This is not a station; it is the ground all twenty-four stand on, and it is why the advice above is true rather than arbitrary. Caching works because memory is about a hundred times faster than disk. An event loop stalls because of how the scheduler hands out time. A container starts in milliseconds because it shares a kernel instead of booting one. You can build a system without this layer. You cannot debug the strange ones. On a rented machine this floor is not underneath your responsibility — it is inside it: it is the bottom two layers of fig. 4, and you are the one who patches it.</p>
     </div>
   </section>
 
-  <!-- ============ FIGURE 2 — THE ASYNC BRANCH ============ -->
+  <!-- ============ FIGURE 5 — THE ASYNC BRANCH ============ -->
   <section>
-    <h2><span>Fig. 2</span> The branch line<i>where work goes when it is too slow for a request</i></h2>
+    <h2><span>Fig. 5</span> The branch line<i>where work goes when it is too slow for a request</i></h2>
     <figure>
       <div class="scroll">
         <svg viewBox="0 0 1400 460" role="img"
@@ -443,9 +1424,9 @@
     </figure>
   </section>
 
-  <!-- ============ FIGURE 3 — SERVICE BANDS ============ -->
+  <!-- ============ FIGURE 6 — SERVICE BANDS ============ -->
   <section>
-    <h2><span>Fig. 3</span> Service across the whole line<i>four concerns that are not stations, because they touch all of them</i></h2>
+    <h2><span>Fig. 6</span> Service across the whole line<i>four concerns that are not stations, because they touch all of them</i></h2>
     <figure>
       <div class="scroll">
         <svg viewBox="0 0 1400 336" role="img"
@@ -498,9 +1479,9 @@
     </figure>
   </section>
 
-  <!-- ============ FIGURE 4 — DELIVERY ============ -->
+  <!-- ============ FIGURE 7 — DELIVERY ============ -->
   <section>
-    <h2><span>Fig. 4</span> The line under construction<i>none of fig. 1 exists until something puts it there</i></h2>
+    <h2><span>Fig. 7</span> The line under construction<i>none of fig. 1 exists until something puts it there</i></h2>
     <figure>
       <div class="scroll">
         <svg viewBox="0 0 1400 268" role="img"
@@ -576,6 +1557,7 @@
         <tr><td>04</td><td>the request</td><td>A session token in local storage, plus one cross-site scripting bug, equals account takeover. No idempotency key on a request that spends money.</td></tr>
         <tr><td>05</td><td>the network</td><td>Packet loss presents as inexplicable slowness. You cannot fix this layer, only design around it.</td></tr>
         <tr><td>06</td><td>CDN edge</td><td>Nothing cached, so every request travels the whole route and you pay full egress. Worse: a <em>personalised</em> page cached and served to everyone.</td></tr>
+        <tr class="crit"><td>door</td><td>edge → origin</td><td><strong>The origin’s real address is reachable from the internet</strong> — and then the firewall, the WAF, the rate limits and the DDoS protection in front of it are all optional, because an attacker simply goes round them. Also: <em>Flexible</em> SSL, which leaves the last hop in plaintext; and the client IP never restored, so every log line says Cloudflare and one IP ban blocks the world.</td></tr>
         <tr><td>07</td><td>VPC</td><td>A database reachable from the internet. A rule open to the whole world on an admin port. Everything in one availability zone.</td></tr>
         <tr class="crit"><td>08</td><td>load balancer</td><td><strong>A health check so deep that one slow database removes every backend at once</strong> — a degradation becomes a total outage, and nothing can recover. Also: an idle timeout that cuts a long report; draining shorter than the slowest request; retries amplifying overload into collapse.</td></tr>
         <tr><td>09</td><td>proxy</td><td>A body size limit rejecting uploads with an unhelpful error. Too few worker processes, so requests queue invisibly before your code runs.</td></tr>
@@ -589,6 +1571,7 @@
         <tr class="crit"><td>17</td><td>cache</td><td><strong>A cache key without the user or tenant in it</strong> — a data leak dressed as an optimisation. Also: caching used to hide a query that simply needed an index.</td></tr>
         <tr class="crit"><td>18</td><td>ORM</td><td><strong>The N+1 query.</strong> One query, then one more per row: four hundred round trips for a single page, created by a lazy-loaded association inside a loop.</td></tr>
         <tr><td>19</td><td>database</td><td>A missing index turning forty milliseconds into four seconds. Connection pool exhausted, so a healthy database looks down. A long transaction holding locks and blocking everything behind it.</td></tr>
+        <tr class="crit"><td>box</td><td>the machine</td><td><strong>The disk fills at two in the morning</strong> — logs, the write-ahead log, an unrotated file — and every station from 09 to 19 stops at once. No swap, so the out-of-memory killer picks the database. SSH open to the world with passwords. A certificate that cannot renew because the port it validates on is closed. And a snapshot that is not a backup until the day you have actually restored one.</td></tr>
         <tr><td>—</td><td>the floor</td><td>CPU credits, disk throughput and memory limits produce throttling that looks exactly like slow code. Check the credit balance before you profile the query.</td></tr>
         <tr class="crit"><td>21</td><td>queue, worker</td><td><strong>Not idempotent, so the customer is charged twice.</strong> Also: no dead letter queue, so failures vanish silently for months; a visibility timeout shorter than the job, so two workers do the same work.</td></tr>
         <tr><td>22</td><td>the response</td><td>A stack trace or internal version returned in an error. Two hundred OK with an error inside the body, so nothing can alert on it. An unpaginated list that grows with your success.</td></tr>
@@ -615,10 +1598,11 @@
 
   <!-- ============ COLOPHON ============ -->
   <footer class="colophon">
-    <h2><span>In short</span> The whole line in six sentences</h2>
+    <h2><span>In short</span> The whole line in seven sentences</h2>
     <ol class="six">
       <li>A click becomes a network request, and DNS, TCP and TLS all happen before one byte of it reaches you.</li>
       <li>It should be answered as early as possible — at the edge or in the cache — because everything past there costs money.</li>
+      <li>In front of all of it sits rented ground you do not run, and behind it exactly one machine you do — keep the door between them the only way in, or everything the edge does for you becomes optional.</li>
       <li>Your application asks three questions in order: who are you, may you, is this valid — and only then does your product.</li>
       <li>The database is almost always the real bottleneck, standing on a floor of CPU, memory, disk and kernel.</li>
       <li>Anything slow does not belong in the request at all; it goes on a queue, and then it must be idempotent.</li>

@@ -1,0 +1,1075 @@
+<meta charset="utf-8">
+<title>Atlas of a Personal Knowledge Base — five sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 17 Personal Knowledge Base · five sheets</p>
+  <h1>Atlas of a <em>Personal Knowledge Base</em></h1>
+  <p class="thesis">Four files the handbook cannot write for you: what you do not understand yet, what you might build, what you learned the hard way, and what your systems actually look like. Sheet 1 is the route a single snag travels, from the moment you notice it to a note in the handbook; sheets 2 to 5 open up one file each. <strong>None of this is storage — every file exists to be re-read, pruned and promoted, and a file that is only ever appended to has stopped working.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 5</span>
+    <span><b>Numbered steps</b> 81</span>
+    <span><b>Read first</b> Sheet 1 end to end, then sheet 2 — Questions is the most valuable file in the handbook</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Capture Line</h4><p>Four lines, twenty-eight stations: how a snag becomes a question, an idea, a note or a diagram — and where each one leaves for the handbook.</p><em>Transit diagram</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Question Circuit</h4><p>Notice, phrase, classify, answer, compress, record — and the quiet decay that happens when you skip the first station.</p><em>Closed circuit</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>The Idea Sieve</h4><p>Capture everything, judge monthly, delete freely. Only an idea with an afternoon-sized smallest version reaches a task.</p><em>Decision tree</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>Anatomy of a Note</h4><p>Date, context, symptom, cause, fix, lesson: the five-line entry written the same afternoon, and the rules for when it leaves.</p><em>Cutaway section</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>Drawing From Memory</h4><p>The four diagrams worth having, one system drawn in the house symbols, and the column where you write down what you got wrong.</p><em>Survey plate</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 300" role="img" aria-label="How the five sheets fit together. Sheet 1, the capture line, runs across the middle: every snag noticed during a working day lands in one of four files. Above it, sheets 2 to 5 each open one file: Questions, Ideas, Technology Notes and Diagrams. Below it, the exit from each file into the handbook: an answered question becomes a handbook note, a surviving idea becomes a task, a repeated technology entry becomes a note, script or template, and a diagram that stops becomes a question. A bar underneath represents the handbook, folders 00 to 16, which receives everything that survives review.">
+        <rect x="30" y="118" width="1340" height="62" fill="var(--z3)"/>
+        <text x="46" y="144" class="s-zone" fill="var(--mute)">Sheet 1 — the capture line: every snag in a working day lands in one of four files</text>
+        <text x="46" y="164" class="s-sub">each file has its own review rhythm and its own exit into the handbook — sheets 2 to 5 open them one at a time</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M250,118 L250,80"/><path d="M580,118 L580,80"/><path d="M910,118 L910,80"/><path d="M1200,118 L1200,80"/>
+          <path d="M250,180 L250,216"/><path d="M580,180 L580,216"/><path d="M910,180 L910,216"/><path d="M1200,180 L1200,216"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="250" y="68">2 · questions</text>
+          <text x="580" y="68">3 · ideas</text>
+          <text x="910" y="68">4 · technology notes</text>
+          <text x="1200" y="68">5 · diagrams</text>
+          <text x="250" y="234">→ a handbook note</text>
+          <text x="580" y="234">→ a task, or a written verdict</text>
+          <text x="910" y="234">→ a note, a script, a template</text>
+          <text x="1200" y="234">→ the questions it exposed</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="250" y="50">what you do not understand yet</text>
+          <text x="580" y="50">what you might build</text>
+          <text x="910" y="50">what you learned by doing</text>
+          <text x="1200" y="50">what your systems look like</text>
+          <text x="250" y="252">the LINK field of an answer</text>
+          <text x="580" y="252">Task Template, folder 16</text>
+          <text x="910" y="252">three repeats and it graduates</text>
+          <text x="1200" y="252">where the drawing stopped</text>
+        </g>
+        <rect x="30" y="276" width="1340" height="10" fill="color-mix(in srgb,var(--fast) 26%,transparent)"/>
+        <text x="1370" y="270" text-anchor="end" class="s-note">The handbook, folders 00–16, sits under all four files — it is where anything that survives review ends up</text>
+      </svg>
+    </div>
+    <figcaption>Read it as one practice with two speeds. <b>Capture is instant</b> — one line, badly phrased, the moment you notice. <b>Review is slow and deliberate</b> — every couple of weeks, once a month, three months later. Skip capture and the material is gone; skip review and four useful files become four junk drawers.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE CAPTURE LINE ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Capture Line</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Questions · Ideas · Technology Notes · Diagrams</span>
+  </div>
+  <p class="thesis">Four files drawn as four lines. Each station is a section of its file, and every line runs left to right through the same four zones: capture, review, record, promote. <strong>Every line has a station where material is deliberately deleted or rejected, and every line ends at the same bar — nothing in this folder is meant to stay in it forever.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 2000 960" role="img" aria-label="A transit map of the personal knowledge base. Four horizontal lines, one per file, cross four zones: capture, review, record and promote, and all end at a vertical bar representing the handbook. The Questions line runs through stations 1 to 7: notice it, phrase it precisely, blocking or background, answer in your own words, the Answered record, thought I understood, and a handbook note, with a dashed loop from station 4 back to station 2 when an answer cannot be compressed. The Ideas line runs through stations 8 to 14: capture, the monthly read, worth a second look, a real task, started, and handbook improvements, with a spur at station 9 down to station 13, deliberately rejected. The Technology Notes line runs through stations 15 to 21: write it the same day, the five-line entry, snippets, dated version notes, stack defaults, the still-true review, and graduation after three repeats. The Diagrams line runs through stations 22 to 28: draw from memory, the four diagrams, annotate the constraint, my systems, redraw after three months, what I got wrong, and the review prompt. Connector A runs from station 22 up the left edge into station 1, because where a drawing stops is a question. Connector B joins the Questions line to the Technology Notes line, because an answered blocking question is written down as an entry.">
+        <defs>
+          <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+          <marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="40" y="40" class="s-zone" fill="var(--line)">The capture line · one snag, four possible routes, one destination</text>
+        <text x="40" y="60" class="s-sub">Lines are files. Stations are sections of each file. Dashed connectors are the places where one file feeds another.</text>
+
+        <line x1="40" y1="88" x2="80" y2="88" stroke="var(--line)" stroke-width="7"/><text x="90" y="92" class="s-lab">Questions</text>
+        <line x1="200" y1="88" x2="240" y2="88" stroke="var(--fast)" stroke-width="7"/><text x="250" y="92" class="s-lab">Ideas</text>
+        <line x1="330" y1="88" x2="370" y2="88" stroke="var(--cool)" stroke-width="7"/><text x="380" y="92" class="s-lab">Technology Notes</text>
+        <line x1="540" y1="88" x2="580" y2="88" stroke="var(--learn)" stroke-width="7"/><text x="590" y="92" class="s-lab">Diagrams</text>
+
+        <rect x="30" y="120" width="490" height="790" fill="var(--z1)"/>
+        <rect x="520" y="120" width="520" height="790" fill="var(--z2)"/>
+        <rect x="1040" y="120" width="500" height="790" fill="var(--z3)"/>
+        <rect x="1540" y="120" width="200" height="790" fill="var(--z4)"/>
+        <rect x="1740" y="120" width="230" height="790" fill="var(--z6)"/>
+        <g class="s-zone" fill="var(--mute)">
+          <text x="42" y="142">Capture · the moment</text><text x="532" y="142">Review · the judgement</text>
+          <text x="1052" y="142">Record · the evidence</text><text x="1552" y="142">Promote</text>
+          <text x="1752" y="142">The handbook</text>
+        </g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="520" y1="120" x2="520" y2="910"/><line x1="1040" y1="120" x2="1040" y2="910"/>
+          <line x1="1540" y1="120" x2="1540" y2="910"/><line x1="1740" y1="120" x2="1740" y2="910"/>
+        </g>
+
+        <!-- the four lines -->
+        <line x1="70" y1="270" x2="1776" y2="270" stroke="var(--line)" stroke-width="7"/>
+        <line x1="70" y1="460" x2="1776" y2="460" stroke="var(--fast)" stroke-width="7"/>
+        <line x1="70" y1="650" x2="1776" y2="650" stroke="var(--cool)" stroke-width="7"/>
+        <line x1="70" y1="840" x2="1776" y2="840" stroke="var(--learn)" stroke-width="7"/>
+        <rect x="1776" y="200" width="12" height="680" fill="var(--ink)"/>
+
+        <!-- Questions line -->
+        <g class="st"><circle cx="90" cy="270" r="9"/><circle cx="330" cy="270" r="9"/><circle cx="580" cy="270" r="9"/><circle cx="830" cy="270" r="9"/><circle cx="1100" cy="270" r="9"/><circle cx="1350" cy="270" r="9"/><circle cx="1600" cy="270" r="9"/></g>
+        <g class="s-num"><text x="76" y="198">01</text><text x="316" y="198">02</text><text x="566" y="198">03</text><text x="816" y="198">04</text><text x="1086" y="198">05</text><text x="1336" y="198">06</text><text x="1586" y="198">07</text></g>
+        <g class="s-lab"><text x="76" y="216">notice it</text><text x="316" y="216">phrase it precisely</text><text x="566" y="216">blocking or background?</text><text x="816" y="216">answer in your own words</text><text x="1086" y="216">the Answered record</text><text x="1336" y="216">thought I understood</text><text x="1586" y="216">a handbook note</text></g>
+        <g class="s-sub">
+          <text x="76" y="234">write it down now, even</text><text x="76" y="248">badly phrased</text>
+          <text x="316" y="234">a vague discomfort becomes</text><text x="316" y="248">a twenty-minute question</text>
+          <text x="566" y="234">blocking: answer it today</text><text x="566" y="248">background: one a week</text>
+          <text x="816" y="234">no pasted quotations —</text><text x="816" y="248">two sentences, or keep going</text>
+          <text x="1086" y="234">ANSWERED · ANSWER ·</text><text x="1086" y="248">SOURCE · LINK</text>
+          <text x="1336" y="234">I believed · Actually ·</text><text x="1336" y="248">Found out when</text>
+          <text x="1586" y="234">which answer deserves</text><text x="1586" y="248">a note of its own?</text>
+        </g>
+        <path d="M830,281 C830,345 330,345 330,283" fill="none" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#c2)"/>
+        <text x="580" y="354" text-anchor="middle" class="s-haz" font-size="10.5">can't compress it to two sentences? that is a new question — back to 02</text>
+
+        <!-- Ideas line -->
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3"><circle cx="90" cy="460" r="9"/><circle cx="330" cy="460" r="9"/><circle cx="580" cy="460" r="9"/><circle cx="830" cy="460" r="9"/><circle cx="1100" cy="460" r="9"/><circle cx="1600" cy="460" r="9"/></g>
+        <g class="s-num"><text x="76" y="388">08</text><text x="316" y="388">09</text><text x="566" y="388">10</text><text x="816" y="388">11</text><text x="1086" y="388">12</text><text x="1586" y="388">14</text></g>
+        <g class="s-lab"><text x="76" y="406">capture</text><text x="316" y="406">the monthly read</text><text x="566" y="406">worth a second look</text><text x="816" y="406">a real task</text><text x="1086" y="406">started</text><text x="1586" y="406">handbook fixes</text></g>
+        <g class="s-sub">
+          <text x="76" y="424">one line, unjudged,</text><text x="76" y="438">newest at the top</text>
+          <text x="316" y="424">unwanted for three months?</text><text x="316" y="438">delete it — no guilt</text>
+          <text x="566" y="424">one or two promoted, each</text><text x="566" y="438">with its smallest version</text>
+          <text x="816" y="424">Task Template, with</text><text x="816" y="438">acceptance criteria</text>
+          <text x="1086" y="424">outcome and verdict —</text><text x="1086" y="438">keep the failures</text>
+          <text x="1586" y="424">usually a link,</text><text x="1586" y="438">not a new note</text>
+        </g>
+        <path d="M330,469 L330,533" fill="none" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="7 5"/>
+        <circle cx="330" cy="540" r="7" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="348" y="524" class="s-num">13</text>
+        <text x="348" y="540" class="s-haz">deliberately rejected</text>
+        <text x="348" y="554" class="s-sub">with the reason and the date, so it is not re-argued every year</text>
+
+        <!-- Technology Notes line -->
+        <g fill="var(--paper)" stroke="var(--cool)" stroke-width="3"><circle cx="90" cy="650" r="9"/><circle cx="330" cy="650" r="9"/><circle cx="580" cy="650" r="9"/><circle cx="830" cy="650" r="9"/><circle cx="1100" cy="650" r="9"/><circle cx="1350" cy="650" r="9"/><circle cx="1600" cy="650" r="9"/></g>
+        <g class="s-num"><text x="76" y="578">15</text><text x="316" y="578">16</text><text x="566" y="578">17</text><text x="816" y="578">18</text><text x="1086" y="578">19</text><text x="1336" y="578">20</text><text x="1586" y="578">21</text></g>
+        <g class="s-lab"><text x="76" y="596">write it the same day</text><text x="316" y="596">the five-line entry</text><text x="566" y="596">snippets I re-type</text><text x="816" y="596">version notes, dated</text><text x="1086" y="596">stack defaults</text><text x="1336" y="596">still true?</text><text x="1586" y="596">three times → a note</text></g>
+        <g class="s-sub">
+          <text x="76" y="614">a week later: a summary;</text><text x="76" y="628">same afternoon: a solution</text>
+          <text x="316" y="614">DATE · CONTEXT · SYMPTOM</text><text x="316" y="628">CAUSE · FIX · LESSON</text>
+          <text x="566" y="614">anything looked up</text><text x="566" y="628">more than twice</text>
+          <text x="816" y="614">true for one version, on one</text><text x="816" y="628">platform — and it expires</text>
+          <text x="1086" y="614">small personal choices;</text><text x="1086" y="628">architecture goes to an ADR</text>
+          <text x="1336" y="614">delete what has expired;</text><text x="1336" y="628">notice what keeps repeating</text>
+          <text x="1586" y="614">snippet → script, alias</text><text x="1586" y="628">or template, folder 16</text>
+        </g>
+
+        <!-- Diagrams line -->
+        <g fill="var(--paper)" stroke="var(--learn)" stroke-width="3"><circle cx="90" cy="840" r="9"/><circle cx="330" cy="840" r="9"/><circle cx="580" cy="840" r="9"/><circle cx="830" cy="840" r="9"/><circle cx="1100" cy="840" r="9"/><circle cx="1350" cy="840" r="9"/><circle cx="1600" cy="840" r="9"/></g>
+        <g class="s-num"><text x="76" y="768">22</text><text x="316" y="768">23</text><text x="566" y="768">24</text><text x="816" y="768">25</text><text x="1086" y="768">26</text><text x="1336" y="768">27</text><text x="1586" y="768">28</text></g>
+        <g class="s-lab"><text x="76" y="786">draw it from memory</text><text x="316" y="786">the four diagrams</text><text x="566" y="786">annotate the constraint</text><text x="816" y="786">my systems</text><text x="1086" y="786">redraw after 3 months</text><text x="1336" y="786">what I got wrong</text><text x="1586" y="786">the review prompt</text></g>
+        <g class="s-sub">
+          <text x="76" y="804">recall, not recognition —</text><text x="76" y="818">it stops where you don't know</text>
+          <text x="316" y="804">request path · data stores</text><text x="316" y="818">· trust · failure domains</text>
+          <text x="566" y="804">not "DB primary" but</text><text x="566" y="818">"all writes; the ceiling"</text>
+          <text x="816" y="804">LAST UPDATED, changed in</text><text x="816" y="818">the same pull request</text>
+          <text x="1086" y="804">the real test of whether</text><text x="1086" y="818">the understanding stuck</text>
+          <text x="1336" y="804">a wrong belief, not a gap —</text><text x="1336" y="818">the dangerous kind</text>
+          <text x="1586" y="804">circle what exists once;</text><text x="1586" y="818">which diagram is missing?</text>
+        </g>
+
+        <!-- Connector A: diagrams to questions -->
+        <path d="M81,840 L50,840 L50,300 Q50,282 80,276" fill="none" stroke="var(--learn)" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#c1)"/>
+        <text x="64" y="500" class="s-learn">A · where the drawing stopped</text>
+        <text x="64" y="514" class="s-sub">becomes a question — back to 01</text>
+
+        <!-- Connector B: answered blocker to technology notes -->
+        <path d="M1070,270 L1070,650" fill="none" stroke="var(--line)" stroke-width="3" stroke-dasharray="8 6"/>
+        <circle cx="1070" cy="270" r="6" fill="var(--line)"/><circle cx="1070" cy="650" r="6" fill="var(--line)"/>
+        <text x="1086" y="500" class="s-lab">B · answered, so write it down</text>
+        <text x="1086" y="516" class="s-sub">the fix becomes a Technology Notes entry</text>
+
+        <!-- handbook bar labels -->
+        <text x="1800" y="262" class="s-lab">the relevant note</text><text x="1800" y="286" class="s-sub">its LINK field filled in</text>
+        <text x="1800" y="452" class="s-lab">a link between notes</text><text x="1800" y="476" class="s-sub">or a correction to one</text>
+        <text x="1800" y="642" class="s-lab">the note the lesson fits</text><text x="1800" y="666" class="s-sub">with a link back here</text>
+        <text x="1800" y="832" class="s-lab">a presentable copy</text><text x="1800" y="856" class="s-sub">generated from the text one</text>
+
+        <text x="40" y="942" class="s-note">Review clock · Questions every couple of weeks, one background question a week · Ideas once a month · Technology Notes occasionally · Diagrams redrawn after three months</text>
+      </svg>
+    </div>
+    <figcaption><b>Three things on this map matter more than any single station.</b> The two dashed connectors — a drawing that stops becomes a question, an answered blocker becomes a written entry — are what turn four files into one system. Stations 03, 09, 20 and 26 are where judgement happens, and they run on a clock rather than on mood. And every line ends at the same bar: the file is a staging area, the handbook is the destination.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every station on this sheet, and what it does</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Notice it</h4><p>Write the question the moment you notice it, even badly phrased. A rough question captured is worth ten good ones forgotten; you can sharpen it later, you cannot recover it.</p></div>
+      <div><h4><span>02</span>Phrase it precisely</h4><p>"I don't really get databases" is unanswerable and demoralising. "Why does an index on a foreign key sometimes make writes slower?" is a twenty-minute answer. The phrasing is most of the work.</p></div>
+      <div><h4><span>03</span>Blocking or background?</h4><p>Blocking means today's work cannot finish without it: answer now. Background means you would understand your systems better if you knew: answer deliberately, one a week.</p></div>
+      <div><h4><span>04</span>Answer in your own words</h4><p>Not a pasted quotation. If you cannot compress the answer into two sentences, you found it without understanding it — which is a different question, and goes back to 02.</p></div>
+      <div><h4><span>05</span>The Answered record</h4><p>ANSWERED, ANSWER, SOURCE, LINK. The Answered section is evidence of what you have learned, and it is worth re-reading.</p></div>
+      <div><h4><span>06</span>Thought I understood</h4><p>A table of I believed / Actually / Found out when. A corrected misunderstanding outranks a new fact, because the wrong belief was already shaping decisions.</p></div>
+      <div><h4><span>07</span>A handbook note</h4><p>The review asks which answered question deserves a handbook note. When one does, update the note and fill in the LINK field so the trail runs both ways.</p></div>
+      <div><h4><span>08</span>Capture</h4><p>Any idea, one line, unjudged, newest at the top, no structure. Written down, it stops interrupting you at work and returning at 2 a.m.</p></div>
+      <div><h4><span>09</span>The monthly read</h4><p>Read the list once a month and delete freely. An idea you have not wanted to start in three months is not one you want — deleting it is information, not failure.</p></div>
+      <div><h4><span>10</span>Worth a second look</h4><p>Promote at most one or two per review. Each gets three lines: why it keeps coming back, the smallest version, what would make it worth it. Sheet 3.</p></div>
+      <div><h4><span>11</span>A real task</h4><p>Anything you actually intend to do moves out of this file into a task built from the Task Template, with acceptance criteria.</p></div>
+      <div><h4><span>12</span>Started</h4><p>Ideas you acted on, with outcome and verdict. Keep the failures — they are the more useful half.</p></div>
+      <div><h4><span>13</span>Deliberately rejected</h4><p>An idea you decided against, with the reason and the date. This section exists to stop you re-litigating the same idea every year.</p></div>
+      <div><h4><span>14</span>Handbook fixes</h4><p>"Improvements to this handbook": notes to write, links to add, sections that turned out wrong. Kept apart from product ideas, and usually resolved with a link rather than a new note.</p></div>
+      <div><h4><span>15</span>Write it the same day</h4><p>The detail that makes a note useful — the exact error string, the wrong first assumption, the search that finally worked — is the detail you forget by tomorrow.</p></div>
+      <div><h4><span>16</span>The five-line entry</h4><p>DATE, CONTEXT, SYMPTOM, CAUSE, FIX, LESSON. Often five lines is the whole note. Sheet 4 cuts one open.</p></div>
+      <div><h4><span>17</span>Snippets I re-type</h4><p>Commands, queries and configuration you have looked up more than twice. Put them here instead of looking them up a fourth time.</p></div>
+      <div><h4><span>18</span>Version notes, dated</h4><p>Things true only for one version on one platform. The fastest-rotting section in the folder, and the one that is actively harmful when neglected.</p></div>
+      <div><h4><span>19</span>Stack defaults</h4><p>Small personal defaults, each with its reason. Anything that is a real architecture decision belongs in an ADR instead.</p></div>
+      <div><h4><span>20</span>Still true?</h4><p>The occasional review: delete what is no longer true, and notice which entry has now come up for the third time.</p></div>
+      <div><h4><span>21</span>Three times → a note</h4><p>An entry that keeps recurring belongs in a handbook note; a snippet that keeps being typed becomes a script, an alias, or a template in folder 16.</p></div>
+      <div><h4><span>22</span>Draw it from memory</h4><p>Reading a diagram is recognition and feels like understanding. Drawing one from memory is recall, and it stops exactly where your understanding does.</p></div>
+      <div><h4><span>23</span>The four diagrams</h4><p>Request path, data stores, trust boundaries, failure domains. The fourth is the one nobody draws and the one that changes decisions. Sheet 5.</p></div>
+      <div><h4><span>24</span>Annotate the constraint</h4><p>"DB primary" tells a reader nothing. "DB primary ◄── all writes; the real ceiling" tells them what the diagram is for. The labels should carry the argument.</p></div>
+      <div><h4><span>25</span>My systems</h4><p>One section per system, stamped LAST UPDATED, with a NOTES block. Update it in the same pull request that changes the system, or it drifts.</p></div>
+      <div><h4><span>26</span>Redraw after three months</h4><p>Redraw the same system from memory and compare it with the stored version. The genuine test of whether the understanding stuck.</p></div>
+      <div><h4><span>27</span>What I got wrong</h4><p>The column that is the whole exercise. Not knowing where something sits is a gap; believing it sits somewhere it does not is a defect in your mental model.</p></div>
+      <div><h4><span>28</span>The review prompt</h4><p>Which diagram is out of date? What exists exactly once? Which of the four is missing? Did what you could not draw reach Questions?</p></div>
+      <div><h4><span>A</span>Diagrams → Questions</h4><p>The point where a drawing stops — where TLS terminates, which component holds the session — goes straight into Questions. The stopping point is worth more than the finished drawing.</p></div>
+      <div><h4><span>B</span>Questions → Technology Notes</h4><p>A blocking question is deleted once answered, but only after the answer is written somewhere permanent. For a flag, an error or a config, that place is a Technology Notes entry.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Capture is not commitment</b>
+    <p>The value of every line on this sheet comes from writing things down without deciding anything about them. Deciding happens later, calmly, at the review stations. Collapse the two — capture only what you already intend to act on — and you have built a backlog, which does not free your attention the way an honest inbox does.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE QUESTION CIRCUIT ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Question Circuit</h2>
+    <span class="form">Closed circuit</span>
+    <span class="cov">Covers · Questions · Technology Notes · Diagrams</span>
+  </div>
+  <p class="thesis">The Questions file is a map of your own edges. One question travels six stations and ends as evidence; the circuit then starts again, because the list is never supposed to be empty. <strong>The expensive failure is not a wrong answer — it is the question that was never written down, and quietly turned into an area of the system you avoid.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 910" role="img" aria-label="A closed circuit of six stations for one question: notice it, phrase it precisely, decide which kind it is, answer it, compress the answer into two sentences, and record it in the Answered section, then back to noticing. To the right, a descending staircase shows the normal fate of a question never written down: half-understood, moved on, the gap becomes permanent, and six months later a whole area is avoided. Below that, two columns separate blocking questions, answered now, from background questions, answered one a week. Then an Answered record is shown filled in, with its date, answer, source and link. Along the bottom: the table of things I thought I understood, a batched list of questions to ask someone else, and the review checklist.">
+        <defs>
+          <marker id="u1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="u2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <!-- THE CIRCUIT -->
+        <text x="40" y="46" class="s-zone" fill="var(--line)">The circuit · one question, from noticed to evidence</text>
+        <g fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#u1)">
+          <path d="M408,177 A190,190 0 0,1 527,242"/>
+          <path d="M553,292 A190,190 0 0,1 553,428"/>
+          <path d="M527,478 A190,190 0 0,1 408,543"/>
+          <path d="M352,543 A190,190 0 0,1 233,478"/>
+          <path d="M207,428 A190,190 0 0,1 207,292"/>
+          <path d="M233,242 A190,190 0 0,1 352,177"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="3.5">
+          <circle cx="380" cy="170" r="26"/><circle cx="544" cy="265" r="26"/><circle cx="544" cy="455" r="26"/>
+          <circle cx="380" cy="550" r="26"/><circle cx="216" cy="455" r="26"/><circle cx="216" cy="265" r="26"/>
+        </g>
+        <g class="s-big" text-anchor="middle" style="fill:var(--line)">
+          <text x="380" y="176">01</text><text x="544" y="271">02</text><text x="544" y="461">03</text><text x="380" y="556">04</text><text x="216" y="461">05</text><text x="216" y="271">06</text>
+        </g>
+        <text x="380" y="100" text-anchor="middle" class="s-lab">notice it</text>
+        <g class="s-sub" text-anchor="middle"><text x="380" y="116">write it the moment it appears,</text><text x="380" y="130">even badly — you cannot recover it</text></g>
+        <text x="586" y="258" class="s-lab">phrase it precisely</text>
+        <g class="s-sub"><text x="586" y="276">a vague discomfort becomes</text><text x="586" y="290">a specific, answerable thing</text></g>
+        <text x="586" y="448" class="s-lab">which kind is it?</text>
+        <g class="s-sub"><text x="586" y="466">blocking → 07, answer now</text><text x="586" y="480">background → 08, one a week</text></g>
+        <text x="380" y="600" text-anchor="middle" class="s-lab">answer it</text>
+        <g class="s-sub" text-anchor="middle"><text x="380" y="616">read, test it, trace the code — or ask (11)</text><text x="380" y="630">the phrasing already did most of the work</text></g>
+        <text x="174" y="444" text-anchor="end" class="s-lab">compress it</text>
+        <g class="s-sub" text-anchor="end"><text x="174" y="462">two sentences, your own</text><text x="174" y="476">words. Can't? That is a</text><text x="174" y="490">new question → back to 01</text></g>
+        <text x="174" y="258" text-anchor="end" class="s-lab">record it</text>
+        <g class="s-sub" text-anchor="end"><text x="174" y="276">move it to Answered,</text><text x="174" y="290">dated, with its source</text><text x="174" y="304">— the card at 09</text></g>
+        <text x="380" y="350" text-anchor="middle" class="s-note" font-size="13">one lap per question</text>
+        <text x="380" y="370" text-anchor="middle" class="s-sub">the list should never be empty —</text>
+        <text x="380" y="384" text-anchor="middle" class="s-sub">if it is, you stopped noticing</text>
+
+        <text x="40" y="684" class="s-note">Blocking questions are answered and deleted. Background questions are answered and kept.</text>
+        <text x="40" y="702" class="s-sub">The first kind unblocks today. The second kind, one a week for a year, is what expertise actually is.</text>
+
+        <!-- THE NORMAL FATE -->
+        <rect x="800" y="40" width="570" height="260" fill="var(--band)"/>
+        <text x="816" y="64" class="s-zone" fill="var(--hazard)">The normal fate · a question never written down</text>
+        <g fill="none" stroke="var(--hazard)" stroke-width="2.5" stroke-dasharray="6 5">
+          <path d="M816,122 L816,166 L886,166" marker-end="url(#u2)"/>
+          <path d="M896,172 L896,216 L966,216" marker-end="url(#u2)"/>
+          <path d="M976,222 L976,266 L1046,266" marker-end="url(#u2)"/>
+        </g>
+        <g fill="var(--hazard)"><circle cx="816" cy="116" r="5"/><circle cx="896" cy="166" r="5"/><circle cx="976" cy="216" r="5"/><circle cx="1056" cy="266" r="5"/></g>
+        <text x="830" y="120" class="s-lab">you half-understand something</text><text x="830" y="136" class="s-sub">and it mostly works</text>
+        <text x="910" y="170" class="s-lab">you move on</text><text x="910" y="186" class="s-sub">no decision was ever made</text>
+        <text x="990" y="220" class="s-lab">the gap becomes permanent</text><text x="990" y="236" class="s-sub">and invisible, even to you</text>
+        <text x="1070" y="270" class="s-haz">you avoid a whole area</text><text x="1070" y="286" class="s-sub" style="fill:var(--hazard)">six months on, without deciding to</text>
+        <text x="1190" y="120" class="s-lab">Writing it down</text>
+        <g class="s-sub"><text x="1190" y="138">turns a vague discomfort</text><text x="1190" y="152">into something specific</text><text x="1190" y="166">enough to answer in twenty</text><text x="1190" y="180">minutes.</text></g>
+
+        <!-- TWO KINDS -->
+        <rect x="800" y="316" width="570" height="186" fill="var(--z1)"/>
+        <text x="816" y="340" class="s-zone" fill="var(--line)">Two kinds worth separating</text>
+        <text x="816" y="366" class="s-num">07</text><text x="842" y="366" class="s-lab">Blocking — answer now</text>
+        <g class="s-sub">
+          <text x="816" y="384">you cannot finish today's work without it</text>
+          <text x="816" y="398">answer it, then write down what you found</text>
+          <text x="816" y="412">delete it once the answer lives somewhere</text>
+          <text x="816" y="426">permanent — usually Technology Notes</text>
+        </g>
+        <line x1="1086" y1="354" x2="1086" y2="436" stroke="var(--rule)"/>
+        <text x="1100" y="366" class="s-num">08</text><text x="1126" y="366" class="s-lab">Background — deliberately</text>
+        <g class="s-sub">
+          <text x="1100" y="384">you'd understand your systems</text>
+          <text x="1100" y="398">better if you knew. Pick one a</text>
+          <text x="1100" y="412">week, note why it matters to you.</text>
+          <text x="1100" y="426">This is where expertise accumulates.</text>
+        </g>
+        <text x="816" y="462" class="s-haz" font-size="10.5">Empty background list? Then you have stopped noticing what you do not know.</text>
+        <text x="816" y="482" class="s-sub" font-size="10.5">Which blocking question did you work around instead of answering? That one comes back.</text>
+
+        <!-- ANSWERED RECORD -->
+        <rect x="800" y="520" width="570" height="190" fill="var(--z4)"/>
+        <text x="816" y="544" class="s-zone" fill="var(--fast)">09 · The Answered record — evidence, worth re-reading</text>
+        <rect x="816" y="558" width="538" height="118" fill="var(--paper)" stroke="var(--rule)"/>
+        <g class="s-mono" font-size="10">
+          <text x="828" y="578">## Why does p99 rise sharply above ~80% utilisation?</text>
+          <text x="828" y="596" fill="var(--line)">ANSWERED</text><text x="910" y="596">2026-05-14</text>
+          <text x="828" y="612" fill="var(--line)">ANSWER</text><text x="910" y="612">queue wait grows like u/(1−u): 4× the service time at 80%,</text>
+          <text x="910" y="626">9× at 90%. The median barely moves; the tail absorbs the queue.</text>
+          <text x="828" y="642" fill="var(--line)">SOURCE</text><text x="910" y="642">a queueing-theory chapter, then my own load test</text>
+          <text x="828" y="658" fill="var(--line)">LINK</text><text x="910" y="658">the handbook's performance note, updated with the curve</text>
+        </g>
+        <text x="816" y="698" class="s-sub">Answer in your own words, not a quotation — compression is the test of understanding.</text>
+
+        <!-- BOTTOM PANELS -->
+        <rect x="30" y="730" width="570" height="160" fill="var(--z3)"/>
+        <text x="46" y="754" class="s-zone" fill="var(--mute)">10 · Things I thought I understood</text>
+        <g class="s-lab" font-size="11"><text x="46" y="780">I believed</text><text x="230" y="780">Actually</text><text x="420" y="780">Found out when</text></g>
+        <line x1="46" y1="788" x2="584" y2="788" stroke="var(--rule)"/>
+        <g class="s-mono" font-size="10">
+          <text x="46" y="808">a Secret is encrypted</text><text x="230" y="808">base64: encoded only</text><text x="420" y="808">a manifest in review</text>
+          <text x="46" y="830">indexes only speed up</text><text x="230" y="830">writes maintain each one</text><text x="420" y="830">a bulk import slowed</text>
+        </g>
+        <text x="46" y="860" class="s-haz" font-size="10.5">A corrected belief is worth more than a new fact —</text>
+        <text x="46" y="874" class="s-haz" font-size="10.5">the wrong one was already shaping your decisions. Write it while it stings.</text>
+
+        <rect x="620" y="730" width="370" height="160" fill="var(--z2)"/>
+        <text x="636" y="754" class="s-zone" fill="var(--mute)">11 · Ask someone else, batched</text>
+        <text x="636" y="780" class="s-sub">Faster to ask than to research? Write down who,</text>
+        <text x="636" y="794" class="s-sub">and save them up instead of interrupting.</text>
+        <g class="s-mono" font-size="10">
+          <text x="636" y="818" fill="var(--line)">colleague</text><text x="736" y="818">where is the session TTL set?</text>
+          <text x="636" y="834" fill="var(--line)">maintainer</text><text x="736" y="834">is this flag still supported?</text>
+          <text x="636" y="850" fill="var(--line)">issue tracker</text><text x="736" y="850">has anyone hit this on ARM?</text>
+          <text x="636" y="866" fill="var(--line)">a model</text><text x="736" y="866">explain this error in context</text>
+        </g>
+
+        <rect x="1010" y="730" width="360" height="160" fill="var(--z1)"/>
+        <text x="1026" y="754" class="s-zone" fill="var(--line)">12 · Review, every two weeks</text>
+        <g class="s-sub">
+          <text x="1026" y="782">□ which blocker did I work around?</text>
+          <text x="1026" y="802">□ which background question is oldest?</text>
+          <text x="1026" y="822">□ which answer deserves a handbook note?</text>
+          <text x="1026" y="842">□ has anything moved into "thought I knew"?</text>
+          <text x="1026" y="862">□ is the list empty? then look harder</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption><b>The circuit is short; the first station is the hard one.</b> Everything after "notice it" is ordinary study. The staircase on the right is what happens instead when nothing is written down — no single step is a decision, which is exactly why the result feels like a personality trait rather than a gap you could close in an afternoon.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the stations and sections of Questions</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Notice it</h4><p>Capture the question the instant you notice it, however rough. The moment of noticing is unrepeatable; the phrasing can always be fixed later.</p></div>
+      <div><h4><span>02</span>Phrase it precisely</h4><p>Convert "I don't get X" into a question with a specific answer. This conversion is most of the value of the file, and it is why the file matters more than any note you will read.</p></div>
+      <div><h4><span>03</span>Which kind is it?</h4><p>Sort into blocking or background. The two lists have different clocks and different endings, so they must not share one.</p></div>
+      <div><h4><span>04</span>Answer it</h4><p>Read, test, trace the code, or ask. Faster-to-ask questions go to the batched list at 11 rather than becoming interruptions.</p></div>
+      <div><h4><span>05</span>Compress it</h4><p>Two sentences, in your own words. If it will not compress, you have found the answer without yet understanding it — write that down as a new question.</p></div>
+      <div><h4><span>06</span>Record it</h4><p>Move the question to Answered with its date and source. The Answered section is evidence, and re-reading it is a cheap form of revision.</p></div>
+      <div><h4><span>07</span>Blocking</h4><p>You cannot finish today's work without it. Answer now, write the answer somewhere permanent, then delete the question. Watch for the ones you worked around instead.</p></div>
+      <div><h4><span>08</span>Background</h4><p>Questions that would deepen your understanding of your own systems, each with a note on why it matters. Answer one a week. This list should never be empty.</p></div>
+      <div><h4><span>09</span>The Answered record</h4><p>ANSWERED date, ANSWER in one or two sentences, SOURCE where you found it, LINK to the handbook note you updated — if you updated one.</p></div>
+      <div><h4><span>10</span>Thought I understood</h4><p>I believed / Actually / Found out when. Deliberately uncomfortable, and the most useful section here: someone who tracks what they got wrong argues from evidence rather than confidence.</p></div>
+      <div><h4><span>11</span>Ask someone else</h4><p>Questions for a colleague, a maintainer, an issue tracker or a model, batched by person or place. Asking is a legitimate answer route, not a failure to research.</p></div>
+      <div><h4><span>12</span>The review</h4><p>Every couple of weeks: the worked-around blockers, the oldest background question (answer it or delete it honestly), the answers that deserve notes, and whether the list has gone empty.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The most valuable file in the handbook</b>
+    <p>Every other file on this atlas feeds this one: a diagram that stops, an error whose cause you never really understood, an idea you could not write a smallest version for. If you keep only one file in folder 17, keep this one — it is the only document anywhere that records where your own understanding ends.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — THE IDEA SIEVE ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Idea Sieve</h2>
+    <span class="form">Decision tree</span>
+    <span class="cov">Covers · Ideas · Questions</span>
+  </div>
+  <p class="thesis">Ideas enter at the top-left without judgement and are filtered on a monthly clock. Each gate removes most of what reaches it, and that is the design working. <strong>The one gate that matters is the smallest version: an idea with no afternoon-sized test is not ready to start, and finding that out costs one line instead of one month.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 870" role="img" aria-label="A decision tree for ideas. Top left, why capture matters: an uncaptured idea interrupts, returns at 2 a.m. and gets half-started. The tree starts at capture, station 1, and passes to a monthly read, station 2, where an idea is kept, left in capture for next month, or deleted at station 3. Kept ideas become worth a second look, station 4, from which some are deliberately rejected at station 11. Station 5 asks whether there is an afternoon-sized smallest version: if not, the idea is not understood yet; if so, it becomes a real task at station 6, is started at station 7, and station 8 asks whether it worked. If yes, station 9 records the verdict. If no, station 10 records the wall that stopped it. A filled-in second-look card is shown on the left. Along the bottom, a separate lane, station 12, collects improvements to the handbook, which are usually links rather than new notes.">
+        <defs>
+          <marker id="i1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="i2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="i3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <!-- WHY CAPTURE -->
+        <rect x="30" y="40" width="340" height="210" fill="var(--z5)"/>
+        <text x="46" y="64" class="s-zone" fill="var(--fast)">The point · an uncaptured idea</text>
+        <g class="s-sub">
+          <text x="46" y="90">· interrupts you while you work</text>
+          <text x="46" y="108">· comes back at 2 a.m.</text>
+          <text x="46" y="126">· gets half-started in a branch</text>
+          <text x="46" y="140">  and abandoned</text>
+        </g>
+        <text x="46" y="166" class="s-note">Written down, it stops demanding</text>
+        <text x="46" y="182" class="s-note">attention — and can be judged calmly.</text>
+        <text x="46" y="210" class="s-haz" font-size="10.5">Capture is not commitment. A list of only</text>
+        <text x="46" y="224" class="s-haz" font-size="10.5">ideas you intend to build is a backlog.</text>
+
+        <text x="400" y="40" class="s-zone" fill="var(--fast)">The sieve · most ideas should die here, not in a repository</text>
+
+        <!-- 01 capture -->
+        <rect x="400" y="100" width="190" height="100" fill="var(--z2)" stroke="var(--rule)"/>
+        <text x="412" y="122" class="s-num">01</text><text x="440" y="122" class="s-lab">Capture</text>
+        <g class="s-sub"><text x="412" y="142">anything, one line, unjudged</text><text x="412" y="156">newest at the top</text><text x="412" y="170">no structure required</text><text x="412" y="186">judged later — never now</text></g>
+        <path d="M590,150 L634,150" fill="none" stroke="var(--fast)" stroke-width="3" marker-end="url(#i1)"/>
+
+        <!-- 02 monthly read -->
+        <polygon points="700,95 760,150 700,205 640,150" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="700" y="146" text-anchor="middle" class="s-num">02</text>
+        <text x="700" y="162" text-anchor="middle" class="s-lab" font-size="10.5">keep?</text>
+        <path d="M700,95 C700,62 495,62 495,96" fill="none" stroke="var(--fast)" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#i1)"/>
+        <text x="598" y="56" text-anchor="middle" class="s-sub">not sure yet — it stays in Capture for next month</text>
+        <text x="766" y="142" class="s-sub">yes</text>
+        <text x="708" y="236" class="s-sub">no</text>
+        <path d="M760,150 L816,150" fill="none" stroke="var(--fast)" stroke-width="3" marker-end="url(#i1)"/>
+        <path d="M700,205 L700,256" fill="none" stroke="var(--hazard)" stroke-width="3" marker-end="url(#i2)"/>
+
+        <!-- 03 delete -->
+        <rect x="610" y="260" width="180" height="76" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="622" y="282" class="s-num">03</text><text x="648" y="282" class="s-haz">Delete it</text>
+        <g class="s-sub"><text x="622" y="300">unwanted for three months</text><text x="622" y="314">is information, not failure</text><text x="622" y="328">— no guilt</text></g>
+
+        <!-- 04 second look -->
+        <rect x="820" y="90" width="270" height="120" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="832" y="112" class="s-num">04</text><text x="858" y="112" class="s-lab">Worth a second look</text>
+        <g class="s-sub"><text x="832" y="132">at most one or two a month,</text><text x="832" y="146">each with three lines:</text></g>
+        <g class="s-mono" font-size="10" style="fill:var(--fast)"><text x="832" y="166">WHY IT KEEPS COMING BACK</text><text x="832" y="180">SMALLEST VERSION</text><text x="832" y="194">WHAT WOULD MAKE IT WORTH IT</text></g>
+        <path d="M1090,150 L1106,150" fill="none" stroke="var(--fast)" stroke-width="3" marker-end="url(#i1)"/>
+        <path d="M955,210 L955,258" fill="none" stroke="var(--hazard)" stroke-width="3" marker-end="url(#i2)"/>
+
+        <!-- 11 rejected -->
+        <rect x="830" y="262" width="210" height="76" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="842" y="284" class="s-num">11</text><text x="868" y="284" class="s-haz">Deliberately rejected</text>
+        <g class="s-sub"><text x="842" y="302">with the reason and the date,</text><text x="842" y="316">so it is not re-argued every</text><text x="842" y="330">year</text></g>
+
+        <!-- 05 smallest version -->
+        <polygon points="1170,95 1230,150 1170,205 1110,150" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="1170" y="146" text-anchor="middle" class="s-num">05</text>
+        <text x="1170" y="162" text-anchor="middle" class="s-lab" font-size="10.5">testable?</text>
+        <text x="1170" y="80" text-anchor="middle" class="s-lab">an afternoon-sized version?</text>
+        <path d="M1170,205 L1170,256" fill="none" stroke="var(--line)" stroke-width="3" marker-end="url(#i3)"/>
+        <text x="1178" y="236" class="s-sub">no</text>
+        <rect x="1060" y="260" width="220" height="76" fill="var(--band)" stroke="var(--rule)"/>
+        <text x="1072" y="282" class="s-lab">No: not understood yet</text>
+        <g class="s-sub"><text x="1072" y="300">worth knowing before a month</text><text x="1072" y="314">goes into it — sharpen it, or</text><text x="1072" y="328">write a question (sheet 2)</text></g>
+        <path d="M1230,150 L1320,150 L1320,396" fill="none" stroke="var(--fast)" stroke-width="3" marker-end="url(#i1)"/>
+        <text x="1244" y="142" class="s-sub">yes</text>
+
+        <!-- 06 task -->
+        <rect x="1130" y="400" width="240" height="110" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="1142" y="422" class="s-num">06</text><text x="1168" y="422" class="s-lab">A real task</text>
+        <g class="s-sub"><text x="1142" y="442">Task Template, folder 16,</text><text x="1142" y="456">with acceptance criteria —</text><text x="1142" y="470">only for what you actually</text><text x="1142" y="484">intend to do</text></g>
+        <path d="M1130,455 L1054,455" fill="none" stroke="var(--fast)" stroke-width="3" marker-end="url(#i1)"/>
+
+        <!-- 07 started -->
+        <rect x="850" y="400" width="200" height="110" fill="var(--z3)" stroke="var(--rule)"/>
+        <text x="862" y="422" class="s-num">07</text><text x="888" y="422" class="s-lab">Started</text>
+        <g class="s-sub"><text x="862" y="442">record the outcome and a</text><text x="862" y="456">verdict — including the</text><text x="862" y="470">ones that failed, which</text><text x="862" y="484">are the more useful half</text></g>
+        <path d="M850,455 L799,455" fill="none" stroke="var(--fast)" stroke-width="3" marker-end="url(#i1)"/>
+
+        <!-- 08 did it work -->
+        <polygon points="740,400 795,455 740,510 685,455" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="740" y="451" text-anchor="middle" class="s-num">08</text>
+        <text x="740" y="467" text-anchor="middle" class="s-lab" font-size="10.5">worked?</text>
+        <text x="740" y="390" text-anchor="middle" class="s-lab">did it work?</text>
+        <path d="M685,455 L644,455" fill="none" stroke="var(--fast)" stroke-width="3" marker-end="url(#i1)"/>
+        <text x="652" y="446" class="s-sub">yes</text>
+        <path d="M740,510 L740,556" fill="none" stroke="var(--hazard)" stroke-width="3" marker-end="url(#i2)"/>
+        <text x="748" y="540" class="s-sub">no</text>
+
+        <!-- 09 worked -->
+        <rect x="420" y="400" width="220" height="110" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <text x="432" y="422" class="s-num">09</text><text x="458" y="422" class="s-lab">It worked</text>
+        <g class="s-sub"><text x="432" y="442">the verdict and outcome stay</text><text x="432" y="456">in the Started table; a real</text><text x="432" y="470">design choice gets an ADR,</text><text x="432" y="484">not a line in this file</text></g>
+
+        <!-- 10 the wall -->
+        <rect x="600" y="560" width="300" height="100" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="612" y="582" class="s-num">10</text><text x="638" y="582" class="s-haz">It didn't — record the wall</text>
+        <g class="s-sub"><text x="612" y="600">"Tried it; the API rate limit makes</text><text x="612" y="614">it useless" is a permanently</text><text x="612" y="628">valuable sentence. Without it, the</text><text x="612" y="642">same idea returns in 18 months.</text></g>
+
+        <!-- CARD -->
+        <rect x="30" y="270" width="370" height="330" fill="var(--z4)"/>
+        <text x="46" y="294" class="s-zone" fill="var(--fast)">04 · One card, filled in</text>
+        <g class="s-mono" font-size="10">
+          <text x="46" y="320">## CI fails if a new external call</text>
+          <text x="46" y="334">   has no timeout</text>
+          <text x="46" y="356" fill="var(--fast)">WHY IT KEEPS COMING BACK</text>
+          <text x="46" y="370">two incidents this year were a hung</text>
+          <text x="46" y="384">HTTP call left on its default timeout</text>
+          <text x="46" y="406" fill="var(--fast)">SMALLEST VERSION</text>
+          <text x="46" y="420">a grep in CI for client calls with no</text>
+          <text x="46" y="434">timeout argument — one afternoon</text>
+          <text x="46" y="456" fill="var(--fast)">WHAT WOULD MAKE IT WORTH IT</text>
+          <text x="46" y="470">it catches one real call in a month</text>
+        </g>
+        <text x="46" y="500" class="s-note">The smallest-version line is what stops</text>
+        <text x="46" y="516" class="s-note">an idea becoming a project.</text>
+        <g class="s-sub"><text x="46" y="540">Can't write one? The idea is not understood</text><text x="46" y="554">well enough to start — useful to know before</text><text x="46" y="568">committing a month to it.</text></g>
+
+        <!-- 12 HANDBOOK LANE -->
+        <rect x="30" y="690" width="1340" height="160" fill="var(--z6)"/>
+        <text x="46" y="714" class="s-zone" fill="var(--learn)">12 · A separate lane · improvements to this handbook, never mixed with product ideas</text>
+        <rect x="46" y="730" width="300" height="60" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="58" y="752" class="s-lab">□ a note that is missing</text><text x="58" y="770" class="s-sub">write it — the rarer fix</text>
+        <rect x="366" y="730" width="300" height="60" fill="var(--paper)" stroke="var(--learn)" stroke-width="2"/>
+        <text x="378" y="752" class="s-lab">□ two notes that should link</text><text x="378" y="770" class="s-sub">the most valuable fix, almost always</text>
+        <rect x="686" y="730" width="300" height="60" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="698" y="752" class="s-lab">□ something that turned out wrong</text><text x="698" y="770" class="s-sub">fix the note; log the belief on sheet 2 · 10</text>
+        <circle cx="1070" cy="760" r="9" fill="var(--paper)" stroke="var(--learn)" stroke-width="2.5"/>
+        <text x="1070" y="796" text-anchor="middle" class="s-sub">a file</text>
+        <g stroke="var(--learn)" stroke-width="2"><line x1="1260" y1="765" x2="1196" y2="760"/><line x1="1260" y1="765" x2="1324" y2="760"/><line x1="1260" y1="765" x2="1260" y2="734"/></g>
+        <g fill="var(--paper)" stroke="var(--learn)" stroke-width="2.5"><circle cx="1196" cy="760" r="7"/><circle cx="1324" cy="760" r="7"/><circle cx="1260" cy="734" r="7"/><circle cx="1260" cy="765" r="9"/></g>
+        <text x="1260" y="796" text-anchor="middle" class="s-sub">part of a map</text>
+        <text x="46" y="830" class="s-note">The handbook's value grows with connections: a note that sits unlinked is a file, while a note reachable from three others is part of a map.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the tree as a set of cheap exits.</b> Delete at 03 costs nothing, rejection at 11 costs one line, "not understood yet" at 05 costs an afternoon of thinking, and the wall at 10 is recorded so it is only ever hit once. The only expensive path is the one where an idea skips every gate and goes straight from a 2 a.m. thought to a branch.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the gates and sections of Ideas</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Capture</h4><p>Anything, in one line, unjudged, newest at the top. The only rule is that nothing is decided here — capture exists to free your attention, not to plan.</p></div>
+      <div><h4><span>02</span>The monthly read</h4><p>Read the whole list once a month. Delete what no longer interests you, leave what you are unsure of, promote at most one or two.</p></div>
+      <div><h4><span>03</span>Delete it</h4><p>An idea you have not wanted to start in three months is not one you want. Most ideas look worse after a month, which is exactly what you needed to find out before spending a weekend.</p></div>
+      <div><h4><span>04</span>Worth a second look</h4><p>Ideas that survived at least one review, each written up as WHY IT KEEPS COMING BACK, SMALLEST VERSION and WHAT WOULD MAKE IT WORTH IT.</p></div>
+      <div><h4><span>05</span>The smallest version</h4><p>Almost every idea has a version that takes an afternoon and answers the interesting question. If you cannot name one, the idea is not understood well enough to start.</p></div>
+      <div><h4><span>06</span>A real task</h4><p>Anything you actually intend to do leaves this file and becomes a task, written from the Task Template in folder 16, with acceptance criteria.</p></div>
+      <div><h4><span>07</span>Started</h4><p>A table of Idea / Started / Outcome / Verdict for everything you acted on. Keeping the failures is the point; they are the more useful half.</p></div>
+      <div><h4><span>08</span>Did it work?</h4><p>Decide the verdict honestly, against the "what would make it worth it" condition written at 04 — not against how much effort went in.</p></div>
+      <div><h4><span>09</span>It worked</h4><p>Record the verdict. When the result is a design choice other people must live with, the reasoning belongs in an Architecture Decision Record, not here.</p></div>
+      <div><h4><span>10</span>Record the wall</h4><p>Write down what stopped it. Without that sentence you will have the same idea in eighteen months and rediscover the same wall.</p></div>
+      <div><h4><span>11</span>Deliberately rejected</h4><p>"&lt;idea&gt; — rejected because &lt;reason&gt;, &lt;date&gt;." A decision recorded once, so it is not re-litigated annually.</p></div>
+      <div><h4><span>12</span>Improvements to this handbook</h4><p>Missing notes, missing links, sections that turned out wrong — kept apart from product ideas. The most valuable improvement is almost always a link, not a new note.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — ANATOMY OF A NOTE ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>Anatomy of a Note</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · Technology Notes · Questions · Ideas</span>
+  </div>
+  <p class="thesis">The handbook holds the reasoning; this file holds the things you can only learn by doing — the flag, the error string, the version that breaks. <strong>Specifics are worth the most on the afternoon they are discovered and rot fastest afterwards, so the whole design of this file is: write it immediately, date it, and move it out the moment it stops being specific.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A cutaway of one Technology Notes entry about a Docker build cache being invalidated on every build, with its six fields numbered: date, context, symptom, cause, fix and lesson. To the right, a comparison of what belongs in this file, specifics, against what belongs in the handbook, reasoning. Below left, a bar chart of how much detail survives if the note is written the same afternoon, the next day, a week later or a month later. Below right, a snippet card with a reusable query. Along the bottom, the dated version notes table with one stale row struck through, personal stack defaults as distinct from architecture decisions, and the review rules for when an entry is deleted or promoted.">
+        <defs>
+          <marker id="n1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <!-- CUTAWAY -->
+        <rect x="30" y="40" width="730" height="380" fill="var(--z3)"/>
+        <text x="46" y="64" class="s-zone" fill="var(--mute)">The cutaway · one entry, five lines, written the same afternoon</text>
+        <rect x="46" y="80" width="420" height="246" fill="var(--paper)" stroke="var(--cool)" stroke-width="2"/>
+        <text x="58" y="104" class="s-mono" font-size="10.5">## Docker — build cache invalidated every build</text>
+        <line x1="58" y1="114" x2="454" y2="114" stroke="var(--rule)"/>
+        <g class="s-mono" font-size="10.5">
+          <text x="58" y="134" fill="var(--cool)">DATE</text><text x="140" y="134">2026-04-11</text>
+          <text x="58" y="160" fill="var(--cool)">CONTEXT</text><text x="140" y="160">builds took 3 min for a one-line change</text>
+          <text x="58" y="186" fill="var(--cool)">SYMPTOM</text><text x="140" y="186">`npm ci` re-ran on every build, with</text>
+          <text x="140" y="200">no dependency changes at all</text>
+          <text x="58" y="226" fill="var(--cool)">CAUSE</text><text x="140" y="226">`COPY . .` came BEFORE `RUN npm ci`,</text>
+          <text x="140" y="240">so any source change busted the layer</text>
+          <text x="58" y="266" fill="var(--cool)">FIX</text><text x="140" y="266">copy package*.json, install, then rest</text>
+          <text x="58" y="292" fill="var(--cool)">LESSON</text><text x="140" y="292">order least → most frequently changed</text>
+          <text x="140" y="306">→ 13 DevOps and Delivery / Docker §5</text>
+        </g>
+        <g stroke="var(--cool)" stroke-width="1.5"><line x1="466" y1="130" x2="474" y2="130"/><line x1="466" y1="156" x2="474" y2="156"/><line x1="466" y1="186" x2="474" y2="186"/><line x1="466" y1="226" x2="474" y2="226"/><line x1="466" y1="262" x2="474" y2="262"/><line x1="466" y1="292" x2="474" y2="292"/></g>
+        <g class="s-num"><text x="478" y="134">01</text><text x="478" y="160">02</text><text x="478" y="190">03</text><text x="478" y="230">04</text><text x="478" y="266">05</text><text x="478" y="296">06</text></g>
+        <g class="s-lab" font-size="11.5">
+          <text x="500" y="134">DATE</text>
+          <text x="500" y="160">CONTEXT · the goal</text>
+          <text x="500" y="190">SYMPTOM · exact error text</text>
+          <text x="500" y="230">CAUSE · what it actually was</text>
+          <text x="500" y="266">FIX · the thing that worked</text>
+          <text x="500" y="296">LESSON · the general form</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="600" y="134">— so its age is visible</text>
+          <text x="500" y="173">what I was trying to do</text>
+          <text x="500" y="203">copied, not paraphrased — searchable</text>
+          <text x="500" y="243">including the wrong first assumption</text>
+          <text x="500" y="279">the command, flag or config</text>
+          <text x="500" y="309">if there is one — and where it links</text>
+        </g>
+        <text x="46" y="352" class="s-note">Write the thing you would have wanted to read three hours ago.</text>
+        <text x="46" y="372" class="s-sub">Nobody else could have written these notes for you — which is exactly why they save the most time.</text>
+        <text x="46" y="396" class="s-sub">Keep it short: a useful note is often five lines, and the LESSON line is the only one that may outlive the rest.</text>
+
+        <!-- 07 THIS FILE VS HANDBOOK -->
+        <rect x="780" y="40" width="590" height="380" fill="var(--z1)"/>
+        <text x="796" y="64" class="s-zone" fill="var(--line)">07 · Two kinds of knowledge, two places</text>
+        <text x="796" y="94" class="s-lab">THIS FILE · specifics</text>
+        <text x="1090" y="94" class="s-lab">THE HANDBOOK · reasoning</text>
+        <line x1="1074" y1="80" x2="1074" y2="256" stroke="var(--rule)"/>
+        <line x1="796" y1="104" x2="1354" y2="104" stroke="var(--rule)"/>
+        <g class="s-sub">
+          <text x="796" y="124">the flag that took two hours to find</text><text x="1090" y="124">what it is and why it exists</text>
+          <text x="796" y="150">"this breaks on Windows"</text><text x="1090" y="150">where it sits in an architecture</text>
+          <text x="796" y="176">our config, and why</text><text x="1090" y="176">when not to use it</text>
+          <text x="796" y="202">the error message, and what it</text><text x="1090" y="202">the trade-offs</text>
+          <text x="796" y="216">actually meant</text>
+        </g>
+        <text x="796" y="246" class="s-haz" font-size="10.5">ages in months — date it, prune it</text>
+        <text x="1090" y="246" class="s-note" font-size="10.5">ages in years — link to it</text>
+        <text x="796" y="284" class="s-lab">The graduation rule</text>
+        <text x="796" y="302" class="s-sub">An entry that comes up three times is no longer a specific. It is a</text>
+        <text x="796" y="316" class="s-sub">pattern, and patterns belong in the handbook, with a link back here.</text>
+        <text x="796" y="344" class="s-note">Handbook notes are about reasoning and age slowly;</text>
+        <text x="796" y="360" class="s-note">these are about specifics and save the most time.</text>
+        <text x="796" y="390" class="s-sub">The LESSON field is the bridge: it is the one line already written in the handbook's voice.</text>
+
+        <!-- 08 HALF-LIFE -->
+        <rect x="30" y="440" width="730" height="212" fill="var(--z5)"/>
+        <text x="46" y="464" class="s-zone" fill="var(--fast)">08 · Write it the same day · what survives, by when</text>
+        <g class="s-lab" font-size="11" text-anchor="end"><text x="190" y="505">same afternoon</text><text x="190" y="541">the next day</text><text x="190" y="577">a week later</text><text x="190" y="613">a month later</text></g>
+        <rect x="200" y="490" width="240" height="20" fill="var(--line)" opacity=".8"/>
+        <rect x="200" y="526" width="160" height="20" fill="var(--line)" opacity=".6"/>
+        <rect x="200" y="562" width="70" height="20" fill="var(--fast)" opacity=".7"/>
+        <rect x="200" y="598" width="20" height="20" fill="var(--hazard)" opacity=".7"/>
+        <g class="s-sub"><text x="452" y="505">the error string, the wrong guess, the search</text><text x="372" y="541">the fix, roughly — not the exact error text</text><text x="282" y="577">a summary: "something about the cache"</text><text x="232" y="613">"I fixed this once, I think…"</text></g>
+        <text x="46" y="640" class="s-note">A note written a week later is a summary; a note written the same afternoon is a solution.</text>
+
+        <!-- 09 SNIPPETS -->
+        <rect x="780" y="440" width="590" height="212" fill="var(--z2)"/>
+        <text x="796" y="464" class="s-zone" fill="var(--mute)">09 · Snippets · looked up more than twice</text>
+        <rect x="796" y="478" width="558" height="96" fill="var(--paper)" stroke="var(--rule)"/>
+        <g class="s-mono" font-size="10.5">
+          <text x="808" y="498" fill="var(--line)">postgres</text>
+          <text x="808" y="516">SELECT query, calls, mean_exec_time FROM pg_stat_statements</text>
+          <text x="808" y="532">ORDER BY total_exec_time DESC LIMIT 3;</text>
+          <text x="808" y="556" fill="var(--mute)">    → the three queries worth fixing; run it before any tuning</text>
+        </g>
+        <text x="796" y="600" class="s-lab">When a snippet graduates</text>
+        <text x="796" y="618" class="s-sub">Looked up yet again → it becomes a script, an alias, or a template in folder 16.</text>
+        <text x="796" y="640" class="s-note">The best snippet is the one you never type again.</text>
+
+        <!-- 10 VERSION NOTES -->
+        <rect x="30" y="672" width="480" height="190" fill="var(--band)"/>
+        <text x="46" y="696" class="s-zone" fill="var(--hazard)">10 · Version notes · dated, or harmful</text>
+        <g class="s-lab" font-size="11"><text x="46" y="722">Technology</text><text x="150" y="722">Version</text><text x="226" y="722">Note</text><text x="420" y="722">Date</text></g>
+        <line x1="46" y1="730" x2="494" y2="730" stroke="var(--rule)"/>
+        <g class="s-mono" font-size="10">
+          <text x="46" y="750">Python</text><text x="150" y="750">3.12</text><text x="226" y="750">distutils removed — old</text><text x="420" y="750">2026-03</text>
+          <text x="226" y="764">setup.py builds fail</text>
+          <text x="46" y="788">client lib</text><text x="150" y="788">2.1</text><text x="226" y="788">retry option ignored</text><text x="420" y="788">2024-09</text>
+        </g>
+        <line x1="46" y1="784" x2="480" y2="784" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="46" y="808" class="s-haz" font-size="10.5">true once; you upgraded past it a year ago — it now costs someone an hour</text>
+        <text x="46" y="832" class="s-sub">The one section that is actively harmful when neglected.</text>
+        <text x="46" y="848" class="s-sub">Date every entry; delete the ones that are no longer true.</text>
+
+        <!-- 11 STACK DEFAULTS -->
+        <rect x="530" y="672" width="380" height="190" fill="var(--z3)"/>
+        <text x="546" y="696" class="s-zone" fill="var(--mute)">11 · My stack defaults</text>
+        <g class="s-mono" font-size="10">
+          <text x="546" y="722">· UTC everywhere — one less bug class</text>
+          <text x="546" y="740">· Postgres first — until it can't</text>
+          <text x="546" y="758">· one formatter, zero style debates</text>
+        </g>
+        <text x="546" y="790" class="s-lab" font-size="11">Not an architecture decision</text>
+        <text x="546" y="808" class="s-sub">Anything a team must live with, or that is</text>
+        <text x="546" y="822" class="s-sub">costly to reverse, goes in an ADR (folder 16).</text>
+        <text x="546" y="848" class="s-note">Small, personal, and reversible by you alone.</text>
+
+        <!-- 12 REVIEW -->
+        <rect x="930" y="672" width="440" height="190" fill="var(--z1)"/>
+        <text x="946" y="696" class="s-zone" fill="var(--line)">12 · The review · where entries leave</text>
+        <g class="s-sub"><text x="946" y="724">no longer true</text><text x="946" y="750">came up three times</text><text x="946" y="776">snippet typed again</text><text x="946" y="802">a lesson generalises</text></g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#n1)"><path d="M1096,720 L1122,720"/><path d="M1096,746 L1122,746"/><path d="M1096,772 L1122,772"/><path d="M1096,798 L1122,798"/></g>
+        <g class="s-lab" font-size="11"><text x="1132" y="724">delete it</text><text x="1132" y="750">a handbook note</text><text x="1132" y="776">script · alias · folder 16</text><text x="1132" y="802">the note + a link back</text></g>
+        <text x="946" y="840" class="s-note">Nothing in this file is meant to stay forever.</text>
+      </svg>
+    </div>
+    <figcaption><b>Two clocks run on every entry.</b> The capture clock is measured in hours: after a day the exact error text is gone, after a week only a summary remains. The rot clock is measured in versions: a note that was true for 2.1 becomes a trap after the upgrade. Writing the same day beats the first; dating and pruning beats the second.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the fields and sections of Technology Notes</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Date</h4><p>When the entry was written. Makes its age visible at a glance, which matters because specifics expire and nobody re-verifies an undated note.</p></div>
+      <div><h4><span>02</span>Context</h4><p>What you were trying to do. Without it, a fix is unreadable six months later — you cannot tell whether your situation is the same one.</p></div>
+      <div><h4><span>03</span>Symptom</h4><p>What happened, including the exact error text. The exact string is what makes the note findable by search the next time it appears.</p></div>
+      <div><h4><span>04</span>Cause</h4><p>What it actually was — usually not what you first assumed. Writing down the wrong first assumption is part of the value.</p></div>
+      <div><h4><span>05</span>Fix</h4><p>The command, flag or config that worked, precisely enough to paste. "Changed the Dockerfile" is not a fix; the reordered instructions are.</p></div>
+      <div><h4><span>06</span>Lesson</h4><p>The general form, if there is one, with a pointer to the handbook note it belongs to — such as the Docker note in 13 DevOps and Delivery.</p></div>
+      <div><h4><span>07</span>This file vs the handbook</h4><p>Handbook notes explain what a technology is, where it sits and its trade-offs; they age slowly. This file holds the flag, the platform quirk and the error meaning; it ages fast and saves the most time.</p></div>
+      <div><h4><span>08</span>Write it the same day</h4><p>The detail that makes the note useful is the one gone by tomorrow. A note written a week later is a summary; written the same afternoon, it is a solution.</p></div>
+      <div><h4><span>09</span>Snippets I keep re-typing</h4><p>Commands, queries and configuration looked up more than twice, each with what it does and when. Candidates for a script, an alias or a template.</p></div>
+      <div><h4><span>10</span>Version and environment notes</h4><p>Technology, version, note, date. The fastest-rotting section: date every row, and delete any note about a version you have upgraded past.</p></div>
+      <div><h4><span>11</span>My stack defaults</h4><p>Small personal defaults with their reasons. Not architecture decisions — anything with that weight belongs in an Architecture Decision Record.</p></div>
+      <div><h4><span>12</span>The review</h4><p>Delete what is no longer true; promote an entry seen three times to a handbook note; turn a re-typed snippet into a script or folder-16 template; add a generalising lesson to its note and link back.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>A stale note is worse than no note</b>
+    <p>A note claiming a bug exists in a version you upgraded past a year ago will cost someone — probably you — an hour of confusion, and it will be believed precisely because you wrote it. Undated specifics are the one thing in this folder that does active harm.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — DRAWING FROM MEMORY ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>Drawing From Memory</h2>
+    <span class="form">Survey plate</span>
+    <span class="cov">Covers · Diagrams · Questions</span>
+  </div>
+  <p class="thesis">Your own drawings of systems you actually work on, in plain text, kept next to the code they describe. <strong>Drawing from memory is the fastest way to discover what you do not understand, and the diagram that changes decisions is the one nobody draws: everything that exists exactly once.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 940" role="img" aria-label="A survey plate for personal diagrams. Top left, recognition against recall: reading a diagram gives a full bar of apparent understanding, while drawing from memory stops partway, and that stopping point goes to Questions. Below it, predict then verify, and why plain text beats a drawing tool. In the centre, one request path drawn in the house symbols: internet, a CDN operated by someone else, a load balancer across two zones, three stateless app instances, a single-node Redis holding sessions, a queue feeding a single worker across the synchronous and asynchronous boundary, and a database primary with a synchronous standby annotated as the real ceiling. A trust boundary line crosses below the CDN, and the single points of failure are circled. Beneath it, the NOTES block. On the right, the four diagrams worth having and a symbols legend. Along the bottom, a log of diagrams drawn from memory with what I got wrong, and the review checklist.">
+        <defs>
+          <marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/></marker>
+        </defs>
+
+        <!-- 01 RECALL -->
+        <rect x="30" y="40" width="370" height="220" fill="var(--z1)"/>
+        <text x="46" y="64" class="s-zone" fill="var(--line)">01 · Recognition is not recall</text>
+        <text x="46" y="92" class="s-lab">reading a diagram</text>
+        <rect x="46" y="100" width="320" height="18" fill="var(--line)" opacity=".35"/>
+        <text x="46" y="134" class="s-sub">recognition — it feels like understanding</text>
+        <text x="46" y="162" class="s-lab">drawing it from memory</text>
+        <rect x="46" y="170" width="150" height="18" fill="var(--fast)" opacity=".8"/>
+        <rect x="196" y="170" width="170" height="18" fill="none" stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text x="206" y="184" class="s-haz" font-size="10.5">stops here → Questions</text>
+        <text x="46" y="204" class="s-sub">recall — every gap shows immediately</text>
+        <text x="46" y="230" class="s-note">The stopping point is worth more</text>
+        <text x="46" y="246" class="s-note">than the finished diagram.</text>
+
+        <rect x="30" y="276" width="370" height="164" fill="var(--z3)"/>
+        <text x="46" y="300" class="s-zone" fill="var(--mute)">Predict, then verify</text>
+        <g class="s-sub"><text x="46" y="326">Draw the system before reading its code,</text><text x="46" y="340">then check the drawing against the code.</text></g>
+        <text x="46" y="366" class="s-lab">Where you predicted wrongly</text>
+        <g class="s-sub"><text x="46" y="384">is where your mental model has been</text><text x="46" y="398">quietly misleading you — and predicting</text><text x="46" y="412">first forms far stronger memory than</text><text x="46" y="426">tracing the code first.</text></g>
+
+        <!-- 15 PLAIN TEXT -->
+        <rect x="30" y="456" width="370" height="264" fill="var(--z5)"/>
+        <text x="46" y="480" class="s-zone" fill="var(--fast)">15 · Why plain text</text>
+        <text x="46" y="506" class="s-lab">ASCII in a Markdown file</text>
+        <g class="s-sub"><text x="46" y="524">✓ diffs in Git — changes are visible</text><text x="46" y="538">✓ readable everywhere, forever, no tool</text><text x="46" y="552">✓ fast to edit, so it stays up to date</text></g>
+        <text x="46" y="566" class="s-haz" font-size="10.5">✗ ugly</text>
+        <text x="46" y="592" class="s-lab">A drawing tool</text>
+        <text x="46" y="610" class="s-sub">✓ pretty</text>
+        <text x="46" y="624" class="s-haz" font-size="10.5">✗ a binary file nobody can diff</text>
+        <text x="46" y="638" class="s-haz" font-size="10.5">✗ stale within a month — editing is a chore</text>
+        <text x="46" y="666" class="s-note">Ugly and correct beats beautiful</text>
+        <text x="46" y="682" class="s-note">and six months stale.</text>
+        <text x="46" y="704" class="s-sub">Need it presentable? Generate that from this one.</text>
+
+        <!-- CENTRE: THE SURVEY -->
+        <rect x="420" y="40" width="580" height="680" fill="var(--z2)"/>
+        <text x="436" y="64" class="s-zone" fill="var(--mute)">02 · A request path, drawn in the house symbols</text>
+        <text x="436" y="86" class="s-mono">## Main application</text>
+        <text x="600" y="86" class="s-mono" style="fill:var(--line)">LAST UPDATED 2026-05-02</text>
+        <text x="770" y="86" class="s-num">12</text>
+
+        <text x="660" y="110" text-anchor="middle" class="s-sub">internet</text>
+        <g stroke="var(--ink)" stroke-width="2" fill="none" marker-end="url(#m1)">
+          <path d="M660,116 L660,138"/>
+          <path d="M660,178 L660,202"/>
+          <path d="M520,256 L520,268"/><path d="M660,256 L660,268"/><path d="M800,256 L800,268"/>
+          <path d="M560,322 L560,338"/><path d="M760,322 L760,338"/>
+          <path d="M660,322 L660,424"/>
+          <path d="M560,460 L560,494"/>
+        </g>
+        <g stroke="var(--ink)" stroke-width="2" fill="none">
+          <path d="M660,242 L660,256"/><path d="M520,256 L800,256"/>
+          <path d="M520,306 L520,322"/><path d="M660,306 L660,322"/><path d="M800,306 L800,322"/><path d="M520,322 L800,322"/>
+        </g>
+
+        <rect x="580" y="142" width="160" height="36" rx="18" fill="var(--paper)" stroke="var(--mute)" stroke-width="2" stroke-dasharray="6 4"/>
+        <text x="660" y="165" text-anchor="middle" class="s-lab" font-size="11">( CDN / edge )</text>
+        <text x="760" y="165" class="s-sub">◄── static + rate limiting</text>
+
+        <line x1="436" y1="192" x2="990" y2="192" stroke="var(--learn)" stroke-width="2.5" stroke-dasharray="10 6"/>
+        <text x="436" y="210" class="s-num">04</text><text x="458" y="210" class="s-learn" font-size="10.5">trust boundary</text>
+
+        <rect x="580" y="206" width="160" height="36" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <text x="660" y="229" text-anchor="middle" class="s-lab" font-size="11">load balancer</text>
+        <text x="760" y="229" class="s-sub">AZ-a + AZ-b</text>
+
+        <g fill="var(--paper)" stroke="var(--ink)" stroke-width="2"><rect x="470" y="272" width="100" height="34"/><rect x="610" y="272" width="100" height="34"/><rect x="750" y="272" width="100" height="34"/></g>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="520" y="294">app</text><text x="660" y="294">app</text><text x="800" y="294">app</text></g>
+        <text x="866" y="294" class="s-sub">stateless</text>
+
+        <rect x="480" y="342" width="160" height="48" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <text x="496" y="362" class="s-lab">Redis</text><text x="544" y="362" class="s-haz">⚠</text>
+        <text x="496" y="380" class="s-sub">sessions</text>
+        <ellipse cx="560" cy="366" rx="96" ry="38" fill="none" stroke="var(--hazard)" stroke-width="2.5" stroke-dasharray="7 5"/>
+        <text x="436" y="420" class="s-haz" font-size="10.5">single node</text>
+
+        <rect x="700" y="342" width="130" height="48" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="704" y="346" width="122" height="40" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="716" y="364" class="s-lab">queue</text>
+        <text x="716" y="380" class="s-sub">async</text>
+        <line x1="832" y1="360" x2="872" y2="360" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M832,367 L880,367" stroke="var(--ink)" stroke-width="2" fill="none" marker-end="url(#m1)"/>
+        <text x="846" y="352" class="s-num">07</text>
+        <rect x="884" y="342" width="100" height="48" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <text x="896" y="362" class="s-lab">worker</text>
+        <text x="896" y="380" class="s-haz" font-size="10.5">⚠ ×1</text>
+        <ellipse cx="934" cy="366" rx="60" ry="38" fill="none" stroke="var(--hazard)" stroke-width="2.5" stroke-dasharray="7 5"/>
+        <text x="878" y="420" class="s-num">05</text><text x="900" y="420" class="s-haz" font-size="10.5">exists once</text>
+
+        <rect x="500" y="428" width="320" height="120" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <text x="516" y="452" class="s-lab">DB primary</text>
+        <text x="600" y="452" class="s-note" font-size="10.5">◄── all writes; the real ceiling</text>
+        <text x="570" y="482" class="s-sub">sync</text>
+        <text x="516" y="514" class="s-lab">standby (AZ-b)</text>
+        <text x="516" y="536" class="s-num">03</text><text x="540" y="536" class="s-sub">the source of truth</text>
+
+        <rect x="436" y="570" width="548" height="94" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="448" y="590" class="s-num">13</text><text x="472" y="590" class="s-mono" font-size="10" style="fill:var(--line)">NOTES</text>
+        <g class="s-mono" font-size="10">
+          <text x="448" y="606">⚠ Redis is single-node — sessions die with it; all logged out</text>
+          <text x="448" y="622">⚠ one worker instance — the queue silently backs up</text>
+          <text x="448" y="638">  admin subdomain TLS certificate still renewed by hand</text>
+          <text x="448" y="654">  NOT SURE where the session TTL is configured → Questions.md</text>
+        </g>
+        <text x="436" y="686" class="s-sub">The constraint a newcomer would not guess, what exists only once,</text>
+        <text x="436" y="700" class="s-sub">and what you are unsure about — which goes straight to Questions.</text>
+
+        <!-- THE FOUR -->
+        <rect x="1020" y="40" width="350" height="300" fill="var(--z4)"/>
+        <text x="1036" y="64" class="s-zone" fill="var(--fast)">The four worth having</text>
+        <text x="1036" y="92" class="s-num">02</text><text x="1062" y="92" class="s-lab">request path</text>
+        <text x="1062" y="108" class="s-sub">one user request, end to end</text>
+        <text x="1036" y="134" class="s-num">03</text><text x="1062" y="134" class="s-lab">data stores</text>
+        <text x="1062" y="150" class="s-sub">what holds state; the source of truth</text>
+        <text x="1036" y="176" class="s-num">04</text><text x="1062" y="176" class="s-lab">trust boundaries</text>
+        <text x="1062" y="192" class="s-sub">where untrusted input enters, where</text>
+        <text x="1062" y="206" class="s-sub">credentials are used</text>
+        <text x="1036" y="232" class="s-num">05</text><text x="1062" y="232" class="s-haz">failure domains</text>
+        <text x="1062" y="248" class="s-sub">what exists once, what dies together</text>
+        <text x="1036" y="276" class="s-note">Number 05 is the one nobody draws —</text>
+        <text x="1036" y="292" class="s-note">and the one that changes decisions.</text>
+        <text x="1036" y="312" class="s-sub">Circle everything that exists once: that is</text>
+        <text x="1036" y="326" class="s-sub">your availability work, in priority order.</text>
+
+        <!-- LEGEND -->
+        <rect x="1020" y="356" width="350" height="364" fill="var(--z3)"/>
+        <text x="1036" y="380" class="s-zone" fill="var(--mute)">Symbols · keep them consistent</text>
+        <path d="M1036,408 L1076,408" stroke="var(--ink)" stroke-width="2" fill="none" marker-end="url(#m1)"/>
+        <text x="1090" y="412" class="s-num">06</text><text x="1114" y="412" class="s-lab" font-size="11.5">flow direction</text>
+        <line x1="1036" y1="443" x2="1076" y2="443" stroke="var(--ink)" stroke-width="2"/><line x1="1036" y1="449" x2="1076" y2="449" stroke="var(--ink)" stroke-width="2"/>
+        <text x="1090" y="450" class="s-num">07</text><text x="1114" y="450" class="s-lab" font-size="11.5">sync / async boundary</text>
+        <rect x="1036" y="474" width="40" height="24" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <text x="1090" y="490" class="s-num">08</text><text x="1114" y="490" class="s-lab" font-size="11.5">a component you own</text>
+        <rect x="1036" y="512" width="40" height="24" rx="12" fill="var(--paper)" stroke="var(--mute)" stroke-width="2" stroke-dasharray="5 3"/>
+        <text x="1090" y="528" class="s-num">09</text><text x="1114" y="528" class="s-lab" font-size="11.5">someone else operates it</text>
+        <text x="1048" y="566" class="s-haz" font-size="14">⚠</text>
+        <text x="1090" y="566" class="s-num">10</text><text x="1114" y="566" class="s-lab" font-size="11.5">a single point of failure</text>
+        <text x="1036" y="604" class="s-mono">◄──</text>
+        <text x="1090" y="604" class="s-num">11</text><text x="1114" y="604" class="s-lab" font-size="11.5">annotate the constraint</text>
+        <g class="s-sub"><text x="1036" y="630">"DB primary" tells a reader nothing they</text><text x="1036" y="644">could not guess. "DB primary ◄── all writes;</text><text x="1036" y="658">the real ceiling" tells them what the</text><text x="1036" y="672">diagram is for.</text></g>
+        <text x="1036" y="700" class="s-note">Same symbols everywhere, or none mean anything.</text>
+
+        <!-- 14 LOG -->
+        <rect x="30" y="740" width="730" height="186" fill="var(--z1)"/>
+        <text x="46" y="764" class="s-zone" fill="var(--line)">14 · Drawn from memory · the log</text>
+        <g class="s-lab" font-size="11"><text x="46" y="790">System</text><text x="210" y="790">Date</text><text x="310" y="790">What I got wrong</text></g>
+        <line x1="46" y1="798" x2="744" y2="798" stroke="var(--rule)"/>
+        <g class="s-mono" font-size="10">
+          <text x="46" y="818">Main application</text><text x="210" y="818">2026-02-10</text><text x="310" y="818">put TLS termination at the apps, not the load balancer</text>
+          <text x="46" y="838">Main application</text><text x="210" y="838">2026-05-12</text><text x="310" y="838">worker count right; session TTL location still unknown</text>
+          <text x="46" y="858">Billing pipeline</text><text x="210" y="858">2026-05-20</text><text x="310" y="858">thought the queue was durable; it is in-memory</text>
+        </g>
+        <text x="46" y="886" class="s-haz" font-size="10.5">Not knowing where a component sits is a gap. Believing it sits somewhere it does not is a defect in your model —</text>
+        <text x="46" y="902" class="s-haz" font-size="10.5">and defects are what produce confident wrong decisions in design discussions.</text>
+
+        <!-- REVIEW -->
+        <rect x="780" y="740" width="590" height="186" fill="var(--z3)"/>
+        <text x="796" y="764" class="s-zone" fill="var(--mute)">The review · five questions</text>
+        <g class="s-sub">
+          <text x="796" y="790">□ which diagram here is out of date? fix it, or date-stamp it as unverified</text>
+          <text x="796" y="810">□ redraw one system from memory, then compare with the stored version</text>
+          <text x="796" y="830">□ circle everything that exists exactly once — is anything surprising?</text>
+          <text x="796" y="850">□ which of the four diagrams do I not have yet?</text>
+          <text x="796" y="870">□ did what I could not draw make it into Questions?</text>
+        </g>
+        <text x="796" y="904" class="s-note">Update the diagram in the same pull request that changes the system.</text>
+      </svg>
+    </div>
+    <figcaption><b>The drawing is not the deliverable; the circles and the log are.</b> Circling what exists once — one Redis node, one worker, one certificate renewed by hand — turns a picture into an availability plan, usually shorter and more mundane than expected. The log's "what I got wrong" column turns a redraw into a measurement of your own mental model.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the parts of this survey</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Recall, not recognition</h4><p>Reading a diagram feels like understanding. Drawing it from memory reveals every gap immediately, and the place you stop — where TLS terminates, who holds the session — belongs in Questions.</p></div>
+      <div><h4><span>02</span>Request path</h4><p>What happens to one user request, end to end. The base drawing that the other three are usually annotations of.</p></div>
+      <div><h4><span>03</span>Data stores</h4><p>What holds state, and which store is the source of truth. Everything else is a cache or a copy and should be drawn as one.</p></div>
+      <div><h4><span>04</span>Trust boundaries</h4><p>Where untrusted input enters and where credentials are used. The drawing a security review starts from.</p></div>
+      <div><h4><span>05</span>Failure domains</h4><p>What exists only once, and what dies together. The one nobody draws and the one that changes decisions: circle the singletons and you have your availability work in priority order.</p></div>
+      <div><h4><span>06</span>Flow direction</h4><p>Arrows show which way requests and data move. Consistent direction lets a reader follow the path without reading any labels.</p></div>
+      <div><h4><span>07</span>Sync / async boundary</h4><p>The double line marks where a request stops waiting — here, between the queue and the worker. Failures on either side of it look completely different.</p></div>
+      <div><h4><span>08</span>A component you own</h4><p>A square box: something you deploy, operate and get paged for.</p></div>
+      <div><h4><span>09</span>Someone else operates it</h4><p>Round brackets: a CDN, a managed service, a vendor API. You depend on it but cannot fix it, which changes what "mitigation" means.</p></div>
+      <div><h4><span>10</span>Single point of failure</h4><p>The warning sign: exists once, and takes something important down with it. In the example, sessions die with the Redis node and the queue silently backs up behind one worker.</p></div>
+      <div><h4><span>11</span>Annotate the constraint</h4><p>Label what a reader could not guess — "all writes; the real ceiling" — rather than what the box obviously is. The labels should carry the argument.</p></div>
+      <div><h4><span>12</span>LAST UPDATED</h4><p>Every system section carries its date and is updated in the same pull request that changes the system. An undated diagram cannot be trusted.</p></div>
+      <div><h4><span>13</span>NOTES</h4><p>Beneath each diagram: the constraint a newcomer would not guess, what exists only once, and what you are unsure about — with that last line copied into Questions.</p></div>
+      <div><h4><span>14</span>Drawn from memory, the log</h4><p>System / Date / What I got wrong. Re-drawing the same system three months later is the real test; the "what I got wrong" column is the whole exercise.</p></div>
+      <div><h4><span>15</span>Plain text</h4><p>ASCII in Markdown diffs in Git, reads anywhere and is fast enough to edit that it stays current. A beautiful diagram that is six months stale loses to an ugly correct one.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>A wrong diagram is worse than a missing one</b>
+    <p>Architecture diagrams are almost always wrong because updating them is friction. If a diagram here is out of date, fix it or date-stamp it as unverified today — a confident, stale drawing will be believed in exactly the design discussion where it does the most damage.</p>
+  </div>
+</div>
+
+</div>

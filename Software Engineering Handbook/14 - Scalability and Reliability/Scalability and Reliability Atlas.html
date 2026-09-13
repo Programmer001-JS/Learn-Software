@@ -1,0 +1,1402 @@
+<meta charset="utf-8">
+<title>Atlas of Scalability and Reliability — six sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 14 Scalability and Reliability · six sheets</p>
+  <h1>Atlas of <em>Scalability and Reliability</em></h1>
+  <p class="thesis">One production system, asked two questions. Can it carry ten times the load? And what happens when a part of it — or all of it — is gone? The first three sheets answer the first question, the last three the second. <strong>Both answers start in the same place: find the thing that exists only once, because that is your ceiling and your single point of failure at the same time.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 6</span>
+    <span><b>Numbered steps</b> 102</span>
+    <span><b>Read first</b> Sheet 1, then sheet 4 — the ceiling and the failure domain are the two ideas everything else leans on</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Scaling Stack</h4><p>Where the ceiling is, why it is almost always the database primary, and the cheap order of fixes — index before shard, bigger machine before cluster.</p><em>Cutaway section</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Fleet and the Front Door</h4><p>Scaling out: statelessness, autoscaling signals, zones — and the load balancer whose health check matters more than its algorithm.</p><em>Transit diagram</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>The Measurement Loop</h4><p>Measure, find the dominant cost, fix, measure again. Then drive traffic at it until you find the knee of the curve.</p><em>Closed circuit</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>Surviving Failure</h4><p>Failure domains from process to region, the nines, redundancy in capacity rather than count, and the timeout that stops a partial failure going total.</p><em>Failure map</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>The Warning Lights</h4><p>SLI to SLO to error budget to burn-rate page to runbook to blameless review — and the discipline of deleting alerts.</p><em>Instrument panel</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>The Recovery Ladder</h4><p>What replication cannot survive: immutable backups, RPO and RTO, four disaster-recovery strategies, and the rehearsal that makes any of it real.</p><em>Ladder plate</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 310" role="img" aria-label="How the six sheets fit together. A band across the middle is one production system: CDN, load balancer, stateless application tier, cache, queue and database. A dashed divider splits the atlas into a scalability half on the left and a reliability half on the right. Above the band, sheet 1 the scaling stack and sheet 2 the fleet and front door sit on the scalability side, sheet 4 surviving failure on the reliability side. Below the band, sheet 3 the measurement loop and sheet 6 the recovery ladder. A strip along the bottom marks sheet 5, monitoring, which runs under everything.">
+        <line x1="820" y1="14" x2="820" y2="262" stroke="var(--mute)" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <text x="806" y="26" text-anchor="end" class="s-zone" fill="var(--line)">← more load · scalability</text>
+        <text x="834" y="26" class="s-zone" fill="var(--hazard)">something breaks · reliability →</text>
+
+        <rect x="30" y="118" width="1340" height="62" fill="var(--z3)"/>
+        <text x="46" y="144" class="s-zone" fill="var(--mute)">One production system — CDN · load balancer · stateless app tier · cache · queue · database</text>
+        <text x="46" y="164" class="s-sub">the left half of this atlas makes it carry more; the right half keeps it standing when a part fails, and brings it back when everything does</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M260,118 L260,80"/><path d="M620,118 L620,80"/><path d="M1080,118 L1080,80"/>
+          <path d="M440,180 L440,216"/><path d="M1080,180 L1080,216"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="260" y="68">1 · the scaling stack</text>
+          <text x="620" y="68">2 · the fleet and the front door</text>
+          <text x="1080" y="68">4 · surviving failure</text>
+          <text x="440" y="234">3 · the measurement loop</text>
+          <text x="1080" y="234">6 · the recovery ladder</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="260" y="50">find the ceiling; fix it cheapest-first</text>
+          <text x="620" y="50">more copies, and who decides where requests go</text>
+          <text x="1080" y="50">no single component takes the service down</text>
+          <text x="440" y="252">how you know where the ceiling actually is</text>
+          <text x="1080" y="252">when the whole environment is gone</text>
+        </g>
+        <rect x="30" y="284" width="1340" height="10" fill="color-mix(in srgb,var(--fast) 26%,transparent)"/>
+        <text x="1370" y="276" text-anchor="end" class="s-note">Sheet 5 — monitoring runs under every sheet: you cannot scale, fail over or recover what you cannot see</text>
+      </svg>
+    </div>
+    <figcaption>Read it as one system with two failure modes. <b>Load</b> — sheets 1 to 3 — fails slowly, then suddenly: a curve that bends at 80% utilisation and collapses soon after. <b>Loss</b> — sheets 4 and 6 — fails instantly, and the only question is whether a human is needed to recover. Sheet 5 is how you find out which of the two you are in, before your users tell you.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE SCALING STACK ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Scaling Stack</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · Scalability Fundamentals · Vertical Scaling</span>
+  </div>
+  <p class="thesis">A system cut open from the edge down to the disk, with the price of scaling each layer written beside it. The top layers scale by configuration; the bottom one scales by architecture. <strong>Scalability is not speed — it is the shape of the curve as load rises, and that shape is set by the one part of the system that cannot be copied.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 990" role="img" aria-label="A cutaway of a scalable system. On the left, layers from top to bottom: CDN and edge, load balancer, a stateless application tier of three instances at 60 percent, a cache and a queue side by side, and the database primary taking all writes with read replicas beneath it, marked as the serial ceiling. On the right, a bar chart of Amdahl's law showing maximum speed-up of 100, 20, 10 and 4 times for serial portions of 1, 5, 10 and 25 percent; a latency curve against utilisation that bends sharply past 80 percent with a target band at 50 to 70 percent; and a panel on stateless versus stateful components. Across the middle, nine stages of the honest scaling order from measuring to sharding, with cost rising at each. Along the bottom, what one modern machine can do, how to find the saturated resource, and the pairing of vertical scaling with a standby.">
+        <defs>
+          <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- THE STACK -->
+        <text x="40" y="40" class="s-zone" fill="var(--line)">The stack · where scaling work lands</text>
+        <rect x="40" y="56" width="400" height="50" fill="var(--z1)" stroke="var(--rule)"/>
+        <rect x="40" y="122" width="400" height="50" fill="var(--z1)" stroke="var(--rule)"/>
+        <rect x="40" y="188" width="400" height="76" fill="var(--z2)" stroke="var(--line)" stroke-width="2"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="176" y="198" width="76" height="30"/><rect x="264" y="198" width="76" height="30"/><rect x="352" y="198" width="76" height="30"/></g>
+        <rect x="40" y="280" width="192" height="58" fill="var(--z3)" stroke="var(--rule)"/>
+        <rect x="248" y="280" width="192" height="58" fill="var(--z3)" stroke="var(--rule)"/>
+        <rect x="40" y="354" width="400" height="118" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <rect x="56" y="414" width="170" height="46" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="250" y="414" width="170" height="46" fill="var(--paper)" stroke="var(--rule)"/>
+
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#c1)">
+          <path d="M240,106 L240,118"/><path d="M240,172 L240,184"/><path d="M136,264 L136,276"/><path d="M344,264 L344,276"/><path d="M136,338 L136,350"/>
+        </g>
+        <path d="M226,437 L246,437" stroke="var(--line)" stroke-width="2" stroke-dasharray="4 3"/>
+
+        <g class="s-num"><text x="52" y="76">01</text><text x="52" y="142">02</text><text x="52" y="208">03</text><text x="52" y="300">04</text><text x="260" y="300">05</text><text x="52" y="374">06</text><text x="68" y="432">07</text></g>
+        <g class="s-lab">
+          <text x="80" y="76">CDN / edge</text><text x="80" y="142">load balancer</text><text x="80" y="208">app tier</text>
+          <text x="80" y="300">cache (Redis)</text><text x="288" y="300">queue → workers</text>
+          <text x="80" y="374" fill="var(--hazard)">DATABASE PRIMARY ← all writes</text>
+          <text x="96" y="432">read replicas</text><text x="262" y="432">connection pool</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="80" y="94">static and cached bytes · rate limited here</text>
+          <text x="80" y="160">one address, spreads work · sheet 2</text>
+          <text x="52" y="226">STATELESS</text><text x="52" y="240">any copy serves</text><text x="52" y="254">any request</text>
+          <text x="186" y="218">app · 60%</text><text x="274" y="218">app · 60%</text><text x="362" y="218">app · 60%</text>
+          <text x="186" y="252">headroom, not 90%</text>
+          <text x="52" y="318">absorbs reads</text><text x="52" y="330">85% hit ratio or bust</text>
+          <text x="260" y="318">depth + message age</text><text x="260" y="330">watched; workers capped</text>
+          <text x="52" y="392">one writer: ordering, locks, transactions —</text><text x="52" y="406">the un-parallelisable part</text>
+          <text x="68" y="450">reports, analytics, search</text>
+          <text x="262" y="450">instances × pool ≤ limit</text>
+        </g>
+
+        <g>
+          <text x="460" y="76" class="s-note" font-size="11">configuration</text><text x="460" y="92" class="s-sub" font-size="10.5">scales for free — use it first</text>
+          <text x="460" y="142" class="s-note" font-size="11">configuration</text><text x="460" y="158" class="s-sub" font-size="10.5">scales horizontally</text>
+          <text x="460" y="214" class="s-note" font-size="11">a design property</text><text x="460" y="230" class="s-sub" font-size="10.5">achievable — once state</text><text x="460" y="244" class="s-sub" font-size="10.5">is pushed down a layer</text>
+          <text x="460" y="300" class="s-note" font-size="11">cheap and large</text><text x="460" y="316" class="s-sub" font-size="10.5">reads cached; slow work</text><text x="460" y="330" class="s-sub" font-size="10.5">moved off the request</text>
+          <text x="460" y="374" class="s-haz" font-size="11">architectural</text><text x="460" y="390" class="s-sub" font-size="10.5" style="fill:var(--hazard)">the serial part —</text><text x="460" y="404" class="s-sub" font-size="10.5" style="fill:var(--hazard)">your actual ceiling</text>
+        </g>
+        <path d="M640,62 L640,462" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="7 5" fill="none" marker-end="url(#c2)"/>
+        <text x="630" y="120" text-anchor="end" class="s-sub" font-size="10" style="fill:var(--fast)">cost ↓</text>
+        <text x="40" y="498" class="s-note">Work moves down this stack in order, and the price rises at every step.</text>
+        <text x="40" y="516" class="s-sub">Reads scale almost arbitrarily: cache, replicas, CDN. Writes usually have one primary —</text>
+        <text x="40" y="530" class="s-sub">batch them, queue them, partition them, relax consistency, in increasing order of pain.</text>
+        <text x="40" y="552" class="s-haz" font-size="10.5">Adding app servers to a system limited by its primary adds queue length, not capacity.</text>
+
+        <!-- AMDAHL -->
+        <rect x="680" y="50" width="690" height="250" fill="var(--z1)"/>
+        <text x="696" y="74" class="s-zone" fill="var(--line)">08 · Amdahl — the serial part sets the ceiling</text>
+        <g>
+          <rect x="800" y="92" width="400" height="20" fill="var(--line)" opacity=".8"/>
+          <rect x="800" y="122" width="80" height="20" fill="var(--fast)" opacity=".8"/>
+          <rect x="800" y="152" width="40" height="20" fill="var(--fast)" opacity=".8"/>
+          <rect x="800" y="182" width="16" height="20" fill="var(--hazard)" opacity=".8"/>
+        </g>
+        <g class="s-lab" font-size="11" text-anchor="end"><text x="790" y="106">1% serial</text><text x="790" y="136">5% serial</text><text x="790" y="166">10% serial</text><text x="790" y="196">25% serial</text></g>
+        <g class="s-mono" font-size="10.5"><text x="1210" y="106">100×</text><text x="890" y="136">20× maximum speed-up</text><text x="850" y="166">10×</text><text x="826" y="196">4×</text></g>
+        <text x="696" y="228" class="s-sub">Limits with INFINITE resources: five percent that cannot run in parallel caps the system at 20×.</text>
+        <text x="696" y="244" class="s-sub">The serial part: one database primary, a global lock, a single-consumer queue, a rate-limited API.</text>
+        <text x="696" y="264" class="s-note">The productive question is never "how many servers?" but "what is everything waiting for?"</text>
+        <text x="696" y="284" class="s-sub" style="fill:var(--fast)">The motorway and the toll booth: more lanes only make a wider queue in front of the one booth.</text>
+
+        <!-- UTILISATION -->
+        <rect x="680" y="316" width="340" height="244" fill="var(--z4)"/>
+        <text x="696" y="340" class="s-zone" fill="var(--mute)">09 · Utilisation — the cliff</text>
+        <rect x="855" y="352" width="54" height="148" fill="var(--line)" opacity=".14"/>
+        <g stroke="var(--rule)" stroke-width="1.5"><line x1="720" y1="352" x2="720" y2="500"/><line x1="720" y1="500" x2="1000" y2="500"/></g>
+        <polyline points="720,492 801,488 855,482 882,476 909,468 936,452 950,436 963,410 977,366" fill="none" stroke="var(--hazard)" stroke-width="3"/>
+        <circle cx="950" cy="436" r="5" fill="var(--hazard)"/>
+        <text x="940" y="404" text-anchor="end" class="s-haz" font-size="10.5">85% — the cliff edge</text>
+        <text x="726" y="364" class="s-sub" font-size="10">p99 latency</text>
+        <text x="1000" y="514" text-anchor="end" class="s-sub" font-size="10">utilisation → 100%</text>
+        <text x="860" y="514" class="s-sub" font-size="10" style="fill:var(--line)">50–70%</text>
+        <text x="692" y="534" class="s-sub" font-size="10.5">Latency heads to infinity near 100% and turns</text>
+        <text x="692" y="548" class="s-sub" font-size="10.5">sharply well before: systems collapse, not degrade.</text>
+
+        <!-- STATE -->
+        <rect x="1036" y="316" width="334" height="244" fill="var(--z3)"/>
+        <text x="1052" y="340" class="s-zone" fill="var(--mute)">10 · State makes it hard</text>
+        <text x="1052" y="362" class="s-lab" font-size="11" style="fill:var(--line)">stateless</text>
+        <text x="1210" y="362" class="s-lab" font-size="11" style="fill:var(--hazard)">stateful</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="1052" y="380">any server, any request</text><text x="1052" y="394">add and remove freely</text><text x="1052" y="408">a crash loses nothing</text><text x="1052" y="422">→ scale by adding copies</text>
+          <text x="1210" y="380">holds something unique</text><text x="1210" y="394">moving it moves data</text><text x="1210" y="408">a crash loses something</text><text x="1210" y="422">→ scale by partitioning</text>
+        </g>
+        <text x="1052" y="448" class="s-lab" font-size="11">Where state should live</text>
+        <g class="s-mono" font-size="10">
+          <text x="1052" y="466">sessions   → Redis or a signed token</text>
+          <text x="1052" y="482">uploads    → object storage (S3)</text>
+          <text x="1052" y="498">the truth  → the database</text>
+          <text x="1052" y="514" fill="var(--hazard)">in the app → nothing durable</text>
+        </g>
+        <text x="1052" y="540" class="s-note" font-size="10.5">In-process sessions force sticky routing;</text>
+        <text x="1052" y="554" class="s-sub" font-size="10.5" style="fill:var(--fast)">local uploads live on one server only.</text>
+
+        <!-- THE HONEST ORDER -->
+        <rect x="30" y="580" width="1340" height="210" fill="var(--band)"/>
+        <text x="46" y="604" class="s-zone" fill="var(--mute)">The honest order · traffic grows 10× in six months, and the fixes land cheapest first</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="46" y="620" width="138" height="84"/><rect x="194" y="620" width="138" height="84"/><rect x="342" y="620" width="138" height="84"/>
+          <rect x="490" y="620" width="138" height="84"/><rect x="638" y="620" width="138" height="84"/><rect x="786" y="620" width="138" height="84"/>
+          <rect x="934" y="620" width="138" height="84"/><rect x="1082" y="620" width="138" height="84"/>
+        </g>
+        <rect x="1230" y="620" width="130" height="84" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <g class="s-num"><text x="56" y="638">11</text><text x="204" y="638">12</text><text x="352" y="638">13</text><text x="500" y="638">14</text><text x="648" y="638">15</text><text x="796" y="638">16</text><text x="944" y="638">17</text><text x="1092" y="638">18</text><text x="1240" y="638">19</text></g>
+        <g class="s-lab" font-size="11.5"><text x="76" y="638">measure</text><text x="224" y="638">add the index</text><text x="372" y="638">CDN</text><text x="520" y="638">cache</text><text x="668" y="638">go stateless</text><text x="816" y="638">queue it</text><text x="964" y="638">read replicas</text><text x="1112" y="638">scale up</text><text x="1260" y="638" fill="var(--hazard)">shard</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="56" y="658">p99 tripled, DB at</text><text x="56" y="671">90% CPU; more app</text><text x="56" y="684">servers: no change</text>
+          <text x="204" y="658">one missing index</text><text x="204" y="671">removes 40% of the</text><text x="204" y="684">database's CPU</text>
+          <text x="352" y="658">static assets at the</text><text x="352" y="671">edge: 60% of requests</text><text x="352" y="684">never arrive</text>
+          <text x="500" y="658">read-through on hot</text><text x="500" y="671">queries: 85% hits,</text><text x="500" y="684">DB CPU now 35%</text>
+          <text x="648" y="658">sessions → Redis,</text><text x="648" y="671">uploads → S3, sticky</text><text x="648" y="684">sessions removed</text>
+          <text x="796" y="658">transcode + email</text><text x="796" y="671">async: 3 s → 180 ms;</text><text x="796" y="684">workers capped</text>
+          <text x="944" y="658">reporting and</text><text x="944" y="671">analytics moved off</text><text x="944" y="684">the primary</text>
+          <text x="1092" y="658">bigger primary: 4×</text><text x="1092" y="671">headroom for one</text><text x="1092" y="684">afternoon's work</text>
+          <text x="1240" y="658">by tenant id, when</text><text x="1240" y="671">writes truly exceed</text><text x="1240" y="684">one primary</text>
+        </g>
+        <polyline points="46,766 194,766 194,760 342,760 342,754 490,754 490,748 638,748 638,742 786,742 786,736 934,736 934,730 1082,730 1082,724" fill="none" stroke="var(--fast)" stroke-width="3"/>
+        <polyline points="1082,724 1230,724 1230,718 1360,718" fill="none" stroke="var(--hazard)" stroke-width="3"/>
+        <text x="46" y="744" class="s-note" font-size="10.5">engineering cost of each step →</text>
+        <text x="1360" y="744" text-anchor="end" class="s-haz" font-size="10.5">a year-long project: no joins, no transactions</text>
+        <text x="46" y="784" class="s-sub">Starting at stage 19 would have taken a year and solved nothing — the actual constraint was one missing index and no cache.</text>
+
+        <!-- VERTICAL -->
+        <rect x="30" y="806" width="440" height="170" fill="var(--z1)"/>
+        <text x="46" y="830" class="s-zone" fill="var(--line)">20 · One machine, today</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="46" y="854">up to ~192 vCPU</text><text x="46" y="870">up to ~24 TB RAM</text><text x="46" y="886">100s of k IOPS on local NVMe</text><text x="46" y="902">100 Gbit/s network</text>
+        </g>
+        <text x="260" y="854" class="s-sub" font-size="10.5">PostgreSQL: tens of</text><text x="260" y="868" class="s-sub" font-size="10.5">thousands of tx/s.</text><text x="260" y="882" class="s-sub" font-size="10.5">A working set of 100s</text><text x="260" y="896" class="s-sub" font-size="10.5">of GB fits in RAM.</text>
+        <text x="46" y="928" class="s-note" font-size="10.5">The picture of "one server" most people carry is a decade old.</text>
+        <text x="46" y="944" class="s-sub" font-size="10.5">Shard-early advice was written for 8 cores and 32 GB. Most primaries</text>
+        <text x="46" y="958" class="s-sub" font-size="10.5">are indexed, cached, replicated, resized — and never sharded.</text>
+
+        <rect x="490" y="806" width="440" height="170" fill="var(--z3)"/>
+        <text x="506" y="830" class="s-zone" fill="var(--mute)">21 · What is actually saturated?</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="506" y="854">CPU high → more cores, or a newer generation</text>
+          <text x="506" y="870">memory high → more RAM, after checking for a leak</text>
+          <text x="506" y="886">disk slow → provisioned IOPS or local NVMe</text>
+          <text x="506" y="902">network capped → a larger size lifts the cap</text>
+          <text x="506" y="918">nothing high → a lock, a query or a dependency</text>
+        </g>
+        <text x="506" y="942" class="s-haz" font-size="10.5">Traps that look like load: t-family CPU credits, gp3 default IOPS.</text>
+        <text x="506" y="958" class="s-sub" font-size="10.5" style="fill:var(--hazard)">Both are configuration. Cores do nothing for single-threaded code.</text>
+
+        <rect x="950" y="806" width="420" height="170" fill="var(--z5)"/>
+        <text x="966" y="830" class="s-zone" fill="var(--fast)">22 · Up for capacity, out for redundancy</text>
+        <rect x="966" y="842" width="112" height="46" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="1110" y="842" width="140" height="46" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <path d="M1080,865 L1104,865" stroke="var(--line)" stroke-width="2.5" marker-end="url(#c1)"/>
+        <text x="974" y="860" class="s-mono" font-size="10">4 vCPU · 16 GB</text><text x="974" y="878" class="s-mono" font-size="10">3k IOPS</text>
+        <text x="1118" y="860" class="s-mono" font-size="10">16 vCPU · 64 GB</text><text x="1118" y="878" class="s-mono" font-size="10">12k IOPS</text>
+        <text x="1260" y="860" class="s-sub" font-size="10">same code,</text><text x="1260" y="874" class="s-sub" font-size="10">same string</text>
+        <text x="966" y="908" class="s-sub" font-size="10.5">Before a bigger size: a newer generation (15–30%), or ARM (20–40%).</text>
+        <text x="966" y="926" class="s-haz" font-size="10.5">One machine is one failure domain, whatever its size —</text>
+        <text x="966" y="942" class="s-sub" font-size="10.5" style="fill:var(--hazard)">pair it with a same-size standby in another AZ, so the resize</text>
+        <text x="966" y="958" class="s-sub" font-size="10.5" style="fill:var(--hazard)">is a ~60-second failover, not an outage.</text>
+      </svg>
+    </div>
+    <figcaption><b>Two facts carry this whole sheet.</b> The ceiling is the serial part, and it is almost always the database primary taking every write. And the fixes have a price order — index, CDN, cache, statelessness, queues, replicas, a bigger machine, and only then sharding. Teams that start at the end of that list spend a year solving a problem an index would have removed in an afternoon.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every layer and stage on this sheet</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>CDN / edge</h4><p>Static and cacheable responses served from many locations, before a request ever reaches you. Scales for free, and the right place to rate limit per client and per tenant.</p></div>
+      <div><h4><span>02</span>Load balancer</h4><p>One stable address in front of a changing fleet. Required by any horizontal tier, and scales horizontally itself. Drawn in full on sheet 2.</p></div>
+      <div><h4><span>03</span>Stateless app tier</h4><p>Identical copies holding nothing unique, each run at about 60% at peak. "Make the application layer stateless" is the highest-leverage sentence in the chapter.</p></div>
+      <div><h4><span>04</span>Cache</h4><p>The cheapest capacity you will ever add. An 85% hit ratio is the difference between a database that copes and one that does not. Keys must include the authorisation context.</p></div>
+      <div><h4><span>05</span>Queue and workers</h4><p>The pressure valve: the user waits for the essential part, the rest happens behind. Converts a capacity problem into a latency-of-completion problem. An unbounded queue is a delayed outage.</p></div>
+      <div><h4><span>06</span>Database primary</h4><p>Usually one writer, where ordering and consistency matter — the bottleneck, almost always. Writes cannot be cached; they can be batched, queued, partitioned or relaxed.</p></div>
+      <div><h4><span>07</span>Replicas and pooling</h4><p>Read replicas take reporting and analytics off the primary. Connection pooling guards the ceiling people meet unexpectedly: instances × pool size against the database's limit.</p></div>
+      <div><h4><span>08</span>Amdahl's law</h4><p>If 5% of the work is serial, the maximum speed-up is 20× with infinite resources; 25% gives 4×. Find the serial part, because no hardware raises that ceiling.</p></div>
+      <div><h4><span>09</span>Utilisation cliff</h4><p>Queueing theory: latency rises non-linearly beyond roughly 70–80% and heads to infinity at 100%. Target 50–70% at peak. A system at 85% is not efficient, it is on a cliff edge.</p></div>
+      <div><h4><span>10</span>State</h4><p>Stateless things scale by adding copies; stateful things scale only by partitioning. Sessions to Redis or a signed token, uploads to object storage, the truth to the database.</p></div>
+      <div><h4><span>11</span>Measure</h4><p>Before adding anything, find out what everything is waiting for. If adding app servers changed nothing, the bottleneck is below them. Compare p50 with p99, never averages.</p></div>
+      <div><h4><span>12</span>Add the index</h4><p>One missing index removed 40% of database CPU. Costs nothing, and often removes the need for scaling work entirely. Never scale to fix an inefficient query.</p></div>
+      <div><h4><span>13</span>CDN the static assets</h4><p>Moving static bytes to the edge removed 60% of requests before they reached the application. Configuration, not engineering.</p></div>
+      <div><h4><span>14</span>Cache the hot path</h4><p>A read-through cache on the hottest queries reached an 85% hit ratio and took database CPU to 35%. Adds staleness and invalidation bugs — accept them knowingly.</p></div>
+      <div><h4><span>15</span>Go stateless</h4><p>Sessions moved from process memory to Redis, uploads from local disk to S3. Any server can serve any request, and sticky sessions come out.</p></div>
+      <div><h4><span>16</span>Queue it</h4><p>Transcoding and email moved off the request path: 3 s became 180 ms. Workers autoscale on queue depth — with a cap, so load cannot become an unbounded bill.</p></div>
+      <div><h4><span>17</span>Read replicas</h4><p>Reporting and analytics moved to replicas. Scales reads without touching the write path, which is still one primary.</p></div>
+      <div><h4><span>18</span>Scale up</h4><p>A larger primary: 4× headroom for one afternoon. The only strategy with no architectural change, and very often the correct next move. Adjust memory settings for the new size.</p></div>
+      <div><h4><span>19</span>Shard</h4><p>Only when writes genuinely exceed the largest primary. Partition by tenant id; cross-shard joins, transactions and unique constraints become application problems. Expect the biggest project of the year.</p></div>
+      <div><h4><span>20</span>One modern machine</h4><p>Up to ~192 vCPU, ~24 TB of RAM, hundreds of thousands of IOPS and 100 Gbit/s. Stack Overflow served enormous traffic from a handful of servers; most databases are never sharded.</p></div>
+      <div><h4><span>21</span>The saturated resource</h4><p>Buy only what is actually saturated. Doubling CPU on a disk-bound system changes only the bill. Check t-family credits and gp3 IOPS defaults first — throttling looks like load.</p></div>
+      <div><h4><span>22</span>Vertical plus standby</h4><p>Up for capacity, out for redundancy. A bigger machine is still one failure domain, so pair it with a same-size Multi-AZ standby; the resize becomes a ~60-second failover.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Scalability is not availability</b>
+    <p>Everything on this sheet makes the system carry more. None of it keeps the system up when a part fails — a 192-core primary is still one machine. The two are related and share techniques, but a design that scales beautifully can still be a single point of failure. That is sheet 4's question.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SHEET 2 — THE FLEET AND THE FRONT DOOR ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Fleet and the Front Door</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Horizontal Scaling · Load Balancing</span>
+  </div>
+  <p class="thesis">Scaling out means more identical copies and one component that decides which copy gets each request. Nine stops take a request from a DNS lookup to an access-log line; four incidents show what the front door does when a backend dies, drains, sickens or drowns. <strong>The health check matters more than the algorithm, and statelessness matters more than either — a copy that holds something unique is not a copy.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 980" role="img" aria-label="A transit line of one request through a load-balanced fleet. Nine stations run left to right across five zones: DNS lookup, edge rate limit and TLS termination at the edge; route match, backend selection and forwarding inside the load balancer; a stateless instance in the fleet; shared state in Redis, the database pool and object storage; and the response with its access log. Four lettered junctions on the line lead to incident panels: overload, a backend dying, a deployment draining, and a backend that is sick but still passing its health check. Below, a fleet across two availability zones with shared state beneath the instance line and the capacity rule for losing a zone; an autoscaling timeline with scaling signals; a list of state that breaks when copied, with sticky sessions; and panels on health checks, balancing algorithms, and timeouts, retries and draining.">
+        <defs>
+          <marker id="f1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <text x="40" y="40" class="s-zone" fill="var(--line)">The request line · one call, from name lookup to log line</text>
+        <rect x="30" y="56" width="425" height="164" fill="var(--z1)"/>
+        <rect x="455" y="56" width="450" height="164" fill="var(--z2)"/>
+        <rect x="905" y="56" width="150" height="164" fill="var(--z3)"/>
+        <rect x="1055" y="56" width="150" height="164" fill="var(--z4)"/>
+        <rect x="1205" y="56" width="165" height="164" fill="var(--z6)"/>
+        <g class="s-zone" fill="var(--mute)"><text x="42" y="78">The edge</text><text x="467" y="78">The load balancer</text><text x="917" y="78">The fleet</text><text x="1067" y="78">Shared state</text><text x="1217" y="78">Back out</text></g>
+
+        <line x1="60" y1="150" x2="1330" y2="150" stroke="var(--line)" stroke-width="7" marker-end="url(#f1)"/>
+        <line x1="60" y1="133" x2="60" y2="167" stroke="var(--line)" stroke-width="7"/>
+        <g class="st"><circle cx="80" cy="150" r="9"/><circle cx="230" cy="150" r="9"/><circle cx="380" cy="150" r="9"/><circle cx="530" cy="150" r="9"/><circle cx="830" cy="150" r="9"/><circle cx="980" cy="150" r="9"/><circle cx="1130" cy="150" r="9"/><circle cx="1260" cy="150" r="9"/></g>
+        <circle cx="680" cy="150" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+
+        <g class="s-num"><text x="56" y="106">01</text><text x="206" y="106">02</text><text x="356" y="106">03</text><text x="506" y="106">04</text><text x="656" y="106">05</text><text x="806" y="106">06</text><text x="956" y="106">07</text><text x="1106" y="106">08</text><text x="1236" y="106">09</text></g>
+        <g class="s-lab"><text x="56" y="124">DNS lookup</text><text x="206" y="124">edge rate limit</text><text x="356" y="124">TLS termination</text><text x="506" y="124">route match</text><text x="656" y="124">pick a backend</text><text x="806" y="124">forward</text><text x="956" y="124">an instance</text><text x="1106" y="124">shared state</text><text x="1236" y="124">response + log</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="56" y="180">name → the LB address;</text><text x="56" y="194">clients cache it</text>
+          <text x="206" y="180">cheapest place: before</text><text x="206" y="194">you pay for compute</text>
+          <text x="356" y="180">TLS 1.2+ and HTTP/2,</text><text x="356" y="194">certs auto-renewed</text>
+          <text x="506" y="180">L7 reads path + host:</text><text x="506" y="194">/api/* → api group</text><text x="506" y="208">/* → web group</text>
+          <text x="656" y="180">healthy ones only;</text><text x="656" y="194">least connections</text><text x="656" y="208">when durations vary</text>
+          <text x="806" y="180">reused keep-alive;</text><text x="806" y="194">X-Forwarded-For set,</text><text x="806" y="208">trusted from here only</text>
+          <text x="956" y="180">stateless, any AZ,</text><text x="956" y="194">running at ≤ 60%</text>
+          <text x="1106" y="180">sessions in Redis,</text><text x="1106" y="194">pool → DB primary,</text><text x="1106" y="208">uploads in S3</text>
+          <text x="1236" y="180">access log records</text><text x="1236" y="194">target, latency,</text><text x="1236" y="208">status</text>
+        </g>
+
+        <g fill="var(--paper)" stroke-width="3"><circle cx="305" cy="150" r="12" stroke="var(--hazard)"/><circle cx="755" cy="150" r="12" stroke="var(--hazard)"/><circle cx="905" cy="150" r="12" stroke="var(--fast)"/><circle cx="1055" cy="150" r="12" stroke="var(--learn)"/></g>
+        <text x="305" y="155" text-anchor="middle" class="s-haz" font-size="12">C</text>
+        <text x="755" y="155" text-anchor="middle" class="s-haz" font-size="12">A</text>
+        <text x="905" y="155" text-anchor="middle" class="s-note" font-size="12">B</text>
+        <text x="1055" y="155" text-anchor="middle" class="s-learn" font-size="12">D</text>
+
+        <!-- INCIDENTS -->
+        <rect x="30" y="236" width="325" height="96" fill="var(--band)" stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <rect x="365" y="236" width="325" height="96" fill="var(--band)" stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <rect x="700" y="236" width="325" height="96" fill="var(--band)" stroke="var(--fast)" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <rect x="1035" y="236" width="335" height="96" fill="var(--band)" stroke="var(--learn)" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <text x="46" y="258" class="s-haz">C · overload</text>
+        <text x="381" y="258" class="s-haz">A · a backend dies</text>
+        <text x="716" y="258" class="s-note">B · a deployment drains</text>
+        <text x="1051" y="258" class="s-learn">D · a backend is sick, not dead</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="276">Traffic triples; health checks still pass and</text><text x="46" y="290">latency climbs. Retries would multiply load:</text><text x="46" y="304">keep the budget small; the edge sheds load.</text>
+          <text x="381" y="276">It stops answering: 2 failed checks over 10 s</text><text x="381" y="290">and it leaves rotation. Traffic redistributes;</text><text x="381" y="304">the scaling group replaces it.</text>
+          <text x="716" y="276">Old targets get no new requests; in-flight</text><text x="716" y="290">ones finish inside the deregistration delay,</text><text x="716" y="304">set longer than the slowest normal request.</text>
+          <text x="1051" y="276">500s on every call, but /healthz still passes —</text><text x="1051" y="290">the shallow check never notices. A per-target</text><text x="1051" y="304">error-rate alarm pages a human instead.</text>
+        </g>
+        <text x="46" y="322" class="s-haz" font-size="10.5">Balancing cannot create capacity.</text>
+        <text x="381" y="322" class="s-haz" font-size="10.5">Health checks catch dead backends.</text>
+        <text x="716" y="322" class="s-note" font-size="10.5">Zero dropped requests.</text>
+        <text x="1051" y="322" class="s-learn" font-size="10.5">Monitoring catches sick ones — sheet 5.</text>
+
+        <!-- FLEET -->
+        <rect x="30" y="350" width="670" height="360" fill="var(--band)"/>
+        <text x="46" y="374" class="s-zone" fill="var(--mute)">10 · The fleet · two zones, each able to serve alone</text>
+        <rect x="46" y="390" width="310" height="110" fill="var(--z1)" stroke="var(--rule)"/>
+        <rect x="370" y="390" width="310" height="110" fill="var(--z1)" stroke="var(--rule)"/>
+        <g class="s-zone" fill="var(--line)"><text x="58" y="410">AZ-a</text><text x="382" y="410">AZ-b</text></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="62" y="422" width="130" height="50"/><rect x="210" y="422" width="130" height="50"/><rect x="386" y="422" width="130" height="50"/><rect x="534" y="422" width="130" height="50"/></g>
+        <g class="s-lab" font-size="11"><text x="74" y="442">instance</text><text x="222" y="442">instance</text><text x="398" y="442">instance</text><text x="546" y="442">instance</text></g>
+        <g class="s-sub" font-size="10.5"><text x="74" y="460">stateless · ≤ 50%</text><text x="222" y="460">stateless · ≤ 50%</text><text x="398" y="460">stateless · ≤ 50%</text><text x="546" y="460">stateless · ≤ 50%</text></g>
+        <text x="58" y="492" class="s-sub" font-size="10">identical, interchangeable, disposable</text>
+        <text x="382" y="492" class="s-sub" font-size="10">one lost zone = half the fleet, at once</text>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#f1)"><path d="M200,500 L200,516"/><path d="M520,500 L520,516"/></g>
+        <rect x="46" y="520" width="634" height="46" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="58" y="538" class="s-lab" font-size="11">Below the instance line: everything unique</text>
+        <text x="58" y="556" class="s-sub" font-size="10.5">Redis sessions + shared cache · PgBouncer → DB primary · object storage for uploads</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="46" y="592">3 instances, all in AZ-a → outage takes 100%</text>
+          <text x="46" y="610">2 instances, one per AZ  → outage takes 50%</text>
+          <text x="46" y="628">4 instances, two per AZ  → 50% left, sized for it</text>
+        </g>
+        <text x="400" y="592" class="s-haz" font-size="10.5">Count is not capacity.</text>
+        <text x="400" y="608" class="s-sub" font-size="10.5">Size the fleet so losing a whole</text>
+        <text x="400" y="622" class="s-sub" font-size="10.5">zone still leaves enough to</text>
+        <text x="400" y="636" class="s-sub" font-size="10.5">serve peak — not just instances.</text>
+        <text x="46" y="662" class="s-note">Even a system that fits on one machine should run two.</text>
+        <text x="46" y="680" class="s-sub">Copies cannot fix a bottleneck below them: more instances open more connections</text>
+        <text x="46" y="694" class="s-sub">to the same primary, and p99 gets worse while throughput stays flat.</text>
+
+        <!-- AUTOSCALING -->
+        <rect x="720" y="350" width="650" height="232" fill="var(--z1)"/>
+        <text x="736" y="374" class="s-zone" fill="var(--line)">11 · Autoscaling · it reacts, so it is always late</text>
+        <line x1="744" y1="410" x2="1350" y2="410" stroke="var(--line)" stroke-width="3" marker-end="url(#f1)"/>
+        <g class="st" stroke-width="2.5"><circle cx="750" cy="410" r="7"/><circle cx="870" cy="410" r="7"/><circle cx="990" cy="410" r="7"/><circle cx="1110" cy="410" r="7"/><circle cx="1230" cy="410" r="7"/></g>
+        <g class="s-lab" font-size="11"><text x="744" y="436">metric crosses</text><text x="864" y="436">launch</text><text x="984" y="436">~45 s to ready</text><text x="1104" y="436">cold caches</text><text x="1224" y="436">absorbed</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="744" y="452">requests per</text><text x="744" y="466">instance target</text>
+          <text x="864" y="452">one per AZ, from</text><text x="864" y="466">a baked image</text>
+          <text x="984" y="452">health checks pass</text><text x="984" y="466">→ into rotation</text>
+          <text x="1104" y="452">JIT and caches:</text><text x="1104" y="466">briefly slower</text>
+          <text x="1224" y="452">p99 back to normal</text>
+        </g>
+        <text x="736" y="496" class="s-lab" font-size="11">Scale on what correlates with load</text>
+        <g class="s-mono" font-size="10"><text x="736" y="514">web tier  → requests/instance or p95</text><text x="736" y="530">workers   → queue depth, message age</text><text x="1070" y="514">CPU-bound   → CPU</text><text x="1070" y="530">known peaks → scheduled</text></g>
+        <text x="736" y="552" class="s-note" font-size="10.5">min 2 · max BOUNDED · out fast, in slowly · a cooldown against thrash</text>
+        <text x="736" y="570" class="s-haz" font-size="10.5">CPU is the default, and often the wrong metric for I/O-bound services.</text>
+
+        <!-- STATE -->
+        <rect x="720" y="596" width="650" height="114" fill="var(--z4)"/>
+        <text x="736" y="618" class="s-zone" fill="var(--mute)">12 · State that breaks copying</text>
+        <g class="s-mono" font-size="10">
+          <text x="736" y="638">sessions in process    → logged out at random</text>
+          <text x="736" y="652">uploads on local disk  → 404 on two servers of 3</text>
+          <text x="736" y="666">in-memory caches       → a different answer each</text>
+          <text x="736" y="680" fill="var(--hazard)">a timer job per copy   → report sent three times</text>
+          <text x="736" y="694">local write-ahead log  → lost when replaced</text>
+        </g>
+        <text x="1110" y="638" class="s-lab" font-size="11">13 · Sticky sessions</text>
+        <text x="1110" y="654" class="s-sub" font-size="10.5">Affinity lets a stateful app "work",</text>
+        <text x="1110" y="668" class="s-sub" font-size="10.5">but a dead instance logs its users</text>
+        <text x="1110" y="682" class="s-sub" font-size="10.5">out and new copies get no traffic.</text>
+        <text x="1110" y="700" class="s-note" font-size="10.5">A bridge — debt with a date attached.</text>
+
+        <!-- HEALTH CHECKS -->
+        <rect x="30" y="726" width="440" height="240" fill="var(--z2)"/>
+        <text x="46" y="750" class="s-zone" fill="var(--mute)">14 · Health checks · get this right</text>
+        <rect x="46" y="764" width="204" height="72" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="262" y="764" width="194" height="72" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="56" y="782" class="s-mono" font-size="10.5">SHALLOW  GET /healthz</text>
+        <text x="272" y="782" class="s-mono" font-size="10.5">DEEP  GET /ready</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="56" y="800">"the process is running"</text><text x="56" y="814">✓ fast, cannot cascade</text><text x="56" y="828">✗ blind to "can it serve"</text>
+          <text x="272" y="800">"I can reach my database"</text><text x="272" y="814">✓ accurate</text><text x="272" y="828">✗ shared failure → all out</text>
+        </g>
+        <text x="46" y="858" class="s-haz" font-size="10.5">A deep check turns a degraded database into a total outage:</text>
+        <text x="46" y="872" class="s-sub" font-size="10.5" style="fill:var(--hazard)">every backend removed at once, and recovery blocked. Check shallow;</text>
+        <text x="46" y="886" class="s-sub" font-size="10.5" style="fill:var(--hazard)">let separate monitoring watch the dependencies.</text>
+        <text x="46" y="910" class="s-lab" font-size="11">Tuning</text>
+        <text x="46" y="926" class="s-mono" font-size="10">interval 5–10 s · timeout &lt; interval · 2–3 failures</text>
+        <text x="46" y="944" class="s-sub" font-size="10.5">too aggressive: healthy backends flap during a GC pause;</text>
+        <text x="46" y="958" class="s-sub" font-size="10.5">too lax: broken backends serve errors for a minute.</text>
+
+        <!-- ALGORITHMS -->
+        <rect x="490" y="726" width="440" height="240" fill="var(--z3)"/>
+        <text x="506" y="750" class="s-zone" fill="var(--mute)">15 · Algorithms · they matter less</text>
+        <g class="s-mono" font-size="10">
+          <text x="506" y="776">ROUND ROBIN</text><text x="506" y="794">LEAST CONNECTIONS</text><text x="506" y="812">LEAST RESPONSE</text><text x="506" y="830">IP HASH</text><text x="506" y="848">CONSISTENT HASH</text><text x="506" y="866">WEIGHTED</text><text x="506" y="884">TWO CHOICES</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="640" y="776">in turn; the default, usually fine</text><text x="640" y="794">fewest active; for varied durations</text><text x="640" y="812">to the fastest responder</text><text x="640" y="830">same client, same backend</text><text x="640" y="848">least reshuffling; for caches</text><text x="640" y="866">by capacity, or a 5% canary</text><text x="640" y="884">pick 2 at random, take the less loaded</text>
+        </g>
+        <text x="506" y="912" class="s-note" font-size="10.5">Most requests 20 ms, a few 8 s? Round robin piles new work</text>
+        <text x="506" y="926" class="s-sub" font-size="10.5" style="fill:var(--fast)">onto a backend tied up with slow ones — the case where it matters.</text>
+        <text x="506" y="950" class="s-sub" font-size="10.5">Elsewhere it is a rounding error next to health checks and timeouts.</text>
+
+        <!-- TIMEOUTS -->
+        <rect x="950" y="726" width="420" height="240" fill="var(--z5)"/>
+        <text x="966" y="750" class="s-zone" fill="var(--fast)">16 · Timeouts, retries, draining</text>
+        <text x="966" y="776" class="s-lab" font-size="11">Idle timeout &gt; longest legitimate request</text>
+        <text x="966" y="792" class="s-sub" font-size="10.5">a 60 s default silently kills a 90 s report</text>
+        <text x="966" y="814" class="s-lab" font-size="11">Deregistration delay &gt; slowest normal request</text>
+        <text x="966" y="830" class="s-sub" font-size="10.5">too short, and every deployment drops requests</text>
+        <text x="966" y="852" class="s-lab" font-size="11">Retry idempotent calls, on connection failure</text>
+        <text x="966" y="868" class="s-sub" font-size="10.5">never a timed-out POST: it may charge a customer twice</text>
+        <text x="966" y="890" class="s-lab" font-size="11">L7 for HTTP, L4 for the rest</text>
+        <text x="966" y="906" class="s-sub" font-size="10.5">L7: paths, headers, retries, +1–5 ms. L4: raw TCP, TLS passthrough.</text>
+        <text x="966" y="930" class="s-haz" font-size="10.5">Long-lived connections never rebalance:</text>
+        <text x="966" y="946" class="s-sub" font-size="10.5" style="fill:var(--hazard)">a new backend behind WebSockets idles until clients reconnect.</text>
+      </svg>
+    </div>
+    <figcaption><b>Teams argue about algorithms; incidents are caused by four settings</b> — a health check that is too deep, a draining delay shorter than the slowest request, an idle timeout that truncates real work, and retries during overload. Get those right, keep state below the instance line, and size each zone to carry the load alone.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the stations, the incidents and the fleet</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>DNS lookup</h4><p>The name resolves to the load balancer, not to servers. DNS alone cannot help: a dead server keeps its share of traffic and clients cache records for hours.</p></div>
+      <div><h4><span>02</span>Edge rate limit</h4><p>The last point before you start paying for compute. Limiting inside the application still spends a process, a connection and a lookup on every abusive request.</p></div>
+      <div><h4><span>03</span>TLS termination</h4><p>One place for certificates, HTTP/2 and compression — and one hop where traffic is briefly plaintext. Re-encrypt to the backend for regulated data.</p></div>
+      <div><h4><span>04</span>Route match</h4><p>Layer 7 understands HTTP, so /api/* and /* can go to different target groups, with per-route timeouts and header-based canaries. Almost every web system wants it.</p></div>
+      <div><h4><span>05</span>Pick a backend</h4><p>Only from the healthy set. Round robin by default; least connections when request durations vary widely; consistent hashing where key locality matters.</p></div>
+      <div><h4><span>06</span>Forward</h4><p>Over a reused keep-alive connection, with X-Forwarded-For added. The application trusts that header only from its own load balancer — clients can forge it.</p></div>
+      <div><h4><span>07</span>An instance</h4><p>Identical, interchangeable, disposable, spread across zones. Scales close to linearly until a shared dependency saturates. Needs idempotent handlers: retries and duplicates become normal.</p></div>
+      <div><h4><span>08</span>Shared state</h4><p>Everything unique lives below the instance line: sessions in Redis, the truth behind a connection pool, uploads in object storage. The pool stops N instances exhausting the database.</p></div>
+      <div><h4><span>09</span>Response and access log</h4><p>Target, latency and status, per request. Often the only complete record of what was asked for — keep it in durable storage.</p></div>
+      <div><h4><span>A</span>A backend dies</h4><p>Two consecutive failed checks over 10 s remove it from rotation; the scaling group replaces it; nobody was logged out because no session lived there.</p></div>
+      <div><h4><span>B</span>A deployment drains</h4><p>Old targets stop receiving new requests and in-flight ones complete. With the delay longer than the slowest normal request, a deployment drops nothing.</p></div>
+      <div><h4><span>C</span>Overload</h4><p>Every backend saturated, checks still green, latency climbing. Retries now multiply load and turn a slowdown into a collapse. Retry on connection-refused only, shed load at the edge, add capacity.</p></div>
+      <div><h4><span>D</span>Sick, not dead</h4><p>A backend returning 500s while passing a shallow check stays in rotation. Health checks catch dead backends; per-target error-rate monitoring catches sick ones.</p></div>
+      <div><h4><span>10</span>Failure domains</h4><p>Three instances in one zone give throughput and no resilience. Size so losing a whole zone still leaves enough capacity for peak — the cost is small cross-zone transfer charges.</p></div>
+      <div><h4><span>11</span>Autoscaling</h4><p>Always late: the metric crosses, then provisioning, boot and warm-up. Scale workers on queue depth, web tiers on requests per instance; bake images, keep headroom, set min 2 and a bounded max.</p></div>
+      <div><h4><span>12</span>State that breaks</h4><p>In-process sessions, local uploads, in-memory caches, local logs — and the scheduled job running in every copy, which nothing warns you about. Use a leader, a lock or a scheduler.</p></div>
+      <div><h4><span>13</span>Sticky sessions</h4><p>Affinity lets a stateful app sit behind a balancer today, and keeps every failover, deployment and uneven-load problem statelessness was meant to solve. Move sessions out, then switch it off.</p></div>
+      <div><h4><span>14</span>Health checks</h4><p>The load balancer's most valuable function. Keep them shallow and local; 5–10 s interval, 2–3 failures before removal. A deep check can remove the whole fleet at once.</p></div>
+      <div><h4><span>15</span>Algorithms</h4><p>Random two choices is surprisingly close to optimal and cheap. Outside the mixed-duration case, the choice is a rounding error beside health checks and timeouts.</p></div>
+      <div><h4><span>16</span>Timeouts and connections</h4><p>Idle timeout above the longest legitimate request, draining above the slowest normal one. Long-lived WebSocket and gRPC streams need a maximum connection age, or new instances sit idle.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Unbounded autoscaling is a financial attack surface</b>
+    <p>A fleet that grows in response to load grows in response to an attack too — the service stays up and the budget does not. Put a maximum on every scaling policy, rate limit before the load balancer, and watch the in-process cache hit ratio fall as copies multiply: ten instances each caching alone see a tenth of the repeats.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SHEET 3 — THE MEASUREMENT LOOP ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Measurement Loop</h2>
+    <span class="form">Closed circuit</span>
+    <span class="cov">Covers · Performance Engineering · Load Testing</span>
+  </div>
+  <p class="thesis">Two instruments for one question — where does the time go? A profiler answers it for one request; a load test answers it for ten thousand at once. <strong>Intuition about where time is spent is reliably wrong, so the loop begins and ends with a measurement, and the answer is usually a missing index, an N+1 or a connection pool — not your code.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 1210" role="img" aria-label="A closed circuit of six performance steps: measure with a trace, drill into the query with the largest total time, diagnose with EXPLAIN ANALYZE, fix the largest cost, measure again, and ask again until the budget is met. To the right, a log-scale chart of where time goes in a web request, with database queries and external API calls dominating and the frontend often exceeding all of it; a table of latency numbers from one nanosecond to a hundred milliseconds; and a panel showing an average of 20 milliseconds hiding a 10 second p99. Across the middle, one day on a slow orders page with p99 falling from 6 seconds to 45 milliseconds, and the ten fixes in order of value per effort. Along the bottom, a ramp test chart with the latency knee at 400 requests per second, the five types of load test, and panels on realism, concurrency and coordinated omission.">
+        <defs>
+          <marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <!-- THE LOOP -->
+        <text x="40" y="46" class="s-zone" fill="var(--line)">The loop · measure, fix one thing, measure again</text>
+        <g fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#m1)">
+          <path d="M368,157 A190,190 0 0,1 487,222"/>
+          <path d="M513,272 A190,190 0 0,1 513,408"/>
+          <path d="M487,458 A190,190 0 0,1 368,523"/>
+          <path d="M312,523 A190,190 0 0,1 193,458"/>
+          <path d="M167,408 A190,190 0 0,1 167,272"/>
+          <path d="M193,222 A190,190 0 0,1 312,157"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="3.5">
+          <circle cx="340" cy="150" r="26"/><circle cx="504" cy="245" r="26"/><circle cx="504" cy="435" r="26"/>
+          <circle cx="176" cy="435" r="26"/><circle cx="176" cy="245" r="26"/>
+        </g>
+        <circle cx="340" cy="530" r="26" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <g class="s-big" text-anchor="middle" style="fill:var(--line)">
+          <text x="340" y="157">1</text><text x="504" y="252">2</text><text x="504" y="442">3</text><text x="340" y="537" fill="var(--fast)">4</text><text x="176" y="442">5</text><text x="176" y="252">6</text>
+        </g>
+        <text x="340" y="100" text-anchor="middle" class="s-lab">measure</text>
+        <g class="s-sub" text-anchor="middle"><text x="340" y="116">trace one slow request</text><text x="340" y="130">LB 2 · app 8 · DB 780 · API 120 ms</text></g>
+        <text x="546" y="238" class="s-lab">drill in</text>
+        <g class="s-sub"><text x="546" y="256">pg_stat_statements by</text><text x="546" y="270">TOTAL time, not slowest</text></g>
+        <text x="546" y="424" class="s-lab">diagnose</text>
+        <g class="s-sub"><text x="546" y="442">EXPLAIN ANALYZE:</text><text x="546" y="456">Seq Scan, 4,000,000 rows</text></g>
+        <text x="340" y="580" text-anchor="middle" class="s-lab">fix the largest cost</text>
+        <text x="340" y="596" text-anchor="middle" class="s-sub">index · eager load · queue · batch — minutes, not months</text>
+        <text x="134" y="424" text-anchor="end" class="s-lab">measure again</text>
+        <g class="s-sub" text-anchor="end"><text x="134" y="442">p99 1.4 s → 90 ms;</text><text x="134" y="456">percentiles only</text></g>
+        <text x="134" y="238" text-anchor="end" class="s-lab">ask again</text>
+        <g class="s-sub" text-anchor="end"><text x="134" y="256">the answer moved:</text><text x="134" y="270">now the external API</text></g>
+        <text x="340" y="326" text-anchor="middle" class="s-note" font-size="13">one lap</text>
+        <text x="340" y="346" text-anchor="middle" class="s-sub">stop when the budget is met —</text>
+        <text x="340" y="360" text-anchor="middle" class="s-sub">the next bottleneck is somewhere else</text>
+        <text x="340" y="384" text-anchor="middle" class="s-haz" font-size="10.5">no profile, no change</text>
+
+        <!-- WHERE TIME GOES -->
+        <rect x="710" y="40" width="660" height="262" fill="var(--z2)"/>
+        <text x="726" y="64" class="s-zone" fill="var(--mute)">07 · Where the time goes · one web request, log scale</text>
+        <g class="s-lab" font-size="11" text-anchor="end">
+          <text x="890" y="96">network + TLS · 5–50 ms</text><text x="890" y="118">load balancer · 1–5 ms</text><text x="890" y="140">app CPU · 1–20 ms</text>
+          <text x="890" y="162">DB queries · 10–500 ms</text><text x="890" y="184">external APIs · 50–2000 ms</text><text x="890" y="206">serialisation · 1–10 ms</text>
+        </g>
+        <g>
+          <rect x="985" y="86" width="122" height="12" fill="var(--cool)" opacity=".8"/>
+          <rect x="900" y="108" width="85" height="12" fill="var(--cool)" opacity=".8"/>
+          <rect x="900" y="130" width="158" height="12" fill="var(--fast)" opacity=".8"/>
+          <rect x="1022" y="152" width="206" height="12" fill="var(--hazard)" opacity=".8"/>
+          <rect x="1107" y="174" width="194" height="12" fill="var(--hazard)" opacity=".8"/>
+          <rect x="900" y="196" width="122" height="12" fill="var(--cool)" opacity=".8"/>
+        </g>
+        <text x="1068" y="140" class="s-note" font-size="10.5">← where people look</text>
+        <text x="1238" y="162" class="s-haz" font-size="10.5">← where it is</text>
+        <text x="1309" y="184" class="s-haz" font-size="10.5">← and here</text>
+        <line x1="900" y1="216" x2="1350" y2="216" stroke="var(--rule)" stroke-width="1.5"/>
+        <g class="s-mono" font-size="10" text-anchor="middle" style="fill:var(--mute)"><text x="900" y="232">1 ms</text><text x="1022" y="232">10</text><text x="1144" y="232">100</text><text x="1265" y="232">1 s</text></g>
+        <text x="726" y="258" class="s-haz" font-size="10.5">FRONTEND rendering is often more than all of the above: a 45 ms API inside a 4.2 s page —</text>
+        <text x="726" y="272" class="s-sub" font-size="10.5" style="fill:var(--hazard)">unsized hero images and a blocking script, fixed in an afternoon: 4.2 s → 1.1 s.</text>
+        <text x="726" y="292" class="s-note" font-size="10.5">Start at the layer with the biggest numbers, and be honest that it is usually not your code.</text>
+
+        <!-- LATENCY NUMBERS -->
+        <rect x="710" y="316" width="320" height="270" fill="var(--z1)"/>
+        <text x="726" y="340" class="s-zone" fill="var(--line)">08 · Numbers to memorise</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="726" y="364">L1 cache          ~1 ns</text><text x="726" y="380">main memory     ~100 ns</text><text x="726" y="396">SSD random read ~100 µs</text>
+          <text x="726" y="412">same-DC trip    ~500 µs</text><text x="726" y="428">same region       ~1 ms</text><text x="726" y="444">spinning seek    ~10 ms</text>
+          <text x="726" y="460" fill="var(--hazard)">cross-continent ~100 ms</text>
+        </g>
+        <g fill="var(--line)" opacity=".75">
+          <rect x="926" y="356" width="4" height="9"/><rect x="926" y="372" width="21" height="9"/><rect x="926" y="388" width="52" height="9"/>
+          <rect x="926" y="404" width="60" height="9"/><rect x="926" y="420" width="63" height="9"/><rect x="926" y="436" width="74" height="9"/>
+        </g>
+        <rect x="926" y="452" width="84" height="9" fill="var(--hazard)" opacity=".75"/>
+        <text x="726" y="488" class="s-note" font-size="10.5">memory ≈ 100× SSD ≈ 100× cross-region</text>
+        <g class="s-sub" font-size="10.5"><text x="726" y="506">One avoided network call beats a thousand</text><text x="726" y="520">micro-optimisations — and it is why caching</text><text x="726" y="534">works and an N+1 is catastrophic.</text></g>
+        <text x="726" y="558" class="s-haz" font-size="10.5">A function at 5% of total time, made</text>
+        <text x="726" y="572" class="s-sub" font-size="10.5" style="fill:var(--hazard)">infinitely fast, saves 5%. Leave it alone.</text>
+
+        <!-- PERCENTILES -->
+        <rect x="1046" y="316" width="324" height="270" fill="var(--z4)"/>
+        <text x="1062" y="340" class="s-zone" fill="var(--mute)">09 · Percentiles, not averages</text>
+        <text x="1062" y="364" class="s-sub">1,000 requests: 999 at 10 ms, one at 10 s</text>
+        <g class="s-mono" font-size="10.5"><text x="1062" y="394">average</text><text x="1062" y="418">p50</text><text x="1062" y="442">p99</text></g>
+        <rect x="1130" y="384" width="52" height="12" fill="var(--line)" opacity=".8"/>
+        <rect x="1130" y="408" width="40" height="12" fill="var(--line)" opacity=".8"/>
+        <rect x="1130" y="432" width="160" height="12" fill="var(--hazard)" opacity=".8"/>
+        <text x="1192" y="394" class="s-sub" font-size="10.5">20 ms — "excellent!"</text>
+        <text x="1180" y="418" class="s-sub" font-size="10.5">10 ms</text>
+        <text x="1298" y="442" class="s-haz" font-size="10.5">~10 s</text>
+        <text x="1062" y="474" class="s-lab" font-size="11">The tail compounds</text>
+        <g class="s-sub" font-size="10.5"><text x="1062" y="492">A page making 20 API calls will usually</text><text x="1062" y="506">hit at least one call's p99, so</text></g>
+        <text x="1062" y="524" class="s-note" font-size="10.5">a component's p99 is the page's p50.</text>
+        <g class="s-sub" font-size="10.5"><text x="1062" y="548">Take averages off the dashboards. A wide</text><text x="1062" y="562">p50–p99 gap means queueing, not slow code.</text></g>
+
+        <g transform="translate(0,20)">
+        <!-- THE CASE -->
+        <rect x="30" y="600" width="660" height="200" fill="var(--z3)"/>
+        <text x="46" y="624" class="s-zone" fill="var(--mute)">10 · One day on the orders page · p99, log scale</text>
+        <g class="s-lab" font-size="11" text-anchor="end"><text x="190" y="660">reported</text><text x="190" y="692">N+1 fixed</text><text x="190" y="724">index added</text><text x="190" y="756">API → a job</text></g>
+        <rect x="200" y="648" width="306" height="18" fill="var(--hazard)" opacity=".75"/>
+        <rect x="200" y="680" width="204" height="18" fill="var(--fast)" opacity=".8"/>
+        <rect x="200" y="712" width="119" height="18" fill="var(--line)" opacity=".8"/>
+        <rect x="200" y="744" width="72" height="18" fill="var(--line)" opacity=".8"/>
+        <g class="s-mono" font-size="10">
+          <text x="516" y="661">6 s · 380 queries/request</text><text x="414" y="693">700 ms · 380 → 2 queries, 1 h</text><text x="329" y="725">120 ms · seq scan → index, 10 min</text><text x="282" y="757">45 ms · enrichment moved to a job</text>
+        </g>
+        <text x="46" y="788" class="s-note" font-size="11">6 s → 45 ms in one day, no rewrite. Plan B was three months in a faster language.</text>
+
+        <!-- FIX LADDER -->
+        <rect x="710" y="600" width="660" height="200" fill="var(--z5)"/>
+        <text x="726" y="624" class="s-zone" fill="var(--fast)">11 · The fixes, by value per unit of effort</text>
+        <g class="s-mono" font-size="10">
+          <text x="726" y="648">1  add an index       minutes · often 100×</text><text x="726" y="666">2  fix the N+1        an hour · 10–50×</text><text x="726" y="684">3  cache the hot path hours · 10× on reads</text><text x="726" y="702">4  paginate           unbounded → bounded</text><text x="726" y="720">5  move work off      a queue takes it</text>
+          <text x="1046" y="648">6  batch              1 round trip, not 100</text><text x="1046" y="666">7  CDN static assets  most requests gone</text><text x="1046" y="684">8  scale up           an afternoon</text><text x="1046" y="702" fill="var(--hazard)">9  optimise the code  days · a few %</text><text x="1046" y="720" fill="var(--hazard)">10 rewrite, faster    months · it was the DB</text>
+        </g>
+        <text x="726" y="752" class="s-note" font-size="10.5">Most teams start near the bottom: the rewrite is interesting and the index is boring.</text>
+        <text x="726" y="770" class="s-sub" font-size="10.5">Work down the list, measuring after each step. Stop when an SLO says fast enough, not when it looks elegant.</text>
+        <text x="726" y="788" class="s-haz" font-size="10.5">Never add a cache to hide a query that should simply be indexed.</text>
+
+        <!-- KNEE -->
+        <rect x="30" y="820" width="530" height="350" fill="var(--z1)"/>
+        <text x="46" y="844" class="s-zone" fill="var(--line)">12 · The knee · ramp test, arrival-rate model</text>
+        <rect x="463" y="866" width="77" height="174" fill="var(--hazard)" opacity=".12"/>
+        <g stroke="var(--rule)" stroke-width="1.5"><line x1="80" y1="866" x2="80" y2="1040"/><line x1="80" y1="1040" x2="540" y2="1040"/></g>
+        <line x1="387" y1="866" x2="387" y2="1040" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="5 5"/>
+        <polyline points="157,1020 233,1012 310,996 387,960 425,925 463,880 502,868" fill="none" stroke="var(--hazard)" stroke-width="3"/>
+        <g fill="var(--hazard)"><circle cx="157" cy="1020" r="4"/><circle cx="233" cy="1012" r="4"/><circle cx="387" cy="960" r="5"/><circle cx="463" cy="880" r="4"/></g>
+        <g class="s-mono" font-size="10"><text x="150" y="1006">80 ms</text><text x="226" y="998">95 ms</text><text x="380" y="948" text-anchor="end">340 ms</text><text x="455" y="878" text-anchor="end">2.1 s</text></g>
+        <text x="88" y="880" class="s-sub" font-size="10">p99 (log)</text>
+        <text x="395" y="1030" class="s-note" font-size="10.5">knee: 400 rps</text>
+        <text x="472" y="1000" class="s-haz" font-size="10">errors, then</text><text x="472" y="1014" class="s-haz" font-size="10">a flat ceiling</text>
+        <g class="s-mono" font-size="10" text-anchor="middle" style="fill:var(--mute)"><text x="157" y="1054">100</text><text x="233" y="1054">200</text><text x="387" y="1054">400</text><text x="502" y="1054">550</text></g>
+        <text x="540" y="1070" text-anchor="end" class="s-sub" font-size="10">offered load, rps →</text>
+        <g class="s-sub" font-size="10.5"><text x="46" y="1092">What broke: not CPU (45%), not memory — database connections at the pool limit.</text><text x="46" y="1106">Fix: a pooler and a bounded pool per instance → knee 900 rps, ceiling 1,400.</text></g>
+        <text x="46" y="1128" class="s-note" font-size="11">Report the knee, not the breaking point; run production at 50–70% of it.</text>
+        <g class="s-sub" font-size="10.5" style="fill:var(--fast)"><text x="46" y="1146">Between the two, the system technically works and users are unhappy.</text><text x="46" y="1160">That band is where most production incidents live.</text></g>
+
+        <!-- TYPES -->
+        <rect x="580" y="820" width="380" height="350" fill="var(--z3)"/>
+        <text x="596" y="844" class="s-zone" fill="var(--mute)">13 · Five tests, five questions</text>
+        <g class="s-mono" font-size="10.5"><text x="596" y="870">LOAD</text><text x="596" y="906">STRESS</text><text x="596" y="942">SPIKE</text><text x="596" y="978" fill="var(--hazard)">SOAK</text><text x="596" y="1014">BREAKPOINT</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="700" y="870">expected peak traffic</text><text x="700" y="884">does it meet the SLO?</text>
+          <text x="700" y="906">increase until it breaks</text><text x="700" y="920">where is the ceiling, what fails?</text>
+          <text x="700" y="942">0 → peak, instantly</text><text x="700" y="956">does autoscaling arrive in time?</text>
+          <text x="700" y="978">moderate load for hours</text><text x="700" y="992">leaks, pools, disks, log growth</text>
+          <text x="700" y="1014">a steady ramp to failure</text><text x="700" y="1028">the curve, not just a number</text>
+        </g>
+        <text x="596" y="1052" class="s-haz" font-size="10.5">The soak is the test people skip.</text>
+        <g class="s-sub" font-size="10.5" style="fill:var(--hazard)"><text x="596" y="1068">Six hours at 300 rps found an unclosed HTTP client</text><text x="596" y="1082">that would have restart-looped on day two.</text></g>
+        <text x="596" y="1106" class="s-lab" font-size="11">Where to run it</text>
+        <g class="s-sub" font-size="10.5"><text x="596" y="1122">staging: same types, same config, same data VOLUME</text><text x="596" y="1136">CI: a short check for regressions, not capacity</text><text x="596" y="1150">production: low traffic, a kill switch, on-call told</text></g>
+
+        <!-- REALISM -->
+        <rect x="980" y="820" width="390" height="350" fill="var(--z4)"/>
+        <text x="996" y="844" class="s-zone" fill="var(--mute)">14 · Realism is the whole game</text>
+        <text x="996" y="866" class="s-lab" font-size="11" style="fill:var(--hazard)">a useless test</text>
+        <text x="1180" y="866" class="s-lab" font-size="11" style="fill:var(--line)">a useful test</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="996" y="884">one endpoint hammered</text><text x="1180" y="884">a mix from access logs</text>
+          <text x="996" y="898">identical requests</text><text x="1180" y="898">many users and tenants</text>
+          <text x="996" y="912">no think time</text><text x="1180" y="912">human pauses</text>
+          <text x="996" y="926">an empty database</text><text x="1180" y="926">production-scale data</text>
+          <text x="996" y="940">one hot cache key</text><text x="1180" y="940">a realistic hit ratio</text>
+        </g>
+        <text x="996" y="964" class="s-haz" font-size="10.5">Fine on 10,000 rows, fatal on 10 million.</text>
+        <text x="996" y="992" class="s-lab" font-size="11">15 · Concurrency, not requests per second</text>
+        <text x="996" y="1010" class="s-mono" font-size="10">concurrency = throughput × latency</text>
+        <g class="s-sub" font-size="10.5"><text x="996" y="1026">1,000 rps at 50 ms = 50 in flight; at 2 s = 2,000.</text><text x="996" y="1040">Closed models (fixed users) back off politely;</text><text x="996" y="1054">open models (arrival rate) expose overload.</text></g>
+        <text x="996" y="1080" class="s-lab" font-size="11">16 · Coordinated omission</text>
+        <g class="s-sub" font-size="10.5"><text x="996" y="1096">A tool that waits on a slow reply never sends the</text><text x="996" y="1110">requests it owed — a 2 s stall vanishes from p99.</text></g>
+        <text x="996" y="1130" class="s-note" font-size="10.5">Use wrk2, k6 arrival-rate executors, HdrHistogram.</text>
+        <text x="996" y="1148" class="s-sub" font-size="10.5">Discard the first minute: JIT, caches, pools settle.</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption><b>The profiler and the load test answer the same question at two scales.</b> A trace shows where one request spent its time; a ramp shows where ten thousand start queueing. Neither means anything against a hundred-row database, an average, or a generator that politely backs off — and both end the same way: fix the largest cost, then measure again.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the loop, the numbers and the load test</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Measure</h4><p>Quantify in percentiles, then trace one slow request end to end. "Slow" with p50 400 ms and p99 6 s is a tail problem, not a speed problem. Without distributed tracing you cannot tell which service spent the time.</p></div>
+      <div><h4><span>02</span>Drill in</h4><p>pg_stat_statements ordered by total time surfaces the query consuming the most database time overall — often a 12 ms query run 40,000 times a minute that no slow-query log would ever show.</p></div>
+      <div><h4><span>03</span>Diagnose</h4><p>EXPLAIN ANALYZE shows what the planner actually did: a sequential scan over 4 million rows is a missing index. Run it against production-scale data; the plan changes with volume.</p></div>
+      <div><h4><span>04</span>Fix the largest cost</h4><p>One change, aimed at the dominant contributor. Optimising something the profile shows as 2% is worse than nothing — it adds permanent complexity for a rounding error.</p></div>
+      <div><h4><span>05</span>Measure again</h4><p>Confirm the change moved the percentile you care about: p99 from 1.4 s to 90 ms. A fix that is not measured is a belief.</p></div>
+      <div><h4><span>06</span>Ask again, or stop</h4><p>The bottleneck will have moved — now the external API, so it goes to a queue. Stop when the performance budget is met: "fast enough" is a real destination.</p></div>
+      <div><h4><span>07</span>Where the time goes</h4><p>Database queries (10–500 ms) and external calls (50–2000 ms) dominate; application CPU is 1–20 ms. The browser often costs more than all of it together.</p></div>
+      <div><h4><span>08</span>Latency numbers</h4><p>~1 ns cache, ~100 ns memory, ~100 µs SSD, ~1 ms in-region, ~100 ms cross-continent. The ratios explain caching, N+1 disasters and why a moved call beats tuned code.</p></div>
+      <div><h4><span>09</span>Percentiles</h4><p>999 requests at 10 ms and one at 10 s average 20 ms. p99 is what generates complaints, and in composed systems a component's p99 becomes a page's p50.</p></div>
+      <div><h4><span>10</span>The orders page</h4><p>380 queries per request from a lazy-loaded association: eager loading took p99 from 6 s to 700 ms, an index to 120 ms, a background job to 45 ms. One day, no new infrastructure.</p></div>
+      <div><h4><span>11</span>The fix ladder</h4><p>Index, N+1, cache, paginate, queue, batch, CDN, scale up, optimise code, rewrite — roughly ordered by return on effort. The usual suspects are also the usual fixes.</p></div>
+      <div><h4><span>12</span>The knee</h4><p>The throughput where latency starts climbing faster than load: 400 rps, while errors only arrive at 500 and the ceiling at 550. That number, not the breaking point, is capacity.</p></div>
+      <div><h4><span>13</span>Test types</h4><p>Load for the SLO at expected peak, stress for the ceiling, spike for autoscaling, soak for leaks, breakpoint for the curve. Each answers one question; the soak finds bugs nothing else does.</p></div>
+      <div><h4><span>14</span>Realism</h4><p>A scenario mix derived from access logs, many distinct users, think time, a realistic cache hit ratio — and above all production-scale data. A small database tests the wrong query plans.</p></div>
+      <div><h4><span>15</span>Concurrency</h4><p>Little's law: concurrency = throughput × latency. Rising latency raises concurrency, which raises latency — the feedback loop of collapse. Only an open, arrival-rate model shows it.</p></div>
+      <div><h4><span>16</span>Coordinated omission</h4><p>A generator that waits for slow responses silently skips the requests it should have sent, deleting stalls from the percentiles. Use tools that correct for it, and keep the generator off the target.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>A load test looks exactly like an attack</b>
+    <p>Warn on-call and silence the alerts for the window, never point a generator at a payment provider or partner API without written permission, make sure the test cannot send real email, SMS or payments, and clean up the orders and accounts it created. Stubbed dependencies no longer contribute their latency — which is often a real part of your p99.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SHEET 4 — SURVIVING FAILURE ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>Surviving Failure</h2>
+    <span class="form">Failure map</span>
+    <span class="cov">Covers · High Availability</span>
+  </div>
+  <p class="thesis">Every component on this map will fail — a disk, a process, a zone, a certificate, a deployment. High availability is not making them reliable; it is assuming they are not, and deciding in advance what happens without a human. <strong>Walk the map and mark everything that exists exactly once: that list, not the diagram full of pairs, is your availability work.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 1066" role="img" aria-label="A failure map of a highly available system. On the left, layers from top: health-checked DNS, a CDN, a multi-AZ load balancer, then two availability zone columns each holding two application instances at 45 percent, a cache primary replicating to a replica, and a database primary replicating synchronously to a standby; below, object storage and immutable backups in a separate account. On the right, the nines from 99 to 99.999 percent with their yearly downtime and cost; four 99.9 percent dependencies in series giving 99.6 percent; and bar charts showing three instances at 70 percent overloading to 105 percent after a loss while two zones at 45 percent survive at 90 percent. Across the middle, failure domains from process to provider with availability zones marked as the high-value step and the human as the most common cause. Along the bottom, detection and failover with its own failure modes, a hanging dependency degraded by timeout, circuit breaker and fallback, and what redundancy cannot protect against.">
+        <defs>
+          <marker id="h1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <!-- THE MAP -->
+        <text x="40" y="40" class="s-zone" fill="var(--line)">The map · mark everything that exists exactly once</text>
+        <rect x="40" y="54" width="680" height="40" fill="var(--z1)" stroke="var(--rule)"/>
+        <rect x="40" y="102" width="680" height="40" fill="var(--z1)" stroke="var(--rule)"/>
+        <rect x="40" y="150" width="680" height="40" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <g class="s-num"><text x="52" y="79">01</text><text x="52" y="127">02</text><text x="52" y="175">03</text></g>
+        <g class="s-lab"><text x="80" y="79">DNS · Route 53 health-check failover</text><text x="80" y="127">CDN / edge · many locations</text><text x="80" y="175">LOAD BALANCER · spans AZ-a and AZ-b</text></g>
+        <text x="708" y="79" text-anchor="end" class="s-note" font-size="10.5">is this redundant?</text>
+        <text x="708" y="127" text-anchor="end" class="s-sub" font-size="10.5" style="fill:var(--line)">yes, by design</text>
+        <text x="708" y="175" text-anchor="end" class="s-note" font-size="10.5">managed and multi-AZ — check it</text>
+
+        <rect x="40" y="204" width="330" height="236" fill="var(--z2)" stroke="var(--rule)"/>
+        <rect x="390" y="204" width="330" height="236" fill="var(--z2)" stroke="var(--rule)"/>
+        <g class="s-zone" fill="var(--line)"><text x="52" y="222">AZ-a</text><text x="402" y="222">AZ-b</text></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="56" y="232" width="146" height="42"/><rect x="214" y="232" width="146" height="42"/><rect x="406" y="232" width="146" height="42"/><rect x="564" y="232" width="146" height="42"/></g>
+        <g class="s-lab" font-size="11"><text x="66" y="250">app</text><text x="224" y="250">app</text><text x="416" y="250">app</text><text x="574" y="250">app</text></g>
+        <g class="s-sub" font-size="10.5"><text x="66" y="266">stateless · 45%</text><text x="224" y="266">stateless · 45%</text><text x="416" y="266">stateless · 45%</text><text x="574" y="266">stateless · 45%</text></g>
+        <text x="196" y="250" text-anchor="end" class="s-num">04</text>
+
+        <rect x="56" y="286" width="304" height="42" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <rect x="406" y="286" width="304" height="42" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="66" y="304" class="s-lab" font-size="11">cache primary</text><text x="66" y="320" class="s-sub" font-size="10.5">a single node here is the classic hidden SPOF</text>
+        <text x="416" y="304" class="s-lab" font-size="11">cache replica</text><text x="416" y="320" class="s-sub" font-size="10.5">Sentinel promotes it on failure</text>
+        <text x="350" y="304" text-anchor="end" class="s-num">05</text>
+        <path d="M360,307 L400,307" stroke="var(--line)" stroke-width="2.5" marker-end="url(#h1)"/>
+
+        <rect x="56" y="340" width="304" height="70" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <rect x="406" y="340" width="304" height="70" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="66" y="360" class="s-lab" style="fill:var(--hazard)">DB PRIMARY</text>
+        <g class="s-sub" font-size="10.5"><text x="66" y="378">all writes · the hard part</text><text x="66" y="394">sync commit to AZ-b adds 1–2 ms</text></g>
+        <text x="416" y="360" class="s-lab">DB STANDBY</text>
+        <g class="s-sub" font-size="10.5"><text x="416" y="378">same size, synchronous copy</text><text x="416" y="394">auto-promoted; DNS moves in 60–120 s</text></g>
+        <text x="350" y="360" text-anchor="end" class="s-num">06</text>
+        <path d="M360,375 L400,375" stroke="var(--line)" stroke-width="3.5" marker-end="url(#h1)"/>
+        <text x="52" y="430" class="s-note" font-size="10.5">either zone can serve peak alone</text>
+        <text x="402" y="430" class="s-note" font-size="10.5">so the other may fail entirely</text>
+
+        <rect x="40" y="452" width="680" height="40" fill="var(--z3)" stroke="var(--rule)"/>
+        <text x="52" y="477" class="s-num">07</text><text x="80" y="477" class="s-lab">object storage</text>
+        <text x="708" y="477" text-anchor="end" class="s-sub" font-size="10.5" style="fill:var(--line)">regionally redundant already</text>
+        <rect x="40" y="502" width="680" height="54" fill="var(--band)" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="7 5"/>
+        <text x="52" y="524" class="s-num">08</text><text x="80" y="524" class="s-lab" style="fill:var(--hazard)">IMMUTABLE BACKUPS · separate account</text>
+        <text x="80" y="542" class="s-sub" font-size="10.5">a bad migration reaches the standby in milliseconds — only a backup brings back 14:31 · sheet 6</text>
+        <text x="40" y="580" class="s-note">Every external call: an explicit timeout · a circuit breaker · a fallback.</text>
+
+        <!-- NINES -->
+        <rect x="780" y="40" width="590" height="262" fill="var(--z1)"/>
+        <text x="796" y="64" class="s-zone" fill="var(--line)">09 · The nines · each costs ~10× the last</text>
+        <g class="s-mono" font-size="10.5"><text x="796" y="92">99%</text><text x="796" y="112">99.9%</text><text x="796" y="132">99.95%</text><text x="796" y="152">99.99%</text><text x="796" y="172">99.999%</text></g>
+        <g fill="var(--line)" opacity=".8"><rect x="880" y="83" width="223" height="11"/><rect x="880" y="103" width="163" height="11"/><rect x="880" y="123" width="145" height="11"/><rect x="880" y="143" width="103" height="11"/><rect x="880" y="163" width="42" height="11"/></g>
+        <g class="s-sub" font-size="10.5"><text x="1111" y="92">3.65 days / year</text><text x="1051" y="112">8.8 hours</text><text x="1033" y="132">4.4 hours</text><text x="991" y="152">53 minutes</text><text x="930" y="172">5 minutes</text></g>
+        <g class="s-note" font-size="10.5"><text x="1220" y="112">multi-AZ, managed</text><text x="1220" y="152">multi-region</text><text x="1220" y="172">a dedicated team</text></g>
+        <text x="796" y="202" class="s-lab" font-size="11">10 · Availability multiplies in series</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="796" y="212" width="70" height="28"/><rect x="888" y="212" width="70" height="28"/><rect x="980" y="212" width="70" height="28"/><rect x="1072" y="212" width="70" height="28"/></g>
+        <g stroke="var(--line)" stroke-width="2"><line x1="866" y1="226" x2="888" y2="226"/><line x1="958" y1="226" x2="980" y2="226"/><line x1="1050" y1="226" x2="1072" y2="226"/></g>
+        <g class="s-mono" font-size="10.5" text-anchor="middle"><text x="831" y="230">99.9%</text><text x="923" y="230">99.9%</text><text x="1015" y="230">99.9%</text><text x="1107" y="230">99.9%</text></g>
+        <text x="1156" y="231" class="s-haz" font-size="13">= ≈ 99.6%</text>
+        <text x="796" y="264" class="s-sub">Four dependencies at 99.9% give about 99.6% — worse than any single one of them.</text>
+        <text x="796" y="284" class="s-note" font-size="10.5">So the engineering is making dependencies non-fatal, not making each one perfect.</text>
+
+        <!-- CAPACITY -->
+        <rect x="780" y="316" width="590" height="250" fill="var(--z4)"/>
+        <text x="796" y="340" class="s-zone" fill="var(--mute)">11 · Redundancy in count is not in capacity</text>
+        <text x="796" y="362" class="s-lab" font-size="11">3 instances at 70%, one fails</text>
+        <text x="1080" y="362" class="s-lab" font-size="11">2 zones at 45%, one fails</text>
+        <line x1="796" y1="380" x2="1040" y2="380" stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <line x1="1080" y1="380" x2="1350" y2="380" stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text x="1040" y="376" text-anchor="end" class="s-sub" font-size="10" style="fill:var(--hazard)">100%</text>
+        <g fill="var(--line)" opacity=".8"><rect x="800" y="407" width="22" height="63"/><rect x="830" y="407" width="22" height="63"/><rect x="860" y="407" width="22" height="63"/><rect x="1084" y="429" width="22" height="41"/><rect x="1114" y="429" width="22" height="41"/></g>
+        <g fill="var(--hazard)" opacity=".8"><rect x="920" y="375" width="22" height="95"/><rect x="950" y="375" width="22" height="95"/></g>
+        <rect x="1184" y="389" width="22" height="81" fill="var(--line)"/>
+        <line x1="796" y1="470" x2="1040" y2="470" stroke="var(--rule)" stroke-width="1.5"/><line x1="1080" y1="470" x2="1350" y2="470" stroke="var(--rule)" stroke-width="1.5"/>
+        <g class="s-sub" font-size="10"><text x="800" y="484">before</text><text x="920" y="484">after</text><text x="1084" y="484">before</text><text x="1184" y="484">after</text></g>
+        <text x="982" y="410" class="s-haz" font-size="10.5">105%</text><text x="982" y="424" class="s-sub" font-size="10" style="fill:var(--hazard)">falls over</text>
+        <text x="1216" y="410" class="s-note" font-size="10.5">90%</text><text x="1216" y="424" class="s-sub" font-size="10" style="fill:var(--fast)">degraded, up</text>
+        <g class="s-lab" font-size="11"><text x="796" y="512">Active-active</text><text x="796" y="530">Active-passive</text><text x="796" y="548">N+1 / N+2</text></g>
+        <g class="s-sub" font-size="10.5"><text x="900" y="512">all replicas serve · no failover delay · needs statelessness</text><text x="900" y="530">one waits · simple, no conflicts · idle cost, failover time</text><text x="900" y="548">spare enough to lose one or two — counted in capacity</text></g>
+
+        <!-- FAILURE DOMAINS -->
+        <rect x="30" y="600" width="1340" height="200" fill="var(--band)"/>
+        <text x="46" y="624" class="s-zone" fill="var(--mute)">12 · Failure domains · the blast radius grows left to right</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="46" y="710" width="176" height="50"/><rect x="232" y="698" width="176" height="62"/><rect x="418" y="686" width="176" height="74"/>
+        </g>
+        <rect x="604" y="674" width="176" height="86" fill="var(--z4)" stroke="var(--fast)" stroke-width="3"/>
+        <rect x="790" y="662" width="176" height="98" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <rect x="976" y="650" width="176" height="110" fill="var(--paper)" stroke="var(--rule)" stroke-width="2"/>
+        <rect x="1162" y="650" width="192" height="110" fill="var(--z6)" stroke="var(--learn)" stroke-width="2" stroke-dasharray="7 5"/>
+        <g class="s-lab" font-size="11"><text x="56" y="728">PROCESS</text><text x="242" y="716">MACHINE</text><text x="428" y="704">RACK</text><text x="614" y="692">AVAILABILITY ZONE</text><text x="800" y="680" fill="var(--hazard)">REGION</text><text x="986" y="668">PROVIDER</text><text x="1172" y="668" fill="var(--learn)">HUMAN</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="56" y="742">run more than one</text><text x="56" y="754">process</text>
+          <text x="242" y="730">more than one machine;</text><text x="242" y="742">the scaling group</text><text x="242" y="754">replaces it</text>
+          <text x="428" y="718">the provider spreads</text><text x="428" y="730">you within an AZ</text>
+          <text x="614" y="706">separate power, cooling,</text><text x="614" y="718">network · ms apart, so</text><text x="614" y="730">one sync system spans</text><text x="614" y="742">2–3 of them</text>
+          <text x="800" y="694">10s–100s of ms apart:</text><text x="800" y="706">async replication,</text><text x="800" y="718">conflicts, split brain</text><text x="800" y="730">forced into the app</text>
+          <text x="986" y="682">rarely justified</text>
+          <text x="1172" y="682">the most common cause</text><text x="1172" y="694">of downtime by far:</text><text x="1172" y="706">review, staging, canaries,</text><text x="1172" y="718">rollback</text>
+        </g>
+        <text x="604" y="664" class="s-note" font-size="10.5">the high-value step</text>
+        <text x="46" y="784" class="s-note">Multi-AZ is where nearly all the value is, and it is close to free.</text>
+        <text x="790" y="784" class="s-haz">Multi-region is a different discipline, not the next increment.</text>
+
+        <!-- DETECT -->
+        <rect x="30" y="820" width="440" height="232" fill="var(--z3)"/>
+        <text x="46" y="844" class="s-zone" fill="var(--mute)">13 · Detect, decide, act, verify</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="46" y="856" width="96" height="40"/><rect x="152" y="856" width="96" height="40"/><rect x="258" y="856" width="96" height="40"/><rect x="364" y="856" width="96" height="40"/></g>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="94" y="873">detect</text><text x="200" y="873">decide</text><text x="306" y="873">act</text><text x="412" y="873">verify</text></g>
+        <g class="s-sub" font-size="10" text-anchor="middle"><text x="94" y="888">checks, monitors</text><text x="200" y="888">automatic</text><text x="306" y="888">promote, route</text><text x="412" y="888">did it work?</text></g>
+        <text x="46" y="920" class="s-lab" font-size="11">When failover itself fails</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="938">SPLIT BRAIN — two primaries, and the data diverges</text>
+          <text x="46" y="954">FLAPPING — failing back and forth</text>
+          <text x="46" y="970">UNTESTED PATH — a standby that never took a connection</text>
+          <text x="46" y="986">CASCADE — the shifted load breaks the next part</text>
+        </g>
+        <text x="46" y="1012" class="s-haz" font-size="10.5">Untested automatic failover is a liability, not a safeguard.</text>
+        <text x="46" y="1028" class="s-sub" font-size="10.5" style="fill:var(--hazard)">Trigger it on a schedule — in production, if you can bear it.</text>
+
+        <!-- DEGRADE -->
+        <rect x="490" y="820" width="440" height="232" fill="var(--z1)"/>
+        <text x="506" y="844" class="s-zone" fill="var(--line)">14 · A dependency hangs · degrade, not die</text>
+        <g class="s-mono" font-size="10">
+          <text x="506" y="866" fill="var(--hazard)">recommendations stop answering — they HANG</text>
+          <text x="506" y="882">→ a 500 ms timeout fires; threads are freed</text>
+          <text x="506" y="898">→ circuit breaker opens: calls fail instantly</text>
+          <text x="506" y="914">→ fallback: the panel is hidden</text>
+          <text x="506" y="930" fill="var(--line)">→ the page works. One feature is degraded.</text>
+        </g>
+        <text x="506" y="954" class="s-lab" font-size="11">The toolkit</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="506" y="970">timeouts, shorter than your own</text><text x="506" y="984">circuit breakers: fail fast</text><text x="506" y="998">fallbacks: stale, default, hidden</text>
+          <text x="720" y="970">bulkheads: separate pools</text><text x="720" y="984">load shedding: keep the rest</text><text x="720" y="998">retries: backoff, jitter, budget</text>
+        </g>
+        <text x="506" y="1022" class="s-haz" font-size="10.5">A missing timeout is how a partial failure goes total:</text>
+        <text x="506" y="1038" class="s-sub" font-size="10.5" style="fill:var(--hazard)">one slow, non-essential feature holds every worker.</text>
+
+        <!-- LIMITS -->
+        <rect x="950" y="820" width="420" height="232" fill="var(--z5)"/>
+        <text x="966" y="844" class="s-zone" fill="var(--fast)">15 · What redundancy cannot do</text>
+        <text x="966" y="866" class="s-lab" font-size="11">Sync or async — decided explicitly</text>
+        <g class="s-sub" font-size="10.5"><text x="966" y="882">sync: +1–2 ms per commit across AZs, no loss</text><text x="966" y="896">async: faster, may lose the last few seconds</text><text x="966" y="910">whoever owns the data decides, not whoever set up the DB</text></g>
+        <text x="966" y="934" class="s-lab" font-size="11">Correlated failure bypasses every pair</text>
+        <g class="s-sub" font-size="10.5"><text x="966" y="950">same bad config, same expired certificate, same host;</text><text x="966" y="964">automate renewal, alert at 30 and 14 days</text></g>
+        <text x="966" y="988" class="s-haz" font-size="10.5">14:32 a migration deletes a table — replicated instantly.</text>
+        <text x="966" y="1002" class="s-sub" font-size="10.5" style="fill:var(--hazard)">Redundancy is useless. Point-in-time restore to 14:31 is not.</text>
+        <text x="966" y="1026" class="s-note" font-size="10.5">HA covers parts failing; backups cover data destroyed.</text>
+        <text x="966" y="1042" class="s-sub" font-size="10.5">Runbooks and credentials must be reachable when the wiki is down.</text>
+      </svg>
+    </div>
+    <figcaption><b>Three rules cover most real failures:</b> span two zones with enough capacity in each to serve alone, put a timeout, circuit breaker and fallback on every call, and exercise the failover before the day it matters. Beyond that, the largest cause of downtime is not hardware but change — which is why rollback belongs on this sheet as much as replication does.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the map, the arithmetic and the failure modes</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Health-checked DNS</h4><p>Route 53 failover can move traffic between endpoints when checks fail. For the rare cases that justify it — and only useful if the TTL is already low.</p></div>
+      <div><h4><span>02</span>CDN / edge</h4><p>Many locations, redundant by design, and the place for DDoS protection and rate limiting — availability is exactly what an attacker attacks.</p></div>
+      <div><h4><span>03</span>Load balancer</h4><p>Managed and multi-AZ by default, and the detection mechanism for the app tier: a dead instance is out of rotation in about 10 s. Check it spans the zones you think it does.</p></div>
+      <div><h4><span>04</span>App tier</h4><p>The easy part: stateless, N copies, active-active. Two per zone at 45%, so either zone can carry peak alone; the scaling group replaces failures and nobody is paged.</p></div>
+      <div><h4><span>05</span>Cache</h4><p>Often a hidden single point of failure — one node everyone forgot. Replicate it and let Sentinel promote, or make a cache miss survivable.</p></div>
+      <div><h4><span>06</span>Database primary and standby</h4><p>The hard part. Multi-AZ with a synchronous standby and automatic promotion is the highest-value single configuration change available; failover takes 60–120 s and loses nothing.</p></div>
+      <div><h4><span>07</span>Object storage</h4><p>Already regionally redundant. The redundancy you do not have to build — which is why files belong here and not on instance disks.</p></div>
+      <div><h4><span>08</span>Immutable backups</h4><p>The one thing replication cannot give you. Corruption, deletion and ransomware replicate perfectly; only an isolated, immutable copy in a separate account survives them.</p></div>
+      <div><h4><span>09</span>The nines</h4><p>99.9% is 8.8 hours a year, 99.99% is 53 minutes, 99.999% is 5 minutes. Each costs roughly ten times the last; do not buy more than the business needs.</p></div>
+      <div><h4><span>10</span>Series availability</h4><p>Availability is the product of your dependencies, not the best of them: four at 99.9% make about 99.6%. Adding services quietly lowers it unless each is made non-fatal.</p></div>
+      <div><h4><span>11</span>Capacity, not count</h4><p>Three instances at 70% cannot lose one — the survivors would need 105%. Across two zones, each must run under 50%. Teams discover this during their first real zone failure.</p></div>
+      <div><h4><span>12</span>Failure domains</h4><p>Process, machine, rack, zone, region, provider — and humans, the most common cause. Spanning two or three zones is the high-value step; multi-region forces asynchronous design into the application.</p></div>
+      <div><h4><span>13</span>Detection and failover</h4><p>Detect, decide automatically, act, verify. Failover has its own failure modes — split brain, flapping, untested paths, cascades — so use proper leader election and rehearse it.</p></div>
+      <div><h4><span>14</span>Graceful degradation</h4><p>A hung dependency must cost one feature, not the service: a timeout shorter than yours, a circuit breaker that fails fast, a fallback, bulkheads and load shedding. Every "return 500" is a decision to revisit.</p></div>
+      <div><h4><span>15</span>Replication trade-off</h4><p>Synchronous costs 1–2 ms per commit and loses nothing on failover; asynchronous is faster and may lose the last seconds. The owner of the data chooses, explicitly.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Security incidents are availability incidents redundancy cannot touch</b>
+    <p>A compromised credential or ransomware propagates to every replica immediately, because replication faithfully copies destruction. So do expired certificates — a startlingly common self-inflicted outage — and a standby configured with looser security than the primary. Pairs protect against parts failing; they do nothing against the same mistake arriving everywhere at once.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SHEET 5 — THE WARNING LIGHTS ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>The Warning Lights</h2>
+    <span class="form">Instrument panel</span>
+    <span class="cov">Covers · Monitoring and Alerting</span>
+  </div>
+  <p class="thesis">Monitoring is the whole instrument panel; alerting is the handful of warning lights, and the error budget is the fuel gauge. Seven links run from a measurement to a changed system. <strong>The failure mode is not missing data — it is four hundred alerts a day and a channel nobody reads, so the mature move is subtractive: define "working", page on that, and delete the rest.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 1000" role="img" aria-label="An instrument panel for reliability. Across the top, a chain of seven boxes: service level indicator, service level objective, error budget, burn-rate alert, on-call with runbook, incident mitigation and blameless review, with a loop arrow from the review back to the start. Below left, a month's error budget of 43 minutes drawn as a burn-down line, with a fast burn on day 9 and 38 of 43 minutes spent by day 15, pausing feature work. Below right, a decision tree of three tests that decides between a dashboard, a ticket and a page, beside lists of symptoms to page on and causes never to page on. Across the middle, a timeline of one incident from deployment at 02:05 to rollback at 02:21, with the review findings. Along the bottom, what makes on-call sustainable, pruning alerts and bounding metric labels, and the failures only external checks catch.">
+        <defs>
+          <marker id="w5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="w5b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <!-- THE CHAIN -->
+        <text x="40" y="40" class="s-zone" fill="var(--line)">The chain · from a measurement to a changed system</text>
+        <g stroke="var(--rule)">
+          <rect x="40" y="60" width="170" height="110" fill="var(--z1)"/><rect x="230" y="60" width="170" height="110" fill="var(--z1)"/><rect x="420" y="60" width="170" height="110" fill="var(--z4)"/>
+          <rect x="610" y="60" width="170" height="110" fill="var(--z5)"/><rect x="800" y="60" width="170" height="110" fill="var(--z2)"/><rect x="990" y="60" width="170" height="110" fill="var(--z3)"/><rect x="1180" y="60" width="170" height="110" fill="var(--z6)"/>
+        </g>
+        <rect x="610" y="60" width="170" height="110" fill="none" stroke="var(--hazard)" stroke-width="2.5"/>
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#w5a)">
+          <path d="M210,115 L226,115"/><path d="M400,115 L416,115"/><path d="M590,115 L606,115"/><path d="M780,115 L796,115"/><path d="M970,115 L986,115"/><path d="M1160,115 L1176,115"/>
+        </g>
+        <g class="s-num"><text x="52" y="82">01</text><text x="242" y="82">02</text><text x="432" y="82">03</text><text x="622" y="82">04</text><text x="812" y="82">05</text><text x="1002" y="82">06</text><text x="1192" y="82">07</text></g>
+        <g class="s-lab"><text x="76" y="82">SLI</text><text x="266" y="82">SLO</text><text x="456" y="82">error budget</text><text x="646" y="82" fill="var(--hazard)">burn-rate alert</text><text x="836" y="82">on-call</text><text x="1026" y="82">incident</text><text x="1216" y="82">review</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="104">a measurement, from the</text><text x="52" y="120">user's side: success ÷</text><text x="52" y="136">total; % under 300 ms</text>
+          <text x="242" y="104">the internal target:</text><text x="242" y="120">99.9% over 30 days.</text><text x="242" y="136">The SLA is always looser</text>
+          <text x="432" y="104">what you may spend:</text><text x="432" y="120">43 minutes a month.</text><text x="432" y="136">Ship while it lasts</text>
+          <text x="622" y="104">fast burn 14× → page</text><text x="622" y="120">slow burn 2× → ticket</text><text x="622" y="136">never a fixed threshold</text>
+          <text x="812" y="104">a human, a runbook</text><text x="812" y="120">linked from the alert,</text><text x="812" y="136">and access to fix it</text>
+          <text x="1002" y="104">mitigate first: roll</text><text x="1002" y="120">back, fail over, shed</text><text x="1002" y="136">load. Status page on</text>
+          <text x="1192" y="104">blameless: timeline,</text><text x="1192" y="120">contributing factors,</text><text x="1192" y="136">actions with owners</text>
+        </g>
+        <text x="1002" y="158" class="s-sub" font-size="10.5">a cadence</text>
+        <path d="M1265,170 L1265,200 L125,200 L125,178" fill="none" stroke="var(--learn)" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#w5b)"/>
+        <text x="695" y="222" text-anchor="middle" class="s-learn">every review changes the system; every quarter the alerts get pruned</text>
+
+        <!-- BUDGET -->
+        <rect x="30" y="240" width="670" height="320" fill="var(--z1)"/>
+        <text x="46" y="264" class="s-zone" fill="var(--line)">08 · The error budget · one month, drawn</text>
+        <g stroke="var(--rule)" stroke-width="1.5"><line x1="80" y1="286" x2="80" y2="470"/><line x1="80" y1="470" x2="660" y2="470"/></g>
+        <line x1="80" y1="290" x2="660" y2="470" stroke="var(--mute)" stroke-width="2" stroke-dasharray="6 5"/>
+        <polyline points="80,290 254,293 256,320 312,356 370,449" fill="none" stroke="var(--line)" stroke-width="3.5"/>
+        <line x1="370" y1="449" x2="660" y2="455" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="6 4"/>
+        <circle cx="255" cy="306" r="6" fill="var(--hazard)"/><circle cx="370" cy="449" r="6" fill="var(--hazard)"/>
+        <g class="s-mono" font-size="10" style="fill:var(--mute)"><text x="72" y="294" text-anchor="end">43</text><text x="72" y="474" text-anchor="end">0</text><text x="80" y="486" text-anchor="middle">day 0</text><text x="370" y="486" text-anchor="middle">15</text><text x="660" y="486" text-anchor="middle">30</text></g>
+        <text x="72" y="376" text-anchor="end" class="s-sub" font-size="10">minutes</text><text x="72" y="388" text-anchor="end" class="s-sub" font-size="10">left</text>
+        <text x="266" y="300" class="s-haz" font-size="10.5">day 9 · fast burn · 7 minutes</text>
+        <text x="360" y="464" text-anchor="end" class="s-haz" font-size="10.5">day 15 · 38 of 43 spent</text>
+        <text x="380" y="440" class="s-sub" font-size="10.5" style="fill:var(--hazard)">→ feature work pauses</text>
+        <text x="46" y="506" class="s-sub">dashed: spending evenly across the month · solid: what actually happened</text>
+        <text x="46" y="528" class="s-note">Budget left → ship freely, even on Friday. Budget gone → stop features, fix reliability.</text>
+        <text x="46" y="546" class="s-sub">No argument needed: the rule was agreed in advance. 100% is the wrong target.</text>
+
+        <!-- PAGE OR NOT -->
+        <rect x="720" y="240" width="650" height="320" fill="var(--z3)"/>
+        <text x="736" y="264" class="s-zone" fill="var(--mute)">09 · Should this wake someone?</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="740" y="282" width="240" height="40"/><rect x="740" y="352" width="240" height="40"/><rect x="740" y="422" width="240" height="40"/></g>
+        <rect x="740" y="492" width="240" height="40" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <g class="s-lab" font-size="11"><text x="754" y="306">1 · is any user affected?</text><text x="754" y="376">2 · can a human act right now?</text><text x="754" y="446">3 · worth waking up for?</text></g>
+        <text x="754" y="517" class="s-haz">PAGE — a phone, not email</text>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#w5a)"><path d="M860,322 L860,348"/><path d="M860,392 L860,418"/><path d="M860,462 L860,488"/></g>
+        <g class="s-sub" font-size="10"><text x="868" y="340">yes</text><text x="868" y="410">yes</text><text x="868" y="480">yes</text><text x="988" y="296">no</text><text x="988" y="366">no</text><text x="988" y="436">no</text></g>
+        <g stroke="var(--mute)" stroke-width="2" fill="none"><path d="M980,302 L1018,302"/><path d="M980,372 L1018,372"/><path d="M980,442 L1018,442"/></g>
+        <g fill="var(--paper)" stroke="var(--rule)"><rect x="1020" y="288" width="100" height="28"/><rect x="1020" y="358" width="100" height="28"/><rect x="1020" y="428" width="100" height="28"/></g>
+        <g class="s-lab" font-size="11" text-anchor="middle" style="fill:var(--mute)"><text x="1070" y="306">dashboard</text><text x="1070" y="376">ticket</text><text x="1070" y="446">ticket, 9 a.m.</text></g>
+        <text x="1140" y="290" class="s-lab" font-size="11" style="fill:var(--line)">Page on symptoms</text>
+        <g class="s-sub" font-size="10.5"><text x="1140" y="306">error rate burning budget</text><text x="1140" y="320">p99 above the SLO</text><text x="1140" y="334">oldest message &gt; N min</text><text x="1140" y="348">synthetic login failing</text><text x="1140" y="362">cert expiring in 14 days</text><text x="1140" y="376">backup job not succeeding</text></g>
+        <text x="1140" y="400" class="s-lab" font-size="11" style="fill:var(--hazard)">Never page on causes</text>
+        <g class="s-sub" font-size="10.5"><text x="1140" y="416">CPU at 85% — so what?</text><text x="1140" y="430">memory at 90%</text><text x="1140" y="444">one pod restart</text><text x="1140" y="458">disk at 70% — predict it</text></g>
+        <text x="1000" y="517" class="s-sub" font-size="10.5">runbook linked · cause dashboards for investigation only</text>
+        <text x="740" y="550" class="s-note" font-size="10.5">Burn rate, not thresholds: a fixed 1% is too twitchy at 3 a.m. and too slow in a real outage.</text>
+
+        <!-- INCIDENT -->
+        <rect x="30" y="580" width="1340" height="182" fill="var(--band)"/>
+        <text x="46" y="604" class="s-zone" fill="var(--mute)">10 · One incident · mitigate first, understand later</text>
+        <rect x="539" y="652" width="230" height="36" fill="var(--hazard)" opacity=".14"/>
+        <line x1="80" y1="670" x2="900" y2="670" stroke="var(--ink)" stroke-width="2"/>
+        <circle cx="244" cy="670" r="6" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <circle cx="506" cy="670" r="5" fill="var(--hazard)"/>
+        <circle cx="539" cy="670" r="7" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <circle cx="572" cy="670" r="6" fill="var(--paper)" stroke="var(--line)" stroke-width="3"/>
+        <circle cx="769" cy="670" r="7" fill="var(--paper)" stroke="var(--line)" stroke-width="3"/>
+        <g class="s-mono" font-size="10" text-anchor="middle" style="fill:var(--mute)"><text x="244" y="662">02:05</text><text x="539" y="662">02:14</text><text x="769" y="662">02:21</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="500" y="630" text-anchor="end">the uncached checkout query bites</text><text x="500" y="644" text-anchor="end">8 minutes after the deploy</text>
+          <text x="572" y="630">02:15 paged · runbook step 1:</text><text x="572" y="644">recent deploy? yes → roll back</text>
+          <text x="244" y="692">release deployed</text><text x="244" y="706">canary ran 5 minutes</text>
+          <text x="539" y="706" text-anchor="end">month's budget in 40 min</text>
+          <text x="769" y="706">impact 7 min · 7 of 43 spent</text>
+        </g>
+        <text x="539" y="692" text-anchor="end" class="s-haz" font-size="10.5">fast-burn alert</text>
+        <text x="769" y="692" class="s-lab" font-size="11" style="fill:var(--line)">service normal</text>
+        <text x="80" y="736" class="s-note">No debugging during the incident — deliberately. The evidence is still there afterwards.</text>
+        <text x="80" y="752" class="s-sub">The exception is a data-corrupting bug, where carrying on may be worse than stopping.</text>
+
+        <rect x="940" y="616" width="414" height="136" fill="var(--z6)" stroke="var(--learn)" stroke-width="2"/>
+        <text x="956" y="638" class="s-learn">11 · The blameless review</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="956" y="656">The cause is never a person — the system allowed it.</text>
+          <text x="956" y="670">Canary ran 5 min, the bug needed 8 → extend the window.</text>
+          <text x="956" y="684">The load test missed checkout's real cache state.</text>
+          <text x="956" y="698">The runbook cut an estimated 15 minutes.</text>
+        </g>
+        <text x="956" y="720" class="s-note" font-size="10.5">Three actions · three owners · three dates</text>
+        <text x="956" y="738" class="s-sub" font-size="10.5">One incident commander coordinates; others fix.</text>
+
+        <!-- ON-CALL -->
+        <rect x="30" y="780" width="440" height="206" fill="var(--z2)"/>
+        <text x="46" y="804" class="s-zone" fill="var(--mute)">12 · On-call people can sustain</text>
+        <text x="46" y="828" class="s-lab" font-size="11" style="fill:var(--line)">what makes it work</text>
+        <text x="258" y="828" class="s-lab" font-size="11" style="fill:var(--hazard)">what destroys it</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="846">a runbook on every page</text><text x="46" y="862">a rotation, not one life</text><text x="46" y="878">handover with context</text><text x="46" y="894">paid time to fix causes</text><text x="46" y="910">access to actually fix it</text>
+          <text x="258" y="846">pages needing no action</text><text x="258" y="862">3 a.m. pages for 9 a.m.</text><text x="258" y="878">no runbook: first principles</text><text x="258" y="894">no authority to change</text><text x="258" y="910">the same alert all month</text>
+        </g>
+        <text x="46" y="940" class="s-haz" font-size="10.5">More than 1–2 actionable pages a week is a system bug,</text>
+        <text x="46" y="956" class="s-sub" font-size="10.5" style="fill:var(--hazard)">not an engineer who needs more resilience. Count pages</text>
+        <text x="46" y="970" class="s-sub" font-size="10.5" style="fill:var(--hazard)">per shift, and make the number fall.</text>
+
+        <!-- PRUNING -->
+        <rect x="490" y="780" width="440" height="206" fill="var(--z4)"/>
+        <text x="506" y="804" class="s-zone" fill="var(--mute)">13 · Delete alerts · bound labels</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="506" y="818" width="16" height="16"/><rect x="526" y="818" width="16" height="16"/><rect x="566" y="818" width="16" height="16"/><rect x="586" y="818" width="16" height="16"/><rect x="626" y="818" width="16" height="16"/><rect x="646" y="818" width="16" height="16"/><rect x="666" y="818" width="16" height="16"/><rect x="706" y="818" width="16" height="16"/><rect x="746" y="818" width="16" height="16"/><rect x="766" y="818" width="16" height="16"/><rect x="806" y="818" width="16" height="16"/><rect x="826" y="818" width="16" height="16"/><rect x="866" y="818" width="16" height="16"/>
+        </g>
+        <g fill="var(--z5)" stroke="var(--hazard)" stroke-width="1.5"><rect x="546" y="818" width="16" height="16"/><rect x="606" y="818" width="16" height="16"/><rect x="686" y="818" width="16" height="16"/><rect x="726" y="818" width="16" height="16"/><rect x="786" y="818" width="16" height="16"/><rect x="846" y="818" width="16" height="16"/></g>
+        <g stroke="var(--hazard)" stroke-width="1.5"><path d="M548,820 L560,832 M560,820 L548,832"/><path d="M608,820 L620,832 M620,820 L608,832"/><path d="M688,820 L700,832 M700,820 L688,832"/><path d="M728,820 L740,832 M740,820 L728,832"/><path d="M788,820 L800,832 M800,820 L788,832"/><path d="M848,820 L860,832 M860,820 L848,832"/></g>
+        <text x="506" y="856" class="s-sub" font-size="10.5">Quarterly review: 6 of 19 alerts never led to an action.</text>
+        <text x="506" y="872" class="s-note" font-size="10.5">Deleted. The channel becomes trustworthy again.</text>
+        <text x="506" y="898" class="s-lab" font-size="11">High cardinality destroys a metrics system</text>
+        <g class="s-mono" font-size="10"><text x="506" y="916">http_requests{route="/orders"}    ✓ bounded</text><text x="506" y="932" fill="var(--hazard)">http_requests{user_id="8817…"}   ✗ millions</text></g>
+        <text x="506" y="954" class="s-sub" font-size="10.5">Identifiers go in logs and traces; metrics take bounded labels.</text>
+        <text x="506" y="970" class="s-sub" font-size="10.5">Traces: sample in production, and always keep the errors.</text>
+
+        <!-- OUTSIDE -->
+        <rect x="950" y="780" width="420" height="206" fill="var(--z5)"/>
+        <text x="966" y="804" class="s-zone" fill="var(--fast)">14 · Watch from outside</text>
+        <text x="966" y="828" class="s-lab" font-size="11">What only these checks caught</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="966" y="846">A DNS change broke resolution for real users while</text><text x="966" y="860">every internal metric looked perfect — only the</text><text x="966" y="874">external synthetic check, running each minute, saw it.</text>
+          <text x="966" y="894">A certificate expiring in 14 days.</text><text x="966" y="908">A backup job silently failing for 3 weeks.</text>
+        </g>
+        <text x="966" y="932" class="s-haz" font-size="10.5">Logs are the most common accidental data leak:</text>
+        <text x="966" y="948" class="s-sub" font-size="10.5" style="fill:var(--hazard)">redact tokens and personal data in the logger itself.</text>
+        <text x="966" y="970" class="s-note" font-size="10.5">Status page and paging hosted outside what they watch.</text>
+      </svg>
+    </div>
+    <figcaption><b>Start with four alerts</b> — availability, latency, a queue or saturation signal, and an external synthetic check — each with a runbook. That covers most real incidents and takes a day. Everything else goes on a dashboard for investigation, and every quarter the alerts that never led to an action are deleted.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the chain, the budget and the incident</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>SLI</h4><p>A service level indicator: a measurement from the user's side, taken as close to them as possible. "Successful checkout requests under 2 s", never "CPU below 80%".</p></div>
+      <div><h4><span>02</span>SLO</h4><p>The internal objective — 99.9% over 30 days. The SLA is the contract with money attached, and is always looser than the SLO so you get warning before it costs you.</p></div>
+      <div><h4><span>03</span>Error budget</h4><p>What the SLO lets you spend: 43 minutes a month at 99.9%. It turns "ship faster" against "be reliable" into arithmetic, and gives permission to spend it deliberately.</p></div>
+      <div><h4><span>04</span>Burn-rate alert</h4><p>Pages on how fast the budget is going, not on a fixed threshold: a 14× fast burn pages, a 2× slow burn opens a ticket. Removes most false pages and catches real outages sooner.</p></div>
+      <div><h4><span>05</span>On-call and runbook</h4><p>Every page links its runbook, reaches a phone rather than an inbox, and lands on someone with the access to fix things. Paging systems must work when the identity provider does not.</p></div>
+      <div><h4><span>06</span>Incident</h4><p>Mitigate first — roll back, fail over, shed load — communicate on a cadence through a status page hosted elsewhere, and keep one incident commander whose job is coordination.</p></div>
+      <div><h4><span>07</span>Blameless review</h4><p>Timeline, contributing factors, and actions with owners and dates. Blameless does not mean causeless: if one person's mistake could break production, the system permitted it.</p></div>
+      <div><h4><span>08</span>The month's budget</h4><p>A 7-minute fast burn on day 9, then 38 of 43 minutes gone by day 15, so feature deployments pause and the team works on reliability — with no argument, because the rule was agreed first.</p></div>
+      <div><h4><span>09</span>Three tests for a page</h4><p>Is a user or the business affected? Can a human act right now? Would you want to be woken? Any "no" makes it a dashboard or a ticket. Symptoms page; causes like CPU and disk do not.</p></div>
+      <div><h4><span>10</span>Mitigate, then understand</h4><p>02:05 deploy, 02:14 fast-burn page, runbook step one finds the recent release, 02:21 rolled back: 7 minutes of impact. Every minute spent diagnosing live is a minute of user impact.</p></div>
+      <div><h4><span>11</span>Review findings</h4><p>The canary ran 5 minutes and the bug took 8 to manifest; the load test missed checkout's cache state; the runbook saved about 15 minutes. Three actions, three owners.</p></div>
+      <div><h4><span>12</span>Sustainable on-call</h4><p>Pages per shift is a reliability metric that should trend down. More than one or two actionable pages a week means the system or the alerting needs work — or the result is attrition.</p></div>
+      <div><h4><span>13</span>Pruning and cardinality</h4><p>Six of nineteen alerts had never led to an action, so they were deleted. And a user id or full URL as a metric label creates millions of series; identifiers belong in logs and traces.</p></div>
+      <div><h4><span>14</span>Outside-in checks</h4><p>A synthetic check from outside the network sees DNS, TLS and CDN failures internal metrics cannot. Alert too on certificates at 30 and 14 days, backup failures and cost anomalies.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Bad monitoring is worse than none</b>
+    <p>Four hundred alerts a day manufacture confidence while training everyone to ignore the channel, so the one real page arrives inside the noise and is missed. Monitoring that depends on the system it monitors fails with it. And logs full of tokens and personal data are readable by far more people than the database is.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SHEET 6 — THE RECOVERY LADDER ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>The Recovery Ladder</h2>
+    <span class="form">Ladder plate</span>
+    <span class="cov">Covers · Backup Strategy · Disaster Recovery</span>
+  </div>
+  <p class="thesis">What sheet 4 cannot survive: a dropped table, ransomware, a deleted account, a lost region. Replication faithfully copies destruction, so recovery needs copies in a separate blast radius and a procedure people have actually run. <strong>A backup nobody has restored is a hypothesis, and a disaster-recovery plan nobody has rehearsed is a document — the rehearsal is the only part that produces a capability.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 1090" role="img" aria-label="A ladder of four disaster recovery strategies rising left to right in cost: backup and restore with an RTO of hours to days, pilot light with tens of minutes, warm standby with minutes, and active-active with near zero, which demands a different data architecture. Above the lower rungs, a panel separating normal failures handled by high availability from disasters handled by recovery. Across the middle, the production account copying into a separate backup account under Object Lock, then a monthly automated restore test; ransomware can delete the first and not the second. To the right, a timeline defining RPO as data lost back to the last good copy and RTO as time down until service returns, and the 3-2-1-1-0 rule. Along the bottom, backup types and grandfather-father-son retention, the single points of failure that appear on the day of a disaster with infrastructure as code as the precondition, and the five levels of rehearsal with a timed quarterly rehearsal that found a payment allowlist.">
+        <defs>
+          <marker id="r6a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="r6b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- HA vs DR -->
+        <text x="40" y="40" class="s-zone" fill="var(--line)">The ladder · four recovery strategies, cheapest first</text>
+        <rect x="40" y="96" width="600" height="130" fill="var(--z3)"/>
+        <text x="56" y="118" class="s-zone" fill="var(--mute)">05 · High availability is not disaster recovery</text>
+        <text x="56" y="142" class="s-lab" font-size="11" style="fill:var(--line)">NORMAL FAILURE</text>
+        <g class="s-sub" font-size="10.5"><text x="56" y="158">an instance, a zone, a DB node</text><text x="56" y="172">→ HA: automatic, no human,</text><text x="56" y="186">an architecture</text></g>
+        <text x="300" y="142" class="s-lab" font-size="11" style="fill:var(--hazard)">DISASTER</text>
+        <g class="s-sub" font-size="10.5"><text x="300" y="158">a region, a deleted or compromised account,</text><text x="300" y="172">ransomware, terraform destroy in the wrong</text><text x="300" y="186">directory, a provider suspending the account</text><text x="300" y="200">→ DR: deliberate, by named people</text></g>
+        <text x="56" y="216" class="s-note" font-size="10.5">Perfect HA and no DR is common.</text>
+
+        <!-- RUNGS -->
+        <line x1="30" y1="430" x2="1370" y2="430" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="40" y="300" width="300" height="130" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="360" y="240" width="300" height="190" fill="var(--z2)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="680" y="180" width="300" height="250" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+        <rect x="1000" y="120" width="300" height="310" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2"/>
+        <g class="s-num"><text x="52" y="320">01</text><text x="372" y="260">02</text><text x="692" y="200">03</text><text x="1012" y="140">04</text></g>
+        <g class="s-lab" font-size="12.5"><text x="80" y="320">backup and restore</text><text x="400" y="260">pilot light</text><text x="720" y="200">warm standby</text><text x="1040" y="140">active-active</text></g>
+        <g class="s-mono" font-size="10.5"><text x="52" y="340">RTO hours–days · RPO hours</text><text x="372" y="280">RTO tens of min · RPO minutes</text><text x="692" y="220">RTO minutes · RPO seconds</text><text x="1012" y="160">RTO ~zero · RPO ~zero</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="358">backups in another account and region;</text><text x="52" y="372">disaster → build from code, restore</text><text x="52" y="386">the data, repoint DNS</text>
+          <text x="372" y="298">the data layer replicates continuously;</text><text x="372" y="312">compute is defined in code but OFF</text><text x="372" y="326">disaster → scale compute, promote the</text><text x="372" y="340">database, repoint DNS</text>
+          <text x="692" y="238">a small but COMPLETE copy running in</text><text x="692" y="252">another region, all the time</text><text x="692" y="266">disaster → scale it up, shift traffic</text>
+          <text x="1012" y="178">both regions serve traffic all the time</text><text x="1012" y="192">disaster → remove one from rotation</text>
+        </g>
+        <text x="52" y="412" class="s-note" font-size="10.5">cheapest · every step under pressure</text>
+        <text x="372" y="366" class="s-note" font-size="10.5">a good balance — if capacity exists</text>
+        <text x="372" y="380" class="s-sub" font-size="10.5" style="fill:var(--hazard)">on the day: DR-region quotas decide</text>
+        <text x="692" y="292" class="s-note" font-size="10.5">the path is exercised just by existing</text>
+        <text x="1012" y="218" class="s-haz" font-size="10.5">Not warm standby, but better:</text>
+        <g class="s-sub" font-size="10.5" style="fill:var(--hazard)"><text x="1012" y="232">a different data architecture —</text><text x="1012" y="246">users partitioned by region, eventual</text><text x="1012" y="260">consistency with conflict resolution,</text><text x="1012" y="274">or a globally distributed database.</text></g>
+        <text x="1012" y="300" class="s-sub" font-size="10.5">Budgeted as infrastructure, discovered</text>
+        <text x="1012" y="314" class="s-sub" font-size="10.5">as an application redesign.</text>
+        <path d="M40,450 L1300,450" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="8 6" fill="none" marker-end="url(#r6b)"/>
+        <text x="40" y="472" class="s-note">Each rung up costs more and shrinks RTO and RPO. Choose the cheapest one that meets a number the business agreed to.</text>
+        <text x="40" y="490" class="s-sub">A rehearsed four-hour backup-and-restore is worth more than an unrehearsed active-active: the second has never been tried, and will not work the first time.</text>
+
+        <!-- ARCHITECTURE -->
+        <rect x="30" y="510" width="730" height="262" fill="var(--band)"/>
+        <text x="46" y="534" class="s-zone" fill="var(--mute)">10 · Where the copies live · a separate blast radius</text>
+        <rect x="46" y="548" width="230" height="176" fill="var(--z2)" stroke="var(--rule)"/>
+        <rect x="306" y="548" width="230" height="176" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="566" y="548" width="180" height="176" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#r6a)"><path d="M276,636 L300,636"/><path d="M536,636 L560,636"/></g>
+        <text x="58" y="566" class="s-lab" font-size="11">PRODUCTION ACCOUNT</text>
+        <text x="58" y="584" class="s-mono" font-size="10">primary ─sync─► standby</text>
+        <g class="s-sub" font-size="10.5"><text x="58" y="602">continuous WAL → automated</text><text x="58" y="616">backups, 35 days: PITR</text><text x="58" y="630">to any second in the window</text><text x="58" y="648">nightly logical dump → S3,</text><text x="58" y="662">versioned, restorable anywhere</text><text x="58" y="680">data bucket: versioning on</text></g>
+        <text x="58" y="706" class="s-haz" font-size="10">same credentials can delete all of it</text>
+        <text x="318" y="566" class="s-lab" font-size="11" style="fill:var(--line)">BACKUP ACCOUNT</text>
+        <g class="s-sub" font-size="10.5"><text x="318" y="584">different credentials; the copier</text><text x="318" y="598">role has PutObject, not Delete</text></g>
+        <text x="318" y="616" class="s-note" font-size="10.5">OBJECT LOCK · compliance mode</text>
+        <g class="s-sub" font-size="10.5"><text x="318" y="630">no credential, even root, deletes</text><text x="318" y="644">a copy before retention expires</text></g>
+        <text x="318" y="664" class="s-mono" font-size="10">30 d · 12 w · 12 m · 7 y</text>
+        <g class="s-sub" font-size="10.5"><text x="318" y="682">→ cross-region copy</text><text x="318" y="696">→ Glacier after 90 days</text><text x="318" y="714">keys recoverable from here</text></g>
+        <text x="578" y="566" class="s-lab" font-size="11">MONTHLY RESTORE TEST</text>
+        <g class="s-sub" font-size="10.5"><text x="578" y="584">restore the latest into</text><text x="578" y="598">a scratch environment,</text><text x="578" y="612">run checks, report a</text><text x="578" y="626">row count to a dashboard</text></g>
+        <text x="578" y="646" class="s-haz" font-size="10.5">ALARM if it fails</text>
+        <text x="578" y="670" class="s-note" font-size="10.5">the only thing that</text>
+        <text x="578" y="684" class="s-note" font-size="10.5">proves any of the above</text>
+        <text x="578" y="704" class="s-sub" font-size="10">timed: that is your real RTO</text>
+        <text x="46" y="746" class="s-haz" font-size="10.5">15 · Ransomware with production admin: snapshots deleted, buckets emptied — the backup account is untouched.</text>
+        <text x="46" y="762" class="s-sub" font-size="10.5">Same attack with backups in the same account: nothing to restore from. Rebuild from Terraform, restore, rotate every secret.</text>
+
+        <!-- RPO / RTO -->
+        <rect x="780" y="510" width="590" height="132" fill="var(--z1)"/>
+        <text x="796" y="534" class="s-zone" fill="var(--line)">06 · RPO and RTO · agreed per dataset</text>
+        <rect x="900" y="572" width="160" height="16" fill="var(--hazard)" opacity=".2"/>
+        <rect x="1060" y="572" width="240" height="16" fill="var(--fast)" opacity=".22"/>
+        <line x1="800" y1="590" x2="1350" y2="590" stroke="var(--ink)" stroke-width="2"/>
+        <circle cx="900" cy="590" r="6" fill="var(--paper)" stroke="var(--line)" stroke-width="3"/>
+        <circle cx="1060" cy="590" r="7" fill="var(--hazard)"/>
+        <circle cx="1300" cy="590" r="6" fill="var(--paper)" stroke="var(--line)" stroke-width="3"/>
+        <text x="980" y="566" text-anchor="middle" class="s-haz" font-size="10.5">RPO · data lost</text>
+        <text x="1180" y="566" text-anchor="middle" class="s-note" font-size="10.5">RTO · time down</text>
+        <g class="s-mono" font-size="10" text-anchor="middle" style="fill:var(--mute)"><text x="900" y="606">last good copy</text><text x="1060" y="606">disaster</text><text x="1300" y="606">service back</text></g>
+        <text x="796" y="628" class="s-sub" font-size="10.5">RPO → backup frequency (daily: 24 h; WAL: seconds). RTO → restore mechanism.</text>
+
+        <!-- 3-2-1-1-0 -->
+        <rect x="780" y="652" width="590" height="120" fill="var(--z4)"/>
+        <text x="796" y="676" class="s-zone" fill="var(--mute)">07 · 3-2-1-1-0 · the cloud version of 3-2-1</text>
+        <g class="s-big" font-size="24"><text x="796" y="712">3</text><text x="912" y="712">2</text><text x="1028" y="712">1</text><text x="1144" y="712" fill="var(--line)">1</text><text x="1260" y="712" fill="var(--hazard)">0</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="796" y="730">copies of the data</text>
+          <text x="912" y="730">storage types</text><text x="912" y="742">or classes</text>
+          <text x="1028" y="730">in another region</text><text x="1028" y="742">or account</text>
+          <text x="1144" y="730">IMMUTABLE</text><text x="1144" y="742">Object Lock, WORM</text>
+          <text x="1260" y="730">errors, VERIFIED</text><text x="1260" y="742">by a real restore</text>
+        </g>
+        <text x="1260" y="760" class="s-haz" font-size="10">always skipped</text>
+
+        <!-- TYPES + RETENTION -->
+        <rect x="30" y="790" width="400" height="290" fill="var(--z3)"/>
+        <text x="46" y="814" class="s-zone" fill="var(--mute)">08 · Backup types · 09 · retention</text>
+        <g class="s-mono" font-size="10"><text x="46" y="838">FULL</text><text x="46" y="854">INCREMENTAL</text><text x="46" y="870">DIFFERENTIAL</text><text x="46" y="886">CONTINUOUS</text><text x="46" y="902" fill="var(--hazard)">SNAPSHOT</text></g>
+        <g class="s-sub" font-size="10.5"><text x="150" y="838">simple, fast to restore, costly</text><text x="150" y="854">cheap; restore needs EVERY link</text><text x="150" y="870">the full plus one differential</text><text x="150" y="886">log shipping: restore to any second</text><text x="150" y="902" fill="var(--hazard)">fast, but only crash-consistent</text></g>
+        <text x="46" y="928" class="s-lab" font-size="11">Grandfather-father-son</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5"><rect x="46" y="938" width="70" height="36"/><rect x="122" y="938" width="70" height="36"/><rect x="198" y="938" width="70" height="36"/><rect x="274" y="938" width="70" height="36"/><rect x="350" y="938" width="70" height="36"/></g>
+        <g class="s-mono" font-size="10" text-anchor="middle"><text x="81" y="953">hourly</text><text x="81" y="967">× 24</text><text x="157" y="953">daily</text><text x="157" y="967">× 30</text><text x="233" y="953">weekly</text><text x="233" y="967">× 12</text><text x="309" y="953">monthly</text><text x="309" y="967">× 12</text><text x="385" y="953">yearly</text><text x="385" y="967">× 7</text></g>
+        <text x="46" y="998" class="s-haz" font-size="10.5">A currency bug hid for three weeks; 7-day retention</text>
+        <text x="46" y="1012" class="s-sub" font-size="10.5" style="fill:var(--hazard)">had already discarded the last clean copy.</text>
+        <text x="46" y="1034" class="s-note" font-size="10.5">Retain for as long as a problem can hide.</text>
+        <text x="46" y="1052" class="s-sub" font-size="10.5">Deep Archive retrieval takes up to 12 h — never</text>
+        <text x="46" y="1066" class="s-sub" font-size="10.5">for recent copies of a dataset with a 1 h RTO.</text>
+
+        <!-- FORGOTTEN -->
+        <rect x="450" y="790" width="420" height="290" fill="var(--z2)"/>
+        <text x="466" y="814" class="s-zone" fill="var(--mute)">11 · The real SPOFs on the day</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="466" y="838" fill="var(--hazard)">secrets and KMS keys ⚠</text><text x="466" y="854">Terraform state</text><text x="466" y="870">DNS records, the registrar</text><text x="466" y="886">TLS certificates</text><text x="466" y="902">the runbook itself</text>
+          <text x="670" y="838">credentials, identity provider</text><text x="670" y="854">third-party IP allowlists</text><text x="670" y="870">quotas in the DR region</text><text x="670" y="886">queue contents in flight</text><text x="670" y="902">the people — on holiday?</text>
+        </g>
+        <text x="466" y="926" class="s-haz" font-size="10.5">Backups encrypted with a key that lived in the lost</text>
+        <text x="466" y="940" class="s-sub" font-size="10.5" style="fill:var(--hazard)">account are not backups. Keys need their own way back.</text>
+        <text x="466" y="966" class="s-lab" font-size="11">12 · Infrastructure as code is the precondition</text>
+        <text x="466" y="984" class="s-mono" font-size="10">terraform apply in the DR region → 22 min</text>
+        <g class="s-sub" font-size="10.5"><text x="466" y="1000">an empty but correct environment; then restore data.</text><text x="466" y="1014">Without it, the rebuild is archaeology and takes days.</text></g>
+        <text x="466" y="1036" class="s-haz" font-size="10.5">The resource made by hand is the one that will be missing.</text>
+        <text x="466" y="1054" class="s-sub" font-size="10.5">Lower critical DNS TTLs to 60 s now, not during the event.</text>
+
+        <!-- REHEARSAL -->
+        <rect x="890" y="790" width="480" height="290" fill="var(--z5)"/>
+        <text x="906" y="814" class="s-zone" fill="var(--fast)">13 · The rehearsal is the deliverable</text>
+        <g class="s-mono" font-size="10">
+          <text x="906" y="836">1 runbook read aloud     → missing steps</text><text x="906" y="850">2 tabletop scenario      → wrong assumptions</text><text x="906" y="864">3 restore to scratch     → broken backups</text><text x="906" y="878">4 full rebuild, timed    → everything else</text><text x="906" y="892" fill="var(--line)">5 real traffic failover  → the only true proof</text>
+        </g>
+        <text x="906" y="916" class="s-lab" font-size="11">14 · Quarterly rehearsal, the author absent</text>
+        <g>
+          <rect x="906" y="926" width="97" height="18" fill="var(--line)" opacity=".8"/><rect x="1003" y="926" width="18" height="18" fill="var(--cool)" opacity=".8"/><rect x="1021" y="926" width="154" height="18" fill="var(--line)" opacity=".55"/><rect x="1175" y="926" width="9" height="18" fill="var(--cool)" opacity=".8"/><rect x="1184" y="926" width="162" height="18" fill="var(--hazard)" opacity=".7"/>
+        </g>
+        <g class="s-sub" font-size="10"><text x="906" y="960">terraform 22 min · promote replica 4 · restore objects 35 · DNS 2</text><text x="906" y="974" fill="var(--hazard)">smoke tests FAIL: the payment provider rejects the new IP range</text></g>
+        <text x="906" y="996" class="s-note" font-size="10.5">1 h 40 m. Documented RTO: "about an hour" → 2 hours.</text>
+        <g class="s-sub" font-size="10.5"><text x="906" y="1016">Real outage: wait 45 min (such outages last ~2 h), declare at 50,</text><text x="906" y="1030">restored in 1 h 50 m with 90 s of data lost — the replica lag.</text></g>
+        <text x="906" y="1052" class="s-haz" font-size="10.5">Unrehearsed: a hand-made resource, a 20-instance quota, a KMS</text>
+        <text x="906" y="1066" class="s-sub" font-size="10.5" style="fill:var(--hazard)">key in the failed region, the runbook in its wiki → two days.</text>
+      </svg>
+    </div>
+    <figcaption><b>Climb the ladder only as far as an agreed RTO requires, and put the recovery assets out of reach of the disaster</b> — infrastructure in code, immutable backups in another account, keys and runbook stored outside what you are recovering. Then rehearse with the runbook's author absent, because every rehearsal finds the same things: a resource not in code, a quota, a key, an allowlist.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the rungs, the copies and the rehearsal</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Backup and restore</h4><p>Backups in another region and account, nothing else running. On the day: provision from code, restore data, repoint DNS. RTO hours to days — the honest baseline for most companies.</p></div>
+      <div><h4><span>02</span>Pilot light</h4><p>The data layer replicates continuously — a cross-region read replica — while compute is defined in Terraform but off. Tens of minutes, provided the recovery region has capacity and quotas.</p></div>
+      <div><h4><span>03</span>Warm standby</h4><p>A scaled-down but complete environment running in another region, promoted and scaled on demand. Minutes of RTO, and the path is exercised simply by existing.</p></div>
+      <div><h4><span>04</span>Active-active</h4><p>Both regions serve all the time; a disaster removes one from rotation. Near-zero RTO and RPO, and a different data architecture: partitioned users, conflict resolution, or a global database.</p></div>
+      <div><h4><span>05</span>HA versus DR</h4><p>HA asks how not to go down when a part fails, and is architecture. DR asks how to come back when everything is gone, and is a documented, rehearsed procedure with named owners.</p></div>
+      <div><h4><span>06</span>RPO and RTO</h4><p>Recovery point: how much data may be lost, which sets backup frequency. Recovery time: how long you may be down, which sets the restore mechanism. Commercial decisions, written per dataset.</p></div>
+      <div><h4><span>07</span>3-2-1-1-0</h4><p>Three copies, two storage types, one in another region or account, one immutable, and zero errors on a verified restore. The zero is the whole point, and the part almost never done.</p></div>
+      <div><h4><span>08</span>Backup types</h4><p>Full, incremental (one missing link breaks the chain), differential, continuous log shipping for point-in-time recovery, and snapshots — crash-consistent only, so use the database's own mechanism.</p></div>
+      <div><h4><span>09</span>Retention</h4><p>Grandfather-father-son: 24 hourly, 30 daily, 12 weekly, 12 monthly, 7 yearly. Set by how long corruption can hide, not how long you expect to need it; thirty days of dailies is the floor.</p></div>
+      <div><h4><span>10</span>A separate blast radius</h4><p>Copies pushed by a write-only role into an account with different credentials, under Object Lock in compliance mode, then cross-region and to Glacier. Snapshots deletable by production credentials are convenient, not trustworthy.</p></div>
+      <div><h4><span>11</span>The real SPOFs</h4><p>Encryption keys, DNS, certificates, secrets, credentials, allowlists, quotas and the runbook itself — each one, if it lives only inside the lost environment, stops the recovery.</p></div>
+      <div><h4><span>12</span>Infrastructure as code</h4><p>The strongest argument for it: "rebuild everything" becomes a command with a known runtime, 22 minutes to an empty but correct environment. Anything created by hand will be missing.</p></div>
+      <div><h4><span>13</span>Rehearsal levels</h4><p>Read the runbook aloud, run a tabletop, restore to scratch, rebuild in another region against the clock, fail real traffic over. Each level finds a class of problem the one before cannot.</p></div>
+      <div><h4><span>14</span>The timed rehearsal</h4><p>Run by someone who did not write the runbook. It found a payment-provider allowlist, turned "about an hour" into a measured 2 hours, and made the real event a 1 h 50 m recovery instead of two days.</p></div>
+      <div><h4><span>15</span>Ransomware</h4><p>The most likely modern disaster is a compromised admin credential. Recovery must not depend on the compromised account: immutable copies it cannot reach, break-glass credentials offline, every secret rotated, evidence preserved first.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The closing loop</b>
+    <p>The ceiling on sheet 1 is the database primary; sheet 4 gives it a standby; this sheet gives it a copy the standby cannot corrupt. Sheet 3 measured how much load it takes, sheet 5 watches whether it still does, and a rehearsal here proves the whole system can come back. Skip any one and the others quietly stop being true.</p>
+  </div>
+</div>
+
+</div>

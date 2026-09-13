@@ -1,0 +1,1619 @@
+<meta charset="utf-8">
+<title>Atlas of a Distributed System — eight sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 10 Distributed Systems · eight sheets</p>
+  <h1>Atlas of a <em>Distributed System</em></h1>
+  <p class="thesis">One order, placed once, and everything that happens to it after the user stops waiting. Sheet 1 is the route that order travels; every other sheet magnifies one stretch of it — the shape of the application, the caches in front, the pipes behind, the workers at the end. <strong>The moment work leaves a single process it can be lost, delayed, reordered or done twice, and every mechanism in this folder exists to answer one of those four.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 8</span>
+    <span><b>Numbered steps</b> 143</span>
+    <span><b>Read first</b> Sheet 1 end to end, then the sheet for the pipe or pattern you are about to choose</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Order Line</h4><p>One POST /orders from click to shipped: 20 stops, a 30 ms answer, and a long asynchronous tail nobody sees.</p><em>Transit diagram</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Architecture Ladder</h4><p>Seven rungs from a bigger machine to microservices. Climb for organisational reasons, not for traffic.</p><em>Ladder plate</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>The Cache Stack</h4><p>Seven layers between the user and the disk, and the stampede that turns a cache into an outage.</p><em>Cutaway section</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>Queue, Stream or Broadcast</h4><p>Choose the kind of pipe before the brand: one consumer, every subscriber, or a log anyone can replay.</p><em>Decision tree</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>Four Brokers, Opened</h4><p>RabbitMQ's exchanges, Kafka's partitions, Redis Streams' pending list and SQS's visibility timeout.</p><em>Exploded parts</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>The Job Circuit</h4><p>Enqueue, take, load, check, work, ack — the six steps every worker runs, and three frameworks' dangerous defaults.</p><em>Closed circuit</em></span></a>
+    <a href="#a7"><span class="n">7</span><span><h4>Events and Sagas</h4><p>One OrderPlaced against the clock: fan-out, a failed payment, a compensation, and the window where services disagree.</p><em>Swimlane chart</em></span></a>
+    <a href="#a8"><span class="n">8</span><span><h4>The Serverless Meter</h4><p>Cold starts layer by layer, the connection limit, and the cost curve that crosses a container's.</p><em>Instrument panel</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 300" role="img" aria-label="How the eight sheets fit together. Sheet 1, the order line, runs across the middle as the route one order takes. Above it, sheet 3 the cache stack sits in front of the request, sheet 2 the architecture ladder describes the shape of the application, and sheet 7 events and sagas covers what happens after the response. Below it, sheet 4 chooses the kind of pipe, sheet 5 opens four brokers, sheet 6 is the worker circuit, and sheet 8 is serverless. A bar under everything marks idempotency as the rule that runs under every sheet.">
+        <rect x="30" y="118" width="1340" height="62" fill="var(--z3)"/>
+        <text x="46" y="144" class="s-zone" fill="var(--mute)">Sheet 1 — one order, from the click to the shipment</text>
+        <text x="46" y="164" class="s-sub">a synchronous half that ends with a 201 in about 30 ms, and an asynchronous half that runs for seconds, on machines the user never sees</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M240,118 L240,80"/><path d="M620,118 L620,80"/><path d="M1060,118 L1060,80"/>
+          <path d="M200,180 L200,216"/><path d="M540,180 L540,216"/><path d="M880,180 L880,216"/><path d="M1200,180 L1200,216"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="240" y="68">3 · the cache stack</text>
+          <text x="620" y="68">2 · the architecture ladder</text>
+          <text x="1060" y="68">7 · events and sagas</text>
+          <text x="200" y="234">4 · queue, stream or broadcast</text>
+          <text x="540" y="234">5 · four brokers, opened</text>
+          <text x="880" y="234">6 · the job circuit</text>
+          <text x="1200" y="234">8 · the serverless meter</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="240" y="50">the layers in front of the request</text>
+          <text x="620" y="50">what shape the application has</text>
+          <text x="1060" y="50">what happens after the 201</text>
+          <text x="200" y="252">which kind of pipe the work needs</text>
+          <text x="540" y="252">what is inside each pipe</text>
+          <text x="880" y="252">what the consumer must do</text>
+          <text x="1200" y="252">when no server holds the worker</text>
+        </g>
+        <rect x="30" y="276" width="1340" height="10" fill="color-mix(in srgb,var(--fast) 26%,transparent)"/>
+        <text x="1370" y="270" text-anchor="end" class="s-note">Idempotency runs under every sheet: redelivery is normal, so everything must be safe to run twice</text>
+      </svg>
+    </div>
+    <figcaption>Read it as one request with two halves. <b>The synchronous half</b> — sheets 2 and 3 — ends when the 201 leaves. <b>The asynchronous half</b> — sheets 4 to 8 — begins there and keeps going, retrying, long after the user has moved on. Most bugs in this folder live at the seam between them: the commit that happened without its message, or the message that ran twice.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE ORDER LINE ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Order Line</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Message Queues · Event Driven Architecture · Background Workers · Microservices · Caching</span>
+  </div>
+  <p class="thesis">One order, one route, twenty stops. The user waits for seven of them. <strong>Stop 06 is the most important line of code in the folder — the order and the intent to publish commit together or not at all — and stop 13 exists because every message after it may arrive twice.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 2160 830" role="img" aria-label="A transit map of one order. Fourteen outbound stations run left to right through five zones: the user, the edge, the service, the pipe and the worker. Station 6 commits the order and an outbox row together; a dashed hazard exit drops from it for a rolled-back transaction. A branch line below stations 1 to 6 shows the cache layers that served the product page. Station 13, the idempotency check, has a dashed exit straight to the return line for duplicates. Station 14 drops into a failure loop of exponential backoff ending in a dead-letter queue. The return line runs right to left through acknowledgement, inventory, payment, shipping, analytics and the user's dashboard, with a compensation arc from the failed payment back to inventory.">
+        <defs>
+          <marker id="o1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="o2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="o3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="40" y="50" class="s-zone" fill="var(--line)">One order · POST /orders, from the click to the shipment</text>
+        <text x="40" y="70" class="s-sub">the user waits for stops 01 to 07; everything to the right of them happens after the response has already been sent</text>
+        <text x="604" y="120" class="s-sub" style="fill:var(--line)">05 is a function call in a monolith and a network hop in microservices — sheet 2</text>
+        <text x="1164" y="120" class="s-sub" style="fill:var(--line)">06 → 08 · the outbox makes the commit and the intent to publish one atomic act</text>
+
+        <rect x="30" y="150" width="130" height="250" fill="var(--z1)"/>
+        <rect x="160" y="150" width="280" height="250" fill="var(--z2)"/>
+        <rect x="440" y="150" width="560" height="250" fill="var(--z3)"/>
+        <rect x="1000" y="150" width="560" height="250" fill="var(--z4)"/>
+        <rect x="1560" y="150" width="570" height="250" fill="var(--z5)"/>
+        <g class="s-zone" fill="var(--mute)">
+          <text x="42" y="172">The user</text><text x="172" y="172">The edge</text>
+          <text x="452" y="172">The service</text><text x="1012" y="172">The pipe</text>
+          <text x="1572" y="172">The worker</text>
+        </g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="160" y1="150" x2="160" y2="400"/><line x1="440" y1="150" x2="440" y2="400"/>
+          <line x1="1000" y1="150" x2="1000" y2="400"/><line x1="1560" y1="150" x2="1560" y2="400"/>
+        </g>
+
+        <line x1="70" y1="290" x2="2070" y2="290" stroke="var(--line)" stroke-width="7"/>
+        <line x1="70" y1="273" x2="70" y2="307" stroke="var(--line)" stroke-width="7"/>
+        <path d="M2070,290 C2124,290 2124,700 2070,700" fill="none" stroke="var(--line)" stroke-width="7"/>
+        <line x1="2070" y1="700" x2="82" y2="700" stroke="var(--line)" stroke-width="7" marker-end="url(#o1)"/>
+
+        <g class="st"><circle cx="90" cy="290" r="9"/><circle cx="230" cy="290" r="9"/><circle cx="370" cy="290" r="9"/><circle cx="510" cy="290" r="9"/><circle cx="650" cy="290" r="9"/><circle cx="930" cy="290" r="9"/><circle cx="1070" cy="290" r="9"/><circle cx="1490" cy="290" r="9"/><circle cx="1630" cy="290" r="9"/><circle cx="1910" cy="290" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"><circle cx="790" cy="290" r="13"/><circle cx="1350" cy="290" r="13"/><circle cx="1770" cy="290" r="13"/></g>
+        <rect x="1180" y="272" width="60" height="36" rx="4" fill="var(--paper)" stroke="var(--line)" stroke-width="3.5"/>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none"><path d="M1188,282 h44"/><path d="M1188,290 h44"/><path d="M1188,298 h44"/></g>
+
+        <g class="s-num">
+          <text x="44" y="206">01</text><text x="184" y="206">02</text><text x="324" y="206">03</text><text x="464" y="206">04</text><text x="604" y="206">05</text><text x="744" y="206">06</text><text x="884" y="206">07</text><text x="1024" y="206">08</text><text x="1164" y="206">09</text><text x="1304" y="206">10</text><text x="1444" y="206">11</text><text x="1584" y="206">12</text><text x="1724" y="206">13</text><text x="1864" y="206">14</text>
+        </g>
+        <g class="s-lab">
+          <text x="44" y="224">place order</text><text x="184" y="224">the gateway</text><text x="324" y="224">load balancer</text><text x="464" y="224">order module</text><text x="604" y="224">stock check</text><text x="744" y="224">BEGIN … COMMIT</text><text x="884" y="224">201 returned</text><text x="1024" y="224">the relay</text><text x="1164" y="224">the broker</text><text x="1304" y="224">fan-out</text><text x="1444" y="224">the queue</text><text x="1584" y="224">a worker</text><text x="1724" y="224">seen it before?</text><text x="1864" y="224">do the work</text>
+        </g>
+        <g class="s-sub">
+          <text x="44" y="242">POST /orders with</text><text x="44" y="256">a cart and a card</text>
+          <text x="184" y="242">auth, rate limit,</text><text x="184" y="256">trace ID attached</text>
+          <text x="324" y="242">any instance will</text><text x="324" y="256">do: stateless</text>
+          <text x="464" y="242">validates through</text><text x="464" y="256">its public interface</text>
+          <text x="604" y="242">inventory reads</text><text x="604" y="256">its own tables</text>
+          <text x="744" y="242">order + outbox row,</text><text x="744" y="256">both or neither</text>
+          <text x="884" y="242">~30 ms; nothing</text><text x="884" y="256">downstream awaited</text>
+          <text x="1024" y="242">reads the outbox,</text><text x="1024" y="256">publishes the event</text>
+          <text x="1164" y="242">OrderPlaced: a</text><text x="1164" y="256">fact, past tense</text>
+          <text x="1304" y="242">every subscriber</text><text x="1304" y="256">gets its own copy</text>
+          <text x="1444" y="242">durable until ack,</text><text x="1444" y="256">depth + age watched</text>
+          <text x="1584" y="242">prefetch 1..10,</text><text x="1584" y="256">its own process</text>
+          <text x="1724" y="242">idempotency key</text><text x="1724" y="256">checked first</text>
+          <text x="1864" y="242">load by ID, fresh,</text><text x="1864" y="256">with a timeout</text>
+        </g>
+
+        <text x="1304" y="330" class="s-note">one event, four subscribers</text>
+        <text x="1304" y="346" class="s-sub" style="fill:var(--fast)">the order service never learns who</text>
+
+        <!-- EXIT A -->
+        <path d="M790,303 L790,694" fill="none" stroke="var(--hazard)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#o3)"/>
+        <circle cx="790" cy="640" r="12.5" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <text x="790" y="644" text-anchor="middle" class="s-haz" font-size="12">A</text>
+        <text x="810" y="628" class="s-haz">rolled back</text>
+        <text x="810" y="642" class="s-sub" style="fill:var(--hazard)">no order row, no outbox row:</text>
+        <text x="810" y="656" class="s-sub" style="fill:var(--hazard)">nothing half-happened</text>
+
+        <!-- BRANCH C: CACHES -->
+        <rect x="170" y="430" width="590" height="170" fill="var(--band)" stroke="var(--line)" stroke-width="2" stroke-dasharray="7 6"/>
+        <text x="184" y="452" class="s-zone" fill="var(--line)">C · Branch line · before the click</text>
+        <text x="184" y="470" class="s-sub">the product page came from a cache; the POST itself never does — sheet 3</text>
+        <path d="M90,303 L90,530 L220,530" fill="none" stroke="var(--line)" stroke-width="4" stroke-dasharray="10 6"/>
+        <line x1="220" y1="530" x2="720" y2="530" stroke="var(--line)" stroke-width="4"/>
+        <g class="st" stroke-width="2.5"><circle cx="220" cy="530" r="7"/><circle cx="320" cy="530" r="7"/><circle cx="420" cy="530" r="7"/><circle cx="520" cy="530" r="7"/><circle cx="620" cy="530" r="7"/><circle cx="720" cy="530" r="7"/></g>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="220" y="516">browser</text><text x="320" y="516">CDN edge</text><text x="420" y="516">proxy</text><text x="520" y="516">app memory</text><text x="620" y="516">Redis</text><text x="720" y="516">database</text></g>
+        <g class="s-sub" font-size="10.5" text-anchor="middle">
+          <text x="220" y="552">0 ms</text><text x="220" y="565">per user</text>
+          <text x="320" y="552">~10 ms</text><text x="320" y="565">per region</text>
+          <text x="420" y="552">~1 ms</text><text x="420" y="565">per DC</text>
+          <text x="520" y="552">~0.1 µs</text><text x="520" y="565">per instance</text>
+          <text x="620" y="552">~1 ms</text><text x="620" y="565">shared</text>
+          <text x="720" y="552">the origin</text><text x="720" y="565">the truth</text>
+        </g>
+        <text x="184" y="590" class="s-haz" font-size="10.5">Invalidating one layer does nothing to the copies held by the others.</text>
+
+        <!-- FAILURE LOOP F -->
+        <path d="M1910,299 L1910,426" fill="none" stroke="var(--hazard)" stroke-width="3.5" marker-end="url(#o3)"/>
+        <rect x="1790" y="430" width="270" height="180" fill="var(--z6)" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="7 6"/>
+        <text x="1804" y="452" class="s-zone" fill="var(--hazard)">F · the failure loop</text>
+        <line x1="1810" y1="500" x2="1990" y2="500" stroke="var(--hazard)" stroke-width="3"/>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"><circle cx="1820" cy="500" r="5"/><circle cx="1856" cy="500" r="5"/><circle cx="1892" cy="500" r="5"/><circle cx="1928" cy="500" r="5"/><circle cx="1964" cy="500" r="5"/></g>
+        <g class="s-mono" font-size="10" text-anchor="middle"><text x="1820" y="486">1s</text><text x="1856" y="486">2s</text><text x="1892" y="486">4s</text><text x="1928" y="486">8s</text><text x="1964" y="486">16s</text></g>
+        <rect x="1990" y="486" width="56" height="28" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="2018" y="504" text-anchor="middle" class="s-mono" font-size="10" style="fill:var(--hazard)">DLQ</text>
+        <g class="s-sub" font-size="10.5"><text x="1804" y="536">throws → backoff with jitter,</text><text x="1804" y="550">5 attempts, then dead-letter</text><text x="1804" y="564">and an alert, never a loop</text></g>
+        <text x="1804" y="592" class="s-haz" font-size="10.5">redrive once fixed · sheet 6</text>
+
+        <!-- EXIT B -->
+        <path d="M1770,303 L1770,694" fill="none" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#o2)"/>
+        <circle cx="1770" cy="655" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="1770" y="659" text-anchor="middle" class="s-note" font-size="12">B</text>
+        <text x="1752" y="644" text-anchor="end" class="s-note">already processed</text>
+        <text x="1752" y="658" text-anchor="end" class="s-sub" style="fill:var(--fast)">→ ack and stop. A duplicate</text>
+        <text x="1752" y="672" text-anchor="end" class="s-sub" style="fill:var(--fast)">is normal, not an error</text>
+
+        <!-- RETURN LINE -->
+        <g class="st"><circle cx="1940" cy="700" r="9"/><circle cx="1560" cy="700" r="9"/><circle cx="1260" cy="700" r="9"/><circle cx="960" cy="700" r="9"/><circle cx="660" cy="700" r="9"/><circle cx="380" cy="700" r="9"/></g>
+        <line x1="90" y1="683" x2="90" y2="717" stroke="var(--line)" stroke-width="7"/>
+        <path d="M1260,691 C1260,630 1560,630 1560,689" fill="none" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#o3)"/>
+        <text x="1410" y="606" text-anchor="middle" class="s-haz">PaymentFailed → inventory compensates</text>
+        <text x="1410" y="620" text-anchor="middle" class="s-sub" style="fill:var(--hazard)">it releases the stock it reserved</text>
+
+        <g class="s-num"><text x="1894" y="726">15</text><text x="1514" y="726">16</text><text x="1214" y="726">17</text><text x="914" y="726">18</text><text x="614" y="726">19</text><text x="334" y="726">20</text></g>
+        <g class="s-lab"><text x="1894" y="744">ack</text><text x="1514" y="744">inventory reserves</text><text x="1214" y="744">payment charges</text><text x="914" y="744">shipping, email</text><text x="614" y="744">analytics counts</text><text x="334" y="744">the dashboard</text><text x="110" y="744">the order</text></g>
+        <g class="s-sub">
+          <text x="1894" y="762">removed only now,</text><text x="1894" y="776">after success</text>
+          <text x="1514" y="762">+200 ms, own DB,</text><text x="1514" y="776">publishes StockReserved</text>
+          <text x="1214" y="762">the card — or fails and</text><text x="1214" y="776">publishes PaymentFailed</text>
+          <text x="914" y="762">react on their own;</text><text x="914" y="776">no one called them</text>
+          <text x="614" y="762">+2 s: until now the</text><text x="614" y="776">services disagreed</text>
+          <text x="334" y="762">shows it seconds</text><text x="334" y="776">after the 201</text>
+          <text x="110" y="762">placed or failed;</text><text x="110" y="776">one order, done</text>
+        </g>
+        <text x="2130" y="816" text-anchor="end" class="s-sub">Budget: ~30 ms to the 201. Everything after it runs in seconds, retrying — and nobody sees it unless you alert on message age.</text>
+      </svg>
+    </div>
+    <figcaption><b>Three things on this map surprise people.</b> The user's request is over at stop 07, so most of the system's behaviour happens with nobody watching. The two dashed exits are both successes, not failures: a rolled-back transaction that leaves no ghost event, and a duplicate that is recognised and dropped. And the compensation arc runs backwards on purpose — a distributed system cannot roll back, it can only do something new that undoes the effect.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every stop on this sheet, and what it does</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Place order</h4><p>A POST with a cart, a payment method and an identity. It is the only moment on the whole map where a person is waiting for a response.</p></div>
+      <div><h4><span>02</span>The gateway</h4><p>Authentication, routing and rate limiting, and a trace ID stamped on the request. That ID is the only thread that will tie the next eighteen stops together during an incident.</p></div>
+      <div><h4><span>03</span>Load balancer</h4><p>Any instance can take the request because instances hold no state. That is what lets a monolith scale horizontally exactly like any other service.</p></div>
+      <div><h4><span>04</span>Order module</h4><p>The request enters through a module's public interface, never its internals. In a modular monolith a lint rule enforces that; in microservices the network does.</p></div>
+      <div><h4><span>05</span>Stock check</h4><p>Inventory answers from tables it owns. A function call measured in nanoseconds inside one process, or a network call that can fail, retry and time out between services.</p></div>
+      <div><h4><span>06</span>BEGIN … COMMIT</h4><p>The order row and an outbox row are written in one transaction. Either both exist or neither does, which removes the "order saved, event never published" bug entirely.</p></div>
+      <div><h4><span>07</span>201 returned</h4><p>Around 30 ms after the click. Nothing downstream has run yet; the response promises only that the order is recorded and the work is durably queued.</p></div>
+      <div><h4><span>08</span>The relay</h4><p>A separate process reads unsent outbox rows, publishes them and marks them sent. It can crash and publish twice, so publication is at-least-once — never exactly-once.</p></div>
+      <div><h4><span>09</span>The broker</h4><p>Kafka, RabbitMQ or EventBridge receives OrderPlaced — a past-tense fact, not an instruction. It cannot be refused, because it already happened.</p></div>
+      <div><h4><span>10</span>Fan-out</h4><p>Every interested service receives its own copy. Adding loyalty points next year means writing one new consumer; the order service is never touched.</p></div>
+      <div><h4><span>11</span>The queue</h4><p>Each consumer's copy waits durably until acknowledged. Its depth and the age of its oldest message are the two numbers that reveal a backlog before users do.</p></div>
+      <div><h4><span>12</span>A worker</h4><p>A separate process, scaled on queue depth rather than request rate, taking a small number of messages at a time so a crash strands little work.</p></div>
+      <div><h4><span>13</span>Seen it before?</h4><p>The idempotency check. Redelivery is normal operation — a worker can finish the work and die before acknowledging — so the first thing a consumer does is ask whether it already did this.</p></div>
+      <div><h4><span>14</span>Do the work</h4><p>Load the entity fresh by its ID, never trust a serialised copy, and run under a timeout so one hung job cannot hold a worker forever.</p></div>
+      <div><h4><span>15</span>Ack</h4><p>Acknowledge only after success. Acknowledging on delivery is how a worker crash silently loses the job — the default in more than one framework on sheet 6.</p></div>
+      <div><h4><span>16</span>Inventory reserves</h4><p>Around 200 ms later, in its own database, then publishes StockReserved. For that window, the order exists and the reservation does not.</p></div>
+      <div><h4><span>17</span>Payment charges</h4><p>The card is charged, or the charge fails and PaymentFailed is published. There is no distributed transaction to roll back; the failure is just another event.</p></div>
+      <div><h4><span>18</span>Shipping, email</h4><p>Each reacts to the events it subscribes to, independently. The flow exists only as the sum of subscriptions — which is why choreography is hard to follow on sheet 7.</p></div>
+      <div><h4><span>19</span>Analytics counts</h4><p>Two seconds after the order. Until this point different services held different versions of reality, and none of them was wrong: the system is eventually consistent.</p></div>
+      <div><h4><span>20</span>The dashboard</h4><p>The user sees the outcome seconds after the 201. The interface must have been designed for that gap, with a pending state rather than a missing order.</p></div>
+      <div><h4><span>A</span>Rolled back</h4><p>If the transaction at 06 fails, neither the order nor its outbox row exists, so no event is ever published about an order that does not exist.</p></div>
+      <div><h4><span>B</span>Already processed</h4><p>A duplicate recognised by its idempotency key is acknowledged and dropped. That is the practical meaning of "exactly once": at-least-once delivery with idempotent effects.</p></div>
+      <div><h4><span>C</span>The cache branch</h4><p>Before the click, the product page was answered by whichever layer had a fresh copy — browser, CDN, proxy, local memory or Redis. Sheet 3 opens every layer.</p></div>
+      <div><h4><span>F</span>The failure loop</h4><p>A throwing job retries with exponential backoff and jitter, then lands in a dead-letter queue with an alert. Without the DLQ, a poison message is retried forever.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The response is not the outcome</b>
+    <p>A 201 at stop 07 means "recorded", not "done". Everything from 08 to 20 can be delayed, reordered, duplicated or fail — and none of it produces an error the user or the API ever sees. If you monitor only HTTP status codes, this entire map is invisible to you.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE ARCHITECTURE LADDER ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Architecture Ladder</h2>
+    <span class="form">Ladder plate</span>
+    <span class="cov">Covers · Monolith · Modular Monolith · Microservices</span>
+  </div>
+  <p class="thesis">Seven ways to grow an application, drawn in the order you should reach for them. The first five keep one deployment and one transaction; the last two start paying for the network. <strong>Traffic almost never forces you up this ladder — teams that cannot deploy independently do, and that is the only honest reason to reach the top rung.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="A staircase of seven rungs rising left to right: a bigger machine, more copies behind a load balancer, a cache in front, read replicas, enforced modules, extracting one component, and microservices. Network hops, failure modes and the difficulty of undoing the step rise with each rung. An extraction path arrow runs from the enforced-modules rung to the extract rung. Below, a table of what changes when a call crosses the network, a drawing of a distributed monolith where three services share one database, and the three-part honest test for splitting.">
+        <defs>
+          <marker id="h1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="h2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <line x1="40" y1="520" x2="1340" y2="520" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M60,88 L1300,88" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#h1)" fill="none"/>
+        <text x="60" y="76" class="s-note">network hops · failure modes · operational tooling · how hard it is to undo</text>
+        <text x="40" y="40" class="s-zone" fill="var(--line)">One deployment on rungs 01 to 05 · the network enters at 06</text>
+
+        <g>
+          <rect x="40" y="460" width="170" height="60" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="225" y="400" width="170" height="120" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="410" y="340" width="170" height="180" fill="var(--z2)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="595" y="280" width="170" height="240" fill="var(--z2)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="780" y="220" width="170" height="300" fill="var(--z3)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="965" y="160" width="170" height="360" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="1150" y="100" width="190" height="420" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2"/>
+        </g>
+        <g class="s-num"><text x="52" y="480">01</text><text x="237" y="420">02</text><text x="422" y="360">03</text><text x="607" y="300">04</text><text x="792" y="240">05</text><text x="977" y="180">06</text><text x="1162" y="120">07</text></g>
+        <g class="s-lab" font-size="12.5">
+          <text x="52" y="498">a bigger machine</text><text x="237" y="438">more copies</text><text x="422" y="378">a cache in front</text><text x="607" y="318">read replicas</text><text x="792" y="258">enforced modules</text><text x="977" y="198">extract ONE part</text><text x="1162" y="138">microservices</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="514">hours · boring · effective</text>
+          <text x="237" y="456">behind a load balancer;</text><text x="237" y="470">needs stateless instances</text><text x="237" y="484">— any one will do</text>
+          <text x="422" y="396">removes most reads from</text><text x="422" y="410">the database — then ask if</text><text x="422" y="424">it survives a cold cache</text><text x="422" y="438">at peak · sheet 3</text>
+          <text x="607" y="336">separate read traffic</text><text x="607" y="350">from writes; replication</text><text x="607" y="364">lag becomes something</text><text x="607" y="378">your interface can see</text>
+          <text x="792" y="276">the modular monolith:</text><text x="792" y="290">a public API per module,</text><text x="792" y="304">each owns its tables,</text><text x="792" y="318">import-linter, ArchUnit</text><text x="792" y="332">or Packwerk fail the build</text><text x="792" y="346">zero runtime cost</text>
+          <text x="977" y="216">a genuinely different</text><text x="977" y="230">scaling profile — the</text><text x="977" y="244">video encoder, search.</text><text x="977" y="258">Its interface exists,</text><text x="977" y="272">its data is isolated:</text><text x="977" y="286">a contained project</text>
+          <text x="1162" y="156">many teams, each owning</text><text x="1162" y="170">its data, deploying alone.</text><text x="1162" y="184">Every call can fail, every</text><text x="1162" y="198">join is an API call, every</text><text x="1162" y="212">transaction is a saga</text>
+        </g>
+        <text x="1162" y="240" class="s-haz" font-size="10.5">If you have one team,</text>
+        <text x="1162" y="254" class="s-haz" font-size="10.5">you pay the entire cost</text>
+        <text x="1162" y="268" class="s-haz" font-size="10.5">and collect none of it.</text>
+        <path d="M865,380 C900,380 930,330 960,300" fill="none" stroke="var(--line)" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#h2)"/>
+        <text x="792" y="400" class="s-sub" style="fill:var(--line)">11 · the extraction path:</text>
+        <text x="792" y="414" class="s-sub" style="fill:var(--line)">only a module can be lifted;</text>
+        <text x="792" y="428" class="s-sub" style="fill:var(--line)">a ball of mud must be</text>
+        <text x="792" y="442" class="s-sub" style="fill:var(--line)">untangled first</text>
+
+        <text x="52" y="546" class="s-note">When a monolith is slow, the cause is almost always a missing index or an N+1 query — and splitting fixes neither.</text>
+        <text x="52" y="562" class="s-sub">Climb for organisational reasons: teams blocked by one pipeline, one component with a wildly different resource profile, a compliance boundary. Not traffic, not fashion, not a conference talk.</text>
+
+        <!-- NETWORK TABLE -->
+        <rect x="30" y="590" width="660" height="250" fill="var(--z3)"/>
+        <text x="46" y="614" class="s-zone" fill="var(--mute)">08 · what changes when a call crosses the network</text>
+        <text x="46" y="640" class="s-lab" font-size="11">In a monolith</text><text x="330" y="640" class="s-lab" font-size="11" style="fill:var(--hazard)">In microservices</text>
+        <line x1="46" y1="650" x2="674" y2="650" stroke="var(--rule)"/>
+        <g class="s-sub">
+          <text x="46" y="670">a function call — nanoseconds</text><text x="330" y="670">a network call that fails, retries, times out</text>
+          <text x="46" y="692">BEGIN … COMMIT</text><text x="330" y="692">a saga with compensating actions</text>
+          <text x="46" y="714">one stack trace</text><text x="330" y="714">a trace ID across five services</text>
+          <text x="46" y="736">a join</text><text x="330" y="736">an API call, or duplicated data</text>
+          <text x="46" y="758">a refactor in one commit</text><text x="330" y="758">a coordinated multi-service release</text>
+          <text x="46" y="780">run it with one command</text><text x="330" y="780">Docker Compose with twelve containers</text>
+        </g>
+        <text x="46" y="808" class="s-haz" font-size="10.5">A network call is roughly a million times slower than a function call. Losing transactions</text>
+        <text x="46" y="822" class="s-haz" font-size="10.5">is the underestimated cost: it permanently changes how business logic is written.</text>
+
+        <!-- DISTRIBUTED MONOLITH -->
+        <rect x="706" y="590" width="330" height="250" fill="var(--band)"/>
+        <text x="722" y="614" class="s-zone" fill="var(--hazard)">09 · the distributed monolith</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="722" y="632" width="88" height="34"/><rect x="827" y="632" width="88" height="34"/><rect x="932" y="632" width="88" height="34"/>
+        </g>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="766" y="653">Orders</text><text x="871" y="653">Billing</text><text x="976" y="653">Users</text></g>
+        <g stroke="var(--hazard)" stroke-width="2.5" fill="none"><path d="M766,666 L840,712"/><path d="M871,666 L871,712"/><path d="M976,666 L902,712"/></g>
+        <rect x="806" y="712" width="130" height="32" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="871" y="733" text-anchor="middle" class="s-lab" font-size="11">one shared DB</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="722" y="768">Services that share tables, or that must be</text>
+          <text x="722" y="782">released together, carry every cost of</text>
+          <text x="722" y="796">microservices and none of the independence.</text>
+        </g>
+        <text x="722" y="820" class="s-haz" font-size="10.5">Neither can change its schema alone.</text>
+
+        <!-- HONEST TEST -->
+        <rect x="1052" y="590" width="318" height="250" fill="var(--z1)"/>
+        <text x="1068" y="614" class="s-zone" fill="var(--line)">10 · the honest test</text>
+        <g class="s-sub">
+          <text x="1068" y="640">1 · several teams genuinely blocked</text>
+          <text x="1068" y="654">    by one deployment pipeline</text>
+          <text x="1068" y="676">2 · boundaries by business capability</text>
+          <text x="1068" y="690">    — 12 · bounded contexts, not tables</text>
+          <text x="1068" y="712">3 · prerequisites already running:</text>
+          <text x="1068" y="726">    per-service CI, central logs,</text>
+          <text x="1068" y="740">    tracing, orchestration, discovery</text>
+        </g>
+        <text x="1068" y="768" class="s-note">All three together — or stay on rung 05.</text>
+        <text x="1068" y="788" class="s-sub" style="fill:var(--fast)">Without 3, splitting produces a distributed</text>
+        <text x="1068" y="802" class="s-sub" style="fill:var(--fast)">monolith; without 2, every feature touches</text>
+        <text x="1068" y="816" class="s-sub" style="fill:var(--fast)">four services and needs four releases.</text>
+      </svg>
+    </div>
+    <figcaption><b>Rung 05 is where most systems should stop.</b> A modular monolith keeps transactions, function-call latency and one stack trace, and its enforced boundaries are exactly what make rung 06 a contained project later. Skipping straight to 07 commits you to service boundaries before you know the domain well enough to draw them.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the rungs and their vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Vertical scaling</h4><p>A bigger machine. Unfashionable, immediate, and far more effective than its reputation — Stack Overflow served enormous traffic from a handful of servers.</p></div>
+      <div><h4><span>02</span>Horizontal scaling</h4><p>More identical copies behind a load balancer. Works for a monolith exactly as for any service, provided no instance holds state the others lack.</p></div>
+      <div><h4><span>03</span>Caching</h4><p>Remove most reads from the database. The cheapest scaling available, and a hidden dependency the day the cache is cold at peak — sheet 3.</p></div>
+      <div><h4><span>04</span>Read replicas</h4><p>Send read traffic to copies of the primary. The database is usually the real bottleneck in either architecture, which is why this rung comes long before splitting.</p></div>
+      <div><h4><span>05</span>Modular monolith</h4><p>One deployment, strict modules: a public interface each, owned tables, and boundaries enforced by tooling that fails the build. Conventions without enforcement decay within months.</p></div>
+      <div><h4><span>06</span>Extract one component</h4><p>Lift out the single part with a genuinely different scaling profile. A targeted decision about one module — not the adoption of microservices.</p></div>
+      <div><h4><span>07</span>Microservices</h4><p>Independently deployable services, each owning its data. Their real purpose is organisational: many teams releasing without coordination. Every technical claim is achievable lower down.</p></div>
+      <div><h4><span>08</span>The network tax</h4><p>Function calls become fallible network calls, transactions become sagas, stack traces become trace IDs, joins become API calls. A permanent cost, paid on every request.</p></div>
+      <div><h4><span>09</span>Distributed monolith</h4><p>Services that share a database or must ship together. All of the operational complexity, none of the independence — the most common way the pattern is adopted in name only.</p></div>
+      <div><h4><span>10</span>The honest test</h4><p>Multiple teams blocked by one pipeline, boundaries drawn by business capability, and CI, logging, tracing and orchestration in place first. All three, or a modular monolith.</p></div>
+      <div><h4><span>11</span>Extraction path</h4><p>A module with its own interface, its own tables and explicit dependencies can be lifted out. A big ball of mud cannot — it must be untangled first, which is where most "we'll split it later" plans die.</p></div>
+      <div><h4><span>12</span>Bounded context</h4><p>The best guide to where module or service lines belong. A boundary is right when most changes touch one side of it; if a typical feature needs four coordinated releases, it is wrong.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Boundaries are not security walls</b>
+    <p>Module boundaries are enforced by the build, not the operating system: a compromised code path can call anything in the process. And the internal network between services is not a perimeter either — authorise in every service, use mTLS, and give each service its own least-privilege credentials.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — THE CACHE STACK ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Cache Stack</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · Caching</span>
+  </div>
+  <p class="thesis">Branch C of sheet 1, cut open. On one server a cache is an optimisation; across many it is a distributed system with copies of the truth at different ages in different places. <strong>Every layer answers faster than the one below it and is harder to invalidate — and the two ways a cache takes a system down, the stampede and the cold start, both happen at the moment it stops answering.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="A cutaway of the cache layers. On the left, seven layers stacked from the user down: browser cache, CDN edge, reverse proxy, application memory on each instance, Redis, the database buffer pool, and disk, each with its latency and scope. Top right, the local-memory trap: a load balancer routing one user to four instances whose caches disagree about a price, with three fixes. Middle right, a stampede chart where database queries jump to saturation when a popular key expires unprotected, and stay flat when protected, beside three defences: locking, stale-while-revalidate and jittered TTLs. Along the bottom, a cold cache after a restart, three Cache-Control headers for a CDN, and cache key design, consistency choices and cache deception.">
+        <defs>
+          <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <!-- LEFT: THE STACK -->
+        <text x="40" y="40" class="s-zone" fill="var(--mute)">The stack · a request stops at the first fresh copy</text>
+        <text x="40" y="60" class="s-sub">the earlier it stops, the cheaper it is — and the harder that copy is to take back</text>
+        <g>
+          <rect x="40" y="90" width="360" height="52" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="40" y="154" width="360" height="52" fill="var(--z4)" stroke="var(--rule)"/>
+          <rect x="40" y="218" width="360" height="52" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="40" y="282" width="360" height="52" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2.5"/>
+          <rect x="40" y="346" width="360" height="52" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="40" y="410" width="360" height="52" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="40" y="474" width="360" height="52" fill="var(--z3)" stroke="var(--rule)"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#c1)">
+          <path d="M380,142 L380,152"/><path d="M380,206 L380,216"/><path d="M380,270 L380,280"/><path d="M380,334 L380,344"/><path d="M380,398 L380,408"/><path d="M380,462 L380,472"/>
+        </g>
+        <g class="s-num"><text x="52" y="109">01</text><text x="52" y="173">02</text><text x="52" y="237">03</text><text x="52" y="301">04</text><text x="52" y="365">05</text><text x="52" y="429">06</text><text x="52" y="493">07</text></g>
+        <g class="s-lab">
+          <text x="82" y="109">browser cache</text><text x="82" y="173">CDN edge</text><text x="82" y="237">reverse proxy</text><text x="82" y="301">app memory × N</text><text x="82" y="365">Redis</text><text x="82" y="429">DB buffer pool</text><text x="82" y="493">disk</text>
+        </g>
+        <g class="s-mono" text-anchor="end" font-size="10.5">
+          <text x="360" y="109">0 ms</text><text x="360" y="173">~10 ms</text><text x="360" y="237">~1 ms</text><text x="360" y="301">~0.1 µs</text><text x="360" y="365">~1 ms</text><text x="360" y="429">~0.1 µs</text><text x="360" y="493">slowest</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="82" y="128">per user · cannot be purged, only expire</text>
+          <text x="82" y="192">per region · a purge takes minutes</text>
+          <text x="82" y="256">per data centre · easy to purge</text>
+          <text x="82" y="384">shared · invalidation easy and immediate</text>
+          <text x="82" y="448">inside the database, managed for you</text>
+          <text x="82" y="512">where the truth finally lives</text>
+        </g>
+        <text x="82" y="320" class="s-sub" font-size="10.5" style="fill:var(--hazard)">PER INSTANCE · the source of inconsistency</text>
+
+        <text x="40" y="556" class="s-note">Each layer has its own scope.</text>
+        <text x="40" y="574" class="s-sub">Invalidating Redis does nothing to the copy in a</text>
+        <text x="40" y="588" class="s-sub">CDN in Frankfurt, a user's browser, or the local</text>
+        <text x="40" y="602" class="s-sub">memory of eleven application instances.</text>
+
+        <!-- TOP RIGHT: THE LOCAL-MEMORY TRAP -->
+        <rect x="430" y="70" width="940" height="260" fill="var(--z2)"/>
+        <text x="446" y="94" class="s-zone" fill="var(--hazard)">08 · the local-memory trap</text>
+        <rect x="446" y="170" width="110" height="44" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="456" y="197" class="s-lab" font-size="11">load balancer</text>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5">
+          <rect x="610" y="110" width="170" height="30"/><rect x="610" y="150" width="170" height="30"/><rect x="610" y="230" width="170" height="30"/>
+        </g>
+        <rect x="610" y="190" width="170" height="30" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2"/>
+        <g stroke="var(--line)" stroke-width="1.8" fill="none"><path d="M556,192 L610,125"/><path d="M556,192 L610,165"/><path d="M556,192 L610,205"/><path d="M556,192 L610,245"/></g>
+        <g class="s-mono" font-size="10"><text x="620" y="129">instance 1 · price 19.00</text><text x="620" y="169">instance 2 · price 19.00</text><text x="620" y="249">instance 4 · price 19.00</text></g>
+        <text x="620" y="209" class="s-mono" font-size="10" style="fill:var(--hazard)">instance 3 · price 21.00</text>
+        <text x="446" y="246" class="s-sub">one user refreshes three times:</text>
+        <text x="446" y="262" class="s-mono" font-size="10.5" style="fill:var(--hazard)">19.00 · 21.00 · 19.00</text>
+        <text x="446" y="296" class="s-sub">every copy was correct when it was made</text>
+
+        <text x="810" y="124" class="s-lab">Ten servers, ten caches, ten answers</text>
+        <text x="810" y="142" class="s-sub">In-process caching is the fastest layer on the stack, and silently breaks correctness</text>
+        <text x="810" y="156" class="s-sub">the moment you scale out. Which answer a user sees depends on routing.</text>
+        <text x="810" y="184" class="s-lab" font-size="11">Fix 1 · accept bounded staleness</text>
+        <text x="810" y="200" class="s-sub">a short TTL, on data that tolerates being briefly wrong</text>
+        <text x="810" y="222" class="s-lab" font-size="11">Fix 2 · a shared cache</text>
+        <text x="810" y="238" class="s-sub">Redis as the one authoritative copy — ~1 ms instead of ~0.1 µs</text>
+        <text x="810" y="260" class="s-lab" font-size="11">Fix 3 · pub/sub invalidation</text>
+        <text x="810" y="276" class="s-sub">one instance writes and publishes "invalidate X"; every instance drops its copy</text>
+        <text x="810" y="300" class="s-haz" font-size="10.5">Pub/sub delivery is not guaranteed — keep a TTL to bound the damage.</text>
+
+        <!-- MIDDLE RIGHT: STAMPEDE -->
+        <rect x="430" y="346" width="940" height="254" fill="var(--z5)"/>
+        <text x="446" y="370" class="s-zone" fill="var(--fast)">09 · cache stampede — the failure that takes systems down</text>
+        <g stroke="var(--rule)" stroke-width="1.5"><line x1="470" y1="390" x2="470" y2="560"/><line x1="470" y1="560" x2="880" y2="560"/></g>
+        <line x1="470" y1="430" x2="880" y2="430" stroke="var(--mute)" stroke-width="1.5" stroke-dasharray="5 5"/>
+        <text x="478" y="402" class="s-sub" font-size="10">DB queries</text>
+        <text x="760" y="424" class="s-sub" font-size="10">database capacity</text>
+        <line x1="600" y1="390" x2="600" y2="560" stroke="var(--fast)" stroke-width="2" stroke-dasharray="5 5"/>
+        <polyline points="470,540 600,540 606,404 650,400 700,406 740,398 780,404 830,399 880,402" fill="none" stroke="var(--hazard)" stroke-width="3"/>
+        <polyline points="470,546 600,546 608,526 640,546 880,546" fill="none" stroke="var(--line)" stroke-width="3"/>
+        <text x="604" y="578" class="s-note" font-size="10.5">key expires</text>
+        <text x="840" y="578" class="s-sub" font-size="10">time →</text>
+        <text x="620" y="470" class="s-haz" font-size="10.5">unprotected: 10,000 misses, all hit the DB</text>
+        <text x="620" y="486" class="s-sub" font-size="10.5" style="fill:var(--hazard)">it slows, requests time out, retry, miss again</text>
+        <text x="620" y="520" class="s-sub" font-size="10.5" style="fill:var(--line)">protected: the database is queried once</text>
+
+        <text x="930" y="400" class="s-lab" font-size="11">10 · locking</text>
+        <text x="930" y="416" class="s-sub">the first miss takes a lock and regenerates; the rest wait</text>
+        <text x="930" y="430" class="s-sub">briefly, then read the new value</text>
+        <text x="930" y="456" class="s-lab" font-size="11">11 · stale-while-revalidate</text>
+        <text x="930" y="472" class="s-sub">serve the expired value while ONE request refreshes in the</text>
+        <text x="930" y="486" class="s-sub">background — no user waits at all</text>
+        <text x="930" y="512" class="s-lab" font-size="11">12 · jittered TTL</text>
+        <text x="930" y="528" class="s-mono" font-size="10.5">ttl = 300 + random(-60, 60)</text>
+        <text x="930" y="544" class="s-sub">so a whole key class never expires at the same instant</text>
+        <text x="930" y="574" class="s-note">Jitter is one line of code — take that, if nothing else.</text>
+
+        <!-- BOTTOM: COLD CACHE -->
+        <rect x="30" y="620" width="440" height="222" fill="var(--z3)"/>
+        <text x="46" y="644" class="s-zone" fill="var(--mute)">13 · cold cache after a restart</text>
+        <text x="46" y="664" class="s-lab" font-size="11">hit rate</text>
+        <rect x="140" y="652" width="285" height="14" fill="var(--line)" opacity=".8"/>
+        <text x="431" y="664" class="s-mono" font-size="10">95%</text>
+        <rect x="140" y="674" width="3" height="14" fill="var(--hazard)"/>
+        <text x="150" y="686" class="s-mono" font-size="10" style="fill:var(--hazard)">0% after the flush</text>
+        <text x="46" y="716" class="s-lab" font-size="11">DB load</text>
+        <rect x="140" y="704" width="15" height="14" fill="var(--line)" opacity=".8"/>
+        <text x="162" y="716" class="s-mono" font-size="10">1× normally</text>
+        <rect x="140" y="726" width="290" height="14" fill="var(--hazard)" opacity=".7"/>
+        <text x="436" y="738" class="s-mono" font-size="10" style="fill:var(--hazard)">20×</text>
+        <text x="46" y="764" class="s-sub">Instantly, and often worse than having no cache at all.</text>
+        <text x="46" y="790" class="s-haz" font-size="10.5">Can the database survive a cold cache at peak traffic?</text>
+        <text x="46" y="806" class="s-sub">If not, the cache is load-bearing: replicate it, monitor it,</text>
+        <text x="46" y="820" class="s-sub">and warm it after every deployment.</text>
+
+        <!-- BOTTOM: CDN -->
+        <rect x="486" y="620" width="440" height="222" fill="var(--z1)"/>
+        <text x="502" y="644" class="s-zone" fill="var(--line)">14 · the CDN, in three headers</text>
+        <text x="502" y="670" class="s-mono" font-size="10">Cache-Control: public, max-age=31536000, immutable</text>
+        <text x="502" y="686" class="s-sub" font-size="10.5">hashed assets like app.a3f9c2.js — a change changes the URL</text>
+        <text x="502" y="714" class="s-mono" font-size="10">Cache-Control: public, max-age=300, stale-while-revalidate=3600</text>
+        <text x="502" y="730" class="s-sub" font-size="10.5">semi-dynamic pages: served instantly, refreshed behind</text>
+        <text x="502" y="758" class="s-mono" font-size="10" style="fill:var(--hazard)">Cache-Control: private, no-store</text>
+        <text x="502" y="774" class="s-sub" font-size="10.5">anything authenticated — and verify the CDN honours it</text>
+        <text x="502" y="802" class="s-note">Purges take minutes and are eventually consistent.</text>
+        <text x="502" y="818" class="s-sub">Content-hashed filenames win by never needing one.</text>
+
+        <!-- BOTTOM: KEYS -->
+        <rect x="942" y="620" width="428" height="222" fill="var(--z4)"/>
+        <text x="958" y="644" class="s-zone" fill="var(--mute)">15–17 · keys, consistency, leaks</text>
+        <text x="958" y="670" class="s-mono" font-size="10" style="fill:var(--hazard)">✗ user_data</text>
+        <text x="1100" y="670" class="s-sub">collides across users</text>
+        <text x="958" y="688" class="s-mono" font-size="10" style="fill:var(--line)">✓ user:42:profile:v3</text>
+        <text x="1100" y="688" class="s-sub">bump v3 → v4 to orphan all</text>
+        <text x="958" y="716" class="s-lab" font-size="11">Invalidate on write</text>
+        <text x="958" y="732" class="s-sub">delete the key; the next read repopulates it</text>
+        <text x="958" y="756" class="s-lab" font-size="11">TTL only</text>
+        <text x="958" y="772" class="s-sub">simplest, and honest about what it guarantees</text>
+        <text x="958" y="798" class="s-haz" font-size="10.5">Cache deception: /account/statement.css cached as a</text>
+        <text x="958" y="812" class="s-haz" font-size="10.5">static file — one user's account served to the next.</text>
+        <text x="958" y="830" class="s-sub" font-size="10.5">private, no-store, and a correct Vary header.</text>
+      </svg>
+    </div>
+    <figcaption><b>The pattern that works best in this area is sidestepping invalidation rather than solving it:</b> hashed filenames that are cached forever because a change produces a new URL, versioned keys that orphan old entries, and TTLs with jitter that put an expiry date on every copy. Recalling copies is hard; letting them expire on schedule is not.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every layer and failure on this sheet</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Browser cache</h4><p>Zero milliseconds, no network at all, one copy per user. The most underused layer, and the one you can never purge — only let expire.</p></div>
+      <div><h4><span>02</span>CDN edge</h4><p>About 10 ms, one copy per region. The highest-leverage layer and the one most often left unconfigured. Purging is eventually consistent and takes minutes.</p></div>
+      <div><h4><span>03</span>Reverse proxy</h4><p>Nginx or Varnish in front of the application, about 1 ms, scoped to a data centre and easy to purge.</p></div>
+      <div><h4><span>04</span>Application memory</h4><p>Around a tenth of a microsecond and scoped to one instance. Correct on one server; ten different answers on ten.</p></div>
+      <div><h4><span>05</span>Redis</h4><p>A shared cache across every instance, about 1 ms away. Invalidation is easy and immediate, which is why it is the authoritative copy when local caches disagree.</p></div>
+      <div><h4><span>06</span>Database buffer pool</h4><p>The database's own memory cache. You tune it rather than invalidate it, and it is what makes a warm database fast and a restarted one slow.</p></div>
+      <div><h4><span>07</span>Disk</h4><p>Where the answer actually lives. Every layer above is a copy of it, made at a different time.</p></div>
+      <div><h4><span>08</span>Local-memory trap</h4><p>In-process caches across many instances produce inconsistent answers depending on routing. Accept bounded staleness deliberately, move to a shared cache, or invalidate over pub/sub with a TTL as the backstop.</p></div>
+      <div><h4><span>09</span>Cache stampede</h4><p>A popular key expires and thousands of concurrent requests miss together, all querying the database, which saturates, times out, and causes retries that miss again. Also called the thundering herd.</p></div>
+      <div><h4><span>10</span>Locking</h4><p>The first miss acquires a lock and regenerates the value; the others wait briefly and read it. The database sees one query instead of ten thousand.</p></div>
+      <div><h4><span>11</span>Stale-while-revalidate</h4><p>Serve the expired value while a single request refreshes it in the background. No user waits, which is what makes news and shop pages feel instant under load.</p></div>
+      <div><h4><span>12</span>Jittered TTL</h4><p>Expire at 300 s plus or minus a random 60, so keys written together do not expire together. One line of code that removes the synchronised version of the stampede.</p></div>
+      <div><h4><span>13</span>Cold cache</h4><p>A flush or restart drops the hit rate from 95% to zero and sends the database 20 times its normal load at once. A system that only survives warm has a load-bearing cache.</p></div>
+      <div><h4><span>14</span>Cache-Control</h4><p>immutable for hashed assets, max-age with stale-while-revalidate for semi-dynamic pages, private and no-store for anything authenticated. Standard headers everyone has and few use fully.</p></div>
+      <div><h4><span>15</span>Versioned key</h4><p>entity · id · variant · schema version, as in user:42:profile:v3. Bumping the version orphans every old entry with no purge, no scan and no race — the cheapest invalidation there is.</p></div>
+      <div><h4><span>16</span>Consistency model</h4><p>Write-through, invalidate-on-write (the usual correct choice), TTL only, or pub/sub invalidation. Each is a statement about how stale an answer is allowed to be.</p></div>
+      <div><h4><span>17</span>Poisoning and deception</h4><p>A shared cache storing one user's response under a key that does not include the user serves it to the next visitor. Unkeyed headers, a wrong Vary, or a path that looks static all cause it.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Permissions live in the cache too</b>
+    <p>When a user's access is revoked, every cached copy of what they could see is still valid until it expires. Purge on permission change, keep authenticated responses out of shared layers entirely, and never let a cache key omit the thing that makes a response private.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — QUEUE, STREAM OR BROADCAST ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>Queue, Stream or Broadcast</h2>
+    <span class="form">Decision tree</span>
+    <span class="cov">Covers · Message Queues · RabbitMQ · Kafka · Redis Streams · AWS SQS</span>
+  </div>
+  <p class="thesis">Stops 09 to 11 of sheet 1, as a choice. Before naming a broker, decide what the pipe must do: hand each message to one worker, announce it to whoever is listening, or keep it so anyone can read it later. <strong>Choosing the wrong shape produces either lost work or duplicated work, and no amount of tuning the right brand fixes the wrong shape.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A decision tree read left to right. From work to hand off, the first question is whether a user needs the result now, which leads to a synchronous call. The second is whether it takes under about fifty milliseconds, which leads to just calling the function. The third asks whether one consumer or every interested party should get it. The one-consumer branch asks about Postgres at modest volume, leading to SKIP LOCKED; then AWS with zero operations, leading to SQS; then routing by content, leading to RabbitMQ; otherwise whichever broker you already run. The everyone branch asks whether a late reader must still see the message: if not, pub/sub; if so, whether replay for weeks or millions per second is needed, leading to Kafka, otherwise Redis Streams. Below, a comparison of queue, pub/sub and stream, the three delivery guarantees, and idempotency written as code.">
+        <defs>
+          <marker id="d4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <text x="40" y="34" class="s-zone" fill="var(--line)">Choose the kind of pipe, then the brand</text>
+
+        <!-- question nodes -->
+        <g fill="var(--z1)" stroke="var(--line)" stroke-width="2.5">
+          <rect x="40" y="280" width="150" height="64"/><rect x="230" y="280" width="190" height="64"/><rect x="470" y="280" width="190" height="64"/>
+          <rect x="710" y="280" width="200" height="64"/><rect x="960" y="70" width="190" height="64"/><rect x="960" y="160" width="190" height="64"/>
+          <rect x="960" y="250" width="190" height="64"/><rect x="710" y="450" width="200" height="64"/><rect x="960" y="450" width="190" height="64"/>
+        </g>
+        <!-- leaves -->
+        <g fill="var(--z2)" stroke="var(--rule)" stroke-width="1.5">
+          <rect x="230" y="140" width="190" height="64"/><rect x="470" y="140" width="190" height="64"/>
+        </g>
+        <g fill="var(--z4)" stroke="var(--fast)" stroke-width="2">
+          <rect x="1190" y="70" width="180" height="64"/><rect x="1190" y="160" width="180" height="64"/><rect x="1190" y="250" width="180" height="64"/>
+          <rect x="960" y="340" width="190" height="64"/><rect x="470" y="450" width="190" height="64"/><rect x="1190" y="450" width="180" height="64"/>
+          <rect x="960" y="540" width="190" height="64"/>
+        </g>
+
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#d4)">
+          <path d="M190,312 L224,312"/><path d="M325,280 L325,210"/><path d="M420,312 L464,312"/><path d="M565,280 L565,210"/><path d="M660,312 L704,312"/>
+          <path d="M910,300 C940,300 930,102 954,102"/><path d="M810,344 L810,444"/>
+          <path d="M1150,102 L1184,102"/><path d="M1055,134 L1055,154"/><path d="M1150,192 L1184,192"/><path d="M1055,224 L1055,244"/>
+          <path d="M1150,282 L1184,282"/><path d="M1055,314 L1055,334"/>
+          <path d="M710,482 L666,482"/><path d="M910,482 L954,482"/><path d="M1150,482 L1184,482"/><path d="M1055,514 L1055,534"/>
+        </g>
+        <g class="s-sub" font-size="10.5" style="fill:var(--line)">
+          <text x="333" y="250">yes</text><text x="432" y="304">no</text><text x="573" y="250">yes</text><text x="672" y="304">no</text>
+          <text x="870" y="270">one</text><text x="818" y="400">all</text>
+          <text x="1155" y="94">yes</text><text x="1062" y="150">no</text><text x="1155" y="184">yes</text><text x="1062" y="240">no</text><text x="1155" y="274">yes</text><text x="1062" y="330">no</text>
+          <text x="678" y="474">no</text><text x="918" y="474">yes</text><text x="1155" y="474">yes</text><text x="1062" y="530">no</text>
+        </g>
+
+        <g class="s-num">
+          <text x="52" y="298">01</text><text x="242" y="298">02</text><text x="242" y="158">03</text><text x="482" y="298">04</text><text x="482" y="158">05</text><text x="722" y="298">06</text>
+          <text x="972" y="88">07</text><text x="1202" y="88">08</text><text x="972" y="178">09</text><text x="1202" y="178">10</text><text x="972" y="268">11</text><text x="1202" y="268">12</text><text x="972" y="358">13</text>
+          <text x="722" y="468">14</text><text x="482" y="468">15</text><text x="972" y="468">16</text><text x="1202" y="468">17</text><text x="972" y="558">18</text>
+        </g>
+        <g class="s-lab" font-size="12">
+          <text x="52" y="316">work to hand off</text><text x="242" y="316">result needed now?</text><text x="242" y="176">a synchronous call</text>
+          <text x="482" y="316">under ~50 ms?</text><text x="482" y="176">call the function</text><text x="722" y="316">one consumer, or all?</text>
+          <text x="972" y="106">modest, on Postgres?</text><text x="1202" y="106">SKIP LOCKED</text><text x="972" y="196">on AWS, zero ops?</text><text x="1202" y="196">AWS SQS</text>
+          <text x="972" y="286">route by content?</text><text x="1202" y="286">RabbitMQ</text><text x="972" y="376">whichever you run</text>
+          <text x="722" y="486">late readers see it?</text><text x="482" y="486">Pub/Sub</text><text x="972" y="486">replay for weeks?</text><text x="1202" y="486">Kafka</text><text x="972" y="576">Redis Streams</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="333">a task, or a fact</text><text x="242" y="333">is someone waiting on it</text><text x="242" y="193">no queue, no worker</text>
+          <text x="482" y="333">and nothing unreliable</text><text x="482" y="193">enqueue costs more</text><text x="722" y="333">a task, or an announcement</text>
+          <text x="972" y="123">and no broker yet</text><text x="1202" y="123">enqueue in the same txn</text><text x="972" y="213">no cluster to run</text><text x="1202" y="213">hidden, not deleted</text>
+          <text x="972" y="303">different queues per key</text><text x="1202" y="303">exchanges, ack each</text><text x="972" y="393">RabbitMQ or Redis Streams</text>
+          <text x="722" y="503">offline, or added next month</text><text x="482" y="503">offline subscriber misses it</text><text x="972" y="503">or millions per second</text><text x="1202" y="503">a retained, keyed log</text><text x="972" y="593">retention that fits in RAM</text>
+        </g>
+
+        <text x="40" y="400" class="s-note">Most wrong broker choices are made at 06, not at the brand.</text>
+        <text x="40" y="418" class="s-sub">A task wants exactly one worker; a fact wants every service</text>
+        <text x="40" y="432" class="s-sub">that cares, including ones that do not exist yet.</text>
+        <text x="40" y="462" class="s-haz" font-size="10.5">Kafka for a background email is the classic mistake:</text>
+        <text x="40" y="476" class="s-haz" font-size="10.5">a distributed system to operate, for a table's job.</text>
+        <text x="40" y="520" class="s-sub">Queues parallelise, which reorders. If order matters,</text>
+        <text x="40" y="534" class="s-sub">partition by key, so one order's events stay in line.</text>
+        <text x="40" y="562" class="s-sub" style="fill:var(--fast)">Postgres SKIP LOCKED is genuinely underrated.</text>
+
+        <!-- COMPARISON -->
+        <rect x="30" y="630" width="670" height="250" fill="var(--z3)"/>
+        <text x="46" y="654" class="s-zone" fill="var(--mute)">19 · queue, pub/sub, stream — the three shapes</text>
+        <g class="s-lab" font-size="11"><text x="200" y="680">Queue</text><text x="360" y="680">Pub/Sub</text><text x="520" y="680">Stream</text></g>
+        <line x1="46" y1="690" x2="684" y2="690" stroke="var(--rule)"/>
+        <g class="s-lab" font-size="11"><text x="46" y="710">Delivery</text><text x="46" y="732">Persistence</text><text x="46" y="754">Offline consumer</text><text x="46" y="776">Replay</text><text x="46" y="798">Purpose</text></g>
+        <g class="s-sub">
+          <text x="200" y="710">one consumer</text><text x="360" y="710">every subscriber</text><text x="520" y="710">every consumer group</text>
+          <text x="200" y="732">until acknowledged</text><text x="360" y="732">usually none</text><text x="520" y="732">retained for days</text>
+          <text x="200" y="754">gets it later</text><text x="360" y="754" fill="var(--hazard)">misses it</text><text x="520" y="754">reads from its offset</text>
+          <text x="200" y="776">no</text><text x="360" y="776">no</text><text x="520" y="776" fill="var(--line)">yes</text>
+          <text x="200" y="798">distribute work</text><text x="360" y="798">broadcast</text><text x="520" y="798">event log</text>
+        </g>
+        <g class="s-mono" font-size="10">
+          <text x="46" y="828">"Send this email"                → QUEUE</text>
+          <text x="46" y="844">"A user just signed up"          → PUB/SUB or STREAM</text>
+          <text x="46" y="860">"Every order event, replayable"  → STREAM</text>
+        </g>
+
+        <!-- GUARANTEES -->
+        <rect x="716" y="630" width="320" height="250" fill="var(--z5)"/>
+        <text x="732" y="654" class="s-zone" fill="var(--fast)">20 · delivery guarantees</text>
+        <text x="732" y="684" class="s-lab" font-size="11">AT MOST ONCE</text>
+        <text x="732" y="700" class="s-sub">may be lost, never duplicated</text>
+        <text x="732" y="726" class="s-lab" font-size="11" style="fill:var(--line)">AT LEAST ONCE</text>
+        <text x="732" y="742" class="s-sub">never lost, may be duplicated —</text>
+        <text x="732" y="756" class="s-sub">the practical default</text>
+        <text x="732" y="784" class="s-lab" font-size="11" style="fill:var(--hazard)">EXACTLY ONCE</text>
+        <line x1="730" y1="780" x2="830" y2="780" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="732" y="800" class="s-sub">the marketing claim</text>
+        <text x="732" y="828" class="s-note">at-least-once + idempotent consumer</text>
+        <text x="732" y="844" class="s-sub" style="fill:var(--fast)">= exactly-once effects</text>
+        <text x="732" y="866" class="s-sub">crash after work, before ack → redelivered</text>
+
+        <!-- IDEMPOTENCY -->
+        <rect x="1052" y="630" width="318" height="250" fill="var(--z1)"/>
+        <text x="1068" y="654" class="s-zone" fill="var(--line)">21 · idempotency, as code</text>
+        <text x="1068" y="684" class="s-mono" font-size="10" style="fill:var(--hazard)">✗ charge_card(order)</text>
+        <text x="1068" y="700" class="s-sub">retried → charged twice</text>
+        <text x="1068" y="722" class="s-mono" font-size="10" style="fill:var(--line)">✓ charge_card(order, idempotency_key)</text>
+        <text x="1068" y="738" class="s-sub">retried → returns the first result</text>
+        <text x="1068" y="766" class="s-mono" font-size="10" style="fill:var(--hazard)">✗ balance += amount</text>
+        <text x="1068" y="782" class="s-sub">retried → double credit</text>
+        <text x="1068" y="804" class="s-mono" font-size="10" style="fill:var(--line)">✓ INSERT … ON CONFLICT DO NOTHING</text>
+        <text x="1068" y="820" class="s-sub">retried → no effect</text>
+        <text x="1068" y="848" class="s-note">Redelivery is normal operation.</text>
+        <text x="1068" y="864" class="s-sub">Every consumer must be safe to run twice.</text>
+      </svg>
+    </div>
+    <figcaption><b>Two questions do almost all the work:</b> node 06 decides between a queue and a broadcast, and node 14 decides whether the broadcast must survive a reader being away. Brands only enter after that — and on every branch, the consumer at the end is still at-least-once, still idempotent, and still needs a dead-letter path.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the nodes, the leaves and the guarantees</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Work to hand off</h4><p>Something one part of the system produces and another must act on — an instruction to a known recipient, or a fact nobody is addressed by.</p></div>
+      <div><h4><span>02</span>Result needed now?</h4><p>If a person is waiting for the answer, it is a synchronous call. A queue makes the work durable, not faster for the one who asked.</p></div>
+      <div><h4><span>03</span>Synchronous call</h4><p>The honest answer for work whose result the user needs immediately. Queuing it only adds eventual consistency to something that needed an answer.</p></div>
+      <div><h4><span>04</span>Under ~50 ms?</h4><p>Enqueue, serialise, poll, deserialise and acknowledge cost more than a short, reliable function call. Queue slow, retryable or externally dependent work.</p></div>
+      <div><h4><span>05</span>Call the function</h4><p>Trivial work stays inline. Putting it behind a broker adds a failure mode and buys nothing.</p></div>
+      <div><h4><span>06</span>One consumer, or all?</h4><p>"Send this email" must happen exactly once, by one worker. "A user signed up" may matter to many services. The single most consequential question on this sheet.</p></div>
+      <div><h4><span>07</span>Modest volume, on Postgres?</h4><p>If the data already lives in Postgres and volume is modest, a new broker may be unnecessary infrastructure.</p></div>
+      <div><h4><span>08</span>SKIP LOCKED</h4><p>SELECT … FOR UPDATE SKIP LOCKED distributes work correctly, and the job is enqueued in the same transaction as the data change. pg-boss, Graphile Worker and Hangfire use this shape.</p></div>
+      <div><h4><span>09</span>On AWS, zero ops?</h4><p>A managed queue removes clusters, patching, failover and capacity planning. The absence of operational work is worth a great deal.</p></div>
+      <div><h4><span>10</span>AWS SQS</h4><p>Effectively unlimited scale, hidden-not-deleted delivery, dead-letter queues and redrive built in. Standard queues duplicate and reorder by design. Sheet 5, panel D.</p></div>
+      <div><h4><span>11</span>Route by content?</h4><p>When different consumers need different subsets — by region, by event type — the broker's routing model starts to matter.</p></div>
+      <div><h4><span>12</span>RabbitMQ</h4><p>Exchanges route by key to queues; each message is acknowledged individually and gone once acked. The classic task queue. Sheet 5, panel A.</p></div>
+      <div><h4><span>13</span>Whichever you run</h4><p>With no routing needs and no managed option, the best broker is the one you already operate: RabbitMQ, or Redis Streams if Redis is already in the stack.</p></div>
+      <div><h4><span>14</span>Late readers see it?</h4><p>Must a subscriber that was restarting, or one added next month, still receive the event? That is the line between broadcast and log.</p></div>
+      <div><h4><span>15</span>Pub/Sub</h4><p>Fire and forget to every current subscriber. No persistence, no acknowledgement, no replay — an offline subscriber simply misses the message.</p></div>
+      <div><h4><span>16</span>Replay for weeks?</h4><p>Retention for days or weeks on disk, millions of events per second, reprocessing after a bug fix — the requirements that justify Kafka's operational cost.</p></div>
+      <div><h4><span>17</span>Kafka</h4><p>A partitioned, replicated, retained log where each consumer group tracks its own offset. Not a task queue, and not a beginner's default. Sheet 5, panel B.</p></div>
+      <div><h4><span>18</span>Redis Streams</h4><p>Most of Kafka's model — persistence, consumer groups, per-entry acknowledgement, replay — as long as retention fits in RAM. Sheet 5, panel C.</p></div>
+      <div><h4><span>19</span>Three shapes</h4><p>Queue distributes work to one consumer until acknowledged; pub/sub broadcasts to whoever is listening; a stream retains events for every group to read from its own offset.</p></div>
+      <div><h4><span>20</span>Delivery guarantees</h4><p>At most once loses; at least once duplicates; exactly once does not exist end to end, because a consumer can finish the work and crash before acknowledging.</p></div>
+      <div><h4><span>21</span>Idempotency</h4><p>An idempotency key, or an insert that ignores conflicts, makes a second run a no-op. At-least-once plus this is how real systems get exactly-once effects.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>A message is untrusted input</b>
+    <p>Anyone who can reach the broker can enqueue anything. Authenticate producers and consumers, validate every payload against a schema, publish identifiers rather than personal data, and remember that the dead-letter queue holds real payloads — usually in the least protected corner of the system.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — FOUR BROKERS, OPENED ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>Four Brokers, Opened</h2>
+    <span class="form">Exploded parts</span>
+    <span class="cov">Covers · RabbitMQ · Kafka · Redis Streams · AWS SQS</span>
+  </div>
+  <p class="thesis">The leaves of sheet 4, taken apart. Each broker answers the same question — what happens to a message a consumer took and never finished? — with a different part. <strong>RabbitMQ waits for an ack, Kafka waits for an offset commit, Redis Streams keeps a pending list someone must reclaim, and SQS simply makes the message visible again. Learn that one part per broker and the rest of its behaviour follows.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="Four exploded panels. A, RabbitMQ: a producer publishes order.eu.created to a topic exchange, which routes copies through three bindings to an audit queue, an EU processing queue and a notification queue, each consumed with per-message acks, with a dead-letter exchange and queue below. B, Kafka: a producer hashes the order id key into one of three partitions drawn as rows of numbered offsets, each read by one consumer of the billing group, with a line showing analytics at offset 12,300 and billing and search at 15,000, and a replay arrow resetting the offset. C, Redis Streams: entries appended with IDs and trimmed from the oldest end, read by a consumer group, tracked in a pending list until XACK, with XAUTOCLAIM handing a stuck entry to another worker. D, AWS SQS: a timeline showing a message hidden for a thirty second visibility timeout and deleted at twenty seconds, and a second case where processing runs past the timeout so a second consumer receives the same message.">
+        <defs>
+          <marker id="b1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="b3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <!-- A · RABBITMQ -->
+        <rect x="30" y="40" width="660" height="400" fill="var(--z1)"/>
+        <text x="46" y="64" class="s-zone" fill="var(--line)">A · RabbitMQ — sorting rules, then signatures</text>
+        <rect x="46" y="120" width="110" height="56" fill="var(--z2)" stroke="var(--rule)"/>
+        <text x="56" y="142" class="s-lab" font-size="11">producer</text>
+        <text x="56" y="162" class="s-mono" font-size="10">order.eu.created</text>
+        <line x1="156" y1="148" x2="180" y2="148" stroke="var(--line)" stroke-width="2.5" marker-end="url(#b1)"/>
+        <rect x="186" y="104" width="130" height="88" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="196" y="130" class="s-lab" font-size="11">topic exchange</text>
+        <text x="196" y="148" class="s-sub" font-size="10.5">matches bindings,</text>
+        <text x="196" y="162" class="s-sub" font-size="10.5">stores nothing</text>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#b1)"><path d="M316,148 L436,118"/><path d="M316,148 L436,176"/><path d="M316,148 L436,234"/></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="440" y="96" width="150" height="44"/><rect x="440" y="154" width="150" height="44"/><rect x="440" y="212" width="150" height="44"/></g>
+        <g class="s-lab" font-size="11"><text x="450" y="114">audit queue</text><text x="450" y="172">eu processing</text><text x="450" y="230">notifications</text></g>
+        <g class="s-mono" font-size="10" style="fill:var(--fast)"><text x="450" y="130">order.#</text><text x="450" y="188">order.eu.*</text><text x="450" y="246">order.*.created</text></g>
+        <g stroke="var(--line)" stroke-width="2" fill="none"><path d="M590,118 L617,118"/><path d="M590,176 L617,176"/><path d="M590,234 L617,234"/></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"><circle cx="630" cy="118" r="13"/><circle cx="630" cy="176" r="13"/><circle cx="630" cy="234" r="13"/></g>
+        <g class="s-mono" font-size="10"><text x="648" y="122">ack</text><text x="648" y="180">ack</text><text x="648" y="238">ack</text></g>
+        <g class="s-num"><text x="46" y="112">01</text><text x="186" y="96">02</text><text x="440" y="88">03</text><text x="622" y="100">04</text><text x="466" y="286">06</text></g>
+        <path d="M515,256 L515,288" fill="none" stroke="var(--hazard)" stroke-width="2.5" marker-end="url(#b2)"/>
+        <rect x="484" y="292" width="62" height="28" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="515" y="310" text-anchor="middle" class="s-mono" font-size="10" style="fill:var(--hazard)">DLX</text>
+        <line x1="546" y1="306" x2="574" y2="306" stroke="var(--hazard)" stroke-width="2.5" marker-end="url(#b2)"/>
+        <rect x="578" y="292" width="62" height="28" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="609" y="310" text-anchor="middle" class="s-mono" font-size="10" style="fill:var(--hazard)">DLQ</text>
+        <text x="484" y="338" class="s-sub" font-size="10.5">nack ×N, or TTL expiry</text>
+        <text x="484" y="352" class="s-sub" font-size="10.5">TTL + DLX = delayed retry</text>
+
+        <text x="46" y="300" class="s-lab" font-size="11">05 · prefetch — the setting that matters</text>
+        <text x="46" y="318" class="s-sub">unbounded: one worker grabs 10,000 messages,</text>
+        <text x="46" y="332" class="s-sub">the rest idle, and a crash redelivers all of it</text>
+        <text x="46" y="350" class="s-sub" style="fill:var(--line)">1..10: even distribution, small blast radius</text>
+        <text x="46" y="380" class="s-haz">auto_ack=True acknowledges on delivery — a crash loses the message silently.</text>
+        <text x="46" y="400" class="s-sub">Once acked it is gone: a to-do list, not an archive. There is nothing to replay.</text>
+        <text x="46" y="424" class="s-note">Tens of thousands/sec per node · queues should stay short</text>
+
+        <!-- B · KAFKA -->
+        <rect x="710" y="40" width="660" height="400" fill="var(--z3)"/>
+        <text x="726" y="64" class="s-zone" fill="var(--line)">B · Kafka — a log nobody deletes by reading</text>
+        <text x="878" y="92" class="s-sub" font-size="10.5">08 · append-only partitions, ordered within each, never across</text>
+        <rect x="726" y="130" width="100" height="56" fill="var(--z2)" stroke="var(--rule)"/>
+        <text x="726" y="122" class="s-num">07</text>
+        <text x="736" y="152" class="s-lab" font-size="11">producer</text>
+        <text x="736" y="172" class="s-mono" font-size="10">key=order_id</text>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#b1)"><path d="M826,158 L870,115"/><path d="M826,158 L870,165"/><path d="M826,158 L870,215"/></g>
+        <text x="760" y="206" class="s-sub" font-size="10">hash(key)</text>
+        <g class="s-lab" font-size="11"><text x="878" y="120">P0</text><text x="878" y="170">P1</text><text x="878" y="220">P2</text></g>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5">
+          <rect x="900" y="100" width="32" height="30"/><rect x="934" y="100" width="32" height="30"/><rect x="968" y="100" width="32" height="30"/><rect x="1002" y="100" width="32" height="30"/><rect x="1036" y="100" width="32" height="30"/><rect x="1070" y="100" width="32" height="30"/><rect x="1104" y="100" width="32" height="30"/><rect x="1138" y="100" width="32" height="30"/><rect x="1172" y="100" width="32" height="30"/>
+          <rect x="900" y="150" width="32" height="30"/><rect x="934" y="150" width="32" height="30"/><rect x="968" y="150" width="32" height="30"/><rect x="1002" y="150" width="32" height="30"/><rect x="1036" y="150" width="32" height="30"/><rect x="1070" y="150" width="32" height="30"/><rect x="1104" y="150" width="32" height="30"/>
+          <rect x="900" y="200" width="32" height="30"/><rect x="934" y="200" width="32" height="30"/><rect x="968" y="200" width="32" height="30"/><rect x="1002" y="200" width="32" height="30"/><rect x="1036" y="200" width="32" height="30"/><rect x="1070" y="200" width="32" height="30"/><rect x="1104" y="200" width="32" height="30"/><rect x="1138" y="200" width="32" height="30"/>
+        </g>
+        <g fill="var(--z5)" stroke="var(--fast)" stroke-width="2"><rect x="1206" y="100" width="32" height="30"/><rect x="1138" y="150" width="32" height="30"/><rect x="1172" y="200" width="32" height="30"/></g>
+        <g class="s-mono" font-size="9.5" text-anchor="middle">
+          <text x="916" y="120">0</text><text x="950" y="120">1</text><text x="984" y="120">2</text><text x="1018" y="120">3</text><text x="1052" y="120">4</text><text x="1086" y="120">5</text><text x="1120" y="120">6</text><text x="1154" y="120">7</text><text x="1188" y="120">8</text><text x="1222" y="120">9</text>
+          <text x="916" y="170">0</text><text x="950" y="170">1</text><text x="984" y="170">2</text><text x="1018" y="170">3</text><text x="1052" y="170">4</text><text x="1086" y="170">5</text><text x="1120" y="170">6</text><text x="1154" y="170">7</text>
+          <text x="916" y="220">0</text><text x="950" y="220">1</text><text x="984" y="220">2</text><text x="1018" y="220">3</text><text x="1052" y="220">4</text><text x="1086" y="220">5</text><text x="1120" y="220">6</text><text x="1154" y="220">7</text><text x="1188" y="220">8</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="2" fill="none"><path d="M1240,115 L1286,115"/><path d="M1172,165 L1286,165"/><path d="M1206,215 L1286,215"/></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"><circle cx="1300" cy="115" r="13"/><circle cx="1300" cy="165" r="13"/><circle cx="1300" cy="215" r="13"/></g>
+        <g class="s-mono" font-size="9.5" text-anchor="middle"><text x="1300" y="119">A1</text><text x="1300" y="169">A2</text><text x="1300" y="219">A3</text></g>
+        <text x="1228" y="252" class="s-lab" font-size="11">09 · group billing</text>
+
+        <text x="726" y="304" class="s-num">10</text>
+        <line x1="746" y1="300" x2="1110" y2="300" stroke="var(--rule)" stroke-width="3"/>
+        <circle cx="930" cy="300" r="6" fill="var(--cool)"/><circle cx="1080" cy="300" r="6" fill="var(--line)"/>
+        <g class="s-sub" text-anchor="middle"><text x="930" y="286">analytics · 12,300</text><text x="1080" y="286">billing, search · 15,000</text></g>
+        <path d="M1080,310 C1040,344 870,344 832,314" fill="none" stroke="var(--learn)" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#b3)"/>
+        <text x="955" y="362" text-anchor="middle" class="s-learn">11 · bug fixed → reset the offset → reprocess</text>
+        <text x="726" y="386" class="s-sub">Consumers in a group ≤ partitions; extras sit idle. Choose the count early.</text>
+        <text x="726" y="402" class="s-sub">Retention: 7 days, 100 GB per partition, or compacted to the latest value per key.</text>
+        <text x="726" y="424" class="s-haz">Commit before processing → loss. Commit after → duplicates. So: idempotent consumers.</text>
+
+        <!-- C · REDIS STREAMS -->
+        <rect x="30" y="460" width="660" height="400" fill="var(--z2)"/>
+        <text x="46" y="484" class="s-zone" fill="var(--line)">C · Redis Streams — a log with a sign-out sheet</text>
+        <rect x="46" y="516" width="110" height="56" fill="var(--z3)" stroke="var(--rule)"/>
+        <text x="56" y="538" class="s-lab" font-size="11">producer</text>
+        <text x="56" y="558" class="s-mono" font-size="10">XADD MAXLEN ~</text>
+        <line x1="156" y1="546" x2="190" y2="546" stroke="var(--line)" stroke-width="2.5" marker-end="url(#b1)"/>
+        <text x="196" y="522" class="s-sub" font-size="10.5">12 · entries kept in RAM, trimmed from the oldest end</text>
+        <rect x="196" y="530" width="52" height="32" fill="var(--band)" stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="250" y="530" width="52" height="32"/><rect x="304" y="530" width="52" height="32"/><rect x="358" y="530" width="52" height="32"/><rect x="412" y="530" width="52" height="32"/><rect x="466" y="530" width="52" height="32"/><rect x="520" y="530" width="52" height="32"/><rect x="574" y="530" width="52" height="32"/>
+        </g>
+        <g class="s-mono" font-size="9.5" text-anchor="middle"><text x="222" y="550" fill="var(--hazard)">1699-0</text><text x="276" y="550">1700-0</text><text x="330" y="550">1701-0</text><text x="384" y="550">1702-0</text><text x="438" y="550">1703-0</text><text x="492" y="550">1704-0</text><text x="546" y="550">1705-0</text><text x="600" y="550">1706-0</text></g>
+        <text x="222" y="578" text-anchor="middle" class="s-sub" font-size="10" style="fill:var(--hazard)">trimmed</text>
+        <line x1="400" y1="562" x2="400" y2="596" stroke="var(--line)" stroke-width="2.5" marker-end="url(#b1)"/>
+        <text x="408" y="586" class="s-mono" font-size="10">XREADGROUP</text>
+        <rect x="196" y="600" width="300" height="64" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <text x="208" y="618" class="s-lab" font-size="11">13 · group workers</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><circle cx="270" cy="646" r="11"/><circle cx="346" cy="646" r="11"/><circle cx="422" cy="646" r="11"/></g>
+        <g class="s-mono" font-size="9.5" text-anchor="middle"><text x="270" y="650">w1</text><text x="346" y="650">w2</text><text x="422" y="650">w3</text></g>
+        <line x1="496" y1="630" x2="526" y2="630" stroke="var(--line)" stroke-width="2.5" marker-end="url(#b1)"/>
+        <text x="500" y="596" class="s-mono" font-size="10">15 XACK</text>
+        <rect x="530" y="600" width="150" height="64" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="540" y="618" class="s-lab" font-size="11">14 · pending list</text>
+        <text x="540" y="636" class="s-mono" font-size="10">XPENDING</text>
+        <text x="540" y="654" class="s-sub" font-size="10.5">delivered, not acked</text>
+        <path d="M605,664 C605,712 346,712 346,662" fill="none" stroke="var(--learn)" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#b3)"/>
+        <text x="360" y="730" class="s-learn">16 · XAUTOCLAIM min-idle 60000 → w2</text>
+        <text x="46" y="756" class="s-haz">No claim loop: a crashed worker's entries sit pending forever, delivered to nobody.</text>
+        <text x="46" y="776" class="s-sub">It lives in RAM: set MAXLEN ~ 10000 on every XADD, or the stream eats the instance.</text>
+        <text x="46" y="792" class="s-sub">AOF everysec — up to a second of writes can be lost on a hard failure.</text>
+        <text x="46" y="816" class="s-note">Most of Kafka's model at a fraction of its operations — if retention fits in memory.</text>
+        <text x="46" y="836" class="s-sub">Hundreds of thousands of entries/sec · sub-millisecond · XREADGROUP BLOCK, no polling</text>
+
+        <!-- D · SQS -->
+        <rect x="710" y="460" width="660" height="400" fill="var(--z4)"/>
+        <text x="726" y="484" class="s-zone" fill="var(--line)">D · AWS SQS — hidden, not deleted</text>
+        <g class="s-mono" font-size="10"><text x="830" y="510" text-anchor="middle">0 s</text><text x="1090" y="510" text-anchor="middle" fill="var(--hazard)">30 s</text><text x="1350" y="510" text-anchor="end">60 s</text></g>
+        <text x="726" y="526" class="s-sub" font-size="10.5">17 · invisible for the timeout</text>
+        <line x1="1090" y1="516" x2="1090" y2="690" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="5 5"/>
+        <g class="s-lab" font-size="11"><text x="726" y="556">consumer A</text><text x="726" y="620">consumer A</text><text x="726" y="660">consumer B</text></g>
+        <rect x="830" y="540" width="260" height="24" fill="var(--z5)" stroke="var(--fast)" stroke-width="1.5"/>
+        <rect x="830" y="547" width="170" height="10" fill="var(--line)" opacity=".75"/>
+        <circle cx="1000" cy="552" r="6" fill="var(--line)"/>
+        <text x="1000" y="582" class="s-sub" style="fill:var(--line)">18 · DeleteMessage at 20 s — gone</text>
+        <text x="1098" y="598" class="s-haz" font-size="10.5">timeout: visible again</text>
+        <rect x="830" y="604" width="260" height="24" fill="var(--z5)" stroke="var(--fast)" stroke-width="1.5"/>
+        <rect x="830" y="611" width="440" height="10" fill="var(--hazard)" opacity=".75"/>
+        <text x="1280" y="620" class="s-sub" style="fill:var(--hazard)">still working</text>
+        <rect x="1100" y="651" width="250" height="10" fill="var(--cool)" opacity=".85"/>
+        <text x="726" y="704" class="s-haz">Processing 50 s, timeout 30 s → consumer B gets it while A is still working.</text>
+        <text x="726" y="720" class="s-sub">Set the timeout above worst-case p99, or extend it with ChangeMessageVisibility.</text>
+        <text x="726" y="746" class="s-lab" font-size="11">19 · Standard</text><text x="1050" y="746" class="s-lab" font-size="11">FIFO</text>
+        <text x="726" y="762" class="s-sub">unlimited · best-effort order · duplicates</text>
+        <text x="1050" y="762" class="s-sub">300–3,000/s · ordered per group</text>
+        <text x="726" y="788" class="s-sub">20 · long polling, WaitTimeSeconds=20 · batches of 10 · 256 KB max, S3 pointer beyond</text>
+        <text x="726" y="814" class="s-note">21 · maxReceiveCount=5 → DLQ → CloudWatch alarm → redrive once fixed</text>
+        <text x="726" y="836" class="s-sub">Multi-AZ, retention up to 14 days, IAM per queue ARN — never a wildcard queue policy.</text>
+      </svg>
+    </div>
+    <figcaption><b>The part to find in each panel is the one that handles an abandoned message:</b> the ack in A, the committed offset in B, the pending list in C, the visibility timeout in D. Each can be misconfigured into silent loss — auto-ack, committing early, no claim loop — or into duplicates, which is why every consumer on every panel is idempotent.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the parts of four brokers</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Routing key</h4><p>The producer publishes with an address such as order.eu.created and knows nothing about who consumes it.</p></div>
+      <div><h4><span>02</span>Exchange</h4><p>Direct matches exactly, topic matches wildcards, fanout copies to every bound queue, headers routes on headers. A topic exchange covers almost every real need.</p></div>
+      <div><h4><span>03</span>Binding and queue</h4><p>order.# for auditing, order.eu.* for regional processing: each queue receives its own copy, and each copy goes to one consumer.</p></div>
+      <div><h4><span>04</span>Manual ack</h4><p>Acknowledge after processing; nack to requeue or dead-letter; a crash without an ack redelivers elsewhere. The whole point of choosing RabbitMQ.</p></div>
+      <div><h4><span>05</span>Prefetch</h4><p>How many unacked messages a consumer may hold. Unbounded is the most common misconfiguration; small for slow tasks, larger for fast ones.</p></div>
+      <div><h4><span>06</span>Dead-letter exchange</h4><p>Rejected or expired messages route to a DLQ for inspection and replay. Combined with a TTL queue that has no consumer, it also implements delayed retry.</p></div>
+      <div><h4><span>07</span>Partition key</h4><p>hash(key) picks the partition, so every event for one order_id lands in the same one and stays in order.</p></div>
+      <div><h4><span>08</span>Partition</h4><p>An append-only, ordered sequence. Ordering exists within it and never across; the partition count is the parallelism ceiling.</p></div>
+      <div><h4><span>09</span>Consumer group</h4><p>Each partition goes to one consumer in the group. More consumers than partitions means idle consumers; rebalancing pauses processing.</p></div>
+      <div><h4><span>10</span>Offset</h4><p>Each group's own read position per partition — billing at 15,000, analytics hours behind at 12,300, all on the same events.</p></div>
+      <div><h4><span>11</span>Replay and retention</h4><p>Events stay for 7 days, 100 GB, or compacted per key, regardless of who read them. Fix a consumer bug, reset its offset, reprocess — nothing else is affected.</p></div>
+      <div><h4><span>12</span>XADD and trimming</h4><p>Appends an entry with an ID such as 1699123456789-0. Streams live in RAM, so MAXLEN or MINID belongs on every stream from the first line of code.</p></div>
+      <div><h4><span>13</span>XREADGROUP</h4><p>Delivers each entry to one member of a consumer group, with BLOCK so workers wait without polling.</p></div>
+      <div><h4><span>14</span>Pending entries list</h4><p>Every delivered, unacknowledged entry with its idle time, visible through XPENDING. What makes Streams reliable — and the part people forget.</p></div>
+      <div><h4><span>15</span>XACK</h4><p>Confirms the work and removes the entry from the pending list. Reliable only together with claiming.</p></div>
+      <div><h4><span>16</span>XAUTOCLAIM</h4><p>A periodic loop reassigns entries idle longer than, say, 60,000 ms to a live worker. Without it, a crashed worker's entries are delivered to nobody, forever.</p></div>
+      <div><h4><span>17</span>Visibility timeout</h4><p>ReceiveMessage hides a message, 30 s by default, rather than deleting it. If processing outlasts the timeout the message reappears and a second consumer takes it.</p></div>
+      <div><h4><span>18</span>DeleteMessage</h4><p>The only thing that removes a message. Forget it and the message simply comes back.</p></div>
+      <div><h4><span>19</span>Standard vs FIFO</h4><p>Standard is effectively unlimited and duplicates and reorders by design. FIFO orders within a group and deduplicates within 5 minutes, at 300–3,000 messages per second.</p></div>
+      <div><h4><span>20</span>Long polling and batching</h4><p>WaitTimeSeconds=20 and batches of 10 cut the request count you are billed for, and lower latency too. Payloads over 256 KB go to S3 with a pointer.</p></div>
+      <div><h4><span>21</span>maxReceiveCount and redrive</h4><p>After 5 receives without deletion a message moves to the DLQ; once the bug is fixed, redrive returns it to the main queue — a feature self-hosted setups usually build themselves.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Every retained message is a data store</b>
+    <p>Seven days of Kafka events, a day of Redis Stream entries and a dead-letter queue full of failed payloads are all personal data with the same obligations as a database — including deletion requests, which an immutable log makes genuinely hard. Publish identifiers, not personal fields, and decide this before you build.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — THE JOB CIRCUIT ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>The Job Circuit</h2>
+    <span class="form">Closed circuit</span>
+    <span class="cov">Covers · Background Workers · Message Queues · Celery · BullMQ · Hangfire</span>
+  </div>
+  <p class="thesis">Stops 12 to 15 of sheet 1, as the loop a worker runs forever. Six steps, the same in every language and framework. <strong>Workers fail silently — nobody receives a 500, the work simply does not happen — so the circuit is only safe with an ID instead of an object, an idempotency check, a timeout, an ack after success, and an alert on the age of the oldest message.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 830" role="img" aria-label="A closed circuit of six steps: enqueue an ID, a worker takes it, load the data fresh by ID, check whether it was already done, do the work under a timeout, and acknowledge only after success, then back to the next job. From step five a hazard path drops to a failure strip: exponential backoff at one, two, four, eight and sixteen seconds, a dead-letter queue, an alert and a redrive. To the right, the six rules every worker follows, scheduled jobs and the cron-on-every-server bug, and one enormous task compared with fan-out into one task per user. Bottom right, the metrics to monitor, led by the age of the oldest message.">
+        <defs>
+          <marker id="j1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="j3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="40" y="46" class="s-zone" fill="var(--line)">The circuit · one job, and what makes it safe to run twice</text>
+        <g fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#j1)">
+          <path d="M368,157 A190,190 0 0,1 487,222"/>
+          <path d="M513,272 A190,190 0 0,1 513,408"/>
+          <path d="M487,458 A190,190 0 0,1 368,523"/>
+          <path d="M312,523 A190,190 0 0,1 193,458"/>
+          <path d="M167,408 A190,190 0 0,1 167,272"/>
+          <path d="M193,222 A190,190 0 0,1 312,157"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="3.5">
+          <circle cx="340" cy="150" r="26"/><circle cx="504" cy="245" r="26"/><circle cx="504" cy="435" r="26"/>
+          <circle cx="176" cy="245" r="26"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"><circle cx="340" cy="530" r="26"/></g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3.5"><circle cx="176" cy="435" r="26"/></g>
+        <g class="s-big" text-anchor="middle" style="fill:var(--line)">
+          <text x="340" y="157">1</text><text x="504" y="252">2</text><text x="504" y="442">3</text><text x="340" y="537">4</text><text x="176" y="442">5</text><text x="176" y="252">6</text>
+        </g>
+        <text x="340" y="100" text-anchor="middle" class="s-lab">enqueue an ID</text>
+        <g class="s-sub" text-anchor="middle"><text x="340" y="116">{ video_id: 42 }, not the file</text><text x="340" y="130">201 back in ~50 ms</text></g>
+        <text x="546" y="238" class="s-lab">a worker takes it</text>
+        <g class="s-sub"><text x="546" y="256">one message, prefetch 1</text><text x="546" y="270">in its own process</text></g>
+        <text x="546" y="424" class="s-lab">load it fresh by ID</text>
+        <g class="s-sub"><text x="546" y="442">data may have changed</text><text x="546" y="456">since it was enqueued</text></g>
+        <text x="340" y="580" text-anchor="middle" class="s-lab">already done?</text>
+        <g class="s-sub" text-anchor="middle"><text x="340" y="596">idempotency check — yes: ack and stop</text><text x="340" y="610">because redelivery is normal</text></g>
+        <text x="134" y="424" text-anchor="end" class="s-lab">do the work</text>
+        <g class="s-sub" text-anchor="end"><text x="134" y="442">4 min encode, with</text><text x="134" y="456">a timeout set</text></g>
+        <text x="134" y="472" text-anchor="end" class="s-haz" font-size="10.5">throws ↓</text>
+        <text x="134" y="238" text-anchor="end" class="s-lab">ack only now</text>
+        <g class="s-sub" text-anchor="end"><text x="134" y="256">status = ready,</text><text x="134" y="270">user notified</text></g>
+        <text x="340" y="330" text-anchor="middle" class="s-note" font-size="13">one job</text>
+        <g class="s-sub" text-anchor="middle"><text x="340" y="350">a crash before step 6</text><text x="340" y="364">means no ack → redelivered</text></g>
+
+        <!-- FAILURE STRIP -->
+        <path d="M176,461 L176,700" fill="none" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#j3)"/>
+        <rect x="30" y="640" width="870" height="176" fill="var(--z5)"/>
+        <text x="46" y="664" class="s-zone" fill="var(--hazard)">07 · when step 5 throws — retries, then a dead letter</text>
+        <line x1="190" y1="712" x2="860" y2="712" stroke="var(--hazard)" stroke-width="3"/>
+        <circle cx="176" cy="712" r="8" fill="var(--hazard)"/>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"><circle cx="280" cy="712" r="7"/><circle cx="360" cy="712" r="7"/><circle cx="440" cy="712" r="7"/><circle cx="520" cy="712" r="7"/><circle cx="600" cy="712" r="7"/></g>
+        <g class="s-mono" font-size="10" text-anchor="middle"><text x="280" y="696">1s</text><text x="360" y="696">2s</text><text x="440" y="696">4s</text><text x="520" y="696">8s</text><text x="600" y="696">16s</text></g>
+        <rect x="650" y="698" width="70" height="28" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="685" y="716" text-anchor="middle" class="s-mono" font-size="10" style="fill:var(--hazard)">DLQ</text>
+        <text x="650" y="692" class="s-num">08</text>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"><circle cx="780" cy="712" r="7"/><circle cx="860" cy="712" r="7"/></g>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="780" y="696">alert</text><text x="860" y="696">redrive</text></g>
+        <text x="46" y="746" class="s-sub">exponential backoff with jitter — or every failed task retries at the same instant, against a service already struggling</text>
+        <text x="46" y="766" class="s-haz" font-size="10.5">No DLQ: a poison message is retried forever and holds a worker. A DLQ turns an infinite loop into an alert.</text>
+        <text x="46" y="792" class="s-sub">Celery: max_retries + retry_backoff + retry_jitter · BullMQ: attempts + exponential backoff · Hangfire: 10 attempts by default</text>
+
+        <!-- MONITORING -->
+        <rect x="916" y="640" width="454" height="176" fill="var(--z1)"/>
+        <text x="932" y="664" class="s-zone" fill="var(--line)">09 · watch the rail, not the errors</text>
+        <g class="s-sub">
+          <text x="932" y="690">queue depth — growing means consumers are behind</text>
+          <text x="932" y="708">oldest message age — the clearest backlog signal</text>
+          <text x="932" y="726">task duration p95/p99 — a slow task starves the pool</text>
+          <text x="932" y="744">failure rate and DLQ size</text>
+          <text x="932" y="762">worker liveness — are they even running?</text>
+        </g>
+        <text x="932" y="792" class="s-haz">Zero errors, two-hour-old message: nothing is done.</text>
+
+        <!-- SIX RULES -->
+        <rect x="700" y="40" width="670" height="260" fill="var(--z3)"/>
+        <text x="716" y="64" class="s-zone" fill="var(--mute)">12 · the six rules, in every framework</text>
+        <g class="s-lab" font-size="11">
+          <text x="716" y="94">1 · IDEMPOTENT</text><text x="716" y="124">2 · SMALL PAYLOADS</text><text x="716" y="154">3 · TIMEOUTS</text>
+          <text x="716" y="184">4 · RETRIES + BACKOFF</text><text x="716" y="214">5 · DEAD-LETTER PATH</text><text x="716" y="244">6 · GRACEFUL SHUTDOWN</text>
+        </g>
+        <g class="s-sub">
+          <text x="880" y="94">redelivery is normal operation; running twice must be safe</text>
+          <text x="880" y="124">pass user_id, not a user object that may be minutes old</text>
+          <text x="880" y="154">on every task, or one hung job holds a worker forever</text>
+          <text x="880" y="184">exponential, with a cap and with jitter</text>
+          <text x="880" y="214">a permanently failing job must stop and alert</text>
+          <text x="880" y="244">finish the current task on SIGTERM, or every deploy kills work</text>
+        </g>
+        <text x="716" y="284" class="s-note">Workers deploy and scale apart from the API — on queue depth, not request rate.</text>
+
+        <!-- SCHEDULED -->
+        <rect x="700" y="316" width="326" height="304" fill="var(--z2)"/>
+        <text x="716" y="340" class="s-zone" fill="var(--mute)">10 · scheduled jobs</text>
+        <text x="716" y="368" class="s-lab" font-size="11">cron on one server</text><text x="716" y="384" class="s-sub">dies with that server</text>
+        <text x="716" y="408" class="s-lab" font-size="11" style="fill:var(--hazard)">cron on every server</text><text x="716" y="424" class="s-sub" style="fill:var(--hazard)">runs N times — the classic bug</text>
+        <text x="716" y="448" class="s-lab" font-size="11">scheduler + queue</text><text x="716" y="464" class="s-sub">one schedule, one enqueue</text>
+        <text x="716" y="488" class="s-lab" font-size="11">Kubernetes CronJob</text><text x="716" y="504" class="s-sub">the orchestrator runs it once</text>
+        <g class="s-sub"><text x="716" y="532">Celery Beat: exactly one instance.</text><text x="716" y="546">BullMQ repeatables, Hangfire RecurringJob:</text><text x="716" y="560">stored centrally, run once per schedule.</text></g>
+        <text x="716" y="588" class="s-note" font-size="11">A lock is efficiency, not a guarantee —</text>
+        <text x="716" y="604" class="s-sub" style="fill:var(--fast)">keep the job idempotent anyway.</text>
+
+        <!-- GRANULARITY -->
+        <rect x="1042" y="316" width="328" height="304" fill="var(--z4)"/>
+        <text x="1058" y="340" class="s-zone" fill="var(--fast)">11 · one task, or 50,000</text>
+        <rect x="1058" y="358" width="296" height="24" fill="var(--band)" stroke="var(--rule)"/>
+        <rect x="1058" y="358" width="178" height="24" fill="var(--line)" opacity=".35"/>
+        <line x1="1236" y1="350" x2="1236" y2="390" stroke="var(--hazard)" stroke-width="3"/>
+        <text x="1066" y="375" class="s-lab" font-size="11">email 50,000 users</text>
+        <text x="1058" y="406" class="s-haz" font-size="10.5">fails at 30,000 → retry resends 30,000</text>
+        <g stroke="var(--line)" stroke-width="10" stroke-dasharray="10 4.5" opacity=".7">
+          <line x1="1058" y1="429" x2="1348" y2="429"/><line x1="1058" y1="443" x2="1348" y2="443"/><line x1="1058" y1="457" x2="1348" y2="457"/><line x1="1058" y1="471" x2="1348" y2="471"/>
+        </g>
+        <rect x="1246.5" y="438" width="10" height="10" fill="var(--hazard)"/>
+        <text x="1058" y="500" class="s-lab" font-size="11">fan-out: one task per user</text>
+        <g class="s-sub"><text x="1058" y="518">each fails and retries alone;</text><text x="1058" y="532">progress is visible, and the</text><text x="1058" y="546">work spreads across workers</text></g>
+        <text x="1058" y="576" class="s-note">Work under 50 ms does not</text>
+        <text x="1058" y="592" class="s-note">belong in a queue at all.</text>
+      </svg>
+    </div>
+    <figcaption><b>The loop itself is five lines of framework code; the safety is in step 4 and the strip beneath it.</b> A job that can run twice harmlessly, retries with jitter, stops in a dead-letter queue and raises an alert is a job you can leave alone. Everything else is a job that will one day send 30,000 duplicate emails at 3 a.m.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 560" role="img" aria-label="Three parallel sections comparing worker frameworks. Celery for Python: Django calls delay with an ID, a RabbitMQ broker, prefork workers and an optional result backend, with the defaults to change: acks_late, the prefetch multiplier and the pickle serializer. BullMQ for Node.js: an API adds jobs to Redis for separate worker processes watched by Bull Board, with removeOnComplete, removeOnFail and concurrency. Hangfire for .NET: ASP.NET enqueues rows into SQL tables polled by a separate server with a dashboard, with the dashboard authorization filter, entity serialisation and in-process hosting. Each column also lists retries, scheduling, workflows and the typical incident.">
+        <defs>
+          <marker id="j2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+        <rect x="30" y="16" width="440" height="500" fill="var(--z1)"/>
+        <rect x="480" y="16" width="440" height="500" fill="var(--z4)"/>
+        <rect x="930" y="16" width="440" height="500" fill="var(--z2)"/>
+        <g class="s-zone" fill="var(--line)"><text x="46" y="40">Celery · Python</text><text x="496" y="40">BullMQ · Node.js</text><text x="946" y="40">Hangfire · .NET</text></g>
+        <g class="s-sub">
+          <text x="46" y="60">the GIL means background work needs separate processes</text>
+          <text x="496" y="60">one blocking resize stalls every request on the event loop</text>
+          <text x="946" y="60">jobs are rows in the database you already run</text>
+        </g>
+
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="46" y="76" width="86" height="44"/><rect x="152" y="76" width="86" height="44"/><rect x="258" y="76" width="86" height="44"/><rect x="364" y="76" width="86" height="44"/>
+          <rect x="496" y="76" width="86" height="44"/><rect x="602" y="76" width="86" height="44"/><rect x="708" y="76" width="86" height="44"/><rect x="814" y="76" width="86" height="44"/>
+          <rect x="946" y="76" width="86" height="44"/><rect x="1052" y="76" width="86" height="44"/><rect x="1158" y="76" width="86" height="44"/><rect x="1264" y="76" width="86" height="44"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#j2)">
+          <path d="M132,98 L148,98"/><path d="M238,98 L254,98"/><path d="M344,98 L360,98"/>
+          <path d="M582,98 L598,98"/><path d="M688,98 L704,98"/><path d="M794,98 L810,98"/>
+          <path d="M1032,98 L1048,98"/><path d="M1138,98 L1154,98"/><path d="M1244,98 L1260,98"/>
+        </g>
+        <g class="s-lab" font-size="11">
+          <text x="54" y="94">Django</text><text x="160" y="94">broker</text><text x="266" y="94">worker ×N</text><text x="372" y="94">results</text>
+          <text x="504" y="94">API</text><text x="610" y="94">Redis</text><text x="716" y="94">worker</text><text x="822" y="94">Bull Board</text>
+          <text x="954" y="94">ASP.NET</text><text x="1060" y="94">SQL tables</text><text x="1166" y="94">server</text><text x="1272" y="94">/hangfire</text>
+        </g>
+        <g class="s-sub" font-size="10">
+          <text x="54" y="110">.delay(id)</text><text x="160" y="110">RabbitMQ</text><text x="266" y="110">prefork</text><text x="372" y="110">optional</text>
+          <text x="504" y="110">queue.add()</text><text x="610" y="110">the queue</text><text x="716" y="110">own process</text><text x="822" y="110">authenticate</text>
+          <text x="954" y="110">Enqueue()</text><text x="1060" y="110">polled</text><text x="1166" y="110">own service</text><text x="1272" y="110">authorise it</text>
+        </g>
+
+        <g class="s-lab" font-size="11"><text x="46" y="146">Defaults you must change</text><text x="496" y="146">Defaults you must change</text><text x="946" y="146">Defaults you must change</text></g>
+        <g class="s-num"><text x="46" y="166">13</text><text x="46" y="200">14</text><text x="496" y="166">15</text><text x="496" y="234">16</text><text x="946" y="166">18</text></g>
+        <g class="s-mono" font-size="10">
+          <text x="70" y="166">acks_late = False → True</text>
+          <text x="70" y="200">worker_prefetch_multiplier = 4 → 1</text>
+          <text x="520" y="166">removeOnComplete: unset → 1000</text>
+          <text x="520" y="200">removeOnFail: unset → 5000</text>
+          <text x="520" y="234">concurrency: 5</text>
+          <text x="970" y="166">Dashboard: local only, no auth filter</text>
+          <text x="970" y="234">server hosted inside the web app</text>
+        </g>
+        <g class="s-mono" font-size="10" style="fill:var(--hazard)"><text x="70" y="234">task_serializer = pickle → json</text><text x="970" y="200">Enqueue(() => Process(order))</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="70" y="180">acknowledged on receipt: a crash loses the task</text>
+          <text x="70" y="214">one worker hoards long tasks; others starve</text>
+          <text x="520" y="180">job history kept forever — Redis fills up</text>
+          <text x="520" y="214">failed records accumulate too</text>
+          <text x="520" y="248">five jobs on ONE event loop: I/O yes, CPU no</text>
+          <text x="970" y="180">→ a real AdminOnly authorization filter</text>
+          <text x="970" y="214">serialises the entity; pending jobs break on change</text>
+          <text x="970" y="248">→ a separate worker service in production</text>
+        </g>
+        <text x="70" y="248" class="s-sub" font-size="10.5" style="fill:var(--hazard)">pickle on a reachable broker is remote code execution</text>
+
+        <g class="s-lab" font-size="11">
+          <text x="46" y="282">Retries</text><text x="46" y="340">Scheduling</text><text x="46" y="384">Workflows</text><text x="46" y="428">Cost</text>
+          <text x="496" y="282">Retries</text><text x="496" y="340">Scheduling</text><text x="496" y="384">Workflows</text><text x="496" y="428">CPU work</text>
+          <text x="946" y="282">Retries</text><text x="946" y="340">Scheduling</text><text x="946" y="384">17 · Transactional enqueue</text><text x="946" y="428">Throughput</text>
+        </g>
+        <g class="s-mono" font-size="10"><text x="46" y="298">max_retries=5, retry_backoff, retry_jitter</text><text x="496" y="298">attempts: 5, backoff: exponential, 1000</text><text x="946" y="298">[AutomaticRetry(Attempts = 5)]</text></g>
+        <g class="s-sub">
+          <text x="46" y="314">1s → 2s → 4s → 8s → 16s, never in lockstep</text>
+          <text x="46" y="356">Celery Beat: exactly ONE instance, or celery-redbeat</text>
+          <text x="46" y="400">chain · group · chord — deep chains belong in Temporal</text>
+          <text x="46" y="444">100–300 MB per worker; disable unused result backends</text>
+          <text x="496" y="314">1s → 2s → 4s → 8s → 16s, then the failed set</text>
+          <text x="496" y="356">repeatable jobs · rate limit: 100 jobs per minute</text>
+          <text x="496" y="400">flows (parent/child) · priorities · delayed jobs</text>
+          <text x="496" y="444">sandboxed processors, or more worker processes</text>
+          <text x="946" y="314">10 attempts by default, then Failed + retry button</text>
+          <text x="946" y="356">RecurringJob runs once across all instances</text>
+          <text x="946" y="400">job row and order row in one BEGIN … COMMIT</text>
+          <text x="946" y="444">hundreds to low thousands of jobs a minute</text>
+        </g>
+        <g class="s-haz">
+          <text x="46" y="480">Incident: tasks lost on a worker crash —</text><text x="46" y="496">acks_late was left at False.</text>
+          <text x="496" y="480">Incident: Redis out of memory —</text><text x="496" y="496">removeOnComplete was never set.</text>
+          <text x="946" y="480">Incident: personal data in job arguments,</text><text x="946" y="496">readable by anyone at /hangfire.</text>
+        </g>
+        <text x="700" y="542" text-anchor="middle" class="s-note">Three frameworks, one set of rules: ack after success, pass IDs, bound the history, secure the dashboard.</text>
+      </svg>
+    </div>
+    <figcaption><b>Every framework ships with one default that loses work or leaks data.</b> Celery acknowledges on receipt, BullMQ keeps every job record in RAM, and Hangfire's dashboard exposes job arguments once it leaves localhost. None of them is a bug; each is a convenience that assumes everything goes well.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the circuit, the rules and the frameworks</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Enqueue an ID</h4><p>Pass { video_id: 42 }, not the file or a serialised object. The API responds in about 50 ms and the task stays small, current and safe across model changes.</p></div>
+      <div><h4><span>02</span>A worker takes it</h4><p>A separate process with its own resource profile, holding one message at a time for long tasks so a crash strands little work.</p></div>
+      <div><h4><span>03</span>Load fresh by ID</h4><p>Read the row now, not as it was when enqueued. A task carrying a whole object acts on data that may be minutes old.</p></div>
+      <div><h4><span>04</span>Already done?</h4><p>Check the idempotency key or the status first. If the work happened, acknowledge and stop — the duplicate was normal delivery, not a failure.</p></div>
+      <div><h4><span>05</span>Do the work</h4><p>Encode, send, sync — always under a timeout. A task with no timeout that hangs holds a worker forever and slowly drains the pool.</p></div>
+      <div><h4><span>06</span>Ack only now</h4><p>Update status, notify, then acknowledge. Acknowledging earlier turns every worker crash into silently lost work.</p></div>
+      <div><h4><span>07</span>Backoff with jitter</h4><p>Retry at 1, 2, 4, 8, 16 seconds with randomness added, so a downstream outage is not hit by every failed task at the same instant.</p></div>
+      <div><h4><span>08</span>Dead-letter queue</h4><p>Where a job goes after its last attempt: inspected, fixed, redriven. It turns a poison message's infinite loop into one alert.</p></div>
+      <div><h4><span>09</span>Oldest message age</h4><p>The clearest backlog signal, alongside depth, p95/p99 duration, DLQ size and liveness. A queue with zero errors can still be doing nothing.</p></div>
+      <div><h4><span>10</span>Scheduled jobs</h4><p>Cron on every replica runs the job N times. Use one scheduler that enqueues, an orchestrator CronJob, or a framework that stores the schedule centrally.</p></div>
+      <div><h4><span>11</span>Fan-out</h4><p>One task per user instead of one task for 50,000. Each retries alone, progress is visible, and a failure at user 30,000 does not resend the first 30,000.</p></div>
+      <div><h4><span>12</span>The six rules</h4><p>Idempotent, small payloads, timeouts, retries with backoff, a dead-letter path, and graceful shutdown that finishes the current task on SIGTERM.</p></div>
+      <div><h4><span>13</span>acks_late</h4><p>Celery acknowledges on receipt by default. Set acks_late=True so a task is acknowledged only after it succeeds — the setting behind the most common Celery incident.</p></div>
+      <div><h4><span>14</span>Prefetch multiplier</h4><p>Celery's default of 4 lets one worker hoard long tasks while others sit idle. Set it to 1 for long-running work.</p></div>
+      <div><h4><span>15</span>removeOnComplete</h4><p>BullMQ keeps completed and failed job records in Redis indefinitely unless told otherwise. A busy queue will consume all available memory.</p></div>
+      <div><h4><span>16</span>Concurrency is not parallelism</h4><p>concurrency: 5 runs five jobs on one Node event loop — fine for I/O, still blocking for CPU. CPU work needs sandboxed processors or more processes.</p></div>
+      <div><h4><span>17</span>Transactional enqueue</h4><p>Because a Hangfire job is a database row, it commits with the business write: both or neither. The same benefit pg-boss and Graphile Worker give Node.</p></div>
+      <div><h4><span>18</span>Dashboard security</h4><p>Hangfire's dashboard, Bull Board and Flower expose payloads and allow retries and deletes. Each needs real authorisation, not an IP restriction.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Workers are not internal</b>
+    <p>They usually run with broader permissions than the API — database writes, file access, third-party credentials — and their input arrives from a queue, which is a trust boundary. Validate payloads, never deserialise untrusted data (pickle is remote code execution), give each worker only the credentials its jobs need, and keep authorisation in the service layer so a worker cannot bypass a rule the API enforces.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 7 — EVENTS AND SAGAS ══════════════════════ -->
+<div class="sheet" id="a7">
+  <div class="plate">
+    <span class="no">Sheet 7</span>
+    <h2>Events and Sagas</h2>
+    <span class="form">Swimlane chart</span>
+    <span class="cov">Covers · Event Driven Architecture · Microservices</span>
+  </div>
+  <p class="thesis">The return line of sheet 1, drawn against the clock with one lane per service. An event is a fact about the past; nobody is told what to do, and nobody holds the whole flow. <strong>Decoupling is real and so is its price: for the shaded seconds the services disagree about reality, and a failed payment is undone not by a rollback but by new events that compensate.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A swimlane chart with seven lanes: order service, relay and broker, inventory, payment, email, analytics and the user's dashboard, against a time axis from zero milliseconds to several seconds. The order service commits the order with an outbox row and returns 201 at 30 milliseconds. The relay publishes OrderPlaced, which fans out to inventory, payment, email and, two seconds later, analytics. Payment fails and publishes PaymentFailed, which makes inventory release the stock and the order service mark the order failed; the dashboard updates seconds after the original response. A shaded window marks the time the services disagree. Below, panels on the outbox pattern, choreography versus orchestration, the saga with compensating actions, past-tense event naming, and event schema versioning.">
+        <defs>
+          <marker id="e1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="e2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="40" y="40" class="s-zone" fill="var(--line)">One OrderPlaced, drawn against the clock</text>
+        <text x="40" y="58" class="s-sub">one lane per service; each owns its own database, and none of them calls another</text>
+
+        <g>
+          <rect x="30" y="70" width="1340" height="50" fill="var(--z1)"/><rect x="30" y="120" width="1340" height="50" fill="var(--band)"/>
+          <rect x="30" y="170" width="1340" height="50" fill="var(--z2)"/><rect x="30" y="220" width="1340" height="50" fill="var(--band)"/>
+          <rect x="30" y="270" width="1340" height="50" fill="var(--z3)"/><rect x="30" y="320" width="1340" height="50" fill="var(--band)"/>
+          <rect x="30" y="370" width="1340" height="50" fill="var(--z6)"/>
+        </g>
+        <rect x="440" y="70" width="900" height="350" fill="color-mix(in srgb,var(--fast) 10%,transparent)"/>
+        <line x1="200" y1="70" x2="200" y2="420" stroke="var(--rule)" stroke-width="1.5"/>
+        <g class="s-lab" font-size="11.5">
+          <text x="46" y="99">order service</text><text x="46" y="149">relay + broker</text><text x="46" y="199">inventory</text><text x="46" y="249">payment</text>
+          <text x="46" y="299">email</text><text x="46" y="349">analytics</text><text x="46" y="399">user's dashboard</text>
+        </g>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#e1)">
+          <path d="M250,95 L514,143"/><path d="M520,145 L694,193"/><path d="M520,145 L694,293"/><path d="M520,145 L814,243"/>
+          <path d="M520,145 L1180,145 C1210,145 1230,300 1230,337"/><path d="M1130,95 L1326,389"/>
+        </g>
+        <g stroke="var(--hazard)" stroke-width="2.5" fill="none" stroke-dasharray="7 5" marker-end="url(#e2)">
+          <path d="M820,245 L994,197"/><path d="M820,245 L1124,97"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="3">
+          <circle cx="250" cy="95" r="7"/><circle cx="520" cy="145" r="7"/><circle cx="700" cy="195" r="7"/><circle cx="700" cy="295" r="7"/><circle cx="1230" cy="345" r="7"/><circle cx="1330" cy="395" r="7"/>
+        </g>
+        <circle cx="440" cy="95" r="9" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"><circle cx="820" cy="245" r="7"/><circle cx="1000" cy="195" r="7"/><circle cx="1130" cy="95" r="7"/></g>
+
+        <g class="s-sub" font-size="10.5">
+          <text x="258" y="86">01 · commit: order + outbox</text>
+          <text x="528" y="134">03 · publishes OrderPlaced</text>
+          <text x="708" y="186">04 · reserves stock</text>
+          <text x="708" y="286">06 · queues confirmation</text>
+          <text x="1222" y="336" text-anchor="end">07 · counts it, +2 s</text>
+        </g>
+        <text x="448" y="86" class="s-note" font-size="10.5">02 · 201 in ~30 ms</text>
+        <g class="s-haz" font-size="10.5">
+          <text x="828" y="236">05 · charge fails</text>
+          <text x="880" y="263">08 · PaymentFailed</text>
+          <text x="1008" y="186">09 · compensates: releases stock</text>
+          <text x="1138" y="86">10 · order marked failed</text>
+        </g>
+        <text x="1322" y="414" text-anchor="end" class="s-sub" font-size="10.5" style="fill:var(--line)">11 · dashboard updates</text>
+
+        <line x1="200" y1="436" x2="1360" y2="436" stroke="var(--rule)" stroke-width="1.5"/>
+        <g class="s-mono" font-size="10" text-anchor="middle">
+          <text x="250" y="452">0 ms</text><text x="440" y="452">30 ms</text><text x="700" y="452">~200 ms</text><text x="820" y="452">~400 ms</text><text x="1000" y="452">~1 s</text><text x="1230" y="452">~2 s</text><text x="1330" y="452">seconds</text>
+        </g>
+        <text x="40" y="478" class="s-note">18 · the shaded window: from the 201 to the dashboard, services disagree about reality — design the UI for it</text>
+
+        <!-- OUTBOX -->
+        <rect x="30" y="496" width="430" height="194" fill="var(--z3)"/>
+        <text x="46" y="520" class="s-zone" fill="var(--mute)">12 · the outbox</text>
+        <g class="s-mono" font-size="10" style="fill:var(--hazard)"><text x="46" y="546">✗ BEGIN; save order; COMMIT;</text><text x="46" y="560">  publish(OrderPlaced)</text></g>
+        <text x="46" y="574" class="s-sub" font-size="10.5" style="fill:var(--hazard)">crash between the two: the event never happened</text>
+        <g class="s-mono" font-size="10" style="fill:var(--line)"><text x="46" y="600">✓ BEGIN; save order;</text><text x="46" y="614">  INSERT INTO outbox (event); COMMIT;</text></g>
+        <text x="46" y="628" class="s-sub" font-size="10.5">a relay reads the outbox, publishes, marks sent</text>
+        <text x="46" y="654" class="s-note">Atomic with the business write; at-least-once out.</text>
+        <text x="46" y="672" class="s-sub">Debezium change data capture is the alternative.</text>
+
+        <!-- CHOREOGRAPHY vs ORCHESTRATION -->
+        <rect x="476" y="496" width="444" height="194" fill="var(--z1)"/>
+        <text x="492" y="520" class="s-zone" fill="var(--line)">13–14 · choreography vs orchestration</text>
+        <g stroke="var(--line)" stroke-width="2" fill="none" stroke-dasharray="5 4">
+          <path d="M600,560 L627,590"/><path d="M627,610 L600,640"/><path d="M580,640 L553,610"/><path d="M553,590 L580,560"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><circle cx="590" cy="555" r="12"/><circle cx="635" cy="600" r="12"/><circle cx="590" cy="645" r="12"/><circle cx="545" cy="600" r="12"/></g>
+        <g class="s-mono" font-size="9" text-anchor="middle"><text x="590" y="558">inv</text><text x="635" y="603">pay</text><text x="590" y="648">shp</text><text x="545" y="603">eml</text></g>
+        <text x="590" y="680" text-anchor="middle" class="s-sub" font-size="10.5">13 · no one knows the flow</text>
+        <g stroke="var(--fast)" stroke-width="2" fill="none"><path d="M770,590 L731,558"/><path d="M850,590 L889,558"/><path d="M770,610 L731,642"/><path d="M850,610 L889,642"/></g>
+        <rect x="770" y="585" width="80" height="30" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="810" y="604" text-anchor="middle" class="s-lab" font-size="11">saga</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><circle cx="720" cy="550" r="12"/><circle cx="900" cy="550" r="12"/><circle cx="720" cy="650" r="12"/><circle cx="900" cy="650" r="12"/></g>
+        <g class="s-mono" font-size="9" text-anchor="middle"><text x="720" y="553">inv</text><text x="900" y="553">pay</text><text x="720" y="653">shp</text><text x="900" y="653">eml</text></g>
+        <text x="810" y="680" text-anchor="middle" class="s-sub" font-size="10.5">14 · explicit, visible flow</text>
+
+        <!-- SAGA -->
+        <rect x="936" y="496" width="434" height="194" fill="var(--z5)"/>
+        <text x="952" y="520" class="s-zone" fill="var(--hazard)">15 · saga — compensation, not rollback</text>
+        <rect x="952" y="536" width="120" height="30" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="1012" y="555" text-anchor="middle" class="s-lab" font-size="11">reserve stock</text>
+        <line x1="1072" y1="551" x2="1104" y2="551" stroke="var(--line)" stroke-width="2" marker-end="url(#e1)"/>
+        <rect x="1110" y="536" width="110" height="30" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="1165" y="555" text-anchor="middle" class="s-lab" font-size="11">charge card</text>
+        <text x="1232" y="555" class="s-haz">FAILS</text>
+        <path d="M1165,566 C1165,598 1012,598 1012,572" fill="none" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#e2)"/>
+        <text x="1250" y="592" class="s-sub" font-size="10.5" style="fill:var(--hazard)">release stock</text>
+        <g class="s-sub">
+          <text x="952" y="626">stock reserved → release it</text>
+          <text x="952" y="642">card charged → refund it, never un-charge</text>
+          <text x="952" y="658" fill="var(--hazard)">email sent → nothing; it cannot be unsent</text>
+        </g>
+        <text x="952" y="680" class="s-note" font-size="11">Some steps have no compensation — design for that.</text>
+
+        <!-- NAMING -->
+        <rect x="30" y="706" width="660" height="174" fill="var(--z2)"/>
+        <text x="46" y="730" class="s-zone" fill="var(--mute)">16 · events describe the past</text>
+        <text x="46" y="756" class="s-mono" font-size="10" style="fill:var(--line)">✓ OrderPlaced · PaymentReceived · UserRegistered · InvoiceIssued</text>
+        <text x="46" y="776" class="s-mono" font-size="10" style="fill:var(--hazard)">✗ SendEmail · CreateInvoice · ChargeCard</text>
+        <text x="46" y="792" class="s-sub">a command sent through an event bus is an RPC with extra latency and no error handling</text>
+        <text x="46" y="818" class="s-haz" font-size="10.5">UserRegistered carrying email, phone and address hands personal data to every subscriber.</text>
+        <text x="46" y="834" class="s-sub">Publish IDs, authorise per topic, authenticate producers: publishers can fabricate facts.</text>
+        <text x="46" y="860" class="s-note">Within one application, domain events give the decoupling without the distribution.</text>
+
+        <!-- VERSIONING -->
+        <rect x="706" y="706" width="664" height="174" fill="var(--z4)"/>
+        <text x="722" y="730" class="s-zone" fill="var(--mute)">17 · a schema is a public API with unknown consumers</text>
+        <g class="s-sub">
+          <text x="722" y="756">✓ only add optional fields</text><text x="1000" y="756">✓ never remove or rename a field</text>
+          <text x="722" y="776">✓ never change a field's meaning</text><text x="1000" y="776">✓ publish v2 beside v1 in a transition</text>
+        </g>
+        <text x="722" y="802" class="s-note">A schema registry turns "we broke someone" into a build failure.</text>
+        <text x="722" y="824" class="s-sub">Trace context in every event, or an incident means reading five services' logs.</text>
+        <text x="722" y="846" class="s-haz" font-size="10.5">Producer latency improves; end-to-end latency and the cost of debugging both get worse.</text>
+      </svg>
+    </div>
+    <figcaption><b>Follow the two dashed red arrows.</b> PaymentFailed is not an error handler — it is just another fact, and inventory and the order service each react to it on their own. That is the whole saga pattern in one picture, and also its cautionary tale: the answer to "why did this order fail?" is spread across four lanes, and only a trace ID ties them together.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the lanes and the patterns</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Commit with outbox</h4><p>The order and an outbox row carrying OrderPlaced are written in one transaction. The event exists exactly when the order does.</p></div>
+      <div><h4><span>02</span>201 in ~30 ms</h4><p>No downstream service was called or awaited. Producer latency improves because the order service stopped waiting for anyone.</p></div>
+      <div><h4><span>03</span>Publish</h4><p>The relay publishes OrderPlaced to the broker. The order service does not know, and does not care, who subscribes.</p></div>
+      <div><h4><span>04</span>Inventory reserves</h4><p>Around 200 ms later, in inventory's own database, followed by StockReserved. For that window the reservation does not yet exist anywhere.</p></div>
+      <div><h4><span>05</span>Payment fails</h4><p>The charge is declined. There is no distributed transaction to abort — each service committed its own local transaction already.</p></div>
+      <div><h4><span>06</span>Email queues</h4><p>A confirmation is queued independently of payment. A consumer that reacts too early is a design question, not a bug in the broker.</p></div>
+      <div><h4><span>07</span>Analytics counts</h4><p>Two seconds after the order. A slow consumer never slows the order, and a broken one never fails it — that isolation is the point of events.</p></div>
+      <div><h4><span>08</span>PaymentFailed</h4><p>The failure becomes a published fact. Every service that must react subscribes to it, and each reaction is its own local transaction.</p></div>
+      <div><h4><span>09</span>Compensation</h4><p>Inventory releases the stock it reserved. A new action that undoes the effect, not a rollback of the old one.</p></div>
+      <div><h4><span>10</span>Order marked failed</h4><p>The order service consumes the same event and updates its own state. Every consumer on this chart is idempotent, because redelivery is normal.</p></div>
+      <div><h4><span>11</span>Dashboard updates</h4><p>The user sees the result seconds after the 201. The interface needs optimistic updates or an explicit pending state to survive that gap.</p></div>
+      <div><h4><span>12</span>Outbox pattern</h4><p>Business write and event in one transaction, then a relay publishes. Without it, a crash between commit and publish loses events silently — the most skipped detail in event-driven systems.</p></div>
+      <div><h4><span>13</span>Choreography</h4><p>Each service reacts to events with no central control. Maximum decoupling, and a flow that exists only as the sum of who subscribes to what. Good for simple fan-out.</p></div>
+      <div><h4><span>14</span>Orchestration</h4><p>A coordinator — often Temporal or Camunda — drives the steps explicitly. Easier to read and debug, at the cost of a dependency. Better for multi-step business processes.</p></div>
+      <div><h4><span>15</span>Saga</h4><p>A long process modelled as local transactions with compensating actions. Money is refunded, not un-charged; an email cannot be unsent — some steps have no compensation at all.</p></div>
+      <div><h4><span>16</span>Event vs command</h4><p>OrderPlaced is a fact that cannot be refused; SendEmail is an instruction to a known recipient. A command disguised as an event is an RPC without error handling.</p></div>
+      <div><h4><span>17</span>Event versioning</h4><p>Add optional fields only; never remove, rename or change meaning; run v2 beside v1 during transitions. A schema registry catches breaks at build time.</p></div>
+      <div><h4><span>18</span>Eventual consistency</h4><p>For a window, services disagree about reality and none is wrong. The user will see it, so the interface must be designed for it rather than surprised by it.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Do not adopt this by default</b>
+    <p>Events turn a readable function call into a distributed flow with no stack trace; debugging becomes "which of eleven consumers did not react, and why?". Use them when several independent things must happen in response to one occurrence and consumers are added over time — and, inside one application, prefer in-process domain events.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 8 — THE SERVERLESS METER ══════════════════════ -->
+<div class="sheet" id="a8">
+  <div class="plate">
+    <span class="no">Sheet 8</span>
+    <h2>The Serverless Meter</h2>
+    <span class="form">Instrument panel</span>
+    <span class="cov">Covers · Serverless · AWS SQS</span>
+  </div>
+  <p class="thesis">The worker of sheet 6 with no fleet to run: the platform starts an instance per event, runs the handler, and bills by the millisecond. There are still servers; you just do not manage them. <strong>Three gauges decide whether that is a bargain — the cold start, the database connection limit, and the point on the cost curve where a flat-priced container becomes cheaper.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="An instrument panel for serverless. Across the top, a cold start drawn to scale as a stacked bar: provisioning the environment, loading the runtime, loading code and dependencies, initialisation, and finally the handler, about 400 milliseconds, beside a warm invocation of about 5 milliseconds and a table of cold start times by runtime. Middle left, a thousand function instances each opening a connection to a PostgreSQL server limited to one hundred, with the fixes. Middle right, a cost chart where serverless cost rises linearly with traffic and crosses a container's flat cost. Along the bottom, SQS triggering Lambda, where serverless fits and where it does not, and its security surface.">
+        <defs>
+          <marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <!-- COLD START BAR -->
+        <text x="40" y="40" class="s-zone" fill="var(--line)">The cold start, layer by layer</text>
+        <text x="40" y="58" class="s-sub">a Python function with heavy dependencies, drawn to scale: 1 ms = 2 px</text>
+        <g stroke="var(--rule)" stroke-width="1.5">
+          <rect x="180" y="90" width="160" height="40" fill="var(--z2)"/>
+          <rect x="340" y="90" width="120" height="40" fill="var(--z3)"/>
+          <rect x="460" y="90" width="300" height="40" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="760" y="90" width="200" height="40" fill="var(--z4)"/>
+          <rect x="960" y="90" width="20" height="40" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="180" y="150" width="10" height="26" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        </g>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="260" y="114">01 · provision</text><text x="400" y="114">02 · runtime</text><text x="610" y="114">03 · code + dependencies</text><text x="860" y="114">04 · init: DB, framework</text></g>
+        <text x="985" y="82" text-anchor="end" class="s-lab" font-size="11" style="fill:var(--line)">05 · handler, finally</text>
+        <g class="s-lab" text-anchor="end"><text x="170" y="115">cold</text><text x="170" y="168">warm</text></g>
+        <text x="200" y="168" class="s-mono" font-size="10.5">~5 ms: handler only — the environment was reused</text>
+        <text x="180" y="146" class="s-mono" font-size="10" style="fill:var(--hazard)">~400 ms before the first line of your handler runs</text>
+        <text x="40" y="210" class="s-haz">pandas + boto3 can cost seconds before your first line runs — trim dependencies before anything else.</text>
+        <text x="40" y="228" class="s-sub">An instance stays warm for a while, then is destroyed. Any instance may vanish, so all state lives in a database, cache or object store.</text>
+
+        <rect x="1040" y="70" width="330" height="170" fill="var(--z3)"/>
+        <text x="1056" y="94" class="s-zone" fill="var(--mute)">cold start by runtime</text>
+        <g class="s-lab" font-size="11"><text x="1056" y="122">Go, Rust</text><text x="1056" y="146">Node.js, Python</text><text x="1056" y="170" fill="var(--hazard)">Java, .NET</text><text x="1056" y="194">GraalVM, .NET AOT</text></g>
+        <g class="s-mono" font-size="10.5" text-anchor="end"><text x="1354" y="122">10–100 ms</text><text x="1354" y="146">100–500 ms</text><text x="1354" y="170" fill="var(--hazard)">1–3 s</text><text x="1354" y="194">50–100 ms</text></g>
+        <text x="1056" y="222" class="s-sub">trimmed dependencies beat a faster language</text>
+
+        <!-- CONNECTION PROBLEM -->
+        <rect x="30" y="250" width="660" height="290" fill="var(--z5)"/>
+        <text x="46" y="274" class="s-zone" fill="var(--hazard)">06 · the connection problem</text>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="1.5">
+          <rect x="50" y="300" width="26" height="26"/><rect x="84" y="300" width="26" height="26"/><rect x="118" y="300" width="26" height="26"/><rect x="152" y="300" width="26" height="26"/>
+          <rect x="50" y="334" width="26" height="26"/><rect x="84" y="334" width="26" height="26"/><rect x="118" y="334" width="26" height="26"/><rect x="152" y="334" width="26" height="26"/>
+          <rect x="50" y="368" width="26" height="26"/><rect x="84" y="368" width="26" height="26"/><rect x="118" y="368" width="26" height="26"/><rect x="152" y="368" width="26" height="26"/>
+        </g>
+        <g class="s-mono" font-size="11" text-anchor="middle" style="fill:var(--fast)">
+          <text x="63" y="317">λ</text><text x="97" y="317">λ</text><text x="131" y="317">λ</text><text x="165" y="317">λ</text>
+          <text x="63" y="351">λ</text><text x="97" y="351">λ</text><text x="131" y="351">λ</text><text x="165" y="351">λ</text>
+          <text x="63" y="385">λ</text><text x="97" y="385">λ</text><text x="131" y="385">λ</text><text x="165" y="385">λ</text>
+        </g>
+        <text x="46" y="420" class="s-sub">×1,000 concurrent invocations</text>
+        <g stroke="var(--hazard)" stroke-width="1.8" fill="none">
+          <path d="M180,306 L300,338"/><path d="M180,320 L300,346"/><path d="M180,340 L300,354"/><path d="M180,354 L300,362"/><path d="M180,374 L300,370"/><path d="M180,388 L300,378"/>
+        </g>
+        <rect x="300" y="330" width="136" height="60" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="310" y="352" class="s-lab" font-size="11">PostgreSQL</text>
+        <text x="310" y="372" class="s-mono" font-size="10">max_connections=100</text>
+        <text x="300" y="412" class="s-mono" font-size="10" style="fill:var(--hazard)">FATAL: too many clients already</text>
+        <text x="480" y="316" class="s-lab" font-size="11">The fixes</text>
+        <g class="s-sub"><text x="480" y="336">a proxy — RDS Proxy, PgBouncer</text><text x="480" y="352">an HTTP database — Neon,</text><text x="480" y="366">PlanetScale, DynamoDB</text><text x="480" y="382">or skip functions for DB work</text></g>
+        <text x="46" y="460" class="s-sub">Connection pooling assumes a long-lived process. Serverless has none,</text>
+        <text x="46" y="474" class="s-sub">so the pool has to live somewhere else.</text>
+        <text x="46" y="500" class="s-note">The single most common serverless failure — and it is structural.</text>
+        <text x="46" y="520" class="s-sub">10,000 uploads at once → 10,000 instances → the database is the real limit.</text>
+
+        <!-- COST CURVE -->
+        <rect x="706" y="250" width="664" height="290" fill="var(--z1)"/>
+        <text x="722" y="274" class="s-zone" fill="var(--line)">07 · the cost curve</text>
+        <g stroke="var(--rule)" stroke-width="1.5"><line x1="740" y1="300" x2="740" y2="500"/><line x1="740" y1="500" x2="1100" y2="500"/></g>
+        <line x1="873" y1="300" x2="873" y2="500" stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="5 5"/>
+        <line x1="740" y1="420" x2="1100" y2="420" stroke="var(--line)" stroke-width="3"/>
+        <line x1="740" y1="500" x2="1090" y2="290" stroke="var(--fast)" stroke-width="3"/>
+        <circle cx="873" cy="420" r="6" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="1090" y="282" text-anchor="end" class="s-note">serverless</text>
+        <text x="1000" y="412" class="s-sub" style="fill:var(--line)">container: flat</text>
+        <text x="748" y="312" class="s-sub" font-size="10">monthly cost</text>
+        <text x="1100" y="516" text-anchor="end" class="s-sub" font-size="10">steady traffic →</text>
+        <g class="s-sub" font-size="10" text-anchor="middle"><text x="806" y="490">serverless wins</text><text x="986" y="490">containers win</text></g>
+        <text x="881" y="340" class="s-haz" font-size="10.5">crossover</text>
+        <text x="1130" y="316" class="s-lab" font-size="11">Low, spiky traffic</text><text x="1130" y="332" class="s-sub">often near zero</text>
+        <text x="1130" y="358" class="s-lab" font-size="11">Moderate</text><text x="1130" y="374" class="s-sub">roughly comparable</text>
+        <text x="1130" y="400" class="s-lab" font-size="11" style="fill:var(--hazard)">High, steady</text><text x="1130" y="416" class="s-sub" style="fill:var(--hazard)">several times the</text><text x="1130" y="430" class="s-sub" style="fill:var(--hazard)">container's cost</text>
+        <text x="1130" y="458" class="s-sub">Model it on real traffic</text><text x="1130" y="472" class="s-sub">before committing.</text>
+        <text x="722" y="532" class="s-note">11 · more memory is often cheaper: CPU scales with it, and you pay for duration</text>
+
+        <!-- SQS -> LAMBDA -->
+        <rect x="30" y="556" width="440" height="290" fill="var(--z4)"/>
+        <text x="46" y="580" class="s-zone" fill="var(--fast)">08 · SQS → Lambda, no worker fleet</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="46" y="600" width="84" height="40"/><rect x="146" y="600" width="84" height="40"/><rect x="246" y="600" width="84" height="40"/><rect x="356" y="600" width="84" height="40"/></g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#v1)"><path d="M130,620 L142,620"/><path d="M230,620 L242,620"/><path d="M330,620 L352,620"/></g>
+        <g class="s-lab" font-size="11"><text x="54" y="617">producer</text><text x="154" y="617">SQS</text><text x="254" y="617">Lambda ×N</text><text x="364" y="617">RDS Proxy</text></g>
+        <g class="s-sub" font-size="10"><text x="54" y="632">sends an ID</text><text x="154" y="632">multi-AZ</text><text x="254" y="632">auto-scaled</text><text x="364" y="632">pools conns</text></g>
+        <g class="s-sub">
+          <text x="46" y="672">Visibility timeout above the function timeout, or a slow</text>
+          <text x="46" y="686">invocation's message is handed to a second one.</text>
+        </g>
+        <text x="46" y="712" class="s-note" font-size="11">maxReceiveCount=5 → DLQ → alarm → redrive</text>
+        <g class="s-sub">
+          <text x="46" y="736">Consumers scale faster than the database copes —</text>
+          <text x="46" y="750">set a reserved concurrency limit on the function.</text>
+          <text x="46" y="776">15-minute execution limit: long work needs a container.</text>
+        </g>
+        <text x="46" y="802" class="s-haz" font-size="10.5">Duplicates still arrive. The handler is still idempotent.</text>
+        <text x="46" y="826" class="s-sub">Batch sends of 10 and long polling cut the request bill.</text>
+
+        <!-- FIT -->
+        <rect x="490" y="556" width="440" height="290" fill="var(--z2)"/>
+        <text x="506" y="580" class="s-zone" fill="var(--mute)">09 · where it fits</text>
+        <text x="506" y="606" class="s-lab" font-size="11" style="fill:var(--line)">fits</text><text x="720" y="606" class="s-lab" font-size="11" style="fill:var(--hazard)">does not</text>
+        <g class="s-sub">
+          <text x="506" y="626">✓ event processing</text><text x="506" y="646">✓ scheduled jobs</text><text x="506" y="666">✓ webhooks</text><text x="506" y="686">✓ glue between services</text><text x="506" y="706">✓ very spiky traffic</text><text x="506" y="726">✓ genuinely small APIs</text>
+          <text x="720" y="626">✗ steady high traffic</text><text x="720" y="646">✗ work over 15 minutes</text><text x="720" y="666">✗ WebSockets, streaming</text><text x="720" y="686">✗ latency-critical paths</text><text x="720" y="706">✗ heavy database use</text>
+        </g>
+        <text x="506" y="760" class="s-note">12 · Fargate / Cloud Run: a container that</text>
+        <text x="506" y="776" class="s-note">scales to zero, with no 15-minute limit.</text>
+        <text x="506" y="802" class="s-haz" font-size="10.5">Dozens of functions as an application: microservice</text>
+        <text x="506" y="816" class="s-haz" font-size="10.5">debugging, plus cold starts, plus lock-in.</text>
+
+        <!-- SECURITY -->
+        <rect x="950" y="556" width="420" height="290" fill="var(--z3)"/>
+        <text x="966" y="580" class="s-zone" fill="var(--hazard)">10 · the security surface</text>
+        <g class="s-sub">
+          <text x="966" y="608">· one IAM role per function, least privilege</text>
+          <text x="966" y="628">· env vars are readable config — use a secrets manager</text>
+          <text x="966" y="648">· public function URLs need real authentication</text>
+          <text x="966" y="668">· auto-scaling is a billing attack: set concurrency</text>
+          <text x="966" y="682">  and rate limits on anything public</text>
+          <text x="966" y="702">· /tmp can survive between invocations on one</text>
+          <text x="966" y="716">  instance — keep nothing sensitive there</text>
+          <text x="966" y="736">· many small packages, many dependency trees</text>
+        </g>
+        <text x="966" y="770" class="s-note">Stateless, always: state lives in a database,</text>
+        <text x="966" y="786" class="s-note">a cache or an object store.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the three gauges together.</b> Serverless is dramatically cheaper for bursty, short, event-driven work — an upload that needs a thumbnail, a nightly job, a webhook — and quietly more expensive, slower and more fragile for steady traffic that talks to a relational database. The workload's shape decides, not the platform's marketing.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the gauges and their vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Provision</h4><p>No warm instance is free, so the platform creates an execution environment. The part you cannot optimise, only avoid by keeping instances warm.</p></div>
+      <div><h4><span>02</span>Load the runtime</h4><p>The language itself starts. Go and Rust take 10–100 ms, Node.js and Python 100–500 ms, Java and .NET 1–3 s unless compiled ahead of time.</p></div>
+      <div><h4><span>03</span>Code and dependencies</h4><p>Usually the largest slice and the one you control. A large dependency tree matters far more here than in a long-running service.</p></div>
+      <div><h4><span>04</span>Initialise</h4><p>Database connections, framework boot, configuration. Done once per instance, then reused by warm invocations.</p></div>
+      <div><h4><span>05</span>Handler</h4><p>Your code finally runs — about 5 ms on a warm instance. Everything to its left is the cold start users feel on scale-up.</p></div>
+      <div><h4><span>06</span>Connection problem</h4><p>A thousand instances each open a connection to a database capped at 100. Fix with a proxy such as RDS Proxy or PgBouncer, an HTTP database, or a different deployment model.</p></div>
+      <div><h4><span>07</span>Cost curve</h4><p>Serverless cost is linear in invocations; a container's is flat. Low, spiky traffic is near free, high steady traffic costs several times more. Model the crossover on real traffic.</p></div>
+      <div><h4><span>08</span>SQS triggering Lambda</h4><p>The canonical serverless worker: no broker, no fleet, consumers scaled by the platform — with visibility timeout, DLQ, concurrency limit and idempotency still yours.</p></div>
+      <div><h4><span>09</span>Fit</h4><p>Event processing, scheduled jobs, webhooks, glue and spiky traffic fit. Steady load, work past 15 minutes, WebSockets, latency-critical paths and heavy database use do not.</p></div>
+      <div><h4><span>10</span>Security surface</h4><p>Fine-grained IAM per function is a genuine advantage; readable environment variables, public URLs, runaway scaling and leftover /tmp data are the liabilities.</p></div>
+      <div><h4><span>11</span>Memory and CPU</h4><p>CPU allocation scales with configured memory, so a function given twice the memory may finish in under half the time — and duration is what you are billed for.</p></div>
+      <div><h4><span>12</span>Serverless containers</h4><p>Fargate and Cloud Run run an ordinary container scaled to zero, with no 15-minute limit. Less discussed than functions, and a better fit for more real workloads.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Automatic scaling is also automatic billing</b>
+    <p>An unauthenticated function can be invoked until it is expensive, and a burst of 10,000 events scales straight past whatever the database behind it can take. Set concurrency limits and rate limits before launch — the platform will happily scale faster than anything downstream of it.</p>
+  </div>
+</div>
+
+</div>

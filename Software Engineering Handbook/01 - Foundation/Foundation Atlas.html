@@ -1,0 +1,1444 @@
+<meta charset="utf-8">
+<title>Atlas of the Foundation — seven sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 01 Foundation · seven sheets</p>
+  <h1>Atlas of the <em>Foundation</em></h1>
+  <p class="thesis">Nine lessons, one argument: software is a sequence of decisions, and most of the craft is knowing which ones are expensive. Sheet 4 is the lap every change takes, from a need to running code and back again; every other sheet is either a decision made on that lap or a discipline that keeps the lap honest. <strong>None of it is about a specific technology — which is exactly why none of it goes out of date.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 7</span>
+    <span><b>Numbered steps</b> 89</span>
+    <span><b>Read first</b> Sheet 3, the decision tree — then the sheet for the stage of the lifecycle you are in</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Load-Bearing Walls</h4><p>What architecture is, drawn as a building: the boxes, the arrows, and the price tag on changing each decision.</p><em>Cutaway section</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Architect's Instruments</h4><p>Constraints, "and then what?", failure questions and the numbers of the machine — the gauges an architect reads before drawing anything.</p><em>Instrument panel</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>The Decision Tree</h4><p>From "the app is slow" to a justified choice: name the problem, find its family, check the door, write down why.</p><em>Decision tree</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>The Lifecycle Circuit</h4><p>Seven stages and the arrow back to the start, with the document each stage owes and the cost of a mistake found there.</p><em>Closed circuit</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>The Verification Line</h4><p>AI made generation cheap and moved the bottleneck to both ends: defining the problem and checking the result.</p><em>Process plant</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>The Price of Principles</h4><p>Eleven defaults that keep a system understandable as it grows — each one with what it buys and what it costs.</p><em>Ledger plate</em></span></a>
+    <a href="#a7"><span class="n">7</span><span><h4>The Engineer's Route</h4><p>Measure, go one layer down, debug by method, and own the change all the way into production.</p><em>Transit diagram</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 350" role="img" aria-label="How the seven sheets fit together. Sheet 4, the lifecycle circuit, runs across the middle as seven stations from requirements to maintenance with a return to the start. Above it, sheet 3, the decision tree, attaches at requirements; sheet 2, the architect's instruments, and sheet 1, the load-bearing walls, attach at design; sheet 6, the principles, spans design and implementation. Below it, sheet 5, the verification line, attaches at implementation and testing. Sheet 7, the engineer's mindset, runs underneath everything as ownership of the whole lap.">
+        <defs>
+          <marker id="o1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+        <rect x="30" y="120" width="1340" height="100" fill="var(--z3)"/>
+        <text x="46" y="142" class="s-zone" fill="var(--mute)">Sheet 4 — the lap every change takes, from a need to running code and back</text>
+        <text x="46" y="160" class="s-sub">every other sheet on this atlas is a decision made at one of these stations, or a discipline that keeps the whole lap honest</text>
+
+        <line x1="140" y1="200" x2="1300" y2="200" stroke="var(--line)" stroke-width="5"/>
+        <g class="st" stroke-width="2.5"><circle cx="140" cy="200" r="6"/><circle cx="330" cy="200" r="6"/><circle cx="520" cy="200" r="6"/><circle cx="710" cy="200" r="6"/><circle cx="900" cy="200" r="6"/><circle cx="1090" cy="200" r="6"/><circle cx="1280" cy="200" r="6"/></g>
+        <g class="s-sub" text-anchor="middle" font-size="10.5">
+          <text x="140" y="186">1 requirements</text><text x="330" y="186">2 design</text><text x="520" y="186">3 implementation</text><text x="710" y="186">4 testing</text><text x="900" y="186">5 deployment</text><text x="1090" y="186">6 operation</text><text x="1280" y="186">7 maintenance</text>
+        </g>
+        <text x="1356" y="204" text-anchor="end" class="s-note" font-size="10.5">↺ 1</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M160,120 L160,84"/><path d="M450,120 L450,84"/><path d="M760,120 L760,84"/><path d="M1090,120 L1090,84"/>
+          <path d="M615,220 L615,256"/><path d="M1090,220 L1090,256"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="160" y="72">3 · the decision tree</text>
+          <text x="450" y="72">2 · the architect's instruments</text>
+          <text x="760" y="72">1 · the load-bearing walls</text>
+          <text x="1090" y="72">6 · the price of principles</text>
+          <text x="615" y="274">5 · the verification line</text>
+          <text x="1090" y="274">4 · the arrow back to station 1</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="160" y="54">problem first, tool second</text>
+          <text x="450" y="54">how the design gets reasoned</text>
+          <text x="760" y="54">what the design actually is</text>
+          <text x="1090" y="54">the defaults every design inherits</text>
+          <text x="615" y="292">AI beside stations 1 to 6, never instead of them</text>
+          <text x="1090" y="292">software is maintained, or it is abandoned</text>
+        </g>
+        <rect x="30" y="326" width="1340" height="10" fill="color-mix(in srgb,var(--fast) 26%,transparent)"/>
+        <text x="1370" y="318" text-anchor="end" class="s-note">Sheet 7 — ownership of the whole lap runs under every sheet on this atlas</text>
+      </svg>
+    </div>
+    <figcaption>Read it as one system with two speeds. <b>The slow decisions</b> — sheets 1, 2, 3 and 6 — are made rarely, cost months to undo, and deserve a written reason. <b>The fast lap</b> — sheets 4, 5 and 7 — runs every week, and gets cheaper only by being automated, documented and owned. Spending a week on a two-way door, or an hour on a one-way door, is the mistake this whole folder exists to prevent.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE LOAD-BEARING WALLS ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Load-Bearing Walls</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · What Is Software Architecture</span>
+  </div>
+  <p class="thesis">Architecture is not a diagram, a folder structure or a framework — those are its outputs. It is the set of decisions behind them, and one test sorts every decision you make. <strong>If changing it later would be painful, slow or risky, it is a load-bearing wall; everything else is paint.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 820" role="img" aria-label="A cutaway of what architecture is. Top left, a system drawn as boxes and arrows: browser to frontend over HTTPS, frontend to API over REST, API to cache to database, API publishing to a queue consumed by a worker that writes to storage, and a dashed forbidden arrow from frontend directly to database. Top right, a bar chart of what seven decisions cost to change, from minutes for variable naming to breaking every client for a public API contract, with the right-hand region shaded as architecture territory. Below it, the six things architecture decides. Along the bottom, the three levels of architecture and how each fails, a radar of the six quality attributes comparing a simple monolith with many services, and where architecture sits between requirements and technology beside the decay line that ends in a rewrite.">
+        <defs>
+          <marker id="h1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="h2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <!-- PANEL A: boxes and arrows -->
+        <rect x="30" y="50" width="580" height="420" fill="var(--z1)"/>
+        <text x="46" y="74" class="s-zone" fill="var(--line)">The boxes and the arrows</text>
+        <text x="46" y="92" class="s-sub">Architecture is not a layer. It is all the layers, and the lines between them.</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="60" y="110" width="120" height="40"/><rect x="60" y="185" width="120" height="40"/>
+          <rect x="60" y="260" width="120" height="40" stroke-width="3"/><rect x="60" y="335" width="120" height="40"/>
+          <rect x="60" y="410" width="120" height="40"/>
+          <rect x="250" y="260" width="120" height="40" stroke="var(--fast)"/><rect x="440" y="260" width="120" height="40" stroke="var(--fast)"/>
+          <rect x="440" y="410" width="120" height="40"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="120" y="135">Browser</text><text x="120" y="210">Frontend</text><text x="120" y="285">API</text><text x="120" y="360">Cache</text><text x="120" y="435">Database</text>
+          <text x="310" y="285">Queue</text><text x="500" y="285">Worker</text><text x="500" y="435">Storage</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#h1)">
+          <path d="M120,150 L120,181"/><path d="M120,225 L120,256"/><path d="M120,300 L120,331"/><path d="M120,375 L120,406"/>
+          <path d="M180,280 L246,280"/><path d="M370,280 L436,280"/><path d="M500,300 L500,406"/>
+        </g>
+        <g class="s-sub" font-size="10">
+          <text x="134" y="170">HTTPS</text><text x="134" y="245">REST</text><text x="134" y="320">read-through</text><text x="134" y="395">SQL</text>
+          <text x="378" y="273">consume</text><text x="508" y="360">files</text>
+        </g>
+        <path d="M180,210 C236,210 236,430 184,430" fill="none" stroke="var(--hazard)" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#h2)"/>
+        <text x="223" y="324" text-anchor="middle" class="s-haz" font-size="14">✕</text>
+        <text x="250" y="340" class="s-haz">frontend → database: forbidden</text>
+        <text x="250" y="356" class="s-sub" style="fill:var(--hazard)">a missing arrow is a rule too</text>
+
+        <text x="250" y="120" class="s-num">12</text>
+        <text x="272" y="120" class="s-note">The arrows are the architecture.</text>
+        <text x="250" y="138" class="s-sub">Anyone can list components. The value is in knowing</text>
+        <text x="250" y="152" class="s-sub">exactly who may call whom — and who may not.</text>
+        <text x="250" y="176" class="s-sub">Queue → worker: slow work leaves the request path,</text>
+        <text x="250" y="190" class="s-sub">so the user never waits for it.</text>
+        <text x="250" y="214" class="s-sub" style="fill:var(--fast)">Amazon: every team exposes data only through a</text>
+        <text x="250" y="228" class="s-sub" style="fill:var(--fast)">service interface. One rule — and eventually AWS.</text>
+
+        <!-- PANEL B: the defining test -->
+        <rect x="630" y="50" width="740" height="260" fill="var(--z4)"/>
+        <text x="646" y="74" class="s-zone" fill="var(--mute)">07 · the defining test — what it costs to change later</text>
+        <text x="646" y="92" class="s-sub">A decision is architecture if changing it later is painful, slow or risky.</text>
+        <rect x="1050" y="110" width="310" height="172" fill="color-mix(in srgb,var(--hazard) 7%,transparent)"/>
+        <text x="1056" y="106" class="s-haz" font-size="10.5">architecture territory</text>
+        <g class="s-lab" font-size="11.5" text-anchor="end">
+          <text x="866" y="128">variable naming style</text><text x="866" y="152">which HTTP library</text><text x="866" y="176">which UI framework</text>
+          <text x="866" y="200">relational vs document database</text><text x="866" y="224">monolith vs microservices</text>
+          <text x="866" y="248">how users authenticate</text><text x="866" y="272">public API contract</text>
+        </g>
+        <g>
+          <rect x="880" y="116" width="20" height="15" fill="var(--mute)" opacity=".45"/>
+          <rect x="880" y="140" width="50" height="15" fill="var(--mute)" opacity=".45"/>
+          <rect x="880" y="164" width="120" height="15" fill="var(--fast)" opacity=".8"/>
+          <rect x="880" y="188" width="200" height="15" fill="var(--line)" opacity=".85"/>
+          <rect x="880" y="212" width="260" height="15" fill="var(--line)" opacity=".85"/>
+          <rect x="880" y="236" width="200" height="15" fill="var(--line)" opacity=".85"/>
+          <rect x="880" y="260" width="320" height="15" fill="var(--hazard)" opacity=".75"/>
+        </g>
+        <g class="s-mono" font-size="10.5">
+          <text x="908" y="128">minutes</text><text x="938" y="152">an afternoon</text><text x="1008" y="176">weeks</text>
+          <text x="1088" y="200">months</text><text x="1148" y="224">months to years</text>
+          <text x="1088" y="248">months + security risk</text><text x="1208" y="272">breaks every client</text>
+        </g>
+        <text x="646" y="300" class="s-note">Right of the shading deserves an ADR and a week. Left of it deserves ten minutes.</text>
+
+        <!-- PANEL C: six decisions -->
+        <rect x="630" y="326" width="740" height="144" fill="var(--z2)"/>
+        <text x="646" y="350" class="s-zone" fill="var(--mute)">01–06 · what architecture actually decides</text>
+        <g class="s-num"><text x="646" y="376">01</text><text x="890" y="376">02</text><text x="1134" y="376">03</text><text x="646" y="426">04</text><text x="890" y="426">05</text><text x="1134" y="426">06</text></g>
+        <g class="s-lab" font-size="11.5"><text x="668" y="376">components</text><text x="912" y="376">responsibilities</text><text x="1156" y="376">communication</text><text x="668" y="426">data ownership</text><text x="912" y="426">boundaries</text><text x="1156" y="426">cross-cutting rules</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="668" y="392">which parts exist: frontend,</text><text x="668" y="406">API, worker, cache, database</text>
+          <text x="912" y="392">what each part is allowed</text><text x="912" y="406">to know, and to do</text>
+          <text x="1156" y="392">HTTP, queue, direct call,</text><text x="1156" y="406">event — how they talk</text>
+          <text x="668" y="442">who owns which data, and</text><text x="668" y="456">who is allowed to write it</text>
+          <text x="912" y="442">what is inside a box, and</text><text x="912" y="456">what may never cross it</text>
+          <text x="1156" y="442">auth, logging, errors and</text><text x="1156" y="456">validation, the same everywhere</text>
+        </g>
+
+        <!-- PANEL D: levels -->
+        <rect x="30" y="490" width="440" height="310" fill="var(--z3)"/>
+        <text x="46" y="514" class="s-zone" fill="var(--mute)">09 · three levels, three failure costs</text>
+        <rect x="46" y="530" width="408" height="52" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <rect x="66" y="592" width="388" height="52" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <rect x="86" y="654" width="368" height="52" fill="var(--paper)" stroke="var(--rule)" stroke-width="2"/>
+        <text x="60" y="552" class="s-lab">System architecture</text><text x="60" y="570" class="s-sub">how services, databases and queues fit together</text>
+        <text x="80" y="614" class="s-lab">Application architecture</text><text x="80" y="632" class="s-sub">how one service is built inside: layers, DDD</text>
+        <text x="100" y="676" class="s-lab">Code architecture</text><text x="100" y="694" class="s-sub">how modules, classes and functions relate</text>
+        <text x="440" y="552" text-anchor="end" class="s-haz">expensive</text>
+        <text x="440" y="614" text-anchor="end" class="s-note">costly</text>
+        <text x="440" y="676" text-anchor="end" class="s-sub">annoying</text>
+        <text x="46" y="734" class="s-note">All three matter. They fail at very different prices.</text>
+        <text x="46" y="754" class="s-sub">Bad code architecture slows one developer down. Bad system</text>
+        <text x="46" y="768" class="s-sub">architecture stops the business, and it is the level you can</text>
+        <text x="46" y="782" class="s-sub">see least from inside a single file.</text>
+
+        <!-- PANEL E: quality attributes -->
+        <rect x="490" y="490" width="440" height="310" fill="var(--z1)"/>
+        <text x="506" y="514" class="s-zone" fill="var(--line)">08 · best at which of six?</text>
+        <text x="506" y="532" class="s-sub">Features can be built in almost any architecture.</text>
+        <text x="506" y="546" class="s-sub">These six cannot be retrofitted cheaply.</text>
+        <polygon points="700,575 769,615 769,695 700,735 631,695 631,615" fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"/>
+        <g stroke="var(--rule)" stroke-width="1"><line x1="700" y1="655" x2="700" y2="575"/><line x1="700" y1="655" x2="769" y2="615"/><line x1="700" y1="655" x2="769" y2="695"/><line x1="700" y1="655" x2="700" y2="735"/><line x1="700" y1="655" x2="631" y2="695"/><line x1="700" y1="655" x2="631" y2="615"/></g>
+        <polygon points="700,591 731,637 735,675 700,727 641,689 652,627" fill="color-mix(in srgb,var(--line) 18%,transparent)" stroke="var(--line)" stroke-width="2.5"/>
+        <polygon points="700,607 766,617 762,691 700,683 669,673 662,633" fill="none" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <g class="s-sub" font-size="10.5">
+          <text x="700" y="566" text-anchor="middle">performance</text><text x="777" y="615">scalability</text><text x="777" y="699">availability</text>
+          <text x="700" y="750" text-anchor="middle">cost</text><text x="623" y="699" text-anchor="end">maintainability</text><text x="623" y="615" text-anchor="end">security</text>
+        </g>
+        <line x1="506" y1="772" x2="526" y2="772" stroke="var(--line)" stroke-width="3"/><text x="532" y="776" class="s-sub">simple monolith</text>
+        <line x1="652" y1="772" x2="672" y2="772" stroke="var(--fast)" stroke-width="3" stroke-dasharray="6 4"/><text x="678" y="776" class="s-sub">hundreds of services</text>
+        <text x="506" y="792" class="s-sub" font-size="10">illustrative shapes, not measurements — no shape wins every axis</text>
+
+        <!-- PANEL F: position and decay -->
+        <rect x="950" y="490" width="420" height="310" fill="var(--z5)"/>
+        <text x="966" y="514" class="s-zone" fill="var(--fast)">10 · where it sits</text>
+        <text x="1160" y="514" class="s-zone" fill="var(--hazard)">11 · without it</text>
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="966" y="530" width="150" height="24"/><rect x="966" y="566" width="150" height="24"/>
+          <rect x="966" y="602" width="150" height="24" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="966" y="638" width="150" height="24"/><rect x="966" y="674" width="150" height="24"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="976" y="546">requirements</text><text x="976" y="582">constraints</text><text x="976" y="618" fill="var(--line)">ARCHITECTURE</text><text x="976" y="654">technology</text><text x="976" y="690">code</text></g>
+        <g stroke="var(--line)" stroke-width="1.5"><line x1="1041" y1="554" x2="1041" y2="566"/><line x1="1041" y1="590" x2="1041" y2="602"/><line x1="1041" y1="626" x2="1041" y2="638"/><line x1="1041" y1="662" x2="1041" y2="674"/></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="1160" y="546">no explicit architecture</text>
+          <text x="1160" y="582">every part talks to every part</text>
+          <text x="1160" y="618">one change breaks three things</text>
+          <text x="1160" y="654">nobody dares to touch it</text>
+        </g>
+        <text x="1160" y="690" class="s-haz">rewrite</text>
+        <g stroke="var(--hazard)" stroke-width="1.5"><line x1="1166" y1="554" x2="1166" y2="570"/><line x1="1166" y1="590" x2="1166" y2="606"/><line x1="1166" y1="626" x2="1166" y2="642"/><line x1="1166" y1="662" x2="1166" y2="678"/></g>
+        <text x="966" y="724" class="s-note">Above technology, below the business.</text>
+        <text x="966" y="742" class="s-sub">React, FastAPI and PostgreSQL are answers to the</text>
+        <text x="966" y="756" class="s-sub">architecture — never the architecture itself.</text>
+        <text x="966" y="782" class="s-haz" font-size="10.5">Imaginary scale: distributed complexity for a hundred users.</text>
+      </svg>
+    </div>
+    <figcaption><b>The building is the mental model:</b> the plan decides where the load-bearing walls go, where the plumbing runs and how many floors are possible. You can repaint any room whenever you like — that is code. Moving a load-bearing wall after the building exists is a different kind of problem entirely — that is architecture.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — what architecture is made of</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Components</h4><p>The parts that exist: frontend, API, worker, cache, database. Listing them is the easy part of architecture and the part everyone already does.</p></div>
+      <div><h4><span>02</span>Responsibilities</h4><p>What each part is allowed to know and do. A component with no clear responsibility becomes the place every awkward piece of logic ends up.</p></div>
+      <div><h4><span>03</span>Communication</h4><p>How parts talk — HTTP, a queue, a direct call, an event. The choice fixes latency, coupling and what happens when the other side is down.</p></div>
+      <div><h4><span>04</span>Data ownership</h4><p>Who owns which data and who may write it. Two writers for the same data is how two systems end up disagreeing about the truth.</p></div>
+      <div><h4><span>05</span>Boundaries</h4><p>What is inside a component and what is forbidden to cross. A good boundary keeps a change inside one box; a bad one lets it ripple out.</p></div>
+      <div><h4><span>06</span>Cross-cutting rules</h4><p>Auth, logging, error handling and validation, applied the same way everywhere. Decided once, or re-decided badly in every module.</p></div>
+      <div><h4><span>07</span>The defining test</h4><p>Is this decision painful, slow or risky to change later? Naming style: minutes, not architecture. Database model, service split, auth, public API: months, or every client broken — architecture.</p></div>
+      <div><h4><span>08</span>Quality attributes</h4><p>Performance, scalability, availability, security, maintainability, cost. Architecture is chosen mostly for these, and you cannot maximise all six — so "what is the best architecture?" is answered with "best at which?"</p></div>
+      <div><h4><span>09</span>Levels</h4><p>System (services, databases, queues), application (one service's layers) and code (modules and classes). Bad code architecture is annoying; bad system architecture is expensive.</p></div>
+      <div><h4><span>10</span>Position</h4><p>Requirements and constraints above, technology and code below. Choosing React or PostgreSQL before this step is choosing answers before the question.</p></div>
+      <div><h4><span>11</span>The decay line</h4><p>Without explicit architecture every local decision is reasonable alone, and together they make everything depend on everything. One change breaks three unrelated things, nobody dares touch it, and the ending is a rewrite.</p></div>
+      <div><h4><span>12</span>Who may call whom</h4><p>The arrows, and the arrows you forbid. Netflix split into hundreds of services so "recommendations" failing never stops "play video" — an architectural decision, not a coding one.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Netflix's architecture solves Netflix's problems</b>
+    <p>Instagram ran an enormous user base on plain Django and PostgreSQL for years, because its bottleneck was images, not application logic. Copying a big company's design imports its costs without its constraints. Make the expensive decisions consciously, write down why, keep them as few as possible — and remember architecture evolves, or it dies.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE ARCHITECT'S INSTRUMENTS ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Architect's Instruments</h2>
+    <span class="form">Instrument panel</span>
+    <span class="cov">Covers · How Software Architects Think</span>
+  </div>
+  <p class="thesis">A developer starts from the feature. An architect starts from what is not allowed to change, then reads a handful of gauges before drawing a single box. <strong>They think in constraints, consequences and failure — and the goal is never to be right about the future, only to be cheap to be wrong.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 840" role="img" aria-label="An instrument panel of how architects think. Top left, a funnel: six constraints — budget, team size, deadline, traffic, compliance, latency — narrow every option down to about two survivors and then one decision with a written reason. Top right, four proposals pushed forward in time with the question and then what, each ending in the question that breaks it. Middle left, a dependency surrounded by five failure probes: down, slow, arriving twice, dying halfway, hostile input. Middle right, a log-scale chart of latency from a one nanosecond CPU cache read to a 50 to 150 millisecond internet round trip. Along the bottom, vague words converted into numbers, the fork between reversible and irreversible decisions, and a developer's single-service view against an architect's whole-system view.">
+        <defs>
+          <marker id="i1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="i2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <!-- PANEL A: constraints funnel -->
+        <rect x="30" y="50" width="560" height="340" fill="var(--z1)"/>
+        <text x="46" y="74" class="s-zone" fill="var(--line)">01 · start from constraints</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="46" y="86" width="80" height="20"/><rect x="134" y="86" width="80" height="20"/><rect x="222" y="86" width="80" height="20"/>
+          <rect x="310" y="86" width="80" height="20"/><rect x="398" y="86" width="80" height="20"/><rect x="486" y="86" width="80" height="20"/>
+        </g>
+        <g class="s-sub" font-size="10.5" text-anchor="middle">
+          <text x="86" y="100">budget</text><text x="174" y="100">team size</text><text x="262" y="100">deadline</text><text x="350" y="100">traffic</text><text x="438" y="100">compliance</text><text x="526" y="100">latency</text>
+        </g>
+        <polygon points="60,118 570,198 570,238 60,318" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <g stroke="var(--line)" stroke-width="1.5" stroke-dasharray="4 4">
+          <line x1="187" y1="138" x2="187" y2="298"/><line x1="315" y1="158" x2="315" y2="278"/><line x1="442" y1="178" x2="442" y2="258"/>
+        </g>
+        <g class="s-mono" font-size="11" text-anchor="middle">
+          <text x="124" y="222">everything</text><text x="251" y="222">survivors</text><text x="378" y="222">≈ 2</text><text x="506" y="222" fill="var(--line)">1 + why</text>
+        </g>
+        <g class="s-sub" font-size="10.5" text-anchor="middle">
+          <text x="124" y="338">every option</text><text x="124" y="352">you have heard of</text>
+          <text x="251" y="338">survive the</text><text x="251" y="352">constraints</text>
+          <text x="378" y="338">after trade-off</text><text x="378" y="352">comparison</text>
+          <text x="506" y="338">a decision and</text><text x="506" y="352">a written reason</text>
+        </g>
+        <text x="46" y="378" class="s-note">Most technology arguments are constraint disagreements in disguise.</text>
+
+        <!-- PANEL B: and then what -->
+        <rect x="610" y="50" width="760" height="340" fill="var(--z4)"/>
+        <text x="626" y="74" class="s-zone" fill="var(--mute)">02 · and then what? — push every proposal forward until it breaks</text>
+        <text x="626" y="92" class="s-sub">Each column is later in time than the one before. Designs break in the third column.</text>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5">
+          <rect x="626" y="104" width="220" height="46"/><rect x="626" y="170" width="220" height="46"/><rect x="626" y="236" width="220" height="46"/><rect x="626" y="302" width="220" height="46"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="2">
+          <rect x="1120" y="104" width="236" height="46"/><rect x="1120" y="170" width="236" height="46"/><rect x="1120" y="236" width="236" height="46"/><rect x="1120" y="302" width="236" height="46"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#i1)">
+          <path d="M846,127 L876,127"/><path d="M846,193 L876,193"/><path d="M846,259 L876,259"/><path d="M846,325 L876,325"/>
+        </g>
+        <g stroke="var(--hazard)" stroke-width="2.5" fill="none" marker-end="url(#i2)">
+          <path d="M1090,127 L1116,127"/><path d="M1090,193 L1116,193"/><path d="M1090,259 L1116,259"/><path d="M1090,325 L1116,325"/>
+        </g>
+        <g class="s-lab" font-size="11">
+          <text x="638" y="132">"uploads on the server disk"</text><text x="638" y="198">"we'll cache it"</text><text x="638" y="264">"call the payment API directly"</text><text x="638" y="330">"one database for everything"</text>
+          <text x="884" y="137">a second server is added</text><text x="884" y="203">the underlying data changes</text><text x="884" y="269">it is down for 10 minutes</text><text x="884" y="335">reporting query runs at 9am</text>
+        </g>
+        <g class="s-sub" font-size="10" style="fill:var(--fast)"><text x="884" y="121">and then</text><text x="884" y="187">and then</text><text x="884" y="253">and then</text><text x="884" y="319">and then</text></g>
+        <g class="s-haz"><text x="1132" y="132">which one has the file?</text><text x="1132" y="198">who clears the cache?</text><text x="1132" y="264">what do users see?</text><text x="1132" y="330">it locks the users table</text></g>
+        <text x="626" y="376" class="s-note">Asked three times in a row, it finds almost every design flaw before a line of code exists.</text>
+
+        <!-- PANEL C: failure probes -->
+        <rect x="30" y="410" width="560" height="230" fill="var(--z3)"/>
+        <text x="46" y="434" class="s-zone" fill="var(--mute)">03 · think in failure, not success</text>
+        <rect x="240" y="500" width="140" height="44" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="310" y="518" text-anchor="middle" class="s-lab">a dependency</text>
+        <text x="310" y="534" text-anchor="middle" class="s-sub" font-size="10">happy path: the easy part</text>
+        <g stroke="var(--hazard)" stroke-width="1.5" fill="none">
+          <path d="M240,512 L222,500"/><path d="M240,536 L222,570"/><path d="M380,508 L396,474"/><path d="M380,522 L396,518"/><path d="M380,536 L396,576"/>
+        </g>
+        <g class="s-num"><text x="60" y="448">04</text><text x="400" y="448">05</text><text x="400" y="508">08</text><text x="60" y="570">06</text><text x="400" y="570">07</text></g>
+        <text x="60" y="464" class="s-lab" font-size="11.5">is it down?</text><text x="60" y="480" class="s-sub">fails fast: callers get an error</text>
+        <text x="400" y="464" class="s-haz">is it slow instead?</text><text x="400" y="480" class="s-sub" style="fill:var(--hazard)">worse: it takes callers down</text>
+        <text x="400" y="524" class="s-lab" font-size="11.5">is the input hostile?</text><text x="400" y="540" class="s-sub">assume it is, at every edge</text>
+        <text x="60" y="586" class="s-lab" font-size="11.5">does it arrive twice?</text><text x="60" y="602" class="s-sub">retries, double-clicks, redelivery</text>
+        <text x="400" y="586" class="s-lab" font-size="11.5">dies halfway through?</text><text x="400" y="602" class="s-sub">what state is left behind?</text>
+        <text x="46" y="628" class="s-haz" font-size="10.5">No answer to these is not "simple" — it is failure behaviour nobody knows.</text>
+
+        <!-- PANEL D: numbers of the machine -->
+        <rect x="610" y="410" width="760" height="230" fill="var(--z2)"/>
+        <text x="626" y="434" class="s-zone" fill="var(--mute)">09 · the numbers of the machine · log scale</text>
+        <g class="s-lab" font-size="11" text-anchor="end">
+          <text x="760" y="462">CPU cache read</text><text x="760" y="486">RAM read</text><text x="760" y="510">SSD read</text>
+          <text x="760" y="534">same-DC network call</text><text x="760" y="558">database query</text><text x="760" y="582">internet round trip</text>
+        </g>
+        <g class="s-mono" font-size="10">
+          <text x="768" y="462">~1 ns</text><text x="768" y="486">~100 ns</text><text x="768" y="510">~100 µs</text>
+          <text x="768" y="534">~0.5 ms</text><text x="768" y="558">1–10 ms</text><text x="768" y="582">50–150 ms</text>
+        </g>
+        <g>
+          <rect x="840" y="451" width="50" height="13" fill="var(--line)" opacity=".85"/>
+          <rect x="840" y="475" width="150" height="13" fill="var(--line)" opacity=".85"/>
+          <rect x="840" y="499" width="300" height="13" fill="var(--cool)" opacity=".85"/>
+          <rect x="840" y="523" width="335" height="13" fill="var(--fast)" opacity=".85"/>
+          <rect x="840" y="547" width="350" height="13" fill="var(--fast)" opacity=".85"/><rect x="1190" y="547" width="50" height="13" fill="var(--fast)" opacity=".4"/>
+          <rect x="840" y="571" width="435" height="13" fill="var(--hazard)" opacity=".8"/><rect x="1275" y="571" width="24" height="13" fill="var(--hazard)" opacity=".4"/>
+        </g>
+        <line x1="840" y1="596" x2="1340" y2="596" stroke="var(--rule)" stroke-width="1.5"/>
+        <g stroke="var(--rule)" stroke-width="1.5"><line x1="890" y1="592" x2="890" y2="600"/><line x1="1040" y1="592" x2="1040" y2="600"/><line x1="1190" y1="592" x2="1190" y2="600"/><line x1="1340" y1="592" x2="1340" y2="600"/></g>
+        <g class="s-sub" font-size="10" text-anchor="middle"><text x="890" y="610">1 ns</text><text x="1040" y="610">1 µs</text><text x="1190" y="610">1 ms</text><text x="1340" y="610">1 s</text></g>
+        <text x="1180" y="466" class="s-note">Almost every performance</text>
+        <text x="1180" y="480" class="s-note">decision follows from</text>
+        <text x="1180" y="494" class="s-note">this one chart.</text>
+        <text x="626" y="630" class="s-haz" font-size="10.5">A network call is roughly a million times slower than a memory read.</text>
+
+        <!-- PANEL E: quantify -->
+        <rect x="30" y="660" width="440" height="165" fill="var(--z3)"/>
+        <text x="46" y="684" class="s-zone" fill="var(--mute)">10 · quantify before designing</text>
+        <g class="s-lab" font-size="11"><text x="46" y="708">"fast"</text><text x="46" y="726">"a lot of users"</text><text x="46" y="744">"lots of data"</text><text x="46" y="762">"always up"</text><text x="46" y="780">"fresh"</text></g>
+        <g class="s-sub" style="fill:var(--line)"><text x="160" y="708">→</text><text x="160" y="726">→</text><text x="160" y="744">→</text><text x="160" y="762">→</text><text x="160" y="780">→</text></g>
+        <g class="s-sub"><text x="180" y="708">100 ms, or 2 seconds?</text><text x="180" y="726">requests per second — at peak, not average</text><text x="180" y="744">how much today, and how much in a year?</text><text x="180" y="762">5 minutes down a month, or 5 hours?</text><text x="180" y="780">is stale data acceptable, and for how long?</text></g>
+        <text x="46" y="808" class="s-note">The "hard scaling problem": usually one server and a cache.</text>
+
+        <!-- PANEL F: doors -->
+        <rect x="490" y="660" width="440" height="165" fill="var(--z1)"/>
+        <text x="506" y="684" class="s-zone" fill="var(--line)">11 · reversible or not?</text>
+        <rect x="630" y="696" width="160" height="28" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="710" y="715" text-anchor="middle" class="s-lab" font-size="11">easy to undo?</text>
+        <g stroke-width="2" fill="none"><path d="M650,724 L580,740" stroke="var(--line)"/><path d="M770,724 L840,740" stroke="var(--hazard)"/></g>
+        <text x="520" y="754" class="s-lab" font-size="11" style="fill:var(--line)">YES</text><text x="520" y="770" class="s-sub">decide fast, move on</text>
+        <text x="770" y="754" class="s-haz">NO</text><text x="770" y="770" class="s-sub">compare, write an ADR</text>
+        <text x="506" y="794" class="s-sub" style="fill:var(--hazard)">one-way: data model · service boundaries · auth</text>
+        <text x="506" y="808" class="s-sub" style="fill:var(--hazard)">public API contract · SQL vs document storage</text>
+
+        <!-- PANEL G: whole system -->
+        <rect x="950" y="660" width="420" height="165" fill="var(--z5)"/>
+        <text x="966" y="684" class="s-zone" fill="var(--fast)">12 · the whole system</text>
+        <text x="966" y="706" class="s-lab" font-size="11">developer view</text>
+        <rect x="966" y="716" width="100" height="24" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="1016" y="732" text-anchor="middle" class="s-sub" font-size="10.5">my service</text>
+        <text x="1100" y="706" class="s-lab" font-size="11">architect view</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="1100" y="716" width="64" height="24"/><rect x="1180" y="716" width="64" height="24"/><rect x="1260" y="716" width="64" height="24"/>
+          <rect x="1160" y="756" width="104" height="22"/>
+        </g>
+        <g class="s-sub" font-size="10.5" text-anchor="middle"><text x="1132" y="732">svc A</text><text x="1212" y="732">svc B</text><text x="1292" y="732">svc C</text><text x="1212" y="771">database</text></g>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none"><path d="M1164,728 L1180,728"/><path d="M1244,728 L1260,728"/><path d="M1132,740 L1180,756"/><path d="M1212,740 L1212,756"/><path d="M1292,740 L1244,756"/></g>
+        <text x="966" y="760" class="s-sub">20% faster here, three</text>
+        <text x="966" y="774" class="s-sub">services harder to</text>
+        <text x="966" y="788" class="s-sub" style="fill:var(--hazard)">change: a loss.</text>
+        <text x="966" y="812" class="s-num">13</text>
+        <text x="988" y="812" class="s-note">Cheap to be wrong beats right about the future.</text>
+      </svg>
+    </div>
+    <figcaption><b>A developer is a driver; an architect is the city traffic planner.</b> The driver optimises one trip. The planner accepts that any single trip may be slightly slower, as long as the whole city does not deadlock at 5pm — which is why every gauge on this panel measures the system, never one component on its own.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the gauges, and what each one reads</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Constraints first</h4><p>Budget, team size, deadline, traffic, compliance, latency — what is not allowed to change. Put them on the table and the realistic options usually drop to two.</p></div>
+      <div><h4><span>02</span>And then what?</h4><p>Push each proposal forward in time until it breaks. Disk uploads meet a second server; a cache meets changing data; a direct payment call meets a 10-minute outage.</p></div>
+      <div><h4><span>03</span>Failure first</h4><p>The happy path is the easy part. Attention goes to the unhappy ones, because a system without answers to them has unknown behaviour, not simple behaviour.</p></div>
+      <div><h4><span>04</span>Down</h4><p>The dependency is unavailable. The easier case: it fails fast, callers get an error, and you can decide what the user sees instead.</p></div>
+      <div><h4><span>05</span>Slow</h4><p>The dependency answers — eventually. Slow is worse than down, because every caller waits with it and the delay spreads upstream until the whole system stalls.</p></div>
+      <div><h4><span>06</span>Twice</h4><p>The same message arrives again: a retry, a double-click, a queue redelivery. If processing it twice charges twice, the design is not finished.</p></div>
+      <div><h4><span>07</span>Halfway</h4><p>The process dies mid-operation. What state is left behind, and does a restart repair it or compound it?</p></div>
+      <div><h4><span>08</span>Hostile</h4><p>The input was written by an attacker. Assume it at every boundary, rather than discovering it in an incident.</p></div>
+      <div><h4><span>09</span>Numbers of the machine</h4><p>Cache ~1 ns, RAM ~100 ns, SSD ~100 µs, same-DC call ~0.5 ms, query 1–10 ms, internet 50–150 ms. A network hop costs about a million memory reads.</p></div>
+      <div><h4><span>10</span>Quantify</h4><p>"Fast", "a lot of users" and "scalable" are not engineering terms. Peak requests per second, data volume in a year, acceptable latency, downtime and staleness are.</p></div>
+      <div><h4><span>11</span>Reversible or not</h4><p>Easy to undo: decide fast and move on. Hard to undo — data model, service boundaries, auth, public API, SQL versus documents: slow down, compare, write an ADR.</p></div>
+      <div><h4><span>12</span>The whole system</h4><p>A change that makes one service 20% faster and three others harder to change is a loss. The question is never "where does this function go?" but "who is allowed to know this?"</p></div>
+      <div><h4><span>13</span>Optionality</h4><p>Nobody knows what the product needs in two years, so do not predict it. Keep boundaries clean, avoid cheap-to-avoid vendor coupling, and decide at the last responsible moment.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Refusing to decide is also a decision</b>
+    <p>Endless analysis is a choice, and usually a bad one. So is treating every decision as equally important — the big ones get the same ten minutes as the small ones. And architecture designed alone will not be implemented: if the team does not understand the reasoning, the code will quietly follow a different design.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — THE DECISION TREE ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Decision Tree</h2>
+    <span class="form">Decision tree</span>
+    <span class="cov">Covers · Engineering Decision Making · Problem First Technology Second</span>
+  </div>
+  <p class="thesis">Technology is an answer; if you cannot state the question, you cannot evaluate the answer. This sheet is the route from a vague symptom to a decision you can still defend when it turns out badly. <strong>Two exits let most decisions finish early — and the step nearly everyone skips, writing down why, is the only one that makes the decision revisitable.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 870" role="img" aria-label="A decision tree drawn as a snake of twelve steps. The top row runs left to right: the symptom, state the problem, what happens if we do nothing, name the family of solutions, list the constraints, and which door — reversible or not. Exit A leaves at step 3 when doing nothing is acceptable. The bottom row runs right to left: generate two to four options, fix criteria then compare, check for bias, decide, write down why, and set a review trigger. Exit B is a shortcut from step 6 to step 10 for two-way doors. A dashed loop returns from the review trigger to step 2. Below, a table of problems and their families of answers, the three honest options with the permanent cost of any new component, the two kinds of door, five biases, and a sample decision record.">
+        <defs>
+          <marker id="e1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="e2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="e3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <text x="40" y="36" class="s-zone" fill="var(--line)">The decision line · a symptom in, a defensible decision out</text>
+
+        <!-- ROW 1 -->
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="40" y="110" width="180" height="64" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="260" y="110" width="180" height="64"/>
+          <rect x="480" y="110" width="180" height="64" stroke="var(--fast)" stroke-width="3"/>
+          <rect x="700" y="110" width="180" height="64" fill="var(--z1)"/>
+          <rect x="920" y="110" width="180" height="64"/>
+          <rect x="1140" y="110" width="180" height="64" stroke="var(--hazard)" stroke-width="3"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#e1)">
+          <path d="M220,142 L256,142"/><path d="M440,142 L476,142"/><path d="M660,142 L696,142"/><path d="M880,142 L916,142"/><path d="M1100,142 L1136,142"/>
+          <path d="M1230,174 L1230,266"/>
+        </g>
+        <g class="s-num"><text x="50" y="128">01</text><text x="270" y="128">02</text><text x="490" y="128">03</text><text x="710" y="128">04</text><text x="930" y="128">05</text><text x="1150" y="128">06</text></g>
+        <g class="s-lab"><text x="72" y="128">the symptom</text><text x="292" y="128">state the problem</text><text x="512" y="128">do nothing?</text><text x="732" y="128">name the family</text><text x="952" y="128">the constraints</text><text x="1172" y="128">which door?</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="50" y="146">"the app is slow" —</text><text x="50" y="160">a feeling, not a problem</text>
+          <text x="270" y="146">one sentence with a number:</text><text x="270" y="160">"10,000 queries a minute"</text>
+          <text x="490" y="146">what breaks if we don't?</text><text x="490" y="160">always a real option</text>
+          <text x="710" y="146">"this is a caching problem"</text><text x="710" y="160">— the table below</text>
+          <text x="930" y="146">budget, team, deadline,</text><text x="930" y="160">traffic, existing skills</text>
+          <text x="1150" y="146">undo it in an afternoon,</text><text x="1150" y="160">or live with it for years?</text>
+        </g>
+
+        <!-- EXIT A -->
+        <path d="M570,110 L570,94" fill="none" stroke="var(--fast)" stroke-width="3" stroke-dasharray="5 4" marker-end="url(#e2)"/>
+        <circle cx="570" cy="80" r="11" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="570" y="84" text-anchor="middle" class="s-note" font-size="12">A</text>
+        <text x="590" y="76" class="s-note">"nothing much"? stop here</text>
+        <text x="590" y="90" class="s-sub" style="fill:var(--fast)">no new component, no permanent cost, no meeting</text>
+
+        <!-- ROW 2 -->
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="1140" y="270" width="180" height="64"/>
+          <rect x="920" y="270" width="180" height="64"/>
+          <rect x="700" y="270" width="180" height="64"/>
+          <rect x="480" y="270" width="180" height="64" fill="var(--z1)" stroke-width="3"/>
+          <rect x="260" y="270" width="180" height="64" fill="var(--z5)" stroke="var(--fast)" stroke-width="3"/>
+          <rect x="40" y="270" width="180" height="64"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#e1)">
+          <path d="M1140,302 L1104,302"/><path d="M920,302 L884,302"/><path d="M700,302 L664,302"/><path d="M480,302 L444,302"/><path d="M260,302 L224,302"/>
+        </g>
+        <g class="s-num"><text x="1150" y="288">07</text><text x="930" y="288">08</text><text x="710" y="288">09</text><text x="490" y="288">10</text><text x="270" y="288">11</text><text x="50" y="288">12</text></g>
+        <g class="s-lab"><text x="1172" y="288">2–4 options</text><text x="952" y="288">fix criteria first</text><text x="732" y="288">check for bias</text><text x="512" y="288">decide</text><text x="292" y="288">write down why</text><text x="72" y="288">review trigger</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="1150" y="306">including "do nothing"</text><text x="1150" y="320">and the simplest fix</text>
+          <text x="930" y="306">chosen before you look,</text><text x="930" y="320">then every option scored</text>
+          <text x="710" y="306">can you argue the other</text><text x="710" y="320">option convincingly?</text>
+          <text x="490" y="306">at the last responsible</text><text x="490" y="320">moment, and not before</text>
+          <text x="270" y="306">the ADR — the step that</text><text x="270" y="320">everyone skips</text>
+          <text x="50" y="306">"revisit if traffic</text><text x="50" y="320">exceeds X"</text>
+        </g>
+
+        <!-- EXIT B + LOOP -->
+        <path d="M1320,142 C1374,142 1374,370 1320,370 L570,370 L570,338" fill="none" stroke="var(--fast)" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#e2)"/>
+        <circle cx="1150" cy="370" r="11" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="1150" y="374" text-anchor="middle" class="s-note" font-size="12">B</text>
+        <text x="600" y="392" class="s-note">two-way door: skip straight to 10 and decide in an hour, not a week</text>
+        <path d="M130,270 C130,222 350,222 350,178" fill="none" stroke="var(--learn)" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#e3)"/>
+        <text x="362" y="214" class="s-learn" font-size="10.5">trigger fires → back to 02, with better information</text>
+
+        <!-- PANEL: problem families -->
+        <rect x="30" y="410" width="900" height="280" fill="var(--z1)"/>
+        <text x="46" y="434" class="s-zone" fill="var(--line)">04 · problems and their families — learn the left column</text>
+        <text x="46" y="452" class="s-sub">Memorise by problem, not by tool. A new tool slots into a row, and you instantly know what it competes with.</text>
+        <g class="s-num"><text x="46" y="474">THE PROBLEM · STABLE FOR DECADES</text><text x="340" y="474">THE FAMILY</text><text x="580" y="474">TODAY'S TOOLS · CHANGE EVERY FEW YEARS</text></g>
+        <line x1="46" y1="480" x2="914" y2="480" stroke="var(--rule)"/>
+        <g class="s-sub">
+          <text x="46" y="498">the same data is read repeatedly</text><text x="46" y="520">work is slower than the request can wait</text>
+          <text x="46" y="542">one server cannot handle the traffic</text><text x="46" y="564">related data must stay consistent</text>
+          <text x="46" y="586">search across text</text><text x="46" y="608">find similar meaning, not exact words</text>
+          <text x="46" y="630">deploys break because environments differ</text><text x="46" y="652">identity checked on every request</text>
+          <text x="46" y="674">files too big for the database</text>
+        </g>
+        <g class="s-sub" style="fill:var(--line)"><text x="318" y="498">→</text><text x="318" y="520">→</text><text x="318" y="542">→</text><text x="318" y="564">→</text><text x="318" y="586">→</text><text x="318" y="608">→</text><text x="318" y="630">→</text><text x="318" y="652">→</text><text x="318" y="674">→</text></g>
+        <g class="s-lab" font-size="11.5">
+          <text x="340" y="498">cache</text><text x="340" y="520">queue + worker</text><text x="340" y="542">horizontal scaling</text><text x="340" y="564">relational database</text>
+          <text x="340" y="586">search engine</text><text x="340" y="608">vector database</text><text x="340" y="630">containers</text><text x="340" y="652">sessions or JWT</text><text x="340" y="674">object storage</text>
+        </g>
+        <g class="s-mono" font-size="10.5">
+          <text x="580" y="498">Redis, Memcached, CDN, local memory</text><text x="580" y="520">RabbitMQ, Kafka, Celery, SQS</text>
+          <text x="580" y="542">N servers + a load balancer</text><text x="580" y="564">+ transactions</text>
+          <text x="580" y="586">Elasticsearch, Meilisearch, Postgres FTS</text><text x="580" y="608">Qdrant, pgvector, Weaviate</text>
+          <text x="580" y="630">Docker</text><text x="580" y="652">server sessions, signed tokens</text><text x="580" y="674">S3, MinIO</text>
+        </g>
+
+        <!-- PANEL: three options -->
+        <rect x="950" y="410" width="420" height="280" fill="var(--z4)"/>
+        <text x="966" y="434" class="s-zone" fill="var(--mute)">07 · the three honest options</text>
+        <text x="966" y="458" class="s-lab" font-size="11.5">do nothing</text>
+        <text x="966" y="474" class="s-sub" style="fill:var(--line)">+ no new complexity</text><text x="1160" y="474" class="s-sub" style="fill:var(--hazard)">− the problem remains</text>
+        <text x="966" y="498" class="s-lab" font-size="11.5">simple fix</text>
+        <text x="966" y="514" class="s-sub" style="fill:var(--line)">+ solves it today</text><text x="1160" y="514" class="s-sub" style="fill:var(--hazard)">− may not scale</text>
+        <text x="966" y="538" class="s-lab" font-size="11.5">proper solution</text>
+        <text x="966" y="554" class="s-sub" style="fill:var(--line)">+ solves it for years</text><text x="1160" y="554" class="s-sub" style="fill:var(--hazard)">− weeks, plus a new</text>
+        <text x="1160" y="568" class="s-sub" style="fill:var(--hazard)">  component to operate</text>
+        <line x1="966" y1="584" x2="1354" y2="584" stroke="var(--rule)"/>
+        <text x="966" y="604" class="s-lab" font-size="11">The bill for every new component, forever</text>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="1.2">
+          <rect x="966" y="614" width="70" height="20"/><rect x="1042" y="614" width="74" height="20"/><rect x="1122" y="614" width="72" height="20"/><rect x="1200" y="614" width="62" height="20"/>
+          <rect x="966" y="640" width="70" height="20"/><rect x="1042" y="640" width="84" height="20"/><rect x="1132" y="640" width="180" height="20"/>
+        </g>
+        <g class="s-sub" font-size="10" text-anchor="middle">
+          <text x="1001" y="628">deployed</text><text x="1079" y="628">monitored</text><text x="1158" y="628">backed up</text><text x="1231" y="628">secured</text>
+          <text x="1001" y="654">upgraded</text><text x="1084" y="654">documented</text><text x="1222" y="654">understood by every new hire</text>
+        </g>
+        <text x="966" y="680" class="s-note">"We'll just add Redis" is never just Redis.</text>
+
+        <!-- PANEL: doors -->
+        <rect x="30" y="710" width="440" height="145" fill="var(--z3)"/>
+        <text x="46" y="734" class="s-zone" fill="var(--mute)">06 · two doors, as Amazon names them</text>
+        <rect x="46" y="746" width="28" height="36" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="60" y="769" text-anchor="middle" class="s-lab" style="fill:var(--line)">⇄</text>
+        <rect x="46" y="794" width="28" height="36" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="60" y="817" text-anchor="middle" class="s-haz" font-size="12">→</text>
+        <text x="90" y="760" class="s-lab" font-size="11.5">two-way door · decide in an hour</text>
+        <text x="90" y="776" class="s-sub">a library, a convention, a CI tool, a small host</text>
+        <text x="90" y="808" class="s-haz">one-way door · decide in a week</text>
+        <text x="90" y="824" class="s-sub">data model, boundaries, auth, public API, the DB</text>
+        <text x="46" y="846" class="s-haz" font-size="10.5">Misjudged doors: a rewrite, or 3 weeks picking a logging library.</text>
+
+        <!-- PANEL: biases -->
+        <rect x="490" y="710" width="440" height="145" fill="var(--z2)"/>
+        <text x="506" y="734" class="s-zone" fill="var(--mute)">09 · five biases to catch in yourself</text>
+        <g class="s-lab" font-size="11"><text x="506" y="756">résumé-driven</text><text x="506" y="774">novelty</text><text x="506" y="792">sunk cost</text><text x="506" y="810">authority</text><text x="506" y="828">availability</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="614" y="756">looks good on a CV, not what fits</text>
+          <text x="614" y="774">new is not better, only less understood</text>
+          <text x="614" y="792">two months spent is no reason for two more</text>
+          <text x="614" y="810">Netflix: other constraints, 2,000 engineers</text>
+          <text x="614" y="828">the tool you read about last week</text>
+        </g>
+        <text x="506" y="848" class="s-note" font-size="10.5">The test: can you argue the other option convincingly?</text>
+
+        <!-- PANEL: the slip -->
+        <rect x="950" y="710" width="420" height="145" fill="var(--z5)"/>
+        <text x="966" y="734" class="s-zone" fill="var(--fast)">11 · the betting slip</text>
+        <rect x="966" y="744" width="388" height="84" fill="var(--paper)" stroke="var(--rule)"/>
+        <g class="s-mono" font-size="10">
+          <text x="976" y="760" fill="var(--line)">PROBLEM</text><text x="1036" y="760">same query ~10,000×/min</text>
+          <text x="976" y="775" fill="var(--line)">OPTIONS</text><text x="1036" y="775">nothing · local memory · Redis</text>
+          <text x="976" y="790" fill="var(--line)">DECISION</text><text x="1036" y="790">Redis, because we already run it</text>
+          <text x="976" y="805" fill="var(--line)">ASSUMED</text><text x="1036" y="805">data changes hourly; 5 min stale ok</text>
+          <text x="976" y="820" fill="var(--learn)">TRIGGER</text><text x="1036" y="820">revisit if staleness stops being ok</text>
+        </g>
+        <text x="966" y="846" class="s-note" font-size="10.5">Judge the reasoning at the time, not the outcome.</text>
+      </svg>
+    </div>
+    <figcaption><b>A decision is a bet, and an ADR is the betting slip.</b> You cannot control whether the bet wins. You can control whether, when the result comes in, anyone can see what you knew, what you assumed and why you chose — the only way to bet better next time. Speed on the two-way doors is what makes care on the one-way doors affordable.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every step on the decision line</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>The symptom</h4><p>"The app is slow", "we need microservices". A feeling or a solution, never yet a problem. Nothing can be evaluated at this station.</p></div>
+      <div><h4><span>02</span>State the problem</h4><p>One sentence, not the solution, with a number in it if possible: "the same query runs 10,000 times a minute". Found by measuring and locating, not by guessing.</p></div>
+      <div><h4><span>03</span>What if we do nothing?</h4><p>If the honest answer is "nothing much", stop. Doing nothing is a real option with a real gain — no new complexity — and it is often correct.</p></div>
+      <div><h4><span>04</span>Name the family</h4><p>Business problem → engineering problem → family of solutions → specific technology. Skipping the middle two is how projects acquire technology nobody can justify.</p></div>
+      <div><h4><span>05</span>List the constraints</h4><p>Budget, team, deadline, traffic, existing skills. They delete options before any comparison begins, and they are what makes "Redis, because we already run it" a real reason.</p></div>
+      <div><h4><span>06</span>Which door?</h4><p>Two-way doors — a library, a convention, a CI tool — can be walked back through. One-way doors — data model, service boundaries, auth, public API — cannot.</p></div>
+      <div><h4><span>07</span>Generate 2–4 options</h4><p>Always including "do nothing" and the simplest thing that solves it. One option compared against nothing is not a decision; it is a preference.</p></div>
+      <div><h4><span>08</span>Fix criteria first</h4><p>Fit to constraints, team knowledge, operational cost, failure behaviour, cost to reverse, licence and vendor risk — chosen before looking, or you will pick criteria that favour your favourite.</p></div>
+      <div><h4><span>09</span>Check for bias</h4><p>Résumé-driven, novelty, sunk cost, authority, availability. If you cannot argue the rejected option convincingly, you have not understood it well enough to reject it.</p></div>
+      <div><h4><span>10</span>Decide</h4><p>At the last responsible moment: too early is deciding with the least information you will ever have, too late blocks the team.</p></div>
+      <div><h4><span>11</span>Write down why</h4><p>The entire value of the process. A decision without a written reason cannot be re-evaluated later — it can only be inherited and resented.</p></div>
+      <div><h4><span>12</span>Review trigger</h4><p>"Revisit if traffic exceeds X." Without one, an outgrown decision stays forever, because nobody knows the condition under which it was right.</p></div>
+      <div><h4><span>A</span>The do-nothing exit</h4><p>The cheapest outcome on the sheet. Every component you do not add is one you never deploy, monitor, back up, secure, upgrade, document or explain to a new hire.</p></div>
+      <div><h4><span>B</span>The two-way shortcut</h4><p>Reversible decisions skip the ceremony and are made in an hour. Treating one like a one-way door is how teams spend three weeks choosing a logging library.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Prescribing before diagnosis is malpractice</b>
+    <p>"We should use microservices" is not a plan — it is a solution looking for a problem, and if the real problem is one slow query, it makes things worse. Instagram stayed on plain Django and PostgreSQL because its bottleneck was media delivery; Stack Overflow ran on a handful of servers with heavy caching because its load was reads. Learn new technology in a side project, where being wrong costs nothing.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — THE LIFECYCLE CIRCUIT ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>The Lifecycle Circuit</h2>
+    <span class="form">Closed circuit</span>
+    <span class="cov">Covers · Software Development Lifecycle · Documentation Driven Development</span>
+  </div>
+  <p class="thesis">Seven stations, and an arrow from the last back to the first. Every team runs this circuit whether it names it or not, and each station owes a document written before the work, not after. <strong>Skipping a station does not remove its work — it moves that work to a later station, where it costs ten times as much.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A closed circuit of the software development lifecycle. Seven numbered stations sit on a ring: requirements, design, implementation, testing, deployment, operation and maintenance, with the arc from maintenance back to requirements highlighted. Beside each station is the document it owes, such as a README, an ADR, an API contract, a runbook or a changelog. To the right, a bar chart of the relative cost of fixing a mistake by the stage it is found — 1 times in requirements up to 100 times in production — and a comparison of waterfall, one long sequence with feedback at the end, against agile, thin slices with feedback every one to two weeks. Along the bottom, a table of documentation artifacts and when each is written, the API-first flow from contract to parallel builds to integration, and which documentation is worth writing and which rots.">
+        <defs>
+          <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- THE CIRCUIT -->
+        <text x="40" y="36" class="s-zone" fill="var(--line)">The circuit · one lap from a need to running software, and back</text>
+        <g fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#c1)">
+          <path d="M427.8,151.9 A200,200 0 0,1 537.5,204.8"/>
+          <path d="M572.2,248.3 A200,200 0 0,1 599.3,366.9"/>
+          <path d="M586.9,421.2 A200,200 0 0,1 511,516.4"/>
+          <path d="M460.8,540.5 A200,200 0 0,1 339.2,540.5"/>
+          <path d="M289,516.4 A200,200 0 0,1 213.1,421.2"/>
+          <path d="M200.7,366.9 A200,200 0 0,1 227.8,248.3"/>
+        </g>
+        <path d="M262.5,204.8 A200,200 0 0,1 372.2,151.9" fill="none" stroke="var(--fast)" stroke-width="6" marker-end="url(#c2)"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="3.5">
+          <circle cx="400" cy="150" r="24"/><circle cx="556" cy="225" r="24"/><circle cx="595" cy="394" r="24"/><circle cx="487" cy="530" r="24"/>
+          <circle cx="313" cy="530" r="24"/><circle cx="205" cy="394" r="24"/><circle cx="244" cy="225" r="24"/>
+        </g>
+        <g class="s-big" text-anchor="middle" font-size="13" style="fill:var(--line)">
+          <text x="400" y="155">01</text><text x="556" y="230">02</text><text x="595" y="399">03</text><text x="487" y="535">04</text><text x="313" y="535">05</text><text x="205" y="399">06</text><text x="244" y="230">07</text>
+        </g>
+
+        <g text-anchor="middle"><text x="400" y="70" class="s-lab">requirements</text><text x="400" y="84" class="s-sub">what problem, for whom —</text><text x="400" y="98" class="s-sub">and how will we know it worked?</text><text x="400" y="114" class="s-note" font-size="10.5">✎ problem statement · README</text></g>
+        <text x="590" y="214" class="s-lab">design</text><text x="590" y="228" class="s-sub">architecture, data model,</text><text x="590" y="242" class="s-sub">interfaces</text><text x="590" y="258" class="s-note" font-size="10.5">✎ ADR · diagram · API contract</text>
+        <text x="630" y="384" class="s-lab">implementation</text><text x="630" y="398" class="s-sub">writing the code</text><text x="630" y="414" class="s-note" font-size="10.5">✎ inline "why" comments</text>
+        <text x="520" y="548" class="s-lab">testing</text><text x="520" y="562" class="s-sub">does it do what we said —</text><text x="520" y="576" class="s-sub">and what when it does not?</text>
+        <g text-anchor="end"><text x="280" y="548" class="s-lab">deployment</text><text x="280" y="562" class="s-sub">to production, safely</text><text x="280" y="578" class="s-note" font-size="10.5">✎ runbook · changelog</text></g>
+        <g text-anchor="end"><text x="172" y="384" class="s-lab">operation</text><text x="172" y="398" class="s-sub">monitoring, alerting,</text><text x="172" y="412" class="s-sub">incidents, backups</text><text x="172" y="428" class="s-note" font-size="10.5">✎ monitoring notes</text></g>
+        <g text-anchor="end"><text x="204" y="200" class="s-lab">maintenance</text><text x="204" y="214" class="s-sub">bug fixes, dependency</text><text x="204" y="228" class="s-sub">updates, improvements</text><text x="204" y="244" class="s-note" font-size="10.5">✎ docs updated to reality</text></g>
+
+        <text x="400" y="330" text-anchor="middle" class="s-note" font-size="13">the arc from 07 to 01</text>
+        <text x="400" y="350" text-anchor="middle" class="s-sub">is the important one. Software is</text>
+        <text x="400" y="364" text-anchor="middle" class="s-sub">never finished — it is maintained,</text>
+        <text x="400" y="378" text-anchor="middle" class="s-sub">or it is abandoned.</text>
+        <text x="40" y="596" class="s-sub">✎ = the document that station owes, written before or beside the work — never as a photograph taken afterwards.</text>
+
+        <!-- COST CURVE -->
+        <rect x="820" y="50" width="550" height="250" fill="var(--z5)"/>
+        <text x="836" y="74" class="s-zone" fill="var(--fast)">08 · the cost curve — where the mistake is found</text>
+        <text x="836" y="92" class="s-sub">The cost of fixing a mistake grows by about an order of magnitude per stage.</text>
+        <g class="s-lab" font-size="11.5" text-anchor="end"><text x="940" y="122">requirements</text><text x="940" y="150">design</text><text x="940" y="178">implementation</text><text x="940" y="206">testing</text><text x="940" y="234">production</text></g>
+        <g>
+          <rect x="950" y="110" width="4" height="16" fill="var(--line)"/>
+          <rect x="950" y="138" width="20" height="16" fill="var(--line)" opacity=".85"/>
+          <rect x="950" y="166" width="40" height="16" fill="var(--fast)" opacity=".8"/>
+          <rect x="950" y="194" width="80" height="16" fill="var(--fast)" opacity=".8"/>
+          <rect x="950" y="222" width="400" height="16" fill="var(--hazard)" opacity=".8"/>
+        </g>
+        <g class="s-mono" font-size="10.5"><text x="962" y="122">1×</text><text x="978" y="150">~5×</text><text x="998" y="178">~10×</text><text x="1038" y="206">~20×</text><text x="1340" y="234" text-anchor="end" fill="var(--paper)">~100×</text></g>
+        <text x="836" y="266" class="s-note">Thinking first is not overhead: it is the cheapest place to be wrong.</text>
+        <text x="836" y="284" class="s-sub">Google reviews every change: defects surface at station 03, not 05.</text>
+
+        <!-- WATERFALL VS AGILE -->
+        <rect x="820" y="320" width="550" height="270" fill="var(--z2)"/>
+        <text x="836" y="344" class="s-zone" fill="var(--mute)">09 · waterfall or agile — the shape of one lap</text>
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="836" y="358" width="110" height="24"/><rect x="948" y="358" width="110" height="24"/><rect x="1060" y="358" width="110" height="24"/><rect x="1172" y="358" width="110" height="24"/>
+        </g>
+        <rect x="1290" y="358" width="64" height="24" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2"/>
+        <g class="s-sub" font-size="10" text-anchor="middle"><text x="891" y="374">all requirements</text><text x="1003" y="374">all design</text><text x="1115" y="374">all code</text><text x="1227" y="374">all testing</text><text x="1322" y="374" fill="var(--hazard)">release</text></g>
+        <text x="836" y="398" class="s-haz" font-size="10.5">waterfall: one huge bet — feedback arrives once, at the very end</text>
+        <g>
+          <rect x="836" y="414" width="20" height="24" fill="var(--line)" opacity=".25"/><rect x="856" y="414" width="20" height="24" fill="var(--line)" opacity=".45"/><rect x="876" y="414" width="20" height="24" fill="var(--line)" opacity=".65"/><rect x="896" y="414" width="20" height="24" fill="var(--line)" opacity=".85"/>
+          <rect x="922" y="414" width="20" height="24" fill="var(--line)" opacity=".25"/><rect x="942" y="414" width="20" height="24" fill="var(--line)" opacity=".45"/><rect x="962" y="414" width="20" height="24" fill="var(--line)" opacity=".65"/><rect x="982" y="414" width="20" height="24" fill="var(--line)" opacity=".85"/>
+          <rect x="1008" y="414" width="20" height="24" fill="var(--line)" opacity=".25"/><rect x="1028" y="414" width="20" height="24" fill="var(--line)" opacity=".45"/><rect x="1048" y="414" width="20" height="24" fill="var(--line)" opacity=".65"/><rect x="1068" y="414" width="20" height="24" fill="var(--line)" opacity=".85"/>
+          <rect x="1094" y="414" width="20" height="24" fill="var(--line)" opacity=".25"/><rect x="1114" y="414" width="20" height="24" fill="var(--line)" opacity=".45"/><rect x="1134" y="414" width="20" height="24" fill="var(--line)" opacity=".65"/><rect x="1154" y="414" width="20" height="24" fill="var(--line)" opacity=".85"/>
+          <rect x="1180" y="414" width="20" height="24" fill="var(--line)" opacity=".25"/><rect x="1200" y="414" width="20" height="24" fill="var(--line)" opacity=".45"/><rect x="1220" y="414" width="20" height="24" fill="var(--line)" opacity=".65"/><rect x="1240" y="414" width="20" height="24" fill="var(--line)" opacity=".85"/>
+          <rect x="1266" y="414" width="20" height="24" fill="var(--line)" opacity=".25"/><rect x="1286" y="414" width="20" height="24" fill="var(--line)" opacity=".45"/><rect x="1306" y="414" width="20" height="24" fill="var(--line)" opacity=".65"/><rect x="1326" y="414" width="20" height="24" fill="var(--line)" opacity=".85"/>
+        </g>
+        <g fill="none" stroke="var(--learn)" stroke-width="1.8">
+          <path d="M916,440 C916,454 876,454 876,442"/><path d="M1002,440 C1002,454 962,454 962,442"/><path d="M1088,440 C1088,454 1048,454 1048,442"/>
+          <path d="M1174,440 C1174,454 1134,454 1134,442"/><path d="M1260,440 C1260,454 1220,454 1220,442"/><path d="M1346,440 C1346,454 1306,454 1306,442"/>
+        </g>
+        <text x="836" y="472" class="s-learn" font-size="10.5">agile: a thin slice through every stage — feedback every 1–2 weeks</text>
+        <line x1="836" y1="482" x2="1354" y2="482" stroke="var(--rule)"/>
+        <g class="s-num"><text x="950" y="498">WATERFALL</text><text x="1170" y="498">AGILE</text></g>
+        <g class="s-lab" font-size="10.5"><text x="836" y="516">feedback</text><text x="836" y="534">changing needs</text><text x="836" y="552">works when</text><text x="836" y="570">main risk</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="950" y="516">once, at the end</text><text x="1170" y="516">continuous</text>
+          <text x="950" y="534">handled badly</text><text x="1170" y="534">handled well</text>
+          <text x="950" y="552">requirements truly fixed</text><text x="1170" y="552">almost everywhere else</text>
+          <text x="950" y="570" fill="var(--hazard)">the wrong thing, perfectly</text><text x="1170" y="570" fill="var(--hazard)">losing sight of architecture</text>
+        </g>
+        <text x="836" y="584" class="s-sub" font-size="10" style="fill:var(--fast)">aerospace and medical keep waterfall: a failed deploy cannot be undone with git revert</text>
+
+        <!-- DOCUMENT TABLE -->
+        <rect x="30" y="610" width="560" height="260" fill="var(--z3)"/>
+        <text x="46" y="634" class="s-zone" fill="var(--mute)">10 · what to write, and when</text>
+        <g class="s-num"><text x="46" y="654">ARTIFACT</text><text x="196" y="654">WRITTEN</text><text x="406" y="654">ANSWERS</text></g>
+        <g class="s-lab" font-size="11"><text x="46" y="674">README</text><text x="46" y="694">ADR</text><text x="46" y="714">API contract</text><text x="46" y="734">architecture diagram</text><text x="46" y="754">runbook</text><text x="46" y="774">changelog</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="196" y="674">at project start</text><text x="406" y="674">what is it, how do I run it?</text>
+          <text x="196" y="694">before an irreversible decision</text><text x="406" y="694">why did we choose this?</text>
+          <text x="196" y="714">before the endpoint exists</text><text x="406" y="714">in, out, and what can fail?</text>
+          <text x="196" y="734">before adding a component</text><text x="406" y="734">where does this fit?</text>
+          <text x="196" y="754">before production</text><text x="406" y="754">what to do at 3am?</text>
+          <text x="196" y="774">at release</text><text x="406" y="774">what changed for the user?</text>
+        </g>
+        <text x="46" y="800" class="s-note">Write it → read it back → the confusion shows → fix it on paper.</text>
+        <text x="46" y="816" class="s-sub">A design that feels clear often falls apart in the second paragraph —</text>
+        <text x="46" y="830" class="s-sub">and finding out costs a paragraph instead of a sprint.</text>
+        <text x="46" y="854" class="s-haz" font-size="10.5">Wrong documentation is worse than none, because people trust it.</text>
+
+        <!-- API FIRST + WHAT TO WRITE -->
+        <rect x="610" y="610" width="760" height="260" fill="var(--z1)"/>
+        <text x="626" y="634" class="s-zone" fill="var(--line)">11 · API-first, the clearest case</text>
+        <rect x="626" y="648" width="340" height="28" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="636" y="666" class="s-mono" font-size="10.5">1 · POST /orders → 201 { id } | 400 | 409</text>
+        <text x="660" y="696" class="s-sub">2 · frontend and backend agree on it</text>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#c1)"><path d="M646,676 L646,706"/><path d="M946,676 L946,706"/><path d="M706,736 L760,762"/><path d="M886,736 L832,762"/></g>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"><rect x="626" y="710" width="160" height="26"/><rect x="806" y="710" width="160" height="26"/></g>
+        <rect x="626" y="766" width="340" height="26" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <g class="s-sub" text-anchor="middle"><text x="706" y="727">3 · frontend builds</text><text x="886" y="727">3 · backend builds</text><text x="796" y="783">4 · integrate without surprises</text></g>
+        <text x="626" y="814" class="s-sub">Without it, the frontend guesses, the backend improvises,</text>
+        <text x="626" y="828" class="s-sub">and integration week becomes a negotiation.</text>
+        <text x="626" y="852" class="s-sub" style="fill:var(--line)">OpenAPI turns the document into something machine-checkable.</text>
+
+        <line x1="990" y1="626" x2="990" y2="856" stroke="var(--rule)"/>
+        <text x="1006" y="654" class="s-num">12</text><text x="1028" y="654" class="s-lab" font-size="11.5" style="fill:var(--line)">worth writing</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="1006" y="672">· why, not what — the code shows what</text>
+          <text x="1006" y="688">· contracts: inputs, outputs, errors</text>
+          <text x="1006" y="704">· assumptions: "fewer than 1000 items"</text>
+          <text x="1006" y="720">· failure: what if the dependency is down</text>
+          <text x="1006" y="736">· rejected alternatives, so nobody re-litigates</text>
+        </g>
+        <text x="1006" y="762" class="s-num">13</text><text x="1028" y="762" class="s-haz">rots, then misleads</text>
+        <text x="1006" y="780" class="s-mono" font-size="10" style="fill:var(--hazard)">i = i + 1  // increment i</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="1006" y="796">· tutorials of a UI that changes every sprint</text>
+          <text x="1006" y="812">· auto-generated docs nobody reads</text>
+          <text x="1006" y="828">· a wiki nobody opens — keep it in the repo</text>
+        </g>
+        <text x="1006" y="854" class="s-note">A blueprint, not a photograph.</text>
+      </svg>
+    </div>
+    <figcaption><b>The circuit is building a house, repeatedly.</b> Requirements are talking to the family about how they live; design is the blueprint; construction, inspection and moving in follow — and operation, the heating, plumbing and repairs, lasts far longer than construction ever did. Amazon deploys thousands of times a day because it made one lap cheap, not because it skipped stations.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the stations and the paperwork</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Requirements</h4><p>What problem, for whom, and how will we know it worked? Owes a problem statement and a README. Starting to code before this is clear is the most expensive mistake in software.</p></div>
+      <div><h4><span>02</span>Design</h4><p>Architecture, data model, interfaces. Owes an ADR, an architecture diagram and the API contract — the station where mistakes still cost about five times the minimum.</p></div>
+      <div><h4><span>03</span>Implementation</h4><p>Writing the code, with inline comments that explain why the strange line exists. The code already says what.</p></div>
+      <div><h4><span>04</span>Testing</h4><p>Does it do what we said, and what happens when it does not? Something written alongside the code, not a phase that starts when coding ends.</p></div>
+      <div><h4><span>05</span>Deployment</h4><p>Getting to production safely. An automated, repeatable process rather than an event — and the runbook is written before launch, not during the first outage.</p></div>
+      <div><h4><span>06</span>Operation</h4><p>Monitoring, alerting, incidents, backups. The station most often forgotten, which produces software nobody can monitor, back up or debug.</p></div>
+      <div><h4><span>07</span>Maintenance</h4><p>Bug fixes, dependency updates, improvements — and updating the documents where reality disagreed. Then back to station 01.</p></div>
+      <div><h4><span>08</span>The cost curve</h4><p>Requirements 1×, design ~5×, implementation ~10×, testing ~20×, production ~100×. The entire economic argument for design and code review.</p></div>
+      <div><h4><span>09</span>Waterfall and agile</h4><p>Waterfall is one lap with feedback at the end; right for regulated or hardware-bound work. Agile is many thin laps — which means designing the architecture early and the details continuously, not skipping design.</p></div>
+      <div><h4><span>10</span>Documentation first</h4><p>README at project start, ADR before an irreversible decision, API contract before the endpoint, diagram before a new component, runbook before production, changelog at release.</p></div>
+      <div><h4><span>11</span>API-first</h4><p>Write the contract, agree it, build both sides in parallel against it, integrate without surprises. OpenAPI makes the document checkable by machine.</p></div>
+      <div><h4><span>12</span>Worth writing</h4><p>Why, contracts, constraints and assumptions, failure behaviour, rejected alternatives. The knowledge that exists only in people's heads — and leaves the company with them.</p></div>
+      <div><h4><span>13</span>Documentation that rots</h4><p>Comments restating the code, tutorials for a UI that changes every sprint, generated docs nobody maintains, wikis nobody opens. Anything duplicating the code line by line drifts within weeks.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Documentation written after shipping is a photograph</b>
+    <p>By then the reasoning is already forgotten, and what gets written describes what happened rather than what was intended. Amazon replaced slide decks with six-page narratives for exactly this reason: a coherent paragraph exposes weak reasoning that bullet points hide. If you cannot explain the design clearly in writing, you do not yet understand it well enough to build it.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — THE VERIFICATION LINE ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>The Verification Line</h2>
+    <span class="form">Process plant</span>
+    <span class="cov">Covers · AI Driven Development Workflow · Documentation Driven Development</span>
+  </div>
+  <p class="thesis">For fifty years typing code was the slow part, so processes were built to make typing faster. That constraint is largely gone; deciding what to build and being accountable for whether it is correct are not. <strong>AI removes the cost of writing code, not the cost of being wrong — so the time it saves belongs at the two ends of this line.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="A process plant for AI-assisted development. Top left, two pipelines compare before and now: idea, design, code and review were all slow before; now design to generated code is fast while idea to design and generation to review remain slow, making them the bottlenecks. Top right, a weak prompt, add caching, beside a strong prompt carrying query rate, change frequency, existing Redis and acceptable staleness, with context meters. The middle is a seven-stage working loop: describe the problem in writing, ask for the design, challenge it, generate small pieces, read every line, run and test, record the reasoning — with return loops when a challenge fails or code cannot be explained or fails its tests. Along the bottom, a chart of generated code outpacing verified code, what AI is and is not reliable at with the skills that gain and lose value, and where AI sits beside each lifecycle stage.">
+        <defs>
+          <marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <!-- BOTTLENECK -->
+        <rect x="30" y="50" width="820" height="200" fill="var(--z3)"/>
+        <text x="46" y="74" class="s-zone" fill="var(--mute)">11 · the bottleneck moved</text>
+        <text x="46" y="124" class="s-zone" fill="var(--mute)" font-size="10">Before</text>
+        <text x="46" y="204" class="s-zone" fill="var(--mute)" font-size="10">Now</text>
+        <g stroke="var(--hazard)" stroke-width="3" stroke-dasharray="6 5"><line x1="188" y1="120" x2="352" y2="120"/><line x1="368" y1="120" x2="532" y2="120"/><line x1="548" y1="120" x2="712" y2="120"/><line x1="188" y1="200" x2="352" y2="200"/><line x1="548" y1="200" x2="712" y2="200"/></g>
+        <line x1="368" y1="200" x2="532" y2="200" stroke="var(--line)" stroke-width="10"/>
+        <g class="st" stroke-width="3"><circle cx="180" cy="120" r="8"/><circle cx="360" cy="120" r="8"/><circle cx="540" cy="120" r="8"/><circle cx="720" cy="120" r="8"/><circle cx="180" cy="200" r="8"/><circle cx="360" cy="200" r="8"/><circle cx="540" cy="200" r="8"/><circle cx="720" cy="200" r="8"/></g>
+        <g class="s-lab" font-size="11.5" text-anchor="middle">
+          <text x="180" y="104">idea</text><text x="360" y="104">design</text><text x="540" y="104">write code</text><text x="720" y="104">review &amp; verify</text>
+          <text x="180" y="184">idea</text><text x="360" y="184">design</text><text x="540" y="184">generate code</text><text x="720" y="184">review &amp; verify</text>
+        </g>
+        <g class="s-sub" font-size="10.5" text-anchor="middle" style="fill:var(--hazard)"><text x="270" y="140">slow</text><text x="450" y="140">slow</text><text x="630" y="140">slow</text><text x="270" y="222">slow · still the bottleneck</text><text x="630" y="222">slow · now the bottleneck</text></g>
+        <text x="450" y="222" text-anchor="middle" class="s-note" font-size="10.5">fast</text>
+        <text x="46" y="242" class="s-note">An engineer's value moves to both ends: defining precisely, verifying rigorously.</text>
+
+        <!-- CONTEXT -->
+        <rect x="870" y="50" width="500" height="200" fill="var(--z1)"/>
+        <text x="886" y="74" class="s-zone" fill="var(--line)">12 · context is the whole game</text>
+        <rect x="886" y="88" width="190" height="96" fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"/>
+        <text x="981" y="140" text-anchor="middle" class="s-mono">"Add caching"</text>
+        <rect x="1096" y="88" width="258" height="96" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <g class="s-mono" font-size="10">
+          <text x="1106" y="106">same query ~2000×/min</text><text x="1106" y="122">data changes hourly</text><text x="1106" y="138">we already run Redis</text>
+          <text x="1106" y="154">staleness up to 5 min is fine</text><text x="1106" y="170">propose two options + trade-offs</text>
+        </g>
+        <rect x="886" y="194" width="190" height="8" fill="var(--rule)"/><rect x="886" y="194" width="14" height="8" fill="var(--hazard)"/>
+        <rect x="1096" y="194" width="258" height="8" fill="var(--rule)"/><rect x="1096" y="194" width="240" height="8" fill="var(--line)"/>
+        <text x="886" y="218" class="s-sub" style="fill:var(--hazard)">weak: a generic answer</text>
+        <text x="1096" y="218" class="s-sub" style="fill:var(--line)">strong: real options, real trade-offs</text>
+        <text x="886" y="240" class="s-sub">READMEs, ADRs and contracts are this context, pre-written — sheet 4.</text>
+
+        <!-- WORKING LOOP -->
+        <text x="40" y="290" class="s-zone" fill="var(--line)">The working loop · generation in the middle, judgment at both ends</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="40" y="310" width="170" height="80" fill="var(--z1)" stroke-width="2.5"/>
+          <rect x="228" y="310" width="170" height="80" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="416" y="310" width="170" height="80" fill="var(--z1)" stroke-width="2.5"/>
+          <rect x="604" y="310" width="170" height="80" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="792" y="310" width="170" height="80" fill="var(--z1)" stroke-width="2.5"/>
+          <rect x="980" y="310" width="170" height="80" fill="var(--z1)" stroke-width="2.5"/>
+          <rect x="1168" y="310" width="170" height="80" fill="var(--z1)" stroke-width="2.5"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#v1)">
+          <path d="M210,350 L224,350"/><path d="M398,350 L412,350"/><path d="M586,350 L600,350"/><path d="M774,350 L788,350"/><path d="M962,350 L976,350"/><path d="M1150,350 L1164,350"/>
+        </g>
+        <g class="s-num"><text x="50" y="328">01</text><text x="238" y="328">02</text><text x="426" y="328">03</text><text x="614" y="328">04</text><text x="802" y="328">05</text><text x="990" y="328">06</text><text x="1178" y="328">07</text></g>
+        <g class="s-sub" font-size="10" text-anchor="end">
+          <text x="200" y="328" fill="var(--line)">engineer</text><text x="388" y="328" fill="var(--fast)">AI proposes</text><text x="576" y="328" fill="var(--line)">engineer</text>
+          <text x="764" y="328" fill="var(--fast)">AI generates</text><text x="952" y="328" fill="var(--line)">engineer</text><text x="1140" y="328" fill="var(--line)">engineer</text><text x="1328" y="328" fill="var(--line)">engineer</text>
+        </g>
+        <g class="s-lab" font-size="12"><text x="50" y="348">describe, in writing</text><text x="238" y="348">ask for the design</text><text x="426" y="348">challenge it</text><text x="614" y="348">generate, small</text><text x="802" y="348">read every line</text><text x="990" y="348">run it, test it</text><text x="1178" y="348">record the why</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="50" y="366">problem, constraints and</text><text x="50" y="380">acceptance criteria</text>
+          <text x="238" y="366">not the code — a thinking</text><text x="238" y="380">partner, not an intern</text>
+          <text x="426" y="366">what breaks? what did you</text><text x="426" y="380">assume? what is simpler?</text>
+          <text x="614" y="366">code in small,</text><text x="614" y="380">reviewable pieces</text>
+          <text x="802" y="366">cannot explain it?</text><text x="802" y="380">then do not merge it</text>
+          <text x="990" y="366">especially the</text><text x="990" y="380">failure paths</text>
+          <text x="1178" y="366">ADR or commit message,</text><text x="1178" y="380">not just the result</text>
+        </g>
+        <g fill="none" stroke="var(--hazard)" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#v2)">
+          <path d="M500,390 C500,428 312,428 312,394"/>
+          <path d="M876,390 C876,420 700,420 700,394"/>
+          <path d="M1064,390 C1064,462 680,462 680,394"/>
+        </g>
+        <text x="330" y="446" class="s-haz" font-size="10.5">challenge fails → back to 02</text>
+        <text x="760" y="480" class="s-haz" font-size="10.5">can't explain it, or it fails → back to 04, in a smaller piece</text>
+        <text x="40" y="508" class="s-note">Step 02 is what separates useful AI work from expensive mess.</text>
+        <text x="500" y="508" class="s-sub">Asking for the design first turns the model into a thinking partner instead of a very fast intern with no context.</text>
+
+        <!-- VERIFICATION PROBLEM -->
+        <rect x="30" y="530" width="440" height="320" fill="var(--z5)"/>
+        <text x="46" y="554" class="s-zone" fill="var(--fast)">08 · the verification problem</text>
+        <line x1="60" y1="690" x2="440" y2="690" stroke="var(--rule)" stroke-width="1.5"/><line x1="60" y1="570" x2="60" y2="690" stroke="var(--rule)" stroke-width="1.5"/>
+        <polygon points="60,688 440,586 440,672" fill="color-mix(in srgb,var(--hazard) 16%,transparent)"/>
+        <line x1="60" y1="688" x2="440" y2="586" stroke="var(--fast)" stroke-width="3"/>
+        <line x1="60" y1="688" x2="440" y2="672" stroke="var(--line)" stroke-width="3"/>
+        <text x="436" y="578" text-anchor="end" class="s-note" font-size="10.5">code generated — 500 lines in seconds</text>
+        <text x="60" y="706" class="s-sub" style="fill:var(--line)">— code verified: as slow as it always was</text>
+        <text x="340" y="656" text-anchor="middle" class="s-haz" font-size="10.5">code nobody has read</text>
+        <text x="440" y="706" text-anchor="end" class="s-sub" font-size="10">time →</text>
+        <text x="46" y="726" class="s-lab" font-size="11">Practical defences</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="744">· small changes, reviewed individually</text>
+          <text x="46" y="760">· tests you wrote, or at least fully understood</text>
+          <text x="46" y="776">· static analysis and type checking</text>
+          <text x="46" y="792">· security review for auth, input handling and secrets</text>
+        </g>
+        <text x="46" y="818" class="s-haz">Never merge code you cannot explain.</text>
+        <text x="46" y="834" class="s-sub" style="fill:var(--hazard)">"The AI wrote it" is not an answer at 3am, or in review.</text>
+
+        <!-- GOOD AT / NOT -->
+        <rect x="490" y="530" width="440" height="320" fill="var(--z2)"/>
+        <text x="506" y="554" class="s-zone" fill="var(--mute)">09 · what it is good at, and not</text>
+        <text x="506" y="578" class="s-lab" font-size="11" style="fill:var(--line)">genuinely good at</text>
+        <text x="720" y="578" class="s-lab" font-size="11" style="fill:var(--hazard)">not reliable at</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="506" y="596">boilerplate and glue code</text><text x="506" y="614">explaining unfamiliar errors</text><text x="506" y="632">drafts of tests, docs, migrations</text><text x="506" y="650">exploring, to reject cheaply</text><text x="506" y="668">naming a problem's family</text>
+          <text x="720" y="596">your constraints, traffic, budget</text><text x="720" y="614">long-lived architecture decisions</text><text x="720" y="632">security without human review</text><text x="720" y="650">very recent library versions</text><text x="720" y="668">saying "you don't need this"</text>
+        </g>
+        <text x="506" y="698" class="s-haz">Confidently wrong in ways that look exactly like right:</text>
+        <text x="506" y="714" class="s-sub">not a syntax error you can see, but a plausible design</text>
+        <text x="506" y="728" class="s-sub">that is subtly unsuitable for your constraints.</text>
+        <text x="506" y="756" class="s-lab" font-size="11" style="fill:var(--line)">skills worth more now</text>
+        <text x="506" y="772" class="s-sub" font-size="10.5">precise problem definition · critical reading · testing</text>
+        <text x="506" y="786" class="s-sub" font-size="10.5">trade-off reasoning · debugging code you did not type</text>
+        <text x="506" y="810" class="s-lab" font-size="11" style="fill:var(--hazard)">skills worth less</text>
+        <text x="506" y="826" class="s-sub" font-size="10.5">memorised syntax · hand-written boilerplate</text>
+        <text x="506" y="840" class="s-sub" font-size="10.5">being the person who knows one framework very well</text>
+
+        <!-- BESIDE EACH STAGE -->
+        <rect x="950" y="530" width="420" height="320" fill="var(--z4)"/>
+        <text x="966" y="554" class="s-zone" fill="var(--mute)">10 · beside each stage, never instead</text>
+        <g class="s-num"><text x="966" y="578">STAGE</text><text x="1076" y="578">AI</text><text x="1222" y="578">ENGINEER</text></g>
+        <g class="s-lab" font-size="11"><text x="966" y="600">requirements</text><text x="966" y="624">design</text><text x="966" y="648">implementation</text><text x="966" y="672">testing</text><text x="966" y="696">operation</text></g>
+        <g class="s-sub" font-size="10.5" style="fill:var(--fast)"><text x="1076" y="600">clarifies, challenges</text><text x="1076" y="624">proposes options</text><text x="1076" y="648">generates</text><text x="1076" y="672">drafts tests</text><text x="1076" y="696">helps debug</text></g>
+        <g class="s-sub" font-size="10.5" style="fill:var(--line)"><text x="1222" y="600">decides what to build</text><text x="1222" y="624">decides</text><text x="1222" y="648">reviews</text><text x="1222" y="672">defines "correct"</text><text x="1222" y="696">is accountable</text></g>
+        <text x="966" y="728" class="s-note">A very fast junior engineer with an enormous</text>
+        <text x="966" y="744" class="s-note">library and no memory of your project.</text>
+        <text x="966" y="766" class="s-sub">It has no idea what your deadline is, what broke last</text>
+        <text x="966" y="780" class="s-sub">month, or why that ugly workaround exists.</text>
+        <text x="966" y="810" class="s-haz">You are the senior engineer in this pairing.</text>
+        <text x="966" y="826" class="s-sub" style="fill:var(--hazard)">The accountability is entirely yours.</text>
+      </svg>
+    </div>
+    <figcaption><b>The plant runs at the speed of its slowest stage, and that stage is no longer typing.</b> Teams that only optimise generation end up with a growing pile of code nobody has read. The teams that benefit kept code review, testing and architectural ownership in human hands: generation got faster, accountability did not move.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the line, stage by stage</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Describe, in writing</h4><p>The problem, the constraints and the acceptance criteria, before any prompt for code. Vague requests produce vague systems, at machine speed.</p></div>
+      <div><h4><span>02</span>Ask for the design</h4><p>Not the code. The single step that separates useful AI work from expensive mess: it makes the model a thinking partner rather than a fast intern with no context.</p></div>
+      <div><h4><span>03</span>Challenge it</h4><p>"What breaks?", "what did you assume?", "what is the simpler option?" — the questions from sheet 2, asked of a proposal that sounds certain whether it is right or not.</p></div>
+      <div><h4><span>04</span>Generate in small pieces</h4><p>Code sized to be reviewed. Five hundred lines arrive in seconds; the review of them does not get faster because they arrived quickly.</p></div>
+      <div><h4><span>05</span>Read every line</h4><p>If you cannot explain it, do not merge it. Reading code fast and critically is now one of the most valuable skills an engineer has.</p></div>
+      <div><h4><span>06</span>Run it, test it</h4><p>Especially the failure paths. The engineer decides what "correct" means; generated tests only check what the generator thought you meant.</p></div>
+      <div><h4><span>07</span>Record the reasoning</h4><p>An ADR or a commit message that says why. Tomorrow it is documentation; next month it is the context that makes the next AI session useful.</p></div>
+      <div><h4><span>08</span>The verification problem</h4><p>Generating 500 lines takes seconds, verifying them takes as long as ever. Defend with small reviewed changes, understood tests, static analysis, type checking and security review.</p></div>
+      <div><h4><span>09</span>Strengths and limits</h4><p>Good at boilerplate, explanation, first drafts and cheap exploration. Unreliable on your constraints, long-lived architecture, security, recent APIs, and knowing you do not need the thing at all.</p></div>
+      <div><h4><span>10</span>Beside, not instead</h4><p>AI clarifies requirements, proposes designs, generates code, drafts tests, helps debug. The engineer decides, reviews, defines correctness, and is accountable in operation.</p></div>
+      <div><h4><span>11</span>The moved bottleneck</h4><p>Design to code became fast. Idea to design is still slow, and generation to verified code is now slow — so value concentrates in precise definition and rigorous verification.</p></div>
+      <div><h4><span>12</span>Context</h4><p>"Add caching" gets a generic answer; "~2000 identical queries a minute, hourly changes, Redis already running, 5 minutes stale is fine" gets real options. Written architecture is that context.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Never let AI make the architectural decision</b>
+    <p>It does not know your traffic, budget, team or what broke last month, and it will not tell you when the honest answer is "you do not need this". Ask it for options; decide with your constraints; skip neither the security review for code that "looks professional" nor the docs check on confident claims about recent library versions.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — THE PRICE OF PRINCIPLES ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>The Price of Principles</h2>
+    <span class="form">Ledger plate</span>
+    <span class="cov">Covers · Architecture Principles</span>
+  </div>
+  <p class="thesis">Principles are defaults, not laws: they let a team make consistent decisions without re-arguing every choice from first principles. Each one is bought at a price, and every one can be broken. <strong>Breaking one should be a conscious decision with a reason attached — never an accident, and never a matter of morality.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A ledger of eleven architecture principles feeding one central goal, an understandable system that grows without collapsing. On the left, five structural principles: separation of concerns, single source of truth, loose coupling and high cohesion, explicit over implicit, and don't repeat yourself carefully. On the right, five runtime principles: fail fast, design for failure, statelessness, idempotency and least privilege. Below the centre, keep it simple and YAGNI, which keeps the rest from becoming ceremony. Each card lists what the principle buys and what it costs. Along the bottom, coupling drawn as a fully connected tangle beside components talking through a contract; bad input rejected at the edge versus a corrupt row weeks later, and a thread pool that stays free when a dependency is down but fills up when it is slow; and a stateful server pinning a user beside stateless servers sharing a store, with a repeated charge made safe by idempotency.">
+        <defs>
+          <marker id="p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="40" y="36" class="s-zone" fill="var(--line)">The ledger · what each default buys (+), and what it costs (−)</text>
+
+        <!-- LEFT CARDS -->
+        <g fill="var(--z1)" stroke="var(--rule)">
+          <rect x="30" y="50" width="480" height="84"/><rect x="30" y="142" width="480" height="84"/><rect x="30" y="234" width="480" height="84"/><rect x="30" y="326" width="480" height="84"/><rect x="30" y="418" width="480" height="84"/>
+        </g>
+        <g fill="var(--z4)" stroke="var(--rule)">
+          <rect x="890" y="50" width="480" height="84"/><rect x="890" y="142" width="480" height="84"/><rect x="890" y="234" width="480" height="84"/><rect x="890" y="326" width="480" height="84"/><rect x="890" y="418" width="480" height="84"/>
+        </g>
+        <g class="s-num"><text x="44" y="72">01</text><text x="44" y="164">02</text><text x="44" y="256">03</text><text x="44" y="348">04</text><text x="44" y="440">05</text>
+          <text x="904" y="72">06</text><text x="904" y="164">07</text><text x="904" y="256">08</text><text x="904" y="348">09</text><text x="904" y="440">10</text></g>
+        <g class="s-lab"><text x="68" y="72">Separation of concerns</text><text x="68" y="164">Single source of truth</text><text x="68" y="256">Loose coupling, high cohesion</text><text x="68" y="348">Explicit over implicit</text><text x="68" y="440">Don't repeat yourself — carefully</text>
+          <text x="928" y="72">Fail fast and loudly</text><text x="928" y="164">Design for failure</text><text x="928" y="256">Statelessness where possible</text><text x="928" y="348">Idempotency</text><text x="928" y="440">Least privilege</text></g>
+        <g class="s-sub" style="fill:var(--line)">
+          <text x="44" y="92">+ each layer can change independently</text><text x="44" y="184">+ exactly one authoritative place for every piece of data</text><text x="44" y="276">+ a change stays inside one box</text><text x="44" y="368">+ you can see where behaviour comes from while debugging</text><text x="44" y="460">+ one place to change each piece of knowledge</text>
+          <text x="904" y="92">+ bad input rejected at the edge; nothing corrupted</text><text x="904" y="184">+ a dependency outage stays a contained, known event</text><text x="904" y="276">+ any server handles any request; restarts are simple</text><text x="904" y="368">+ retries, double-clicks and redelivery become harmless</text><text x="904" y="460">+ a compromised component can reach very little</text>
+        </g>
+        <g class="s-sub" style="fill:var(--hazard)">
+          <text x="44" y="108">− more files, more indirection, more to read for a simple change</text><text x="44" y="200">− copies allowed only if clearly derived and rebuildable</text><text x="44" y="292">− a contract to define between boxes, and to keep stable</text><text x="44" y="384">− more typing than the framework's magic</text><text x="44" y="476">− a shared abstraction couples everything that uses it</text>
+          <text x="904" y="108">− every boundary must validate, and say clearly why</text><text x="904" y="200">− a timeout, a retry policy and a fallback on every remote call</text><text x="904" y="292">− state moves out: Redis, the database, or the token itself</text><text x="904" y="384">− every write designed to tolerate being applied twice</text><text x="904" y="476">− more credentials and roles to issue and manage</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="44" y="124">controller knows HTTP · service knows the domain · repository knows SQL</text>
+          <text x="44" y="216">two systems that both own the same data will eventually disagree</text>
+          <text x="44" y="308">know less about each other; belong together more inside</text>
+          <text x="44" y="400">three config sources, unclear precedence: fast to write, painful to fix</text>
+          <text x="44" y="492">DRY is about knowledge, not text: alike-but-different code stays apart</text>
+          <text x="904" y="124">a quietly accepted bad value surfaces far from its cause</text>
+          <text x="904" y="216">Netflix: timeouts, fallbacks and circuit breakers by default</text>
+          <text x="904" y="308">what makes horizontal scaling possible at all</text>
+          <text x="904" y="400">anything that cannot tolerate repetition will eventually be repeated</text>
+          <text x="904" y="492">a service that only reads holds no write credentials</text>
+        </g>
+
+        <!-- CENTRE -->
+        <rect x="560" y="200" width="280" height="150" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+        <text x="700" y="250" text-anchor="middle" class="s-big">an understandable system</text>
+        <text x="700" y="270" text-anchor="middle" class="s-sub">that grows without collapsing</text>
+        <text x="700" y="304" text-anchor="middle" class="s-sub">defaults, not laws —</text>
+        <text x="700" y="320" text-anchor="middle" class="s-sub">break one deliberately, in writing</text>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#p1)">
+          <path d="M510,92 C535,92 530,215 554,215"/><path d="M510,184 C535,184 530,245 554,245"/><path d="M510,276 L554,276"/><path d="M510,368 C535,368 530,305 554,305"/><path d="M510,460 C535,460 530,335 554,335"/>
+          <path d="M890,92 C865,92 870,215 846,215"/><path d="M890,184 C865,184 870,245 846,245"/><path d="M890,276 L846,276"/><path d="M890,368 C865,368 870,305 846,305"/><path d="M890,460 C865,460 870,335 846,335"/>
+          <path d="M700,400 L700,356"/>
+        </g>
+        <text x="560" y="180" class="s-zone" fill="var(--mute)" font-size="10">structure</text>
+        <text x="840" y="180" text-anchor="end" class="s-zone" fill="var(--mute)" font-size="10">runtime</text>
+        <rect x="560" y="400" width="280" height="102" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="574" y="422" class="s-num">11</text><text x="598" y="422" class="s-lab">Keep it simple / YAGNI</text>
+        <text x="574" y="442" class="s-sub" style="fill:var(--line)">+ complexity you never pay for</text>
+        <text x="574" y="458" class="s-sub" style="fill:var(--hazard)">− build it later, if it is ever needed</text>
+        <text x="574" y="478" class="s-note" font-size="10.5">keeps the other ten from</text>
+        <text x="574" y="492" class="s-note" font-size="10.5">becoming ceremony</text>
+
+        <!-- COUPLING -->
+        <rect x="30" y="520" width="440" height="340" fill="var(--z3)"/>
+        <text x="46" y="544" class="s-zone" fill="var(--mute)">03 · coupling, drawn</text>
+        <text x="46" y="572" class="s-haz">bad</text><text x="270" y="572" class="s-lab" style="fill:var(--line)">good</text>
+        <g stroke="var(--hazard)" stroke-width="2"><line x1="90" y1="610" x2="210" y2="610"/><line x1="90" y1="710" x2="210" y2="710"/><line x1="90" y1="610" x2="90" y2="710"/><line x1="210" y1="610" x2="210" y2="710"/><line x1="90" y1="610" x2="210" y2="710"/><line x1="210" y1="610" x2="90" y2="710"/></g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"><circle cx="90" cy="610" r="18"/><circle cx="210" cy="610" r="18"/><circle cx="90" cy="710" r="18"/><circle cx="210" cy="710" r="18"/></g>
+        <g class="s-lab" text-anchor="middle"><text x="90" y="615">A</text><text x="210" y="615">B</text><text x="90" y="715">C</text><text x="210" y="715">D</text></g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#p1)"><path d="M308,616 L336,642"/><path d="M308,704 L336,672"/><path d="M420,657 L428,657"/></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"><circle cx="290" cy="610" r="18"/><circle cx="290" cy="710" r="18"/><circle cx="448" cy="657" r="16"/></g>
+        <rect x="340" y="643" width="80" height="28" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <g class="s-lab" text-anchor="middle"><text x="290" y="615">A</text><text x="290" y="715">C</text><text x="448" y="662">B</text></g>
+        <text x="380" y="661" text-anchor="middle" class="s-sub" font-size="10.5">contract</text>
+        <text x="46" y="752" class="s-sub" style="fill:var(--hazard)">everything knows everything</text>
+        <text x="270" y="752" class="s-sub" style="fill:var(--line)">each knows only the contract</text>
+        <text x="46" y="784" class="s-note">Premature abstraction costs more than duplication.</text>
+        <text x="46" y="802" class="s-sub">Duplication is cheap to fix; a wrong abstraction ten modules</text>
+        <text x="46" y="816" class="s-sub">depend on is not.</text>
+        <text x="46" y="842" class="s-sub" font-size="10.5">A three-file script does not need clean architecture.</text>
+
+        <!-- FAIL FAST + SLOW -->
+        <rect x="490" y="520" width="440" height="340" fill="var(--z5)"/>
+        <text x="506" y="544" class="s-zone" fill="var(--fast)">06–07 · fail fast · slow is worse than down</text>
+        <rect x="506" y="580" width="90" height="26" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="551" y="597" text-anchor="middle" class="s-lab" font-size="11">bad input</text>
+        <path d="M596,590 L630,570" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#p1)"/>
+        <path d="M596,598 L630,614" stroke="var(--hazard)" stroke-width="2.5" fill="none" stroke-dasharray="5 4" marker-end="url(#p2)"/>
+        <text x="640" y="572" class="s-lab" font-size="11" style="fill:var(--line)">reject at the edge</text><text x="640" y="586" class="s-sub" font-size="10.5">clear error, nothing corrupted</text>
+        <text x="640" y="614" class="s-haz">accept quietly</text><text x="640" y="628" class="s-sub" font-size="10.5" style="fill:var(--hazard)">a corrupt row, found three weeks later</text>
+
+        <text x="506" y="664" class="s-lab" font-size="11">a dependency that is down</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="506" y="672" width="16" height="16"/><rect x="526" y="672" width="16" height="16"/><rect x="546" y="672" width="16" height="16"/><rect x="566" y="672" width="16" height="16"/><rect x="586" y="672" width="16" height="16"/>
+          <rect x="606" y="672" width="16" height="16"/><rect x="626" y="672" width="16" height="16"/><rect x="646" y="672" width="16" height="16"/><rect x="666" y="672" width="16" height="16"/><rect x="686" y="672" width="16" height="16"/>
+        </g>
+        <text x="716" y="685" class="s-sub" font-size="10.5">fails in ms; threads stay free</text>
+        <text x="506" y="716" class="s-haz">the same dependency, 30 s slow</text>
+        <g fill="var(--hazard)" opacity=".75">
+          <rect x="506" y="724" width="16" height="16"/><rect x="526" y="724" width="16" height="16"/><rect x="546" y="724" width="16" height="16"/><rect x="566" y="724" width="16" height="16"/><rect x="586" y="724" width="16" height="16"/>
+          <rect x="606" y="724" width="16" height="16"/><rect x="626" y="724" width="16" height="16"/><rect x="646" y="724" width="16" height="16"/><rect x="666" y="724" width="16" height="16"/><rect x="686" y="724" width="16" height="16"/>
+        </g>
+        <text x="716" y="737" class="s-sub" font-size="10.5" style="fill:var(--hazard)">every thread waits; pool exhausted</text>
+        <text x="506" y="768" class="s-lab" font-size="11" style="fill:var(--line)">with a timeout, a retry policy and a fallback</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="546" y="776" width="16" height="16"/><rect x="566" y="776" width="16" height="16"/><rect x="586" y="776" width="16" height="16"/>
+          <rect x="606" y="776" width="16" height="16"/><rect x="626" y="776" width="16" height="16"/><rect x="646" y="776" width="16" height="16"/><rect x="666" y="776" width="16" height="16"/><rect x="686" y="776" width="16" height="16"/>
+        </g>
+        <g fill="var(--fast)"><rect x="506" y="776" width="16" height="16"/><rect x="526" y="776" width="16" height="16"/></g>
+        <text x="716" y="789" class="s-sub" font-size="10.5">a known, bounded failure</text>
+        <text x="506" y="828" class="s-haz">Slow holds every caller's threads until the</text>
+        <text x="506" y="844" class="s-sub" style="fill:var(--hazard)">whole system stops. Down at least fails fast.</text>
+
+        <!-- STATELESS + IDEMPOTENT -->
+        <rect x="950" y="520" width="420" height="340" fill="var(--z2)"/>
+        <text x="966" y="544" class="s-zone" fill="var(--mute)">08–09 · stateless, and safe to repeat</text>
+        <circle cx="975" cy="610" r="10" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"><rect x="1030" y="574" width="64" height="20"/><rect x="1030" y="626" width="64" height="20"/></g>
+        <rect x="1030" y="600" width="64" height="20" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <path d="M985,610 L1026,610" stroke="var(--hazard)" stroke-width="2.5" fill="none" marker-end="url(#p2)"/>
+        <g class="s-sub" font-size="10" text-anchor="middle"><text x="1062" y="588">server 1</text><text x="1062" y="614" fill="var(--hazard)">server 2</text><text x="1062" y="640">server 3</text></g>
+        <circle cx="1165" cy="610" r="10" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5"><rect x="1210" y="574" width="64" height="20"/><rect x="1210" y="600" width="64" height="20"/><rect x="1210" y="626" width="64" height="20"/></g>
+        <rect x="1296" y="596" width="62" height="28" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none"><path d="M1175,608 L1208,584"/><path d="M1175,610 L1208,610"/><path d="M1175,612 L1208,636"/><path d="M1274,584 L1296,604"/><path d="M1274,610 L1296,610"/><path d="M1274,636 L1296,616"/></g>
+        <g class="s-sub" font-size="10" text-anchor="middle"><text x="1242" y="588">server 1</text><text x="1242" y="614">server 2</text><text x="1242" y="640">server 3</text><text x="1327" y="614">Redis/DB</text></g>
+        <text x="966" y="670" class="s-sub" style="fill:var(--hazard)">stateful: must hit server 2</text>
+        <text x="1160" y="670" class="s-sub" style="fill:var(--line)">stateless: any server works</text>
+        <line x1="966" y1="684" x2="1354" y2="684" stroke="var(--rule)"/>
+        <text x="966" y="706" class="s-lab" font-size="11">the same request, delivered twice</text>
+        <text x="966" y="728" class="s-mono" font-size="10">POST /charge ×2</text><text x="1150" y="728" class="s-haz">charged twice</text>
+        <text x="966" y="748" class="s-mono" font-size="10">POST /charge ×2 · key 7f3a</text><text x="1150" y="748" class="s-note">charged once</text>
+        <text x="966" y="774" class="s-sub" font-size="10.5">networks retry, users double-click, queues redeliver —</text>
+        <text x="966" y="788" class="s-sub" font-size="10.5">an operation that cannot tolerate repetition will be repeated.</text>
+        <text x="966" y="822" class="s-note">Principles are traffic rules.</text>
+        <text x="966" y="838" class="s-sub">An ambulance may break them — deliberately, visibly.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read each card from right to left:</b> the minus line is paid on every change by every future developer, and the plus line only pays back if the system actually grows the way the principle assumes. That is why a three-file script ignores most of this ledger, and why a system that ignores all of it rediscovers each principle through pain.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the eleven defaults</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Separation of concerns</h4><p>Each part has one reason to exist: the controller knows HTTP, the service knows the domain, the repository knows storage. Bought: independent change. Paid: more files and indirection.</p></div>
+      <div><h4><span>02</span>Single source of truth</h4><p>Every piece of data has exactly one authoritative home; copies must be clearly derived and rebuildable. Reconciling two owners afterwards is among the most expensive work there is.</p></div>
+      <div><h4><span>03</span>Loose coupling, high cohesion</h4><p>Coupling is how much one component must know about another — less is better. Cohesion is how strongly the insides of a component belong together — more is better.</p></div>
+      <div><h4><span>04</span>Explicit over implicit</h4><p>Magic saves typing and costs debugging. Invisible auto-wiring and configuration from three places with unclear precedence are quick to write and painful to diagnose.</p></div>
+      <div><h4><span>05</span>DRY, carefully</h4><p>Applies to knowledge, not text. Code that looks identical but changes for different reasons stays separate — premature abstraction is costlier than duplication.</p></div>
+      <div><h4><span>06</span>Fail fast and loudly</h4><p>Validate at the boundary and reject immediately with a clear error. A silently accepted bad value corrupts data later, somewhere with no visible connection to the cause.</p></div>
+      <div><h4><span>07</span>Design for failure</h4><p>Every dependency will be unavailable or slow at some point. Every remote call gets a timeout, a defined retry policy and defined behaviour when it finally fails.</p></div>
+      <div><h4><span>08</span>Statelessness</h4><p>A server with no per-user state in memory lets any server handle any request, making horizontal scaling and restarts simple. State goes to Redis, the database, or the token.</p></div>
+      <div><h4><span>09</span>Idempotency</h4><p>Applying an operation twice has the same effect as applying it once. Networks retry, users double-click and queues redeliver, so repetition is a certainty, not an edge case.</p></div>
+      <div><h4><span>10</span>Least privilege</h4><p>Every component, service and user gets the minimum access its job needs. A service that only reads should not hold write credentials.</p></div>
+      <div><h4><span>11</span>KISS and YAGNI</h4><p>Do not build for an imagined requirement: the cost is paid now and with certainty, the benefit is speculative. Complexity is a permanent tax on every future change.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Principles are trade-offs, not morality</b>
+    <p>The common failures come in pairs: applying every principle everywhere, or ignoring them all; DRY-ing code that is only accidentally similar; building abstractions for flexibility nobody asked for. Check each design choice against the ledger, note which principle it breaks and why — and the result is either a consistent system or a documented, deliberate exception.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 7 — THE ENGINEER'S ROUTE ══════════════════════ -->
+<div class="sheet" id="a7">
+  <div class="plate">
+    <span class="no">Sheet 7</span>
+    <h2>The Engineer's Route</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Software Engineering Mindset</span>
+  </div>
+  <p class="thesis">Programming is one stop on this line — the one where it works on this machine, today. Engineering is the whole route, because the job is not writing code that works but being able to explain why it will keep working. <strong>"It works on my machine" is the boundary between the two, and everything to the right of it is still yours.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A transit map of an engineer's ownership. Seven stations run left to right: understand the problem, design, write the code, test, deploy, monitor, and the next person. A dashed boundary after the code station is labelled it works on my machine; programming covers only the code station, engineering covers the whole line. Three branch lines drop from it. From the code station, a shaft through five layers — your code, framework, runtime, operating system, hardware — where hard bugs are usually explained one layer down. From the test station, the debugging method: reproduce, read the error, form one hypothesis, change one thing, and return to the hypothesis if wrong. From the monitor station, the measurement loop: feels slow, measure, find the actual bottleneck, fix that one thing, measure again. Along the bottom, programming compared with engineering, fundamentals compounding while framework knowledge depreciates, and the habits of reading more than writing and being honest about what you know.">
+        <defs>
+          <marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="m2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <!-- ZONES -->
+        <rect x="30" y="90" width="170" height="170" fill="var(--z3)"/>
+        <rect x="200" y="90" width="180" height="170" fill="var(--z1)"/>
+        <rect x="380" y="90" width="200" height="170" fill="var(--z2)"/>
+        <rect x="580" y="90" width="200" height="170" fill="var(--z4)"/>
+        <rect x="780" y="90" width="370" height="170" fill="var(--z5)"/>
+        <rect x="1150" y="90" width="220" height="170" fill="var(--z6)"/>
+        <g class="s-zone" fill="var(--mute)">
+          <text x="42" y="112">The problem</text><text x="212" y="112">The shape</text><text x="392" y="112">The code</text>
+          <text x="592" y="112">The proof</text><text x="792" y="112">Production</text><text x="1162" y="112">The future</text>
+        </g>
+        <line x1="580" y1="80" x2="580" y2="270" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="8 6"/>
+        <text x="580" y="72" text-anchor="middle" class="s-haz">"it works on my machine"</text>
+
+        <line x1="60" y1="204" x2="1340" y2="204" stroke="var(--line)" stroke-width="7"/>
+        <line x1="60" y1="187" x2="60" y2="221" stroke="var(--line)" stroke-width="7"/>
+        <line x1="1340" y1="187" x2="1340" y2="221" stroke="var(--line)" stroke-width="7"/>
+        <g class="st"><circle cx="110" cy="204" r="9"/><circle cx="290" cy="204" r="9"/><circle cx="870" cy="204" r="9"/><circle cx="1250" cy="204" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"><circle cx="470" cy="204" r="13"/><circle cx="690" cy="204" r="13"/><circle cx="1050" cy="204" r="13"/></g>
+        <g class="s-num"><text x="64" y="132">01</text><text x="244" y="132">02</text><text x="424" y="132">03</text><text x="644" y="132">04</text><text x="824" y="132">05</text><text x="1004" y="132">06</text><text x="1204" y="132">07</text></g>
+        <g class="s-lab"><text x="64" y="150">understand</text><text x="244" y="150">design</text><text x="424" y="150">write the code</text><text x="644" y="150">test</text><text x="824" y="150">deploy</text><text x="1004" y="150">monitor</text><text x="1204" y="150">the next person</text></g>
+        <g class="s-sub">
+          <text x="64" y="166">the problem, and the</text><text x="64" y="180">constraints you dislike</text>
+          <text x="244" y="166">the simple version arrives</text><text x="244" y="180">after understanding</text>
+          <text x="424" y="166">it runs — here, today.</text><text x="424" y="180">programming ends here</text>
+          <text x="644" y="166">under load, under failure,</text><text x="644" y="180">under new people</text>
+          <text x="824" y="166">how it ships, and</text><text x="824" y="180">how it rolls back</text>
+          <text x="1004" y="166">would anyone know</text><text x="1004" y="180">if it stopped?</text>
+          <text x="1204" y="166">has none of your context</text><text x="1204" y="180">— and is often you</text>
+        </g>
+
+        <line x1="380" y1="282" x2="580" y2="282" stroke="var(--fast)" stroke-width="3"/>
+        <text x="482" y="300" class="s-note">programming · make it work</text>
+        <line x1="30" y1="314" x2="1370" y2="314" stroke="var(--line)" stroke-width="3"/>
+        <text x="40" y="334" class="s-lab" style="fill:var(--line)">engineering · make it keep working</text><text x="1070" y="334" class="s-sub" style="fill:var(--line)">ownership spans every station</text>
+
+        <!-- BRANCH CONNECTORS -->
+        <g stroke="var(--line)" stroke-width="4" fill="none"><path d="M470,217 L470,350"/><path d="M690,217 L690,350"/><path d="M1050,217 L1050,350"/></g>
+
+        <!-- P1: LAYER BELOW -->
+        <rect x="30" y="350" width="530" height="250" fill="var(--band)" stroke="var(--line)" stroke-width="2" stroke-dasharray="7 6"/>
+        <text x="46" y="374" class="s-zone" fill="var(--line)">08 · one layer below the symptom</text>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5">
+          <rect x="46" y="388" width="200" height="30" stroke="var(--line)" stroke-width="2"/><rect x="46" y="424" width="200" height="30"/><rect x="46" y="460" width="200" height="30"/><rect x="46" y="496" width="200" height="30"/><rect x="46" y="532" width="200" height="30" stroke="var(--fast)" stroke-width="2"/>
+        </g>
+        <g class="s-lab" font-size="11.5"><text x="58" y="408">your code</text><text x="58" y="444">framework / library</text><text x="58" y="480">runtime / interpreter</text><text x="58" y="516">operating system</text><text x="58" y="552">hardware</text></g>
+        <g stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="4 3"><line x1="246" y1="403" x2="262" y2="403"/><line x1="246" y1="439" x2="262" y2="439"/><line x1="246" y1="475" x2="262" y2="475"/><line x1="246" y1="547" x2="262" y2="547"/></g>
+        <text x="270" y="400" class="s-lab" font-size="11">slow endpoint</text><text x="270" y="413" class="s-sub" font-size="10.5">→ a missing index, one level down</text>
+        <text x="270" y="436" class="s-lab" font-size="11">memory leak</text><text x="270" y="449" class="s-sub" font-size="10.5">→ an unbounded cache</text>
+        <text x="270" y="472" class="s-lab" font-size="11">random failure</text><text x="270" y="485" class="s-sub" font-size="10.5">→ a race between threads</text>
+        <text x="270" y="544" class="s-note" font-size="11">"why is this slow?"</text><text x="270" y="557" class="s-sub" font-size="10.5" style="fill:var(--fast)">usually gets answered down here</text>
+        <text x="46" y="588" class="s-sub">Not mastery of every layer — enough to know which one to look at.</text>
+
+        <!-- P2: DEBUGGING -->
+        <rect x="580" y="350" width="300" height="250" fill="var(--z1)" stroke="var(--line)" stroke-width="2" stroke-dasharray="7 6"/>
+        <text x="596" y="374" class="s-zone" fill="var(--line)">D · debugging is a method</text>
+        <line x1="620" y1="396" x2="620" y2="540" stroke="var(--line)" stroke-width="3"/>
+        <g class="st" stroke-width="2.5"><circle cx="620" cy="396" r="7"/><circle cx="620" cy="432" r="7"/><circle cx="620" cy="468" r="7"/><circle cx="620" cy="504" r="7"/></g>
+        <circle cx="620" cy="540" r="7" fill="var(--paper)" stroke="var(--learn)" stroke-width="2.5"/>
+        <path d="M613,540 C592,540 592,468 609,468" fill="none" stroke="var(--learn)" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#m2)"/>
+        <g class="s-num"><text x="638" y="393">D1</text><text x="638" y="429">D2</text><text x="638" y="465">D3</text><text x="638" y="501">D4</text><text x="638" y="537">D5</text></g>
+        <g class="s-lab" font-size="11"><text x="660" y="393">reproduce it reliably</text><text x="660" y="429">read the actual error</text><text x="660" y="465">form ONE hypothesis</text><text x="660" y="501">test it: change one thing</text><text x="660" y="537" fill="var(--learn)">wrong? back to D3</text></g>
+        <g class="s-sub" font-size="10.5"><text x="638" y="407">can't? then you can only guess</text><text x="638" y="443">the whole message, the whole trace</text><text x="638" y="479">one, not three</text><text x="638" y="515">one change, one observation</text><text x="638" y="551" fill="var(--learn)">carrying the new information</text></g>
+        <text x="596" y="588" class="s-haz" font-size="10.5">Change three things at once: learn nothing.</text>
+
+        <!-- P3: MEASURE -->
+        <rect x="900" y="350" width="470" height="250" fill="var(--z5)" stroke="var(--fast)" stroke-width="2" stroke-dasharray="7 6"/>
+        <text x="916" y="374" class="s-zone" fill="var(--fast)">M · measure before you optimise</text>
+        <line x1="936" y1="396" x2="936" y2="540" stroke="var(--line)" stroke-width="3"/>
+        <circle cx="936" cy="396" r="7" fill="var(--paper)" stroke="var(--mute)" stroke-width="2.5"/>
+        <g class="st" stroke-width="2.5"><circle cx="936" cy="432" r="7"/><circle cx="936" cy="468" r="7"/><circle cx="936" cy="504" r="7"/><circle cx="936" cy="540" r="7"/></g>
+        <path d="M929,540 C910,540 910,432 925,432" fill="none" stroke="var(--learn)" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#m2)"/>
+        <g class="s-num"><text x="952" y="429">M1</text><text x="952" y="465">M2</text><text x="952" y="501">M3</text><text x="952" y="537">M4</text></g>
+        <g class="s-lab" font-size="11"><text x="952" y="393">it feels slow</text><text x="974" y="429">measure</text><text x="974" y="465">find the real bottleneck</text><text x="974" y="501">fix that one thing</text><text x="974" y="537" fill="var(--learn)">measure again</text></g>
+        <g class="s-sub" font-size="10.5"><text x="952" y="407">intuition: reliably wrong</text><text x="952" y="443">profiler · timing · logs · EXPLAIN</text><text x="952" y="479">usually one query, or one N+1 loop</text><text x="952" y="515">and nothing else</text><text x="952" y="551" fill="var(--learn)">did the number move?</text></g>
+        <text x="1190" y="400" class="s-lab" font-size="11">one request, measured</text>
+        <rect x="1190" y="410" width="20" height="18" fill="var(--mute)" opacity=".5"/><rect x="1210" y="410" width="14" height="18" fill="var(--cool)" opacity=".6"/><rect x="1224" y="410" width="110" height="18" fill="var(--hazard)" opacity=".75"/><rect x="1334" y="410" width="20" height="18" fill="var(--line)" opacity=".5"/>
+        <text x="1190" y="446" class="s-sub" font-size="10.5" style="fill:var(--hazard)">one query: most of the time</text>
+        <text x="1190" y="460" class="s-sub" font-size="10.5">your suspect: a sliver</text>
+        <text x="1190" y="472" class="s-sub" font-size="10">illustrative proportions</text>
+        <text x="1190" y="500" class="s-haz" font-size="10.5">Optimising without measuring</text>
+        <text x="1190" y="514" class="s-haz" font-size="10.5">is guessing with extra steps.</text>
+        <text x="916" y="588" class="s-sub" style="fill:var(--hazard)">It makes the code harder to read, and the program no faster.</text>
+
+        <!-- Q: PROGRAMMING VS ENGINEERING -->
+        <rect x="30" y="620" width="560" height="250" fill="var(--z3)"/>
+        <text x="46" y="644" class="s-zone" fill="var(--mute)">09 · programming, and engineering</text>
+        <g class="s-num"><text x="170" y="664">PROGRAMMING</text><text x="340" y="664">ENGINEERING</text></g>
+        <g class="s-lab" font-size="11"><text x="46" y="684">goal</text><text x="46" y="704">scope</text><text x="46" y="724">measure</text><text x="46" y="744">deliverable</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="170" y="684">make it work</text><text x="340" y="684" fill="var(--line)">make it keep working</text>
+          <text x="170" y="704">this machine, today</text><text x="340" y="704" fill="var(--line)">many machines, for years</text>
+          <text x="170" y="724">it runs</text><text x="340" y="724" fill="var(--line)">under load, failure, new people</text>
+          <text x="170" y="744">code</text><text x="340" y="744" fill="var(--line)">code, tests, docs, deploy, monitors</text>
+        </g>
+        <text x="46" y="772" class="s-note">A programmer builds a bridge that holds.</text>
+        <text x="46" y="788" class="s-sub">An engineer can say how much weight it holds, what a storm does,</text>
+        <text x="46" y="802" class="s-sub">how long it lasts — and how you would know before it fell.</text>
+        <text x="46" y="828" class="s-sub">Google SRE: authors own production behaviour, with reliability targets.</text>
+        <text x="46" y="852" class="s-haz" font-size="10.5">Fixing symptoms instead of causes: the bug returns wearing a different hat.</text>
+
+        <!-- R: SLOW LAYER -->
+        <rect x="610" y="620" width="380" height="250" fill="var(--z1)"/>
+        <text x="626" y="644" class="s-zone" fill="var(--line)">12 · learn the slow layer</text>
+        <line x1="640" y1="780" x2="970" y2="780" stroke="var(--rule)" stroke-width="1.5"/><line x1="640" y1="656" x2="640" y2="780" stroke="var(--rule)" stroke-width="1.5"/>
+        <polyline points="640,776 700,706 760,696 820,736 880,762 966,774" fill="none" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="7 4"/>
+        <polyline points="640,776 730,756 820,728 900,698 966,662" fill="none" stroke="var(--line)" stroke-width="3"/>
+        <text x="648" y="668" class="s-sub" font-size="10">value of what you learned</text>
+        <text x="966" y="794" text-anchor="end" class="s-sub" font-size="10">years →</text>
+        <line x1="626" y1="810" x2="646" y2="810" stroke="var(--line)" stroke-width="3"/><text x="652" y="814" class="s-sub" font-size="10.5">HTTP, TCP, SQL, caching, queues, OS: compounds</text>
+        <line x1="626" y1="828" x2="646" y2="828" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="7 4"/><text x="652" y="832" class="s-sub" font-size="10.5">this year's framework: depreciates</text>
+        <text x="626" y="856" class="s-note">Invest in the slow layer. It compounds.</text>
+
+        <!-- S: HABITS -->
+        <rect x="1010" y="620" width="360" height="250" fill="var(--z4)"/>
+        <text x="1026" y="644" class="s-zone" fill="var(--mute)">10–11 · two habits</text>
+        <text x="1026" y="670" class="s-num">10</text><text x="1048" y="670" class="s-lab" font-size="11.5">read more than you write</text>
+        <text x="1026" y="688" class="s-sub">Your code from six months ago, colleagues' code,</text>
+        <text x="1026" y="702" class="s-sub">a library's source. Pick a small project and read</text>
+        <text x="1026" y="716" class="s-sub">it until you can explain its structure.</text>
+        <text x="1026" y="746" class="s-num">11</text><text x="1048" y="746" class="s-lab" font-size="11.5">be honest about the edge</text>
+        <text x="1026" y="764" class="s-sub">"I don't know, I'll check": three seconds.</text>
+        <text x="1026" y="778" class="s-sub">A confident guess: a day of someone else's</text>
+        <text x="1026" y="792" class="s-sub">work, and eventually your credibility.</text>
+        <text x="1026" y="822" class="s-note">Knowing what you don't know is a skill,</text>
+        <text x="1026" y="838" class="s-sub" style="fill:var(--fast)">not a personality trait.</text>
+      </svg>
+    </div>
+    <figcaption><b>The route has no terminus at "merged".</b> An engineer owns the change until it is running correctly in production, and cares how it is deployed, how it fails, how it is monitored, how it is rolled back, and how the next person will understand it. The three branch lines are the methods that keep that ownership affordable: measure, go one layer down, and debug one hypothesis at a time.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every stop on the engineer's route</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Understand</h4><p>The problem, and constraints you may not like. Complex solutions are usually a sign the problem is not yet understood.</p></div>
+      <div><h4><span>02</span>Design</h4><p>Anyone can build something complicated. The simple version needs enough understanding to know what can be left out — it arrives after understanding, not before.</p></div>
+      <div><h4><span>03</span>Write the code</h4><p>It runs, on this machine, today. Programming is a part of engineering the way laying bricks is part of building a house.</p></div>
+      <div><h4><span>04</span>Test</h4><p>Does it run under load, under failure, and under new people? The first station past "it works on my machine".</p></div>
+      <div><h4><span>05</span>Deploy</h4><p>How it ships and how it rolls back, owned by the person who wrote the change rather than handed over the wall.</p></div>
+      <div><h4><span>06</span>Monitor</h4><p>Would anyone be able to tell if it stopped working? Caring about that question is the practical definition of ownership.</p></div>
+      <div><h4><span>07</span>The next person</h4><p>Has none of your context, and is very often you. Clear names, small functions and a comment explaining why the strange line exists let a system survive its authors.</p></div>
+      <div><h4><span>08</span>One layer below</h4><p>Most hard bugs are explained a level down: a slow endpoint is a missing index, a leak an unbounded cache, a random failure a race. Know enough of each layer to pick which to inspect.</p></div>
+      <div><h4><span>D1–D5</span>Debugging method</h4><p>Reproduce reliably; read the whole error and stack trace; form one hypothesis; test it by changing one thing; if wrong, return to the hypothesis with new information. A method, not a talent.</p></div>
+      <div><h4><span>M1–M4</span>Measure first</h4><p>Measure with a profiler, timing, logs or EXPLAIN; find the real bottleneck, usually one query or one N+1 loop; fix only that; measure again. Performance intuition is reliably wrong.</p></div>
+      <div><h4><span>09</span>Programming vs engineering</h4><p>Make it work versus make it keep working; this machine today versus many machines for years; code versus code, tests, docs, deployment and monitoring.</p></div>
+      <div><h4><span>10</span>Read more than you write</h4><p>You will read far more code than you write, so reading is the higher-leverage skill — and it is trainable on any small open-source project.</p></div>
+      <div><h4><span>11</span>Honesty about knowledge</h4><p>"I don't know, I'll check" costs three seconds; a confident guess costs someone a day. Pretending to know is a common mistake with a compounding price.</p></div>
+      <div><h4><span>12</span>The slow layer</h4><p>HTTP, TCP, relational databases, caching, queues and operating systems have been the same for decades while frameworks come and go. Learning there compounds; framework knowledge depreciates.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The whole atlas, in one sentence</b>
+    <p>Engineering is accountability for the whole life of the system, not authorship of the code that started it. Every earlier sheet — the expensive decisions on sheet 1, the gauges on sheet 2, the written reasons on sheet 3, the lap on sheet 4, the verification on sheet 5, the priced defaults on sheet 6 — is a way of taking that accountability seriously when other people depend on the result.</p>
+  </div>
+</div>
+
+</div>

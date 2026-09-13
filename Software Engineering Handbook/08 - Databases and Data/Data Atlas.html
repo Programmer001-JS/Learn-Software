@@ -1,0 +1,1751 @@
+<meta charset="utf-8">
+<title>Atlas of a Data Layer — nine sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 08 Databases and Data · nine sheets</p>
+  <h1>Atlas of a <em>Data Layer</em></h1>
+  <p class="thesis">One query, one write, and everything standing between your code and the disk. Sheet 1 is the route a single request actually travels; every other sheet is a magnification of one stop on it, the write that runs beside it, or the tools that coordinate around it. <strong>Nearly every incident drawn here is one of three things — a missing index, an N+1, or a transaction held too long — and each sheet shows exactly where that one hides.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 9</span>
+    <span><b>Numbered steps</b> 156</span>
+    <span><b>Read first</b> Sheet 1 end to end, then the sheet for the layer you are debugging</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Query Line</h4><p>One SELECT from request to rows: seventeen stops, two early exits, and the loop that turns one query into 101.</p><em>Transit diagram</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>Inside the Engine</h4><p>One UPDATE cut open: the log flushed before the commit, the version never overwritten, the process each connection costs.</p><em>Cutaway section</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>The Index</h4><p>A B-tree taken apart: why three pages beat ten million rows, and the column order that decides whether it is used at all.</p><em>Exploded parts</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>The Commit</h4><p>Two buyers and one last item, drawn against the clock — and the three correct ways to stop the lost update.</p><em>Timing diagram</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>The Mapping Layer</h4><p>The unit of work every ORM runs, the N+1 hiding inside it, and four dialects of the same idea.</p><em>Closed circuit</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>The Optimisation Ladder</h4><p>Nine rungs from measuring to sharding. Almost every real problem is solved before rung four.</p><em>Ladder plate</em></span></a>
+    <a href="#a7"><span class="n">7</span><span><h4>The Fast Copy</h4><p>Redis as cache and session store: hit, miss, delete-on-write, and the ticket that makes logout instant.</p><em>Sorting line</em></span></a>
+    <a href="#a8"><span class="n">8</span><span><h4>Messages and Locks</h4><p>Broadcasts that can be missed and locks that can expire under you — and what to use when it really matters.</p><em>Timing diagram</em></span></a>
+    <a href="#a9"><span class="n">9</span><span><h4>Choosing the Store</h4><p>Five questions from "new data" to PostgreSQL, MySQL, MongoDB or Redis — and the defaults that burned people.</p><em>Decision tree</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 300" role="img" aria-label="How the nine sheets fit together. Sheet 1, the query line, runs across the middle as the route one request takes. Above it, sheet 5 zooms into the ORM stop, sheet 7 into the cache stop, sheet 3 into the planner's index branch and sheet 2 into the storage engine. Below it, sheet 6 is the order in which to fix a slow line, sheet 8 covers the messaging and locking that coordinate many servers, and sheet 4 is the write path that must stay correct. Sheet 9, choosing the store, runs underneath everything.">
+        <rect x="30" y="118" width="1340" height="62" fill="var(--z3)"/>
+        <text x="46" y="144" class="s-zone" fill="var(--mute)">Sheet 1 — the route one query takes, from a request to rows and back</text>
+        <text x="46" y="164" class="s-sub">every other sheet is a zoom into one of its stops, the write path that runs beside it, or the tools that coordinate many servers around it</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M260,118 L260,80"/><path d="M560,118 L560,80"/><path d="M880,118 L880,80"/><path d="M1180,118 L1180,80"/>
+          <path d="M300,180 L300,216"/><path d="M760,180 L760,216"/><path d="M1180,180 L1180,216"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="260" y="68">5 · the mapping layer</text>
+          <text x="560" y="68">7 · the fast copy</text>
+          <text x="880" y="68">3 · the index</text>
+          <text x="1180" y="68">2 · inside the engine</text>
+          <text x="300" y="234">6 · the optimisation ladder</text>
+          <text x="760" y="234">8 · messages and locks</text>
+          <text x="1180" y="234">4 · the commit</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="260" y="50">stop 03, where objects become SQL</text>
+          <text x="560" y="50">stop 05 and the trip back</text>
+          <text x="880" y="50">the branch below stop 07</text>
+          <text x="1180" y="50">stops 09 to 11, cut open</text>
+          <text x="300" y="252">the order in which to fix a slow line</text>
+          <text x="760" y="252">coordination once there are many servers</text>
+          <text x="1180" y="252">what a write must guarantee</text>
+        </g>
+        <rect x="30" y="276" width="1340" height="10" fill="color-mix(in srgb,var(--fast) 26%,transparent)"/>
+        <text x="1370" y="270" text-anchor="end" class="s-note">Sheet 9 — the choice of store decides which engine every other sheet runs on</text>
+      </svg>
+    </div>
+    <figcaption>Read it as two lines that share every stop. <b>The read path</b> — sheets 1, 3, 5 and 7 — is where performance is lost: a missing index, an N+1, a cache quietly hiding both. <b>The write path</b> — sheets 2, 4 and 8 — is where correctness is lost: a lost update, an event published before commit, a lock trusted with money. Reaching for a read-path tool to fix a write-path bug is the most expensive mistake in this folder.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE QUERY LINE ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Query Line</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Database Fundamentals · SQL · PostgreSQL · Cache · ORM</span>
+  </div>
+  <p class="thesis">One request, one route, seventeen stops. The database proper is six of them. <strong>Two stations can end the journey before the engine ever runs, stop 07 decides whether the answer takes a millisecond or four seconds, and the loop over the top is how one page quietly becomes a hundred and one queries.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 2160 800" role="img" aria-label="A transit map of one SELECT query. Twelve numbered outbound stations run left to right through six zones: the request, your application, the fast copy, the engine, storage, and back out. Station 4, the connection pool, has a dashed hazard exit to the return line when the pool is exhausted. Station 5, the cache, has a dashed shortcut to the return line on a hit. Station 7, the planner, has a branch line down through four index stops that rejoins at station 8, the executor. From station 10, the disk, a dashed branch leads to a box explaining that writes leave through the write-ahead log. Over the top, a loop runs from the far right back to station 3, the ORM, because every lazy relation touched in a loop repeats the journey. The return line runs right to left through stations 13 to 17 back to the response.">
+        <defs>
+          <marker id="q1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="q1b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="q1c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <rect x="30" y="150" width="140" height="250" fill="var(--z1)"/>
+        <rect x="170" y="150" width="510" height="250" fill="var(--z2)"/>
+        <rect x="680" y="150" width="200" height="250" fill="var(--z3)"/>
+        <rect x="880" y="150" width="720" height="250" fill="var(--z4)"/>
+        <rect x="1600" y="150" width="390" height="250" fill="var(--z5)"/>
+        <rect x="1990" y="150" width="140" height="250" fill="var(--z6)"/>
+        <g class="s-zone" fill="var(--mute)">
+          <text x="42" y="172">The request</text><text x="182" y="172">Your application</text>
+          <text x="692" y="172">The fast copy</text><text x="892" y="172">The engine</text>
+          <text x="1612" y="172">Storage</text><text x="2002" y="172">Back out</text>
+        </g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="170" y1="150" x2="170" y2="400"/><line x1="680" y1="150" x2="680" y2="400"/>
+          <line x1="880" y1="150" x2="880" y2="400"/><line x1="1600" y1="150" x2="1600" y2="400"/>
+          <line x1="1990" y1="150" x2="1990" y2="400"/>
+        </g>
+
+        <line x1="70" y1="290" x2="2070" y2="290" stroke="var(--line)" stroke-width="7"/>
+        <line x1="70" y1="273" x2="70" y2="307" stroke="var(--line)" stroke-width="7"/>
+        <path d="M2070,290 C2124,290 2124,700 2070,700" fill="none" stroke="var(--line)" stroke-width="7"/>
+        <line x1="2070" y1="700" x2="82" y2="700" stroke="var(--line)" stroke-width="7" marker-end="url(#q1a)"/>
+
+        <g class="st"><circle cx="90" cy="290" r="9"/><circle cx="250" cy="290" r="9"/><circle cx="410" cy="290" r="9"/><circle cx="570" cy="290" r="9"/><circle cx="950" cy="290" r="9"/><circle cx="1520" cy="290" r="9"/><circle cx="1790" cy="290" r="9"/><circle cx="1920" cy="290" r="9"/><circle cx="2050" cy="290" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"><circle cx="760" cy="290" r="13"/><circle cx="1100" cy="290" r="13"/></g>
+        <rect x="1630" y="272" width="60" height="36" rx="4" fill="var(--paper)" stroke="var(--line)" stroke-width="3.5"/>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none"><path d="M1638,282 h44"/><path d="M1638,290 h44"/><path d="M1638,298 h44"/></g>
+
+        <g class="s-num">
+          <text x="44" y="206">01</text><text x="204" y="206">02</text><text x="364" y="206">03</text><text x="524" y="206">04</text><text x="714" y="206">05</text><text x="904" y="206">06</text><text x="1054" y="206">07</text><text x="1474" y="206">08</text><text x="1614" y="206">09</text><text x="1744" y="206">10</text><text x="1874" y="206">11</text><text x="2004" y="206">12</text>
+        </g>
+        <g class="s-lab">
+          <text x="44" y="224">you ask</text><text x="204" y="224">the service</text><text x="364" y="224">the ORM</text><text x="524" y="224">the pool</text><text x="714" y="224">the cache</text><text x="904" y="224">parse</text><text x="1054" y="224">the planner</text><text x="1474" y="224">the executor</text><text x="1614" y="224">buffer pool</text><text x="1744" y="224">disk</text><text x="1874" y="224">MVCC filter</text><text x="2004" y="224">rows</text>
+        </g>
+        <g class="s-sub">
+          <text x="44" y="242">GET /orders?status=</text><text x="44" y="256">pending, as user 42</text>
+          <text x="204" y="242">BEGIN: one use case,</text><text x="204" y="256">one transaction</text>
+          <text x="364" y="242">objects → parameterised</text><text x="364" y="256">SQL — eager or lazy?</text>
+          <text x="524" y="242">borrow, never open —</text><text x="524" y="256">connections are costly</text>
+          <text x="714" y="242">GET orders:42:pending</text><text x="714" y="256">a hit ends it here</text>
+          <text x="904" y="242">SQL text checked,</text><text x="904" y="256">names resolved</text>
+          <text x="1054" y="242">statistics decide:</text><text x="1054" y="256">index scan or Seq Scan,</text><text x="1054" y="270">and the join order</text>
+          <text x="1474" y="242">nested loop, hash</text><text x="1474" y="256">or merge join</text>
+          <text x="1614" y="242">RAM hit, ~100 ns;</text><text x="1614" y="256">shared_buffers</text>
+          <text x="1744" y="242">miss: SSD ~100 µs</text><text x="1744" y="256">1,000× slower</text>
+          <text x="1874" y="242">only versions this</text><text x="1874" y="256">transaction may see</text>
+          <text x="2004" y="242">20 rows; LIMIT</text><text x="2004" y="256">is applied last</text>
+        </g>
+
+        <!-- N+1 loop over the top -->
+        <path d="M2100,150 L2100,112 L410,112 L410,146" fill="none" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#q1b)"/>
+        <text x="1255" y="80" text-anchor="middle" class="s-note">the N+1 loop — stops 03 to 12 run again for every lazy relation touched inside a loop</text>
+        <text x="1255" y="98" text-anchor="middle" class="s-sub" style="fill:var(--fast)">100 orders, each loading its customer: 101 queries × 2 ms round trip ≈ 200 ms of pure waiting. Eager loading: 1 query, ~5 ms. Sheet 5.</text>
+
+        <!-- Exit A: pool exhausted -->
+        <path d="M570,299 L570,694" fill="none" stroke="var(--hazard)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#q1c)"/>
+        <circle cx="570" cy="560" r="12.5" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <text x="570" y="564" text-anchor="middle" class="s-haz" font-size="12">A</text>
+        <text x="592" y="548" class="s-haz">pool exhausted</text>
+        <text x="592" y="562" class="s-sub" style="fill:var(--hazard)">16 × 4 × 10 = 640 wanted,</text>
+        <text x="592" y="576" class="s-sub" style="fill:var(--hazard)">max_connections = 100</text>
+
+        <!-- Exit B: cache hit -->
+        <path d="M760,303 L760,694" fill="none" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#q1b)"/>
+        <circle cx="760" cy="610" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="760" y="614" text-anchor="middle" class="s-note" font-size="12">B</text>
+        <text x="782" y="598" class="s-note">a cache hit</text>
+        <text x="782" y="612" class="s-sub" style="fill:var(--fast)">~1 ms — parse, plan and disk never run;</text>
+        <text x="782" y="626" class="s-sub" style="fill:var(--fast)">the database is not touched at all</text>
+
+        <!-- Branch: the index detour -->
+        <text x="1150" y="282" class="s-sub" style="fill:var(--hazard)">no index? straight through — Seq Scan, every row</text>
+        <rect x="1060" y="430" width="510" height="190" fill="var(--band)" stroke="var(--line)" stroke-width="2" stroke-dasharray="7 6"/>
+        <text x="1116" y="452" class="s-zone" fill="var(--line)">Branch line · the index detour</text>
+        <text x="1116" y="470" class="s-sub">taken when stop 07 finds a usable index — sheet 3 draws it</text>
+        <path d="M1100,303 L1100,510" fill="none" stroke="var(--line)" stroke-width="4"/>
+        <line x1="1100" y1="510" x2="1450" y2="510" stroke="var(--line)" stroke-width="4"/>
+        <g class="st" stroke-width="2.5"><circle cx="1100" cy="510" r="7"/><circle cx="1230" cy="510" r="7"/><circle cx="1340" cy="510" r="7"/><circle cx="1450" cy="510" r="7"/></g>
+        <g class="s-num" font-size="10"><text x="1112" y="484">B1</text><text x="1206" y="484">B2</text><text x="1316" y="484">B3</text><text x="1426" y="484">B4</text></g>
+        <g class="s-lab" font-size="11"><text x="1112" y="498">statistics</text><text x="1206" y="498">root page</text><text x="1316" y="498">internal</text><text x="1426" y="498">leaf page</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="1112" y="530">selective</text><text x="1112" y="543">enough?</text>
+          <text x="1206" y="530">[ M ] halves</text><text x="1206" y="543">the range</text>
+          <text x="1316" y="530">[ D H ] cuts</text><text x="1316" y="543">it again</text>
+          <text x="1426" y="530">value → row</text><text x="1426" y="543">3–4 reads</text>
+        </g>
+        <path d="M1450,510 C1510,510 1520,470 1520,303" fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#q1a)"/>
+        <text x="1074" y="576" class="s-sub">WHERE user_id = 42 AND status = 'pending' ORDER BY created</text>
+        <text x="1074" y="592" class="s-sub">with an index on (user_id, status, created): ~0.3 ms, no sort</text>
+        <text x="1074" y="608" class="s-haz" font-size="10.5">without it: 10,000,000 rows read, then sorted — ~4 s</text>
+
+        <!-- The write exit -->
+        <rect x="1640" y="470" width="490" height="154" fill="var(--z6)" stroke="var(--learn)" stroke-width="2" stroke-dasharray="7 6"/>
+        <path d="M1790,303 L1790,466" fill="none" stroke="var(--learn)" stroke-width="3.5" stroke-dasharray="8 6"/>
+        <text x="1654" y="494" class="s-learn">a write leaves by a different exit</text>
+        <text x="1654" y="514" class="s-sub">An UPDATE does not wait for its page to reach disk.</text>
+        <text x="1654" y="528" class="s-sub">The change is appended to the write-ahead log, the log</text>
+        <text x="1654" y="542" class="s-sub">is flushed, and only then is COMMIT acknowledged. The</text>
+        <text x="1654" y="556" class="s-sub">page itself is written later — sheets 2 and 4.</text>
+        <text x="1654" y="580" class="s-haz" font-size="10.5">A transaction left open on this line blocks autovacuum,</text>
+        <text x="1654" y="594" class="s-haz" font-size="10.5">and every table slowly bloats behind it.</text>
+
+        <!-- Return line -->
+        <g class="st"><circle cx="1900" cy="700" r="9"/><circle cx="1600" cy="700" r="9"/><circle cx="1300" cy="700" r="9"/><circle cx="1020" cy="700" r="9"/><circle cx="330" cy="700" r="9"/></g>
+        <line x1="90" y1="683" x2="90" y2="717" stroke="var(--line)" stroke-width="7"/>
+        <g class="s-num"><text x="1854" y="662">13</text><text x="1554" y="662">14</text><text x="1254" y="662">15</text><text x="974" y="662">16</text><text x="284" y="662">17</text></g>
+        <g class="s-lab"><text x="1854" y="680">map to objects</text><text x="1554" y="680">write back</text><text x="1254" y="680">commit, close</text><text x="974" y="680">build a DTO</text><text x="284" y="680">the ledger</text><text x="110" y="680">the response</text></g>
+        <g class="s-sub">
+          <text x="1854" y="726">rows → objects; the</text><text x="1854" y="740">identity map dedupes</text>
+          <text x="1554" y="726">SET orders:42:pending</text><text x="1554" y="740">… EX 300 — five minutes</text>
+          <text x="1254" y="726">session closed, the</text><text x="1254" y="740">connection returned</text>
+          <text x="974" y="726">never the entity: it</text><text x="974" y="740">serialises every column</text>
+          <text x="284" y="726">pg_stat_statements:</text><text x="284" y="740">calls, total time</text>
+          <text x="110" y="726">JSON in a few ms —</text><text x="110" y="740">or 4 s, if 07 failed</text>
+        </g>
+        <text x="2130" y="778" text-anchor="end" class="s-sub">Budget: ~1 ms on a cache hit, a few ms through an index, ~4 s on 10,000,000 rows without one. Stop 07 decides which.</text>
+      </svg>
+    </div>
+    <figcaption><b>Three things on this map surprise people.</b> The database is six stops out of seventeen — the ORM, the pool and the cache in front of it cause as many incidents as the engine does. The loop over the top means "load a page" is often "run the same journey a hundred times". And the index branch is not an optimisation bolted on: it is the difference between reading three pages and reading every page you own.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every stop on this sheet, and what it does</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>You ask</h4><p>A request arrives for data: the pending orders of user 42. Everything downstream is shaped by two facts about it — the disk is slow, and other requests are changing the same rows right now.</p></div>
+      <div><h4><span>02</span>The service</h4><p>The service layer is the transaction boundary: one use case, one transaction. A controller does not know which writes belong together, and a repository is too fine-grained to decide.</p></div>
+      <div><h4><span>03</span>The ORM</h4><p>Method calls become parameterised SQL and rows become objects. It prevents SQL injection by default, and hides the one detail that matters most: how many queries it is about to send.</p></div>
+      <div><h4><span>04</span>The pool</h4><p>Connections are expensive — a whole process each in PostgreSQL — so they are borrowed from a pool, never opened per request. Total demand is pool size × workers × replicas, and that product must fit the database limit.</p></div>
+      <div><h4><span>05</span>The cache</h4><p>Cache-aside: check Redis before the database. A hit answers in about a millisecond and nothing to the right ever runs. A miss pays the full journey and writes the result back at stop 14.</p></div>
+      <div><h4><span>06</span>Parse</h4><p>The SQL text is checked and every table and column name resolved. This is also where a query built by string concatenation has already lost: the input became code before anything could stop it.</p></div>
+      <div><h4><span>07</span>The planner</h4><p>SQL says what, never how. The planner uses table statistics to choose an index or a sequential scan, a join order and a join method. Stale statistics mean bad plans on perfect indexes.</p></div>
+      <div><h4><span>B1</span>Statistics</h4><p>Is the index selective enough to be worth it? A boolean over 50/50 data is not. ANALYZE keeps these numbers current; without them the planner is guessing.</p></div>
+      <div><h4><span>B2</span>Root page</h4><p>The top of the B-tree. One page read narrows the whole table's range of values to a fraction of it.</p></div>
+      <div><h4><span>B3</span>Internal page</h4><p>Each level narrows again. Three or four levels are enough to cover millions of rows, which is why an index lookup costs three or four page reads.</p></div>
+      <div><h4><span>B4</span>Leaf page</h4><p>Sorted values with pointers to the rows. Because the leaves are already in order, ORDER BY created needs no sort at all — the executor just reads the next 20 entries.</p></div>
+      <div><h4><span>08</span>The executor</h4><p>Runs the plan: fetches pages, applies filters, performs the join by nested loop, hash or merge — whichever the planner chose. EXPLAIN ANALYZE shows what it actually did.</p></div>
+      <div><h4><span>09</span>Buffer pool</h4><p>Hot pages held in RAM — shared_buffers in PostgreSQL, the InnoDB buffer pool in MySQL. A hit costs roughly 100 nanoseconds, and most reads on a healthy database never go further.</p></div>
+      <div><h4><span>10</span>Disk</h4><p>A miss reads the page from SSD at around 100 microseconds — a thousand times slower. Indexes, the buffer pool and the write-ahead log all exist to avoid or reshape exactly this cost.</p></div>
+      <div><h4><span>11</span>MVCC filter</h4><p>Rows are stored as versions. Only the versions visible to this transaction's snapshot are returned, which is why readers never block writers and writers never block readers.</p></div>
+      <div><h4><span>12</span>Rows</h4><p>LIMIT is applied last in the logical order of a SELECT. A query with no LIMIT on a growing table is a memory problem waiting for the table to grow.</p></div>
+      <div><h4><span>13</span>Map to objects</h4><p>Rows become objects. The identity map guarantees the same row fetched twice is the same object — a free, request-scoped cache. Touching an unloaded relation here is what starts the N+1 loop.</p></div>
+      <div><h4><span>14</span>Write back</h4><p>On a miss, the application stores the result with a TTL: SET … EX 300. Every identical request for the next five minutes takes exit B instead of the whole line.</p></div>
+      <div><h4><span>15</span>Commit, close</h4><p>The session or DbContext is closed and its connection returned to the pool. A session that is never closed holds a connection and an open transaction — exits A and the vacuum hazard, both at once.</p></div>
+      <div><h4><span>16</span>Build a DTO</h4><p>The response is built from a purpose-made object, never the entity. Entities serialise every column — including ones added next year — and can trigger lazy loads mid-serialisation.</p></div>
+      <div><h4><span>17</span>The ledger</h4><p>pg_stat_statements records calls and total time per query shape. It is how you find the slow stop on this line from measurement instead of from intuition — sheet 6, rung 1.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The two exits are not free</b>
+    <p>Exit B only exists while the cache is warm: a restart or a flush sends every request down the full line at once, and a missing index that the cache was hiding appears at the worst possible moment. Exit A is not an exit anyone chooses — it is what "the database is slow" usually means when the queries themselves are fast and the requests are queuing for a connection.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — INSIDE THE ENGINE ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>Inside the Engine</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · PostgreSQL · MySQL · Database Fundamentals · Transactions</span>
+  </div>
+  <p class="thesis">Stops 09 to 11 of sheet 1, cut open — this time for a write. On the left, the whole path one UPDATE takes through the engine; on the right, the four mechanisms it passes through, magnified. <strong>Durability is an ordering rule, not a feature: the log reaches the disk before the commit is acknowledged, and the page itself follows whenever it is convenient.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A cutaway of a relational database engine. On the left, a vertical chain of eleven steps for one UPDATE: the statement, parse and plan, find the page, lock the row, write a new version, append to the write-ahead log, flush the log, commit acknowledged, checkpoint, stream to replicas, and autovacuum. On the right, band A shows MVCC: two versions of row 42 and two transactions that each see a different one, while a writer and readers never block each other. Band B shows connections: 640 requested against a limit of 100, and the process-per-connection model of PostgreSQL against the thread-per-connection model of MySQL. Band C shows memory: RAM against SSD and how to size the buffer pool. At the bottom, panel D shows replication lag and panel E the inherited MySQL defaults that still cause bugs.">
+        <defs>
+          <marker id="e2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="e2b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <!-- LEFT COLUMN -->
+        <text x="40" y="40" class="s-zone" fill="var(--mute)">One UPDATE, all the way down</text>
+        <text x="40" y="60" class="s-sub">UPDATE stock SET qty = qty − 1 WHERE id = 42 — eleven steps</text>
+
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#e2a)">
+          <path d="M165,146 L165,158"/><path d="M165,204 L165,216"/><path d="M165,262 L165,274"/>
+          <path d="M165,320 L165,332"/><path d="M165,378 L165,390"/><path d="M165,436 L165,448"/>
+          <path d="M165,494 L165,506"/><path d="M165,552 L165,564"/><path d="M165,610 L165,622"/>
+          <path d="M165,668 L165,680"/>
+        </g>
+        <g>
+          <rect x="40" y="100" width="250" height="46" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="40" y="158" width="250" height="46" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="40" y="216" width="250" height="46" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="40" y="274" width="250" height="46" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="40" y="332" width="250" height="46" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="40" y="390" width="250" height="46" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="40" y="448" width="250" height="46" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="40" y="506" width="250" height="46" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="40" y="564" width="250" height="46" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="40" y="622" width="250" height="46" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="40" y="680" width="250" height="46" fill="var(--z3)" stroke="var(--rule)"/>
+        </g>
+        <g class="s-num"><text x="52" y="119">01</text><text x="52" y="177">02</text><text x="52" y="235">03</text><text x="52" y="293">04</text><text x="52" y="351">05</text><text x="52" y="409">06</text><text x="52" y="467">07</text><text x="52" y="525">08</text><text x="52" y="583">09</text><text x="52" y="641">10</text><text x="52" y="699">11</text></g>
+        <g class="s-lab">
+          <text x="82" y="119">the statement</text><text x="82" y="177">parse and plan</text><text x="82" y="235">find the page</text>
+          <text x="82" y="293">lock the row</text><text x="82" y="351">write a new version</text><text x="82" y="409">append to the WAL</text>
+          <text x="82" y="467">flush the WAL</text><text x="82" y="525">COMMIT acknowledged</text><text x="82" y="583">checkpoint</text>
+          <text x="82" y="641">stream to replicas</text><text x="82" y="699">autovacuum</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="82" y="136">qty = qty − 1, one expression</text><text x="82" y="194">sheet 1, stops 06 and 07</text><text x="82" y="252">via the index, in shared buffers</text>
+          <text x="82" y="310">other writers of row 42 now wait</text><text x="82" y="368">the old one is marked dead</text><text x="82" y="426">sequential, so cheap</text>
+          <text x="82" y="484">fsync: the moment of durability</text><text x="82" y="542">only after step 07 returns</text><text x="82" y="600">dirty pages written later, in bulk</text>
+          <text x="82" y="658">WAL in PG · binlog in MySQL</text><text x="82" y="716">reclaims dead versions, later</text>
+        </g>
+        <text x="40" y="756" class="s-note">Log first, page later</text>
+        <text x="40" y="774" class="s-sub">A crash after 08 loses nothing: on restart</text>
+        <text x="40" y="788" class="s-sub">the log is replayed and every acknowledged</text>
+        <text x="40" y="802" class="s-sub">commit is redone. A crash before 07 simply</text>
+        <text x="40" y="816" class="s-sub">never happened.</text>
+        <text x="40" y="840" class="s-sub" style="fill:var(--line)">MySQL's InnoDB does the same with its redo</text>
+        <text x="40" y="854" class="s-sub" style="fill:var(--line)">log. The names differ; the order does not.</text>
+
+        <line x1="300" y1="290" x2="330" y2="290" stroke="var(--line)" stroke-width="3" marker-end="url(#e2a)"/>
+        <text x="298" y="278" class="s-sub" style="fill:var(--line)">opened →</text>
+
+        <!-- BAND A: MVCC -->
+        <rect x="340" y="80" width="1030" height="312" fill="var(--z1)"/>
+        <text x="356" y="104" class="s-zone" fill="var(--line)">A · MVCC — an UPDATE writes a new version, it never overwrites</text>
+        <rect x="356" y="122" width="300" height="56" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="6 4"/>
+        <text x="368" y="143" class="s-lab" font-size="11.5">row 42 · version 1 · dead</text>
+        <text x="368" y="164" class="s-mono" font-size="10.5">qty=10 · xmin=100 · xmax=205</text>
+        <rect x="356" y="194" width="300" height="56" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="368" y="215" class="s-lab" font-size="11.5">row 42 · version 2 · live</text>
+        <text x="368" y="236" class="s-mono" font-size="10.5">qty=9 · xmin=205 · xmax=none</text>
+
+        <rect x="760" y="122" width="250" height="56" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="772" y="143" class="s-lab" font-size="11.5">txn 150 · a report</text>
+        <text x="772" y="162" class="s-sub" font-size="10.5">began before 205 committed</text>
+        <rect x="760" y="194" width="250" height="56" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="772" y="215" class="s-lab" font-size="11.5">txn 210 · a new request</text>
+        <text x="772" y="234" class="s-sub" font-size="10.5">began after 205 committed</text>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#e2a)">
+          <path d="M756,158 L662,158"/><path d="M756,230 L662,230"/>
+        </g>
+        <text x="676" y="148" class="s-sub" font-size="10.5" style="fill:var(--line)">sees 10</text>
+        <text x="676" y="220" class="s-sub" font-size="10.5" style="fill:var(--line)">sees 9</text>
+
+        <rect x="1040" y="122" width="314" height="128" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="1052" y="144" class="s-lab" font-size="11.5">txn 205 · the writer</text>
+        <text x="1052" y="162" class="s-sub" font-size="10.5">wrote version 2 and committed. It never</text>
+        <text x="1052" y="176" class="s-sub" font-size="10.5">waited for txn 150, and txn 150 never</text>
+        <text x="1052" y="190" class="s-sub" font-size="10.5">waited for it — each saw its own snapshot.</text>
+        <text x="1052" y="216" class="s-note">Readers never block writers.</text>
+        <text x="1052" y="234" class="s-note">Writers never block readers.</text>
+
+        <text x="356" y="284" class="s-lab">Autovacuum — the bill MVCC sends later</text>
+        <text x="356" y="302" class="s-sub">Version 1 is dead once no running transaction can still see it. Autovacuum reclaims the space in the background; if it falls</text>
+        <text x="356" y="316" class="s-sub">behind, dead versions pile up, tables bloat, and every scan reads rows that no transaction will ever be shown.</text>
+        <text x="356" y="342" class="s-haz" font-size="11">idle in transaction — the most dangerous state a connection can sit in</text>
+        <text x="356" y="358" class="s-sub" style="fill:var(--hazard)">A connection that ran BEGIN and then waited holds its snapshot open. Nothing newer than it can be cleaned, in any table,</text>
+        <text x="356" y="372" class="s-sub" style="fill:var(--hazard)">and the bloat persists long after it finally closes. A leaked ORM session on sheet 5 produces exactly this state.</text>
+
+        <!-- BAND B: CONNECTIONS -->
+        <rect x="340" y="404" width="1030" height="196" fill="var(--z4)"/>
+        <text x="356" y="428" class="s-zone" fill="var(--mute)">B · Connections — a process each in PostgreSQL, a thread in MySQL</text>
+        <rect x="356" y="444" width="320" height="22" fill="var(--hazard)" opacity=".7"/>
+        <rect x="356" y="474" width="50" height="22" fill="var(--line)" opacity=".85"/>
+        <line x1="406" y1="438" x2="406" y2="504" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="686" y="459" class="s-mono" font-size="10.5">640 · 16 replicas × 4 workers × pool 10</text>
+        <text x="416" y="489" class="s-mono" font-size="10.5">100 · max_connections, the default</text>
+        <text x="356" y="524" class="s-mono" font-size="10.5" style="fill:var(--hazard)">FATAL: sorry, too many clients already</text>
+        <text x="356" y="548" class="s-sub">The fix is not a bigger number. PgBouncer in transaction pooling mode multiplexes thousands of</text>
+        <text x="356" y="562" class="s-sub">client connections onto a few dozen real ones, and the database spends its memory on work.</text>
+        <text x="356" y="586" class="s-note">More connections is not more throughput — it moves the queue into the database.</text>
+
+        <text x="990" y="452" class="s-lab" font-size="11.5">PostgreSQL</text>
+        <text x="990" y="470" class="s-sub">the postmaster forks one OS process per</text>
+        <text x="990" y="484" class="s-sub">connection, several MB each. Pool early.</text>
+        <text x="990" y="510" class="s-lab" font-size="11.5">MySQL</text>
+        <text x="990" y="528" class="s-sub">one thread per connection — lighter,</text>
+        <text x="990" y="542" class="s-sub">but a pool is still the correct design.</text>
+        <text x="990" y="568" class="s-sub" style="fill:var(--fast)">Count before you deploy: pool size ×</text>
+        <text x="990" y="582" class="s-sub" style="fill:var(--fast)">workers × replicas, against the limit.</text>
+
+        <!-- BAND C: MEMORY -->
+        <rect x="340" y="612" width="1030" height="106" fill="var(--z3)"/>
+        <text x="356" y="636" class="s-zone" fill="var(--mute)">C · Memory — the buffer pool is most of performance</text>
+        <text x="356" y="660" class="s-lab">RAM ~100 ns · SSD ~100 µs</text>
+        <text x="356" y="678" class="s-sub">A page in the buffer pool costs a memory read; a page on disk costs</text>
+        <text x="356" y="692" class="s-sub">a thousand of them. Hot data that fits in RAM is most of the speed —</text>
+        <text x="356" y="706" class="s-sub">and indexes compete for that same pool.</text>
+        <text x="880" y="660" class="s-lab">Size it, or waste the machine</text>
+        <text x="880" y="678" class="s-sub">shared_buffers ≈ 25% of RAM in PostgreSQL — the OS cache does the rest</text>
+        <text x="880" y="692" class="s-sub">innodb_buffer_pool_size ≈ 70–80% of RAM in MySQL — its most important dial</text>
+        <text x="880" y="706" class="s-sub" style="fill:var(--hazard)">Defaults assume a small machine and leave a 64 GB server mostly idle.</text>
+
+        <!-- PANEL D: REPLICATION -->
+        <rect x="340" y="730" width="500" height="140" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="356" y="754" class="s-note">D · Replication — copies that are always a little behind</text>
+        <text x="356" y="776" class="s-sub">PostgreSQL streams its WAL; MySQL ships its binlog. Both are</text>
+        <text x="356" y="790" class="s-sub">asynchronous by default, so replicas lag — sometimes by seconds.</text>
+        <text x="356" y="804" class="s-sub">MySQL adds semi-sync and Group Replication for stronger guarantees.</text>
+        <text x="356" y="828" class="s-sub" style="fill:var(--hazard)">Read-after-write: a user saves their profile, the next read lands on a</text>
+        <text x="356" y="842" class="s-sub" style="fill:var(--hazard)">lagging replica, and the change appears to have vanished. Route reads</text>
+        <text x="356" y="856" class="s-sub" style="fill:var(--hazard)">that must see a recent write to the primary.</text>
+
+        <!-- PANEL E: MYSQL DEFAULTS -->
+        <rect x="870" y="730" width="500" height="140" fill="var(--z2)" stroke="var(--rule)" stroke-width="2"/>
+        <text x="886" y="754" class="s-lab">E · An inherited MySQL may not be on modern defaults</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="886" y="778">utf8</text><text x="886" y="796">STRICT off</text><text x="886" y="814">MyISAM</text><text x="886" y="832">old DDL</text>
+        </g>
+        <g class="s-sub">
+          <text x="986" y="778">3 bytes, so no emoji — use utf8mb4, always</text>
+          <text x="986" y="796">'2024-13-45' silently became '0000-00-00'</text>
+          <text x="986" y="814">no transactions, no crash safety: a bug, not a choice</text>
+          <text x="986" y="832">not transactional — a failed migration left it half-done</text>
+        </g>
+        <text x="886" y="856" class="s-sub" style="fill:var(--fast)">MySQL 8 fixed most of it. Checking an old server takes five minutes.</text>
+      </svg>
+    </div>
+    <figcaption><b>The useful mental model:</b> the write-ahead log makes a write durable, MVCC makes it invisible to everyone else until it commits, the buffer pool makes reading it cheap, and autovacuum cleans up after all three. PostgreSQL and MySQL disagree on connections and defaults; they agree on almost everything else on this sheet.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the engine, step by step and band by band</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>The statement</h4><p>Written as qty = qty − 1 rather than a value computed in application code, so the database does the arithmetic under its own lock. Sheet 4 shows why that one choice prevents a lost update.</p></div>
+      <div><h4><span>02</span>Parse and plan</h4><p>Exactly the read path of sheet 1: the text is parsed, and the planner picks an index to find row 42. A write without a usable index scans the table to find what it must change.</p></div>
+      <div><h4><span>03</span>Find the page</h4><p>The page holding row 42 is located through the index and served from shared buffers if it is hot, or read from disk and cached if it is not.</p></div>
+      <div><h4><span>04</span>Lock the row</h4><p>The UPDATE takes a row lock. Any other writer to row 42 waits until this transaction ends — which is why a long transaction is somebody else's latency.</p></div>
+      <div><h4><span>05</span>Write a new version</h4><p>MVCC: the old row version is marked dead, a new one written beside it. Readers already running keep seeing the old version; nobody is blocked.</p></div>
+      <div><h4><span>06</span>Append to the WAL</h4><p>The change is described in the write-ahead log first. Appending to a log is a sequential write, far cheaper than updating pages scattered across the disk.</p></div>
+      <div><h4><span>07</span>Flush the WAL</h4><p>The log is forced to durable storage. This is the precise instant the change becomes crash-proof, and the reason commit latency tracks disk flush latency.</p></div>
+      <div><h4><span>08</span>COMMIT acknowledged</h4><p>Only after step 07 returns does the client hear "committed". From here, the change survives a power cut; before it, the transaction never happened.</p></div>
+      <div><h4><span>09</span>Checkpoint</h4><p>Modified pages in memory are written to their real place on disk later, in bulk. If the server crashes first, replaying the log rebuilds them.</p></div>
+      <div><h4><span>10</span>Stream to replicas</h4><p>PostgreSQL streams WAL; MySQL writes the binlog and replicas pull it. Both are asynchronous by default, so a replica is a slightly older copy, not a mirror.</p></div>
+      <div><h4><span>11</span>Autovacuum</h4><p>Dead versions from step 05 are reclaimed once no snapshot can see them. When it falls behind, tables bloat and queries slow gradually, with no single cause in any log.</p></div>
+      <div><h4><span>A</span>MVCC</h4><p>Multi-Version Concurrency Control. Each transaction reads a snapshot, so concurrent reads and writes proceed together. InnoDB does the same with undo logs. The price is cleanup — and an idle-in-transaction connection stops it.</p></div>
+      <div><h4><span>B</span>Connections</h4><p>A process per connection in PostgreSQL (default limit 100), a thread in MySQL. Pool size × workers × replicas must fit under the limit; PgBouncer in transaction mode is the standard fix, not a higher limit.</p></div>
+      <div><h4><span>C</span>Buffer pool</h4><p>RAM is about a thousand times faster than SSD, so the pool holding hot pages is the engine's real speed. Size shared_buffers near 25% of RAM, or the InnoDB pool near 70–80%.</p></div>
+      <div><h4><span>D</span>Replication</h4><p>Copies for read scaling and failover. Lag is a correctness concern: a read that must reflect the user's own last write goes to the primary.</p></div>
+      <div><h4><span>E</span>Inherited defaults</h4><p>utf8 instead of utf8mb4, strict mode off, MyISAM tables, non-transactional DDL. MySQL 8 fixed the defaults — but a database you inherited may never have been upgraded to them.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — THE INDEX ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Index</h2>
+    <span class="form">Exploded parts</span>
+    <span class="cov">Covers · Indexes · SQL · Database Optimization</span>
+  </div>
+  <p class="thesis">The branch below stop 07 of sheet 1, taken apart. An index is a second, sorted copy of a few columns that lets the engine read three pages instead of every page. <strong>It is the highest-leverage change in this whole folder — and it only works if the query is shaped the way the index is sorted, which is where most of them silently fail.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="Six panels about database indexes. Panel A draws a B-tree: a root page, two internal pages and six leaf pages pointing into the table, with the search path for one email highlighted. Panel B compares a sequential scan that reads every page with an index scan that reads three. Panel C shows EXPLAIN ANALYZE output for both plans and notes that the planner decides from statistics. Panel D shows a composite index on user id, status and created, with three queries that can use it and one that cannot. Panel E lists index types and the partial, expression and covering variants. Panel F shows the write cost of ten indexes, the logical execution order of a SELECT with its traps, and parameterised queries as the one fix for SQL injection.">
+        <defs>
+          <marker id="i3a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- PANEL A: B-tree -->
+        <rect x="30" y="50" width="530" height="280" fill="var(--z2)"/>
+        <text x="46" y="74" class="s-zone" fill="var(--mute)">A · a B-tree, drawn</text>
+        <g stroke="var(--rule)" stroke-width="2" fill="none">
+          <path d="M240,118 L335,150"/>
+          <path d="M145,180 L138,212"/><path d="M145,180 L202,212"/>
+          <path d="M335,180 L282,212"/><path d="M335,180 L346,212"/><path d="M335,180 L410,212"/>
+        </g>
+        <g stroke="var(--fast)" stroke-width="3" fill="none">
+          <path d="M240,118 L145,150"/><path d="M145,180 L74,212"/>
+        </g>
+        <path d="M74,242 L74,258" stroke="var(--fast)" stroke-width="3" fill="none" marker-end="url(#i3a)"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="210" y="88" width="60" height="30"/>
+          <rect x="100" y="150" width="90" height="30"/><rect x="290" y="150" width="90" height="30"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5">
+          <rect x="110" y="212" width="56" height="30"/><rect x="174" y="212" width="56" height="30"/>
+          <rect x="254" y="212" width="56" height="30"/><rect x="318" y="212" width="56" height="30"/><rect x="382" y="212" width="56" height="30"/>
+        </g>
+        <rect x="46" y="212" width="56" height="30" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+        <g class="s-mono" font-size="11" text-anchor="middle">
+          <text x="240" y="107">M</text><text x="145" y="169">D · H</text><text x="335" y="169">R · W</text>
+          <text x="74" y="231">A–C</text><text x="138" y="231">D–G</text><text x="202" y="231">H–L</text><text x="282" y="231">M–Q</text><text x="346" y="231">R–V</text><text x="410" y="231">W–Z</text>
+        </g>
+        <rect x="46" y="262" width="392" height="20" fill="var(--band)" stroke="var(--rule)"/>
+        <text x="242" y="276" text-anchor="middle" class="s-sub" font-size="10.5">the table's own pages — the heap</text>
+        <g class="s-num"><text x="456" y="107">01</text><text x="456" y="169">02</text><text x="456" y="231">03</text><text x="456" y="276">04</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="480" y="107">root page</text><text x="480" y="169">internal</text><text x="480" y="231">sorted leaves</text><text x="480" y="276">the row</text>
+        </g>
+        <text x="46" y="306" class="s-sub">ana@example.com: M → left, D · H → left, leaf A–C, pointer into the table.</text>
+        <text x="46" y="320" class="s-sub">Leaves are in order, so ranges and ORDER BY come free with equality.</text>
+
+        <!-- PANEL B: seq vs index -->
+        <rect x="576" y="50" width="400" height="280" fill="var(--z3)"/>
+        <text x="592" y="74" class="s-zone" fill="var(--mute)">B · one query, two ways</text>
+        <text x="592" y="96" class="s-mono" font-size="10.5">WHERE email = 'ana@example.com'</text>
+        <rect x="592" y="108" width="224" height="72" fill="var(--hazard)" opacity=".35"/>
+        <g stroke="var(--paper)" stroke-width="1.5">
+          <line x1="606" y1="108" x2="606" y2="180"/><line x1="620" y1="108" x2="620" y2="180"/><line x1="634" y1="108" x2="634" y2="180"/><line x1="648" y1="108" x2="648" y2="180"/><line x1="662" y1="108" x2="662" y2="180"/><line x1="676" y1="108" x2="676" y2="180"/><line x1="690" y1="108" x2="690" y2="180"/><line x1="704" y1="108" x2="704" y2="180"/><line x1="718" y1="108" x2="718" y2="180"/><line x1="732" y1="108" x2="732" y2="180"/><line x1="746" y1="108" x2="746" y2="180"/><line x1="760" y1="108" x2="760" y2="180"/><line x1="774" y1="108" x2="774" y2="180"/><line x1="788" y1="108" x2="788" y2="180"/><line x1="802" y1="108" x2="802" y2="180"/>
+          <line x1="592" y1="120" x2="816" y2="120"/><line x1="592" y1="132" x2="816" y2="132"/><line x1="592" y1="144" x2="816" y2="144"/><line x1="592" y1="156" x2="816" y2="156"/><line x1="592" y1="168" x2="816" y2="168"/>
+        </g>
+        <rect x="592" y="200" width="224" height="72" fill="var(--paper)" stroke="var(--rule)"/>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="606" y1="200" x2="606" y2="272"/><line x1="620" y1="200" x2="620" y2="272"/><line x1="634" y1="200" x2="634" y2="272"/><line x1="648" y1="200" x2="648" y2="272"/><line x1="662" y1="200" x2="662" y2="272"/><line x1="676" y1="200" x2="676" y2="272"/><line x1="690" y1="200" x2="690" y2="272"/><line x1="704" y1="200" x2="704" y2="272"/><line x1="718" y1="200" x2="718" y2="272"/><line x1="732" y1="200" x2="732" y2="272"/><line x1="746" y1="200" x2="746" y2="272"/><line x1="760" y1="200" x2="760" y2="272"/><line x1="774" y1="200" x2="774" y2="272"/><line x1="788" y1="200" x2="788" y2="272"/><line x1="802" y1="200" x2="802" y2="272"/>
+          <line x1="592" y1="212" x2="816" y2="212"/><line x1="592" y1="224" x2="816" y2="224"/><line x1="592" y1="236" x2="816" y2="236"/><line x1="592" y1="248" x2="816" y2="248"/><line x1="592" y1="260" x2="816" y2="260"/>
+        </g>
+        <g fill="var(--fast)"><rect x="662" y="200" width="14" height="12"/><rect x="718" y="224" width="14" height="12"/><rect x="620" y="248" width="14" height="12"/></g>
+        <text x="830" y="122" class="s-num">05</text><text x="852" y="122" class="s-lab" font-size="11">Seq Scan</text>
+        <text x="830" y="140" class="s-sub" font-size="10.5">10,000,000 rows</text>
+        <text x="830" y="154" class="s-sub" font-size="10.5" style="fill:var(--hazard)">~4 seconds</text>
+        <text x="830" y="214" class="s-num">06</text><text x="852" y="214" class="s-lab" font-size="11">Index Scan</text>
+        <text x="830" y="232" class="s-sub" font-size="10.5">~3 pages read</text>
+        <text x="830" y="246" class="s-sub" font-size="10.5" style="fill:var(--line)">~0.2 ms</text>
+        <text x="592" y="300" class="s-sub">The ratio grows with the table. A query that is fine</text>
+        <text x="592" y="314" class="s-sub" style="fill:var(--hazard)">at 10,000 rows is an outage at 10 million.</text>
+
+        <!-- PANEL C: the plan -->
+        <rect x="992" y="50" width="378" height="280" fill="var(--z4)"/>
+        <text x="1008" y="74" class="s-zone" fill="var(--mute)">C · read the plan, not a guess</text>
+        <text x="1354" y="74" text-anchor="end" class="s-num">07</text>
+        <text x="1008" y="96" class="s-mono" font-size="10">EXPLAIN ANALYZE SELECT * FROM orders</text>
+        <text x="1008" y="110" class="s-mono" font-size="10">WHERE user_id = 42;</text>
+        <rect x="1008" y="120" width="346" height="50" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="1018" y="140" class="s-mono" font-size="10" style="fill:var(--hazard)">Seq Scan on orders (cost=0.00..18584.00)</text>
+        <text x="1018" y="158" class="s-sub" font-size="10.5">reads every row — the plan is telling you: index it</text>
+        <rect x="1008" y="180" width="346" height="50" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="1018" y="200" class="s-mono" font-size="10" style="fill:var(--line)">Index Scan using idx_orders_user</text>
+        <text x="1018" y="218" class="s-sub" font-size="10.5">reads a handful of pages</text>
+        <text x="1008" y="254" class="s-lab" font-size="11">The planner chooses from statistics</text>
+        <text x="1354" y="254" text-anchor="end" class="s-num">08</text>
+        <text x="1008" y="272" class="s-sub" font-size="10.5">ANALYZE keeps them current; stale statistics give bad</text>
+        <text x="1008" y="286" class="s-sub" font-size="10.5">plans on perfectly good indexes.</text>
+        <text x="1008" y="306" class="s-note" font-size="11">Most "the database is slow" reports are one</text>
+        <text x="1008" y="321" class="s-note" font-size="11">missing index, visible here in five minutes.</text>
+
+        <!-- PANEL D: composite -->
+        <rect x="30" y="346" width="660" height="254" fill="var(--z1)"/>
+        <text x="46" y="370" class="s-zone" fill="var(--line)">D · a composite index reads left to right, like a phone book</text>
+        <text x="46" y="392" class="s-mono">CREATE INDEX idx ON orders (user_id, status, created);</text>
+        <text x="674" y="392" text-anchor="end" class="s-num">09</text>
+        <rect x="46" y="404" width="90" height="116" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="140" y="404" width="90" height="116" fill="var(--paper)" stroke="var(--line)" stroke-width="1.5"/>
+        <rect x="234" y="404" width="90" height="116" fill="var(--paper)" stroke="var(--line)" stroke-width="1"/>
+        <g class="s-lab" font-size="11"><text x="56" y="420">user_id</text><text x="150" y="420">status</text><text x="244" y="420">created</text></g>
+        <g class="s-mono" font-size="10">
+          <text x="56" y="440">1</text><text x="56" y="458">1</text><text x="56" y="476">1</text><text x="56" y="494">2</text><text x="56" y="512">2</text>
+          <text x="150" y="440">paid</text><text x="150" y="458">pending</text><text x="150" y="476">pending</text><text x="150" y="494">paid</text><text x="150" y="512">pending</text>
+          <text x="244" y="440">01-03</text><text x="244" y="458">01-02</text><text x="244" y="476">01-05</text><text x="244" y="494">01-01</text><text x="244" y="512">01-04</text>
+        </g>
+        <g class="s-mono" font-size="10.5">
+          <text x="348" y="428" fill="var(--line)">✓ WHERE user_id = 1</text>
+          <text x="348" y="450" fill="var(--line)">✓ … AND status = 'pending'</text>
+          <text x="348" y="472" fill="var(--line)">✓ … ORDER BY created</text>
+          <text x="348" y="498" fill="var(--hazard)">✗ WHERE status = 'pending'</text>
+        </g>
+        <text x="348" y="514" class="s-sub" font-size="10.5" style="fill:var(--hazard)">user_id is missing — the index cannot be entered</text>
+        <text x="46" y="546" class="s-note">Rule of thumb: equality columns first, then range columns, then sort columns.</text>
+        <text x="46" y="566" class="s-sub">You can find "Smith" and "Smith, John" — never "everyone called John". Column order is</text>
+        <text x="46" y="580" class="s-sub">the single most important decision when you create one.</text>
+
+        <!-- PANEL E: shapes -->
+        <rect x="706" y="346" width="664" height="254" fill="var(--z5)"/>
+        <text x="722" y="370" class="s-zone" fill="var(--fast)">E · the other shapes an index can take</text>
+        <g class="s-lab" font-size="11">
+          <text x="722" y="396">B-tree</text><text x="722" y="414">Hash</text><text x="722" y="432">GIN</text><text x="722" y="450">GiST</text><text x="722" y="468">BRIN</text><text x="722" y="486">HNSW</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="780" y="396">equality, ranges, ORDER BY — the default</text>
+          <text x="780" y="414">exact equality only; rarely worth it</text>
+          <text x="780" y="432">JSONB, arrays, full-text: "contains?"</text>
+          <text x="780" y="450">geospatial, ranges, nearest-neighbour</text>
+          <text x="780" y="468">huge naturally ordered tables — tiny</text>
+          <text x="780" y="486">vector similarity, via pgvector</text>
+        </g>
+        <line x1="1050" y1="382" x2="1050" y2="530" stroke="var(--rule)"/>
+        <text x="1066" y="396" class="s-lab" font-size="11">partial</text><text x="1354" y="396" text-anchor="end" class="s-num">10</text>
+        <text x="1066" y="412" class="s-mono" font-size="10">(created) WHERE status = 'pending'</text>
+        <text x="1066" y="426" class="s-sub" font-size="10.5">indexes only the ~2% you actually query</text>
+        <text x="1066" y="450" class="s-lab" font-size="11">expression</text><text x="1354" y="450" text-anchor="end" class="s-num">11</text>
+        <text x="1066" y="466" class="s-mono" font-size="10">ON users (lower(email))</text>
+        <text x="1066" y="480" class="s-sub" font-size="10.5">the shape the query uses, not the column</text>
+        <text x="1066" y="504" class="s-lab" font-size="11">covering</text><text x="1354" y="504" text-anchor="end" class="s-num">12</text>
+        <text x="1066" y="520" class="s-mono" font-size="10">(user_id) INCLUDE (total, status)</text>
+        <text x="1066" y="534" class="s-sub" font-size="10.5">index-only scan: the table is never read</text>
+        <text x="722" y="560" class="s-haz" font-size="10.5">A function on an indexed column disables a plain index: lower(email) = 'x', date(created) = …</text>
+        <text x="722" y="574" class="s-haz" font-size="10.5">and implicit casts all fall back to a Seq Scan. Index the expression, or rewrite as a range.</text>
+        <text x="722" y="592" class="s-sub" style="fill:var(--fast)">SELECT * guarantees the table must be read — the strongest argument against it.</text>
+
+        <!-- PANEL F -->
+        <rect x="30" y="616" width="1340" height="224" fill="var(--band)"/>
+        <text x="46" y="640" class="s-zone" fill="var(--mute)">F · what every index costs, and the order SQL actually runs in</text>
+
+        <text x="46" y="664" class="s-lab" font-size="11">One INSERT into a table with 10 indexes</text>
+        <text x="464" y="664" text-anchor="end" class="s-num">13</text>
+        <rect x="46" y="674" width="30" height="20" fill="var(--line)" opacity=".85"/>
+        <g fill="var(--fast)" opacity=".8">
+          <rect x="84" y="674" width="30" height="20"/><rect x="118" y="674" width="30" height="20"/><rect x="152" y="674" width="30" height="20"/><rect x="186" y="674" width="30" height="20"/><rect x="220" y="674" width="30" height="20"/>
+          <rect x="254" y="674" width="30" height="20"/><rect x="288" y="674" width="30" height="20"/><rect x="322" y="674" width="30" height="20"/><rect x="356" y="674" width="30" height="20"/><rect x="390" y="674" width="30" height="20"/>
+        </g>
+        <text x="46" y="712" class="s-mono" font-size="10.5">1 table write + 10 index writes, every time</text>
+        <text x="46" y="734" class="s-sub" style="fill:var(--line)">✓ foreign keys · WHERE · JOIN · ORDER BY columns</text>
+        <text x="46" y="750" class="s-sub" style="fill:var(--hazard)">✗ 50/50 booleans · small tables · "just in case"</text>
+        <text x="46" y="774" class="s-haz" font-size="10.5">PostgreSQL does not index foreign keys for you —</text>
+        <text x="46" y="788" class="s-haz" font-size="10.5">the most common missing index in production.</text>
+        <text x="46" y="812" class="s-sub">On a live table, CREATE INDEX CONCURRENTLY, or the</text>
+        <text x="46" y="826" class="s-sub">table is locked for as long as the build takes.</text>
+
+        <text x="500" y="664" class="s-lab" font-size="11">Written order is not executed order</text>
+        <text x="924" y="664" text-anchor="end" class="s-num">14</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="500" y="676" width="56" height="44"/><rect x="561" y="676" width="56" height="44"/><rect x="622" y="676" width="56" height="44"/><rect x="683" y="676" width="56" height="44"/><rect x="744" y="676" width="56" height="44"/><rect x="805" y="676" width="56" height="44"/><rect x="866" y="676" width="56" height="44"/>
+        </g>
+        <g class="s-num" text-anchor="middle"><text x="528" y="692">1</text><text x="589" y="692">2</text><text x="650" y="692">3</text><text x="711" y="692">4</text><text x="772" y="692">5</text><text x="833" y="692">6</text><text x="894" y="692">7</text></g>
+        <g class="s-mono" font-size="10" text-anchor="middle"><text x="528" y="710">FROM</text><text x="589" y="710">WHERE</text><text x="650" y="710">GROUP</text><text x="711" y="710">HAVING</text><text x="772" y="710">SELECT</text><text x="833" y="710">ORDER</text><text x="894" y="710">LIMIT</text></g>
+        <text x="500" y="740" class="s-sub">WHERE filters rows before grouping; HAVING filters groups after.</text>
+        <text x="500" y="754" class="s-sub">A SELECT alias does not exist inside WHERE — step 5 has not run yet.</text>
+        <text x="500" y="780" class="s-lab" font-size="11">Traps that return wrong rows, silently</text>
+        <g class="s-mono" font-size="10" style="fill:var(--hazard)">
+          <text x="500" y="798">LEFT JOIN + WHERE on the right table → INNER JOIN</text>
+          <text x="500" y="812">WHERE x = NULL → nothing; write IS NULL</text>
+          <text x="500" y="826">NOT IN (1, 2, NULL) → no rows at all</text>
+        </g>
+
+        <text x="960" y="664" class="s-lab" font-size="11">The one reliable fix for SQL injection</text>
+        <text x="1354" y="664" text-anchor="end" class="s-num">15</text>
+        <text x="960" y="684" class="s-mono" font-size="10" style="fill:var(--hazard)">f"… WHERE email = '{email}'"  ✗ input is code</text>
+        <text x="960" y="700" class="s-mono" font-size="10" style="fill:var(--line)">"… WHERE email = %s", (email,)  ✓ input is data</text>
+        <text x="960" y="724" class="s-sub">Parameterise always. Escaping by hand and validation</text>
+        <text x="960" y="738" class="s-sub">are not substitutes. Table and column names cannot be</text>
+        <text x="960" y="752" class="s-sub">parameterised — check them against an allow-list.</text>
+        <text x="960" y="778" class="s-haz" font-size="10.5">An unindexed search endpoint is a denial-of-service</text>
+        <text x="960" y="792" class="s-haz" font-size="10.5">vector: anyone can call a 10-million-row scan in a loop.</text>
+        <text x="960" y="816" class="s-sub">Rate-limit it and cap page sizes, whatever the indexes.</text>
+      </svg>
+    </div>
+    <figcaption><b>Three numbers to keep:</b> three or four page reads for any lookup on a B-tree, ten index writes for every insert into a table with ten indexes, and zero indexes used by a query that wraps the column in a function. Index what you filter, join and sort on — then prove it with EXPLAIN ANALYZE, before and after.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the parts on this sheet</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Root page</h4><p>The single entry point of a B-tree. Its keys split the whole range of values, so one read discards most of the table from consideration.</p></div>
+      <div><h4><span>02</span>Internal pages</h4><p>Each level narrows the range again. Three to four levels cover millions of rows, which is why lookup cost barely moves as the table grows.</p></div>
+      <div><h4><span>03</span>Leaf pages</h4><p>The indexed values in sorted order, each with a pointer to its row. Sorted leaves are what let one index serve equality, ranges and ORDER BY.</p></div>
+      <div><h4><span>04</span>The heap</h4><p>The table itself. An ordinary index scan finishes by fetching the row from here — unless the index already holds every column the query needs.</p></div>
+      <div><h4><span>05</span>Seq Scan</h4><p>Reading every page of the table. Perfectly fine on a small table; ten million rows and about four seconds on a large one, and the buffer pool fills with useless pages.</p></div>
+      <div><h4><span>06</span>Index Scan</h4><p>Descend the tree, read the matching leaves, fetch those rows. Roughly three pages and fractions of a millisecond — 10 to 10,000 times faster on large tables.</p></div>
+      <div><h4><span>07</span>EXPLAIN ANALYZE</h4><p>Runs the query and reports what the database actually did. "Seq Scan" on a big table is the answer to most slow-query reports. Read it before and after every change.</p></div>
+      <div><h4><span>08</span>Statistics</h4><p>The planner's estimates of how many rows each condition matches. ANALYZE refreshes them; when they are stale the planner picks the wrong plan with a perfect index in place.</p></div>
+      <div><h4><span>09</span>Composite index</h4><p>Several columns, sorted left to right. Usable for any leading prefix of its columns and nothing else. Equality columns first, range next, sort last.</p></div>
+      <div><h4><span>10</span>Partial index</h4><p>An index over only the rows a condition selects — say the 2% of orders that are pending. Smaller, faster, and cheaper to maintain on every write.</p></div>
+      <div><h4><span>11</span>Expression index</h4><p>Indexes the result of an expression such as lower(email). The fix when the query must apply a function, since a function on a plain indexed column disables the index.</p></div>
+      <div><h4><span>12</span>Covering index</h4><p>INCLUDE adds non-key columns, so the query is answered from the index alone — an index-only scan. SELECT * makes this impossible by definition.</p></div>
+      <div><h4><span>13</span>Write cost</h4><p>Every INSERT, UPDATE and DELETE updates every index. Indexes also take 10–30% of table size and compete for the buffer pool. Unused ones (zero scans in pg_stat_user_indexes) are pure overhead.</p></div>
+      <div><h4><span>14</span>Logical order</h4><p>FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY, LIMIT. It explains why aliases fail in WHERE, why HAVING exists, and why a LEFT JOIN condition belongs in ON rather than WHERE.</p></div>
+      <div><h4><span>15</span>Parameterised query</h4><p>The input is sent as data, never spliced into the SQL text. The only reliable defence against SQL injection; ORMs do it by default until someone writes raw SQL with string formatting.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — THE COMMIT ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>The Commit</h2>
+    <span class="form">Timing diagram</span>
+    <span class="cov">Covers · Transactions · PostgreSQL · MySQL · Database Fundamentals</span>
+  </div>
+  <p class="thesis">Sheet 2 showed what a single write guarantees. This sheet shows what happens when two of them overlap in time. <strong>A transaction makes a group of writes all-or-nothing, but it does not stop two requests from reading the same value and both acting on it — that bug lives in the gap between the read and the write, and you must close it explicitly.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A timing diagram of transactions. At the top, three horizontal lanes — buyer A, row 42 and buyer B — show the lost update: both buyers read stock 10, both write 9, both commit, and two items are sold while stock drops by one. Below, three panels show the fixes: an atomic update, a pessimistic SELECT FOR UPDATE lock, and an optimistic version check. In the middle left, a staircase of four isolation levels from read uncommitted to serializable. In the middle right, the transaction for creating an order drawn as a bracket from BEGIN to COMMIT, with a rollback branch, a hazard about external calls inside the bracket, and events published only after commit. Along the bottom, deadlocks, sagas across services, and the outbox pattern.">
+        <defs>
+          <marker id="c4a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="c4b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <!-- LOST UPDATE LANES -->
+        <text x="40" y="42" class="s-zone" fill="var(--hazard)">The lost update · two buyers, one last item, no lock</text>
+        <rect x="150" y="70" width="750" height="40" fill="var(--z1)"/>
+        <rect x="150" y="130" width="750" height="40" fill="var(--z3)"/>
+        <rect x="150" y="190" width="750" height="40" fill="var(--z4)"/>
+        <g class="s-lab"><text x="40" y="94">buyer A</text><text x="40" y="154">row 42</text><text x="40" y="214">buyer B</text></g>
+        <g class="s-sub" font-size="10.5"><text x="40" y="108">txn A</text><text x="40" y="168">stock table</text><text x="40" y="228">txn B</text></g>
+        <g stroke="var(--rule)" stroke-dasharray="3 4"><line x1="240" y1="62" x2="240" y2="240"/><line x1="380" y1="62" x2="380" y2="240"/><line x1="520" y1="62" x2="520" y2="240"/><line x1="660" y1="62" x2="660" y2="240"/><line x1="800" y1="62" x2="800" y2="240"/></g>
+        <g class="s-num" text-anchor="middle"><text x="240" y="256">t1</text><text x="380" y="256">t2</text><text x="520" y="256">t3</text><text x="660" y="256">t4</text><text x="800" y="256">t5</text></g>
+        <g stroke-width="2.5" fill="none">
+          <path d="M240,130 L240,116" stroke="var(--line)" marker-end="url(#c4a)"/>
+          <path d="M380,170 L380,184" stroke="var(--line)" marker-end="url(#c4a)"/>
+          <path d="M520,110 L520,124" stroke="var(--line)" marker-end="url(#c4a)"/>
+          <path d="M660,190 L660,176" stroke="var(--hazard)" marker-end="url(#c4b)"/>
+        </g>
+        <g fill="var(--line)"><circle cx="240" cy="90" r="6"/><circle cx="520" cy="90" r="6"/><circle cx="380" cy="210" r="6"/></g>
+        <g fill="var(--hazard)"><circle cx="660" cy="210" r="6"/><circle cx="800" cy="90" r="6"/><circle cx="800" cy="210" r="6"/></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="252" y="94">01 read → 10</text><text x="532" y="94">03 write 9</text><text x="812" y="94">05 commit</text>
+          <text x="392" y="214">02 read → 10</text><text x="672" y="214">04 write 9</text><text x="812" y="214">05 commit</text>
+        </g>
+        <g class="s-mono" font-size="10.5"><text x="162" y="154">qty 10</text><text x="532" y="154">qty 9</text><text x="672" y="154">qty 9, again</text></g>
+        <text x="812" y="154" class="s-haz" font-size="10.5">2 sold, −1</text>
+
+        <text x="920" y="84" class="s-haz">Two items sold, stock decremented once</text>
+        <text x="920" y="102" class="s-sub">Both transactions read before either wrote. At READ</text>
+        <text x="920" y="116" class="s-sub">COMMITTED each saw only committed data — which is</text>
+        <text x="920" y="130" class="s-sub">exactly the bug. A transaction alone does not protect a</text>
+        <text x="920" y="144" class="s-sub">read-modify-write done in application code.</text>
+        <text x="920" y="170" class="s-note">Overselling is a lost update, not a caching problem.</text>
+        <text x="920" y="188" class="s-sub" style="fill:var(--hazard)">Redeeming one coupon twice or withdrawing one balance</text>
+        <text x="920" y="202" class="s-sub" style="fill:var(--hazard)">twice is the same race — and a standard attack technique.</text>
+
+        <!-- THREE FIXES -->
+        <rect x="30" y="290" width="436" height="176" fill="var(--z1)"/>
+        <rect x="482" y="290" width="436" height="176" fill="var(--z1)"/>
+        <rect x="934" y="290" width="436" height="176" fill="var(--z1)"/>
+        <g class="s-lab">
+          <text x="46" y="314">06 · let the database do the arithmetic</text>
+          <text x="498" y="314">07 · pessimistic: lock it before reading</text>
+          <text x="950" y="314">08 · optimistic: check a version</text>
+        </g>
+        <g class="s-mono" font-size="10">
+          <text x="46" y="336">UPDATE stock SET qty = qty - 1</text><text x="46" y="350">WHERE id = 42 AND qty &gt; 0;</text>
+          <text x="498" y="336">SELECT qty FROM stock</text><text x="498" y="350">WHERE id = 42 FOR UPDATE;</text>
+          <text x="950" y="336">UPDATE stock SET qty = 9, version = 6</text><text x="950" y="350">WHERE id = 42 AND version = 5;</text>
+        </g>
+        <g fill="var(--line)" opacity=".85">
+          <rect x="46" y="392" width="150" height="14"/><rect x="270" y="392" width="180" height="14"/>
+          <rect x="498" y="392" width="150" height="14"/><rect x="722" y="392" width="180" height="14"/>
+          <rect x="950" y="392" width="150" height="14"/>
+        </g>
+        <rect x="1174" y="392" width="180" height="14" fill="var(--hazard)" opacity=".7"/>
+        <g stroke="var(--hazard)" stroke-width="2.5" stroke-dasharray="5 4"><line x1="196" y1="399" x2="270" y2="399"/><line x1="648" y1="399" x2="722" y2="399"/></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="384">A: 10 → 9</text><text x="200" y="384">B waits</text><text x="274" y="384">B: 9 → 8</text>
+          <text x="498" y="384">A locks, reads 10</text><text x="652" y="384">B blocks</text><text x="726" y="384">B reads 9</text>
+          <text x="950" y="384">A: 1 row affected</text><text x="1174" y="384">B: 0 rows → retry</text>
+        </g>
+        <g class="s-sub">
+          <text x="46" y="428">The UPDATE takes the row lock itself; B waits a few</text><text x="46" y="442">ms, then decrements 9 → 8. qty &gt; 0 stops the oversell.</text>
+          <text x="498" y="428">For checks that need several statements. Hold it for</text><text x="498" y="442">milliseconds — never across an HTTP call.</text>
+          <text x="950" y="428">A version column instead of a lock. 0 rows affected means</text><text x="950" y="442">somebody else won: read again and retry.</text>
+        </g>
+        <g class="s-note" font-size="11"><text x="46" y="460">the best fix, whenever it is possible</text><text x="498" y="460">for multi-step invariants</text><text x="950" y="460">for conflicts that are rare</text></g>
+
+        <!-- ISOLATION -->
+        <rect x="30" y="482" width="660" height="230" fill="var(--z3)"/>
+        <text x="46" y="506" class="s-zone" fill="var(--mute)">Isolation · fewer anomalies, less concurrency</text>
+        <path d="M46,522 L516,522" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="8 6" fill="none" marker-end="url(#c4a)"/>
+        <g>
+          <rect x="46" y="608" width="150" height="72" fill="var(--paper)" stroke="var(--rule)" stroke-width="2"/>
+          <rect x="206" y="582" width="150" height="98" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="366" y="556" width="150" height="124" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="526" y="530" width="150" height="150" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+        </g>
+        <g class="s-num"><text x="54" y="624">09</text><text x="214" y="598">10</text><text x="374" y="572">11</text><text x="534" y="546">12</text></g>
+        <g class="s-mono" font-size="10"><text x="74" y="624">READ UNCOMMITTED</text><text x="234" y="598">READ COMMITTED</text><text x="394" y="572">REPEATABLE READ</text><text x="554" y="546">SERIALIZABLE</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="54" y="640">sees uncommitted</text><text x="54" y="654">data — never used</text>
+          <text x="214" y="614">no dirty reads</text><text x="214" y="628" fill="var(--line)">PostgreSQL default</text>
+          <text x="374" y="588">no non-repeatable</text><text x="374" y="602">reads</text><text x="374" y="616" fill="var(--line)">MySQL default</text>
+          <text x="534" y="562">no phantom rows</text><text x="534" y="576">as if run one at a</text><text x="534" y="590">time; most retries</text>
+        </g>
+        <text x="46" y="702" class="s-haz" font-size="10.5">The lost update is stopped by none of these at their defaults — it needs 06, 07 or 08.</text>
+
+        <!-- ORDER TRANSACTION -->
+        <rect x="706" y="482" width="664" height="230" fill="var(--z4)"/>
+        <text x="722" y="506" class="s-zone" fill="var(--mute)">One use case, one transaction — an order</text>
+        <text x="722" y="528" class="s-sub">the service owns this bracket — a controller cannot know which writes belong together</text>
+        <path d="M722,552 L722,544 L1226,544 L1226,552" fill="none" stroke="var(--line)" stroke-width="2"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="722" y="556" width="60" height="40"/><rect x="788" y="556" width="86" height="40"/><rect x="880" y="556" width="86" height="40"/><rect x="972" y="556" width="86" height="40"/><rect x="1064" y="556" width="86" height="40"/>
+        </g>
+        <rect x="1156" y="556" width="70" height="40" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+        <rect x="1236" y="556" width="118" height="40" fill="var(--z6)" stroke="var(--learn)" stroke-width="2"/>
+        <g class="s-num"><text x="728" y="570">13</text><text x="794" y="570">14</text><text x="886" y="570">15</text><text x="978" y="570">16</text><text x="1070" y="570">17</text><text x="1162" y="570">18</text><text x="1242" y="570">19</text></g>
+        <g class="s-mono" font-size="10"><text x="728" y="588">BEGIN</text><text x="794" y="588">lock stock</text><text x="886" y="588">INSERT order</text><text x="978" y="588">INSERT items</text><text x="1070" y="588">UPDATE stock</text><text x="1162" y="588">COMMIT</text><text x="1242" y="588">publish, email</text></g>
+        <path d="M831,596 L831,622" stroke="var(--hazard)" stroke-width="2.5" fill="none" marker-end="url(#c4b)"/>
+        <text x="842" y="618" class="s-haz" font-size="10.5">stock short → ROLLBACK, nothing written</text>
+        <text x="1160" y="618" class="s-sub" font-size="10.5">WAL flushed, then</text>
+        <text x="1160" y="632" class="s-sub" font-size="10.5">acknowledged</text>
+        <text x="1240" y="652" class="s-sub" font-size="10.5" style="fill:var(--learn)">after commit only —</text>
+        <text x="1240" y="666" class="s-sub" font-size="10.5" style="fill:var(--learn)">else a rollback</text>
+        <text x="1240" y="680" class="s-sub" font-size="10.5" style="fill:var(--learn)">emails a ghost order</text>
+        <text x="722" y="656" class="s-haz" font-size="10.5">✗ an external payment call (2 s) inside the bracket</text>
+        <text x="722" y="672" class="s-sub" font-size="10.5" style="fill:var(--hazard)">holds the lock, blocks writers, stalls vacuum. Call it outside,</text>
+        <text x="722" y="686" class="s-sub" font-size="10.5" style="fill:var(--hazard)">with an idempotency key so a retry cannot charge twice.</text>
+
+        <!-- BOTTOM -->
+        <rect x="30" y="728" width="440" height="140" fill="var(--z5)"/>
+        <text x="46" y="752" class="s-note">20 · deadlocks are normal, not bugs</text>
+        <text x="46" y="774" class="s-sub">Two transactions each hold a row the other wants. The</text>
+        <text x="46" y="788" class="s-sub">database kills one; your code must catch it and retry.</text>
+        <text x="46" y="814" class="s-lab" font-size="11">Batch the writes</text>
+        <text x="46" y="832" class="s-sub">One transaction for 1,000 inserts is far faster than</text>
+        <text x="46" y="846" class="s-sub">1,000 transactions of one insert each.</text>
+
+        <rect x="490" y="728" width="440" height="140" fill="var(--band)"/>
+        <text x="506" y="752" class="s-lab">21 · across services: the saga</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5"><rect x="506" y="764" width="120" height="30"/><rect x="646" y="764" width="120" height="30"/><rect x="786" y="764" width="128" height="30"/></g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#c4a)"><path d="M626,779 L642,779"/><path d="M766,779 L782,779"/></g>
+        <g class="s-lab" font-size="11"><text x="516" y="784">reserve stock</text><text x="656" y="784">charge card</text><text x="796" y="784">create shipment</text></g>
+        <text x="506" y="816" class="s-haz" font-size="10.5">charge fails → release the stock</text>
+        <text x="506" y="830" class="s-haz" font-size="10.5">shipment fails → refund, then release</text>
+        <text x="506" y="854" class="s-sub">Two-phase commit: slow, fragile, blocks if its coordinator dies.</text>
+
+        <rect x="950" y="728" width="420" height="140" fill="var(--z2)"/>
+        <text x="966" y="752" class="s-lab">22 · the outbox</text>
+        <text x="966" y="774" class="s-sub">Write the OrderCreated event into an outbox table in the</text>
+        <text x="966" y="788" class="s-sub">same transaction as the order. A relay publishes it after</text>
+        <text x="966" y="802" class="s-sub">commit, so no event describes a rolled-back row.</text>
+        <text x="966" y="826" class="s-lab" font-size="11">Invariants belong in the database</text>
+        <text x="966" y="842" class="s-sub">Unique and CHECK constraints cannot be raced; audit</text>
+        <text x="966" y="856" class="s-sub">rows go in the same transaction as the act they record.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the top lanes once, then the three fixes:</b> the lost update needs no crash and no bad isolation level — only two requests a few milliseconds apart. The cure is always to make the check and the change a single step the database can see: an atomic statement, a lock, or a version it can compare.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the transaction vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>A reads</h4><p>Buyer A's transaction reads stock = 10 into application memory. From this instant the value in memory can go stale, and nothing in the database knows A intends to change it.</p></div>
+      <div><h4><span>02</span>B reads</h4><p>Buyer B reads the same row a moment later. A has not written yet, so B also sees 10. At READ COMMITTED this is entirely correct behaviour.</p></div>
+      <div><h4><span>03</span>A writes 9</h4><p>A computes 10 − 1 in code and writes the literal 9. The row lock taken now protects the write — but not the decision, which was made from an old read.</p></div>
+      <div><h4><span>04</span>B writes 9</h4><p>B waits for A's lock if A has not committed, then writes its own 9, overwriting A's work with the same number. No error is raised anywhere.</p></div>
+      <div><h4><span>05</span>Both commit</h4><p>Two items sold, stock decremented once. Durable, consistent with every constraint, and wrong. This is the most common real transaction bug and it costs real money.</p></div>
+      <div><h4><span>06</span>Atomic update</h4><p>qty = qty − 1 WHERE qty &gt; 0. The read, the check and the write happen inside one statement under the row lock. Best whenever the logic fits in SQL.</p></div>
+      <div><h4><span>07</span>SELECT … FOR UPDATE</h4><p>Pessimistic locking: the row is locked at the read, so the second transaction blocks until the first commits and then reads the new value. Keep it short.</p></div>
+      <div><h4><span>08</span>Optimistic locking</h4><p>A version column checked in the WHERE clause. Zero rows affected means a concurrent change won; re-read and retry. Cheap when conflicts are rare.</p></div>
+      <div><h4><span>09</span>Read uncommitted</h4><p>Can see other transactions' unfinished writes — dirty reads. Essentially never used on purpose.</p></div>
+      <div><h4><span>10</span>Read committed</h4><p>Sees only committed data, but a row may change between two reads in the same transaction. PostgreSQL's default.</p></div>
+      <div><h4><span>11</span>Repeatable read</h4><p>The same query returns the same rows throughout the transaction. MySQL's default. Stronger — and still not a cure for application-side read-modify-write.</p></div>
+      <div><h4><span>12</span>Serializable</h4><p>Behaves as if transactions ran one at a time, preventing phantom rows too. Safest, slowest, and the level that produces the most retries.</p></div>
+      <div><h4><span>13</span>BEGIN</h4><p>Opened by the service method for one use case. Frameworks do it for you — Spring's @Transactional, a SQLAlchemy session, EF Core's SaveChanges — which is why an exception rolls back every write.</p></div>
+      <div><h4><span>14</span>Lock the stock</h4><p>SELECT … FOR UPDATE on the items being bought, so no concurrent order can sell the same units. If stock is short, raise: the rollback writes nothing.</p></div>
+      <div><h4><span>15</span>Insert the order</h4><p>The parent row. On its own it is meaningless, which is exactly why it must commit together with its items or not at all.</p></div>
+      <div><h4><span>16</span>Insert the items</h4><p>Anything spanning two tables must be atomic. Batch the item inserts inside this one transaction rather than committing each separately.</p></div>
+      <div><h4><span>17</span>Decrement stock</h4><p>An atomic qty = qty − n, under the lock taken at step 14. The inventory invariant is now enforced by the database, not by hope.</p></div>
+      <div><h4><span>18</span>COMMIT</h4><p>The write-ahead log is flushed first, then the commit is acknowledged. Everything inside the bracket becomes durable and visible to everyone at the same instant.</p></div>
+      <div><h4><span>19</span>After commit</h4><p>Publish OrderCreated and send the email only now. Done inside the bracket, a rollback would have announced an order that never existed.</p></div>
+      <div><h4><span>20</span>Deadlock</h4><p>Two transactions waiting on each other's locks. The database resolves it by killing one participant; retrying that transaction is ordinary, required error handling.</p></div>
+      <div><h4><span>21</span>Saga</h4><p>ACID does not cross service boundaries. A saga is a chain of local transactions, each with a compensating action for when a later step fails — eventual consistency by design.</p></div>
+      <div><h4><span>22</span>Outbox</h4><p>An event row committed atomically with the business write, then published by a relay. The honest way to "write and publish" when the broker is a separate system.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Short, local, and inside the database</b>
+    <p>Keep transactions to milliseconds: a long one holds locks, blocks writers, holds a pooled connection and stops PostgreSQL's autovacuum from cleaning anything newer than it. Never include an external API call, a file upload or a queue publish. And never assume a transaction spans two services — it does not, however it looks in the code.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — THE MAPPING LAYER ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>The Mapping Layer</h2>
+    <span class="form">Closed circuit</span>
+    <span class="cov">Covers · ORM · SQLAlchemy · Hibernate · Entity Framework · Prisma</span>
+  </div>
+  <p class="thesis">Stop 03 of sheet 1, opened up. Every ORM — in Python, Java, C# or TypeScript — runs the same six-step circuit once per request, under a different name. <strong>The circuit is what makes an ORM safe and short; the spur off step 3 is what makes it slow, and it is invisible in the source code until something counts the queries.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 940" role="img" aria-label="A closed circuit of six steps that every ORM runs per request: open a session, build the query, materialise rows into objects, mutate them, flush and commit, close and map to a DTO. A dashed hazard spur leaves step 3 and re-enters step 2, labelled as the N+1 loop. On the right, a panel counts the N+1: a hundred and one query ticks against a single eager query, with the eager-loading fix for Django, SQLAlchemy, Hibernate, EF Core and Prisma. Below it, the Active Record and Data Mapper styles and a spectrum from full ORM to raw SQL. Along the bottom, four panels compare SQLAlchemy, Hibernate, EF Core and Prisma: their unit of work, lazy-loading default, N+1 guard, typical failure, the rule to follow, and the unsafe and safe forms of raw SQL.">
+        <defs>
+          <marker id="o5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="o5b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <!-- THE CIRCUIT -->
+        <text x="40" y="46" class="s-zone" fill="var(--line)">The unit of work · one request's life inside any ORM</text>
+        <g fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#o5a)">
+          <path d="M428,157 A190,190 0 0,1 547,222"/>
+          <path d="M573,272 A190,190 0 0,1 573,408"/>
+          <path d="M547,458 A190,190 0 0,1 428,523"/>
+          <path d="M372,523 A190,190 0 0,1 253,458"/>
+          <path d="M227,408 A190,190 0 0,1 227,272"/>
+          <path d="M253,222 A190,190 0 0,1 372,157"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="3.5">
+          <circle cx="400" cy="150" r="26"/><circle cx="564" cy="245" r="26"/><circle cx="564" cy="435" r="26"/>
+          <circle cx="400" cy="530" r="26"/><circle cx="236" cy="435" r="26"/><circle cx="236" cy="245" r="26"/>
+        </g>
+        <g class="s-big" text-anchor="middle" style="fill:var(--line)">
+          <text x="400" y="157">1</text><text x="564" y="252">2</text><text x="564" y="442">3</text><text x="400" y="537">4</text><text x="236" y="442">5</text><text x="236" y="252">6</text>
+        </g>
+        <text x="400" y="86" text-anchor="middle" class="s-lab">open a session</text>
+        <text x="400" y="102" text-anchor="middle" class="s-sub">scoped to this request,</text>
+        <text x="400" y="116" text-anchor="middle" class="s-sub">never a global</text>
+        <text x="606" y="238" class="s-lab">build the query</text>
+        <text x="606" y="256" class="s-sub">select() · LINQ · findMany</text>
+        <text x="606" y="270" class="s-sub">→ parameterised SQL</text>
+        <text x="606" y="424" class="s-lab">materialise</text>
+        <text x="606" y="442" class="s-sub">rows → objects; identity</text>
+        <text x="606" y="456" class="s-sub">map: one object per row</text>
+        <text x="400" y="580" text-anchor="middle" class="s-lab">mutate</text>
+        <text x="400" y="596" text-anchor="middle" class="s-sub">the change tracker notes every edit — no SQL yet</text>
+        <text x="400" y="610" text-anchor="middle" class="s-sub">(Hibernate calls it dirty checking)</text>
+        <text x="194" y="424" text-anchor="end" class="s-lab">flush + commit</text>
+        <text x="194" y="442" text-anchor="end" class="s-sub">UPDATE and INSERT</text>
+        <text x="194" y="456" text-anchor="end" class="s-sub">issued in one transaction</text>
+        <text x="194" y="238" text-anchor="end" class="s-lab">close, map to DTO</text>
+        <text x="194" y="256" text-anchor="end" class="s-sub">connection back to the</text>
+        <text x="194" y="270" text-anchor="end" class="s-sub">pool; respond from a DTO</text>
+        <text x="400" y="330" text-anchor="middle" class="s-note" font-size="13">one request</text>
+        <text x="400" y="350" text-anchor="middle" class="s-sub">a session never closed keeps a</text>
+        <text x="400" y="364" text-anchor="middle" class="s-sub">connection and a transaction open</text>
+
+        <path d="M580,414 C650,390 650,300 580,280" fill="none" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#o5b)"/>
+        <text x="690" y="316" class="s-haz">07 · the N+1 spur</text>
+        <text x="690" y="332" class="s-sub" font-size="10.5" style="fill:var(--hazard)">each lazy relation</text>
+        <text x="690" y="346" class="s-sub" font-size="10.5" style="fill:var(--hazard)">touched in a loop</text>
+        <text x="690" y="360" class="s-sub" font-size="10.5" style="fill:var(--hazard)">re-enters step 2</text>
+
+        <!-- N+1 COUNTED -->
+        <rect x="830" y="30" width="540" height="300" fill="var(--z4)"/>
+        <text x="846" y="54" class="s-zone" fill="var(--fast)">07 · the N+1, counted</text>
+        <text x="846" y="76" class="s-sub">100 orders, lazy customer: 1 + 100 queries × 2 ms round trip ≈ 200 ms of waiting</text>
+        <line x1="846" y1="100" x2="1330" y2="100" stroke="var(--hazard)" stroke-width="26" stroke-dasharray="3 1.8" opacity=".75"/>
+        <text x="846" y="134" class="s-mono" font-size="10.5">for order in orders: order.customer.name</text>
+        <text x="846" y="162" class="s-sub">eager loading: 1 query ≈ 5 ms</text>
+        <rect x="846" y="170" width="5" height="26" fill="var(--line)"/>
+        <text x="862" y="188" class="s-sub" style="fill:var(--line)">← the whole page, in one round trip</text>
+        <text x="846" y="218" class="s-sub">Invisible in the code; obvious once a query counter shows 200 on one page.</text>
+        <g class="s-lab" font-size="11">
+          <text x="846" y="244">Django</text><text x="846" y="262">SQLAlchemy</text><text x="846" y="280">Hibernate</text><text x="846" y="298">EF Core</text><text x="846" y="316">Prisma</text>
+        </g>
+        <g class="s-mono" font-size="10">
+          <text x="950" y="244">select_related / prefetch_related</text>
+          <text x="950" y="262">joinedload / selectinload</text>
+          <text x="950" y="280">JOIN FETCH / entity graph</text>
+          <text x="950" y="298">Include(…).ThenInclude(…)</text>
+          <text x="950" y="316">include — lazy loading does not exist</text>
+        </g>
+
+        <!-- STYLES -->
+        <rect x="830" y="346" width="540" height="214" fill="var(--z1)"/>
+        <text x="846" y="370" class="s-zone" fill="var(--line)">Two mapping styles, one spectrum</text>
+        <text x="846" y="394" class="s-lab" font-size="11.5">08 · Active Record</text>
+        <text x="846" y="412" class="s-mono" font-size="10">user.save()</text>
+        <text x="846" y="428" class="s-sub" font-size="10.5">the object saves itself · Django,</text>
+        <text x="846" y="442" class="s-sub" font-size="10.5">Eloquent · domain tied to storage</text>
+        <text x="1110" y="394" class="s-lab" font-size="11.5">09 · Data Mapper</text>
+        <text x="1110" y="412" class="s-mono" font-size="10">session.add(u); session.commit()</text>
+        <text x="1110" y="428" class="s-sub" font-size="10.5">a layer moves data · SQLAlchemy,</text>
+        <text x="1110" y="442" class="s-sub" font-size="10.5">Hibernate · domain stays clean</text>
+        <text x="846" y="466" class="s-lab" font-size="11">10 · the spectrum</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="846" y="476" width="120" height="30"/><rect x="976" y="476" width="120" height="30"/><rect x="1106" y="476" width="120" height="30"/><rect x="1236" y="476" width="118" height="30"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="856" y="495">full ORM</text><text x="986" y="495">query builder</text><text x="1116" y="495">micro-ORM</text><text x="1246" y="495">raw SQL</text></g>
+        <g class="s-sub" font-size="10.5"><text x="856" y="522">Hibernate, EF</text><text x="986" y="522">Knex, jOOQ</text><text x="1116" y="522">Dapper</text><text x="1246" y="522">full control</text></g>
+        <text x="846" y="546" class="s-sub" style="fill:var(--fast)">Most teams run a hybrid: the ORM for CRUD, SQL for reports, aggregations and bulk work.</text>
+
+        <!-- FOUR DIALECTS -->
+        <rect x="30" y="640" width="328" height="240" fill="var(--z2)"/>
+        <rect x="372" y="640" width="328" height="240" fill="var(--z3)"/>
+        <rect x="714" y="640" width="328" height="240" fill="var(--z2)"/>
+        <rect x="1056" y="640" width="314" height="240" fill="var(--z3)"/>
+        <g class="s-name"><text x="46" y="664">11 · SQLAlchemy</text><text x="388" y="664">12 · Hibernate</text><text x="730" y="664">13 · EF Core</text><text x="1072" y="664">14 · Prisma</text></g>
+        <g class="s-lab" font-size="10.5" style="fill:var(--mute)">
+          <text x="46" y="688">unit</text><text x="46" y="706">lazy</text><text x="46" y="724">guard</text><text x="46" y="742">breaks</text><text x="46" y="760">rule</text>
+          <text x="388" y="688">unit</text><text x="388" y="706">lazy</text><text x="388" y="724">guard</text><text x="388" y="742">breaks</text><text x="388" y="760">rule</text>
+          <text x="730" y="688">unit</text><text x="730" y="706">lazy</text><text x="730" y="724">guard</text><text x="730" y="742">breaks</text><text x="730" y="760">rule</text>
+          <text x="1072" y="688">unit</text><text x="1072" y="706">lazy</text><text x="1072" y="724">guard</text><text x="1072" y="742">breaks</text><text x="1072" y="760">rule</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="100" y="688">Session: txn, identity map</text><text x="100" y="706">on; raises in async code</text><text x="100" y="724">lazy="raise" in development</text><text x="100" y="742" fill="var(--hazard)">a global, long-lived Session</text><text x="100" y="760">per request; Core for bulk</text>
+          <text x="442" y="688">the Persistence Context</text><text x="442" y="706">@ManyToOne EAGER by default</text><text x="442" y="724">JOIN FETCH, entity graphs</text><text x="442" y="742" fill="var(--hazard)">LazyInitializationException</text><text x="442" y="760">DTO in txn; open-in-view off</text>
+          <text x="784" y="688">DbContext, registered scoped</text><text x="784" y="706">off by default — keep it off</text><text x="784" y="724">Include, AsSplitQuery, Select</text><text x="784" y="742" fill="var(--hazard)">a singleton DbContext</text><text x="784" y="760">AsNoTracking() on every read</text>
+          <text x="1126" y="688">client generated from schema</text><text x="1126" y="706">does not exist, by design</text><text x="1126" y="724">no include, no compile</text><text x="1126" y="742" fill="var(--hazard)">prisma generate not in CI</text><text x="1126" y="760">migrate deploy, not db push</text>
+        </g>
+        <g class="s-mono" font-size="10">
+          <text x="46" y="788" fill="var(--hazard)">text(f"…'{email}'")  ✗</text><text x="46" y="804" fill="var(--line)">text("… :e"), {"e": email}  ✓</text>
+          <text x="388" y="788" fill="var(--hazard)">"…'" + email + "'"  ✗</text><text x="388" y="804" fill="var(--line)">"… u.email = :email"  ✓</text>
+          <text x="730" y="788" fill="var(--hazard)">FromSqlRaw($"…'{email}'")  ✗</text><text x="730" y="804" fill="var(--line)">FromSqlInterpolated(…)  ✓</text>
+          <text x="1072" y="788" fill="var(--hazard)">$queryRawUnsafe(`…`)  ✗</text><text x="1072" y="804" fill="var(--line)">$queryRaw`…${email}`  ✓</text>
+        </g>
+        <g class="s-note" font-size="11">
+          <text x="46" y="834">Core and ORM share one session</text><text x="46" y="850">and one transaction.</text>
+          <text x="388" y="834">Edit a managed entity inside a</text><text x="388" y="850">transaction: an UPDATE, unasked.</text>
+          <text x="730" y="834">Untranslatable LINQ throws since</text><text x="730" y="850">3.0 — it used to load the table.</text>
+          <text x="1072" y="834">The result type changes with</text><text x="1072" y="850">the include clause you wrote.</text>
+        </g>
+
+        <text x="40" y="912" class="s-haz">15 · Every ORM here generates migrations. Read each one before applying it: auto-generated DDL has dropped columns and locked large tables in production.</text>
+      </svg>
+    </div>
+    <figcaption><b>The circuit is the same in every language; only the vocabulary changes.</b> Session, Persistence Context, DbContext and the Prisma client are all a transaction plus an identity map plus a change tracker, scoped to one request. Learn the circuit once and the four failure modes below it are recognisable on sight.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the mapping vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Open a session</h4><p>The unit of work is created per request by dependency injection or a context manager. It is not thread-safe and must never be global, singleton or shared.</p></div>
+      <div><h4><span>02</span>Build the query</h4><p>select(), LINQ, a repository method or findMany is translated into parameterised SQL. This is where loading strategy — eager or lazy — is decided, explicitly or by default.</p></div>
+      <div><h4><span>03</span>Materialise</h4><p>Rows become objects. The identity map guarantees one object per row within the session: a free per-request cache, and the reason the same entity fetched twice is the same instance.</p></div>
+      <div><h4><span>04</span>Mutate</h4><p>Business logic changes objects; the change tracker records it and no SQL is sent. In Hibernate, modifying a managed entity issues an UPDATE even without a save() call.</p></div>
+      <div><h4><span>05</span>Flush and commit</h4><p>Tracked changes become UPDATE and INSERT statements inside one transaction — sheet 4's bracket, drawn for you by the framework.</p></div>
+      <div><h4><span>06</span>Close, map to DTO</h4><p>The connection returns to the pool and the response is built from a purpose-made object. Returning entities serialises every column and can trigger lazy loads after the session is gone.</p></div>
+      <div><h4><span>07</span>N+1</h4><p>One query for the list, then one per row for each lazy relation touched in a loop. The near-universal ORM performance bug, fixed with eager loading and caught with a query counter.</p></div>
+      <div><h4><span>08</span>Active Record</h4><p>The model knows how to save itself. Fast to write and simple to read; the price is a domain model welded to the persistence layer.</p></div>
+      <div><h4><span>09</span>Data Mapper</h4><p>A separate layer moves data between plain objects and tables. More ceremony, cleaner separation — the style of SQLAlchemy, Hibernate and Doctrine.</p></div>
+      <div><h4><span>10</span>The spectrum</h4><p>Full ORM, query builder, micro-ORM, raw SQL. Query builders are underrated: composable and parameterised without hiding the query shape. Drop to SQL whenever the query is the point.</p></div>
+      <div><h4><span>11</span>SQLAlchemy</h4><p>Core expression language underneath, ORM on top, both in one Session. selectinload for collections, joinedload for many-to-one, lazy="raise" to make N+1 fail loudly. Alembic for migrations.</p></div>
+      <div><h4><span>12</span>Hibernate</h4><p>The JPA reference implementation under Spring Data JPA. Mark relations LAZY, fetch explicitly, map to DTOs inside the transaction, and disable spring.jpa.open-in-view. Flyway, not hbm2ddl.auto.</p></div>
+      <div><h4><span>13</span>EF Core</h4><p>LINQ compiled to SQL, lazy loading off by default. DbContext scoped per request, AsNoTracking() for reads, AsSplitQuery() against cartesian Include chains, Dapper beside it for reports.</p></div>
+      <div><h4><span>14</span>Prisma</h4><p>schema.prisma generates a typed client, so a missing include is a compile error and N+1 cannot happen by accident. Use select to avoid leaking fields such as passwordHash; plan pooling for serverless.</p></div>
+      <div><h4><span>15</span>Migrations</h4><p>Versioned, reviewable schema changes applied in order in every environment. The most underrated ORM feature — and the most dangerous when applied unread, or bypassed with db push or EnsureCreated().</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The protection ends at the string</b>
+    <p>Every ORM on this sheet parameterises by default, which is its strongest argument. The moment someone formats input into raw SQL, or binds a request body straight onto a model and lets a caller set is_admin, that protection is gone. Bind to an explicit input schema, and let the runtime database user hold no DDL rights at all.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — THE OPTIMISATION LADDER ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>The Optimisation Ladder</h2>
+    <span class="form">Ladder plate</span>
+    <span class="cov">Covers · Database Optimization · Indexes · Cache · PostgreSQL · Database Fundamentals</span>
+  </div>
+  <p class="thesis">Nine ways to make a slow data layer fast, drawn in the order you should try them. <strong>Each rung is roughly ten times the effort of the one below it and ten times less likely to be needed — so measure, fix the N+1, add the index, and stop the moment it is fast enough.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="A staircase of nine rungs rising left to right: measure, fix the N+1, add indexes, rewrite queries, cache, tune configuration, read replicas, denormalise, and shard. Effort and irreversibility rise with each step. Below, a bar chart of a realistic session where an orders page goes from 4,000 milliseconds to 900, 120 and 90 and then stops. Beside it, two bars showing that a 5 millisecond query called 200,000 times costs far more than a 2 second query called twice. Along the bottom, a chart of offset pagination slowing with depth while keyset pagination stays flat, the configuration settings worth tuning, and the guard rails of timeouts, page caps and pool sizing.">
+        <defs>
+          <marker id="l6a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <line x1="40" y1="470" x2="1364" y2="470" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M60,58 L1340,58" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#l6a)" fill="none"/>
+        <text x="60" y="44" class="s-note">effort · risk · how hard it is to undo — each rung ≈ 10× the one before, and ≈ 10× less likely to be needed</text>
+
+        <g>
+          <rect x="40" y="400" width="140" height="70" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="188" y="360" width="140" height="110" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="336" y="320" width="140" height="150" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="484" y="280" width="140" height="190" fill="var(--z2)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="632" y="240" width="140" height="230" fill="var(--z3)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="780" y="200" width="140" height="270" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="928" y="160" width="140" height="310" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="1076" y="120" width="140" height="350" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="1224" y="80" width="140" height="390" fill="var(--band)" stroke="var(--hazard)" stroke-width="2"/>
+        </g>
+        <g class="s-num"><text x="52" y="420">01</text><text x="200" y="380">02</text><text x="348" y="340">03</text><text x="496" y="300">04</text><text x="644" y="260">05</text><text x="792" y="220">06</text><text x="940" y="180">07</text><text x="1088" y="140">08</text><text x="1236" y="100">09</text></g>
+        <g class="s-lab" font-size="12.5">
+          <text x="52" y="438">measure</text><text x="200" y="398">fix the N+1</text><text x="348" y="358">add indexes</text><text x="496" y="318">rewrite queries</text><text x="644" y="278">cache</text><text x="792" y="238">tune config</text><text x="940" y="198">read replicas</text><text x="1088" y="158">denormalise</text><text x="1236" y="118">shard</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="456">pg_stat_statements</text>
+          <text x="200" y="416">biggest win in any</text><text x="200" y="430">ORM app: 340 → 3</text><text x="200" y="444">queries on one page</text>
+          <text x="348" y="376">second biggest, and</text><text x="348" y="390">cheap: FKs first,</text><text x="348" y="404">then equality →</text><text x="348" y="418">range → sort</text><text x="348" y="432">— sheet 3</text>
+          <text x="496" y="336">name the columns,</text><text x="496" y="350">no functions on</text><text x="496" y="364">indexed columns,</text><text x="496" y="378">keyset, not OFFSET</text>
+          <text x="644" y="296">only once the query</text><text x="644" y="310">is sane — sheet 7.</text><text x="644" y="324">A cache over a slow</text><text x="644" y="338">query hides the</text><text x="644" y="352">missing index</text>
+          <text x="792" y="256">shared_buffers,</text><text x="792" y="270">work_mem, pool size;</text><text x="792" y="284">defaults assume a</text><text x="792" y="298">small machine</text>
+          <text x="940" y="216">scale reads out —</text><text x="940" y="230">but replicas lag, so</text><text x="940" y="244">read-after-write</text><text x="940" y="258">must go to the</text><text x="940" y="272">primary</text>
+          <text x="1088" y="176">duplicate data to</text><text x="1088" y="190">skip joins; you now</text><text x="1088" y="204">own consistency.</text><text x="1088" y="218">Partition first:</text><text x="1088" y="232">split one huge table</text><text x="1088" y="246">by range, usually</text><text x="1088" y="260">by time</text>
+          <text x="1236" y="136">point of no return:</text><text x="1236" y="150">breaks joins and</text><text x="1236" y="164">transactions; every</text><text x="1236" y="178">query needs a shard</text><text x="1236" y="192">key; nearly</text><text x="1236" y="206">impossible to undo</text>
+        </g>
+        <text x="1236" y="234" class="s-haz" font-size="10.5">exhaust every rung</text>
+        <text x="1236" y="248" class="s-haz" font-size="10.5">below it first</text>
+
+        <text x="52" y="496" class="s-note">Almost every database performance problem is resolved before rung 4.</text>
+        <text x="52" y="514" class="s-sub">Work up in order. Measure after every rung and stop the moment it is fast enough — the realistic session below never left rung 4. A single well-indexed PostgreSQL handles tens of thousands of queries per second.</text>
+
+        <!-- 10 SESSION -->
+        <rect x="30" y="540" width="660" height="150" fill="var(--z3)"/>
+        <text x="46" y="564" class="s-zone" fill="var(--mute)">10 · a realistic session: "the orders page takes 4 s"</text>
+        <rect x="46" y="578" width="560" height="16" fill="var(--hazard)" opacity=".75"/>
+        <rect x="46" y="602" width="126" height="16" fill="var(--fast)" opacity=".85"/>
+        <rect x="46" y="626" width="17" height="16" fill="var(--line)" opacity=".85"/>
+        <rect x="46" y="650" width="13" height="16" fill="var(--line)" opacity=".85"/>
+        <g class="s-mono" font-size="10">
+          <text x="54" y="590" fill="var(--paper)">4,000 ms · 340 queries on one page — an N+1</text>
+          <text x="180" y="614">900 ms · eager loading → 3 queries</text>
+          <text x="71" y="638">120 ms · CREATE INDEX CONCURRENTLY (user_id, status, created)</text>
+          <text x="67" y="662">90 ms · six named columns instead of SELECT *</text>
+        </g>
+        <text x="46" y="684" class="s-note">Fast enough — STOP. No cache, no config change, no replica, no shard.</text>
+
+        <!-- 11 TOTAL VS MEAN -->
+        <rect x="706" y="540" width="664" height="150" fill="var(--z1)"/>
+        <text x="722" y="564" class="s-zone" fill="var(--line)">11 · rank by total time, not by mean</text>
+        <text x="722" y="586" class="s-mono" font-size="10">5 ms × 200,000 calls = 1,000 s</text>
+        <rect x="722" y="592" width="500" height="16" fill="var(--hazard)" opacity=".75"/>
+        <text x="1236" y="605" class="s-haz" font-size="10.5">the real cost</text>
+        <text x="722" y="628" class="s-mono" font-size="10">2 s × 2 calls = 4 s</text>
+        <rect x="722" y="634" width="2" height="16" fill="var(--line)"/>
+        <text x="734" y="647" class="s-sub" font-size="10.5">looks slow, costs almost nothing</text>
+        <text x="722" y="672" class="s-sub">The fast-looking query is usually the real problem: ORDER BY total_exec_time DESC.</text>
+
+        <!-- 12 PAGINATION -->
+        <rect x="30" y="706" width="440" height="140" fill="var(--z4)"/>
+        <text x="46" y="730" class="s-zone" fill="var(--mute)">12 · OFFSET against keyset</text>
+        <path d="M46,746 L46,826 L300,826" fill="none" stroke="var(--rule)" stroke-width="1.5"/>
+        <path d="M48,822 L296,752" fill="none" stroke="var(--hazard)" stroke-width="3"/>
+        <path d="M48,816 L296,816" fill="none" stroke="var(--line)" stroke-width="3"/>
+        <text x="312" y="760" class="s-mono" font-size="10" style="fill:var(--hazard)">LIMIT 20 OFFSET 100000</text>
+        <text x="312" y="774" class="s-sub" font-size="10.5">reads 100,020 rows</text>
+        <text x="312" y="804" class="s-mono" font-size="10" style="fill:var(--line)">WHERE id &lt; :last_seen</text>
+        <text x="312" y="818" class="s-sub" font-size="10.5">constant at any depth</text>
+        <text x="300" y="840" text-anchor="end" class="s-sub" font-size="10">page depth →</text>
+
+        <!-- 13 CONFIG -->
+        <rect x="490" y="706" width="440" height="140" fill="var(--z2)"/>
+        <text x="506" y="730" class="s-zone" fill="var(--mute)">13 · configuration, last of all</text>
+        <g class="s-lab" font-size="10.5">
+          <text x="506" y="752">shared_buffers</text><text x="506" y="770">innodb_buffer_pool</text><text x="506" y="788">work_mem</text><text x="506" y="806">max_connections</text><text x="506" y="824">effective_cache_size</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="660" y="752">≈ 25% of RAM (PostgreSQL)</text><text x="660" y="770">≈ 70–80% of RAM (MySQL)</text><text x="660" y="788">per sort, × concurrent queries</text><text x="660" y="806">low, with PgBouncer in front</text><text x="660" y="824">the OS cache the planner assumes</text>
+        </g>
+
+        <!-- 14 GUARD RAILS -->
+        <rect x="950" y="706" width="420" height="140" fill="var(--z5)"/>
+        <text x="966" y="730" class="s-zone" fill="var(--fast)">14 · guard rails</text>
+        <text x="966" y="752" class="s-sub">statement_timeout — no query runs forever</text>
+        <text x="966" y="770" class="s-sub">cap page sizes — an unbounded limit parameter</text>
+        <text x="966" y="784" class="s-sub">is a resource-exhaustion vector</text>
+        <text x="966" y="802" class="s-sub">rate-limit search and export endpoints</text>
+        <text x="966" y="822" class="s-haz" font-size="10.5">16 replicas × 4 workers × pool 10 = 640 &gt; 100:</text>
+        <text x="966" y="836" class="s-haz" font-size="10.5">keep pools small, put PgBouncer in front.</text>
+      </svg>
+    </div>
+    <figcaption><b>The ladder is also a diagnosis order.</b> When a page is slow, ask in sequence: do I know which query, is it one query or a hundred, does the plan say Seq Scan, is it fetching more than it needs? Nearly every investigation ends on the second or third question — usually after a week spent discussing caching strategies.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the rungs and the instruments</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Measure</h4><p>Enable pg_stat_statements and list queries by total execution time; then EXPLAIN ANALYZE the top offenders. Nothing else on this sheet is allowed to happen before this.</p></div>
+      <div><h4><span>02</span>Fix the N+1</h4><p>Usually the largest single win in an ORM application: a page issuing hundreds of queries becomes a handful with eager loading. A query counter in development makes it visible immediately.</p></div>
+      <div><h4><span>03</span>Add indexes</h4><p>The second largest win, and cheap. Index foreign keys and the columns in WHERE, JOIN and ORDER BY; order composite columns equality, range, sort; drop indexes with zero scans.</p></div>
+      <div><h4><span>04</span>Rewrite queries</h4><p>Select only needed columns, replace date(created) = … with a range, and use keyset pagination instead of deep OFFSET. Small edits, often large effects.</p></div>
+      <div><h4><span>05</span>Cache</h4><p>Only after the query itself is reasonable. A cache over a slow query hides a missing index that the cold cache, the restart and the next scale-up will each reveal.</p></div>
+      <div><h4><span>06</span>Tune configuration</h4><p>Defaults assume a small machine. Size the buffer pool, keep work_mem sane because it multiplies across concurrent sorts, and keep max_connections low behind a pooler.</p></div>
+      <div><h4><span>07</span>Read replicas</h4><p>Scale reads horizontally. Replica lag turns into user-visible bugs wherever a request must read its own recent write, so those reads stay on the primary.</p></div>
+      <div><h4><span>08</span>Denormalise</h4><p>Duplicate data to avoid joins, deliberately, with a written reason and a measured read pattern. Partitioning a huge table by time usually comes first and costs less.</p></div>
+      <div><h4><span>09</span>Shard</h4><p>Split data across machines. Breaks joins, complicates transactions, forces a shard key into every query and is extremely hard to undo. Instagram deferred it for years by indexing and caching properly.</p></div>
+      <div><h4><span>10</span>The realistic session</h4><p>4 s and 340 queries; eager loading to 900 ms; one concurrent index to 120 ms; named columns to 90 ms. Then stop — the discipline is refusing to climb further once it is fast enough.</p></div>
+      <div><h4><span>11</span>Total, not mean</h4><p>A 5 ms query called 200,000 times costs 1,000 seconds; a 2 s query called twice costs 4. Sort pg_stat_statements by total_exec_time or you will optimise the wrong one.</p></div>
+      <div><h4><span>12</span>Keyset pagination</h4><p>OFFSET 100000 must read and discard 100,020 rows, getting linearly slower with depth. WHERE id &lt; :last_seen ORDER BY id DESC LIMIT 20 costs the same on every page.</p></div>
+      <div><h4><span>13</span>Configuration</h4><p>shared_buffers near 25% of RAM, the InnoDB buffer pool near 70–80%, work_mem per operation, effective_cache_size to tell the planner about the OS cache.</p></div>
+      <div><h4><span>14</span>Guard rails</h4><p>statement_timeout, capped page sizes and rate limits turn an unoptimised query from an availability vulnerability into a slow request. Connection exhaustion is often misdiagnosed as slowness.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 7 — THE FAST COPY ══════════════════════ -->
+<div class="sheet" id="a7">
+  <div class="plate">
+    <span class="no">Sheet 7</span>
+    <h2>The Fast Copy</h2>
+    <span class="form">Sorting line</span>
+    <span class="cov">Covers · Redis · Cache · Session Store</span>
+  </div>
+  <p class="thesis">Stop 05 of sheet 1 and the trip back, drawn in full — plus the other job Redis does on every request. A cache is a copy of an expensive answer kept somewhere cheap; a session store is a copy of "who is logged in" kept where every server can see it. <strong>Both trade the guarantee that data is current for speed, and both need a source of truth behind them: Redis with nothing behind it is not a cache, it is a fragile database.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="Six panels about Redis, caching and sessions. Panel A shows Redis inside: a queue of commands feeding a single-threaded event loop and one in-memory hash table with keys and TTLs, plus background persistence. Panel B is a log-scale bar chart of cache layers from CPU cache to a PostgreSQL query, and lists of what to cache and what not to. Panel C is a sorting line for cache-aside: a read that hits Redis and returns in a millisecond, or misses, queries PostgreSQL and stores the result with a TTL; and a write line that updates the database and deletes the key, with a note on why updating the key races. Panel D shows how hit rate decides whether a cache is worth it, TTL guidance and eviction policies. Panel E shows the session login line — verify, regenerate the ID, store in Redis, set a secure cookie — and the per-request lookup and logout. Panel F compares sessions with JWTs and lists the failure modes.">
+        <defs>
+          <marker id="f7a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="f7b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- A: INSIDE REDIS -->
+        <rect x="30" y="40" width="560" height="300" fill="var(--z1)"/>
+        <text x="46" y="64" class="s-zone" fill="var(--line)">A · inside Redis — one table, one thread</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5"><rect x="46" y="96" width="58" height="26"/><rect x="112" y="96" width="58" height="26"/><rect x="178" y="96" width="58" height="26"/></g>
+        <rect x="244" y="96" width="70" height="26" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <g class="s-mono" font-size="10.5" text-anchor="middle"><text x="75" y="113">GET</text><text x="141" y="113">SET</text><text x="207" y="113">DEL</text><text x="279" y="113" fill="var(--hazard)">KEYS *</text></g>
+        <path d="M318,109 L344,109" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#f7a)"/>
+        <circle cx="380" cy="109" r="30" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="380" y="113" text-anchor="middle" class="s-lab" font-size="11">1 thread</text>
+        <path d="M380,139 L380,158" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#f7a)"/>
+        <text x="400" y="154" class="s-lab" font-size="11">02 · one hash table in RAM</text>
+        <rect x="250" y="164" width="324" height="104" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <g class="s-mono" font-size="10">
+          <text x="262" y="184">product:42</text><text x="394" y="184">{"price": …}</text><text x="562" y="184" text-anchor="end">300 s</text>
+          <text x="262" y="202">session:8f3a</text><text x="394" y="202">{user_id: 42}</text><text x="562" y="202" text-anchor="end">1800 s</text>
+          <text x="262" y="220">lock:daily-report</text><text x="394" y="220">a1f9…</text><text x="562" y="220" text-anchor="end">300 s</text>
+          <text x="262" y="238">user:42:profile</text><text x="394" y="238">{"name": "Ivan"}</text><text x="562" y="238" text-anchor="end">300 s</text>
+          <text x="262" y="256">orders:42:pending</text><text x="394" y="256">[ … ]</text><text x="562" y="256" text-anchor="end">300 s</text>
+        </g>
+        <text x="46" y="152" class="s-lab" font-size="11">01 · a command at a time</text>
+        <text x="46" y="170" class="s-sub">each command is atomic:</text>
+        <text x="46" y="184" class="s-sub">no locks and no races</text>
+        <text x="46" y="198" class="s-sub">between two commands</text>
+        <text x="46" y="222" class="s-haz" font-size="10.5">KEYS * over a million keys</text>
+        <text x="46" y="236" class="s-haz" font-size="10.5">blocks every client until</text>
+        <text x="46" y="250" class="s-haz" font-size="10.5">it finishes</text>
+        <rect x="46" y="284" width="120" height="26" fill="var(--band)" stroke="var(--mute)" stroke-dasharray="5 4"/>
+        <rect x="176" y="284" width="120" height="26" fill="var(--band)" stroke="var(--mute)" stroke-dasharray="5 4"/>
+        <g class="s-lab" font-size="11"><text x="56" y="301">RDB snapshot</text><text x="186" y="301">AOF log</text></g>
+        <text x="316" y="296" class="s-sub">03 · persistence runs in the</text>
+        <text x="316" y="310" class="s-sub">background: a safety net, not</text>
+        <text x="316" y="324" class="s-sub">the main path. Data can still be lost.</text>
+
+        <!-- B: LAYERS -->
+        <rect x="606" y="40" width="764" height="300" fill="var(--z3)"/>
+        <text x="622" y="64" class="s-zone" fill="var(--mute)">B · caching is one idea at every layer</text>
+        <text x="1354" y="64" text-anchor="end" class="s-num">04</text>
+        <g class="s-lab" font-size="11"><text x="622" y="90">CPU cache</text><text x="622" y="114">app memory</text><text x="622" y="138">Redis</text><text x="622" y="162">CDN</text><text x="622" y="186" fill="var(--hazard)">a DB query</text></g>
+        <rect x="760" y="78" width="54" height="16" fill="var(--line)" opacity=".85"/>
+        <rect x="760" y="102" width="162" height="16" fill="var(--line)" opacity=".85"/>
+        <rect x="760" y="126" width="378" height="16" fill="var(--fast)" opacity=".85"/>
+        <rect x="760" y="150" width="432" height="16" fill="var(--fast)" opacity=".6"/>
+        <rect x="760" y="174" width="464" height="16" fill="var(--hazard)" opacity=".7"/>
+        <g class="s-mono" font-size="10"><text x="822" y="90">64 bytes · ~1 ns</text><text x="930" y="114">MBs · ~0.1 µs</text><text x="1146" y="138">GBs · ~1 ms</text><text x="1200" y="162">TBs · ~10 ms</text><text x="1232" y="186">~40 ms, a miss</text></g>
+        <text x="622" y="210" class="s-sub">log scale — each layer caches the layer below it, and every hit skips everything to its right</text>
+        <text x="622" y="238" class="s-lab" font-size="11" style="fill:var(--line)">05 · ✓ cache it when it is</text>
+        <g class="s-sub"><text x="622" y="256">read many times, changes rarely</text><text x="622" y="270">expensive to compute</text><text x="622" y="284">the same for many users</text><text x="622" y="298">fine if slightly stale</text></g>
+        <text x="1000" y="238" class="s-lab" font-size="11" style="fill:var(--hazard)">✗ do not cache it when it is</text>
+        <g class="s-sub"><text x="1000" y="256">unique per request — never hit</text><text x="1000" y="270">changing constantly</text><text x="1000" y="284">required to be exact: balances,</text><text x="1000" y="298">stock levels, permissions</text><text x="1000" y="312">very large</text></g>
+
+        <!-- C: CACHE-ASIDE -->
+        <rect x="30" y="356" width="900" height="264" fill="var(--z4)"/>
+        <text x="46" y="380" class="s-zone" fill="var(--mute)">C · cache-aside — the read, the write, the race</text>
+        <line x1="60" y1="450" x2="840" y2="450" stroke="var(--line)" stroke-width="6"/>
+        <path d="M240,437 L240,416 L820,416 L820,437" fill="none" stroke="var(--fast)" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#f7b)"/>
+        <text x="530" y="408" text-anchor="middle" class="s-note">HIT · ~1 ms — the database is never touched</text>
+        <g class="st"><circle cx="80" cy="450" r="9"/><circle cx="470" cy="450" r="9"/><circle cx="650" cy="450" r="9"/><circle cx="820" cy="450" r="9"/></g>
+        <circle cx="240" cy="450" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <g class="s-num"><text x="60" y="478">06</text><text x="220" y="478">07</text><text x="450" y="478">08</text><text x="630" y="478">09</text><text x="800" y="478">10</text></g>
+        <g class="s-lab" font-size="11.5"><text x="60" y="494">GET /product/42</text><text x="220" y="494">GET product:42</text><text x="450" y="494">MISS → SELECT</text><text x="630" y="494">SET … EX 300</text><text x="800" y="494">return</text></g>
+        <g class="s-sub" font-size="10.5"><text x="60" y="508">a read request</text><text x="220" y="508">in Redis — hit?</text><text x="450" y="508">PostgreSQL, ~40 ms</text><text x="630" y="508">store with a TTL</text><text x="800" y="508">5 min of hits</text></g>
+
+        <line x1="60" y1="570" x2="600" y2="570" stroke="var(--line)" stroke-width="5"/>
+        <g class="st" stroke-width="2.5"><circle cx="80" cy="570" r="8"/><circle cx="280" cy="570" r="8"/><circle cx="480" cy="570" r="8"/></g>
+        <g class="s-num"><text x="60" y="540">11</text><text x="260" y="540">12</text><text x="460" y="540">13</text></g>
+        <g class="s-lab" font-size="11.5"><text x="60" y="556">UPDATE products</text><text x="260" y="556">DEL product:42</text><text x="460" y="556">next read misses</text></g>
+        <g class="s-sub" font-size="10.5"><text x="60" y="592">SET price = … WHERE id = 42</text><text x="260" y="592">delete — do not update</text><text x="460" y="592">fetches fresh, repopulates</text></g>
+        <rect x="640" y="530" width="274" height="80" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="652" y="550" class="s-haz" font-size="11">why not SET the new value?</text>
+        <text x="652" y="568" class="s-sub" font-size="10.5">Two concurrent updates interleave; the</text>
+        <text x="652" y="582" class="s-sub" font-size="10.5">slower one's SET lands last and the stale</text>
+        <text x="652" y="596" class="s-sub" font-size="10.5">value stays. A deleted key cannot go stale.</text>
+
+        <!-- D: HIT RATE -->
+        <rect x="946" y="356" width="424" height="264" fill="var(--z5)"/>
+        <text x="962" y="380" class="s-zone" fill="var(--fast)">14 · the hit rate decides</text>
+        <g class="s-mono" font-size="10.5"><text x="962" y="412">95% hit</text><text x="962" y="436">50% hit</text><text x="962" y="460">10% hit</text></g>
+        <rect x="1040" y="401" width="13" height="14" fill="var(--line)"/>
+        <rect x="1040" y="425" width="125" height="14" fill="var(--fast)"/>
+        <rect x="1040" y="449" width="225" height="14" fill="var(--hazard)" opacity=".75"/>
+        <g class="s-sub" font-size="10.5"><text x="1061" y="412">excellent</text><text x="1173" y="436">questionable</text><text x="1273" y="460" fill="var(--hazard)">remove it</text></g>
+        <text x="962" y="482" class="s-sub" font-size="10.5">bar = traffic still reaching the database, plus overhead</text>
+        <text x="962" y="508" class="s-lab" font-size="11">15 · TTL — bounded wrongness</text>
+        <g class="s-sub" font-size="10.5"><text x="962" y="526">30–60 s · fast-changing, tolerant of staleness</text><text x="962" y="540">5–15 min · product and content pages</text><text x="962" y="554">hours · rarely changing reference data</text></g>
+        <text x="962" y="568" class="s-haz" font-size="10.5">never expires · a bug waiting to happen</text>
+        <text x="962" y="592" class="s-lab" font-size="11">16 · eviction, when memory fills</text>
+        <text x="962" y="608" class="s-sub" font-size="10.5">LRU the default · LFU · TTL · FIFO rarely wanted</text>
+
+        <!-- E: SESSIONS -->
+        <rect x="30" y="636" width="900" height="250" fill="var(--z2)"/>
+        <text x="46" y="660" class="s-zone" fill="var(--mute)">E · session store — a cloakroom ticket</text>
+        <line x1="60" y1="720" x2="900" y2="720" stroke="var(--line)" stroke-width="6"/>
+        <g class="st"><circle cx="80" cy="720" r="9"/><circle cx="230" cy="720" r="9"/><circle cx="560" cy="720" r="9"/><circle cx="760" cy="720" r="9"/></g>
+        <circle cx="380" cy="720" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <g class="s-num"><text x="60" y="690">17</text><text x="210" y="690">18</text><text x="360" y="690">19</text><text x="540" y="690">20</text><text x="740" y="690">21</text></g>
+        <g class="s-lab" font-size="11.5"><text x="60" y="706">POST /login</text><text x="210" y="706">verify</text><text x="360" y="706">regenerate the ID</text><text x="540" y="706">SET session:&lt;id&gt;</text><text x="740" y="706">Set-Cookie</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="60" y="744">credentials in</text>
+          <text x="210" y="744">hashed comparison</text>
+          <text x="360" y="744">old ID discarded:</text><text x="360" y="758">the fixation defence</text>
+          <text x="540" y="744">{user_id: 42} EX 1800</text><text x="540" y="758">random, ≥ 128 bits</text>
+          <text x="740" y="744">HttpOnly · Secure ·</text><text x="740" y="758">SameSite=Lax</text>
+        </g>
+        <line x1="60" y1="820" x2="900" y2="820" stroke="var(--line)" stroke-width="5"/>
+        <g class="st" stroke-width="2.5"><circle cx="80" cy="820" r="8"/><circle cx="330" cy="820" r="8"/><circle cx="640" cy="820" r="8"/></g>
+        <text x="60" y="804" class="s-sub" font-size="10.5">every later request, on any app server</text>
+        <g class="s-num"><text x="60" y="844">22</text><text x="310" y="844">23</text><text x="620" y="844">24</text></g>
+        <g class="s-lab" font-size="11.5"><text x="84" y="844">cookie sent</text><text x="334" y="844">GET session:&lt;id&gt;</text><text x="644" y="844">DEL session:&lt;id&gt;</text></g>
+        <g class="s-sub" font-size="10.5"><text x="60" y="860">automatically</text><text x="310" y="860">missing → 401 · found → user 42,</text><text x="310" y="874">TTL refreshed</text><text x="620" y="860">logout: effective instantly,</text><text x="620" y="874">on every server</text></g>
+
+        <!-- F: SESSION VS JWT -->
+        <rect x="946" y="636" width="424" height="250" fill="var(--band)"/>
+        <text x="962" y="660" class="s-zone" fill="var(--mute)">25 · session or JWT</text>
+        <text x="962" y="682" class="s-lab" font-size="11">session</text><text x="1166" y="682" class="s-lab" font-size="11">JWT</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="962" y="698">opaque ID, looked up</text><text x="962" y="712">revoke: DEL, instant</text><text x="962" y="726">the store is a dependency</text>
+          <text x="1166" y="698">signed claims, no lookup</text><text x="1166" y="712">revoke: needs a blocklist</text><text x="1166" y="726">— the lookup, back again</text>
+        </g>
+        <text x="962" y="750" class="s-note" font-size="11">JWT plus a Redis blocklist is a session store</text>
+        <text x="962" y="765" class="s-note" font-size="11">with extra steps.</text>
+        <text x="962" y="790" class="s-haz" font-size="10.5">26 · Redis down: every user logged out at once.</text>
+        <text x="962" y="804" class="s-haz" font-size="10.5">Redis compromised: every session hijackable.</text>
+        <text x="962" y="828" class="s-sub" font-size="10.5" style="fill:var(--hazard)">A personalised response cached under a key with no</text>
+        <text x="962" y="842" class="s-sub" font-size="10.5" style="fill:var(--hazard)">user id serves one user's data to the next user.</text>
+        <text x="962" y="866" class="s-sub" font-size="10.5">Put the user or tenant in every personalised key.</text>
+      </svg>
+    </div>
+    <figcaption><b>One store, two jobs, one rule.</b> The cache holds copies you can rebuild from PostgreSQL; the session store holds tickets you can reissue by logging in again. Everything Redis holds should be losable — with a TTL on every key, a miss path in every caller, and a measured hit rate proving the copy earns its keep.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the fast copy, stop by stop</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Single thread</h4><p>Commands run one at a time on one thread, so each is atomic with no locking. The same design means one slow command such as KEYS * stalls every client.</p></div>
+      <div><h4><span>02</span>Hash table in RAM</h4><p>All data lives in memory, so a lookup is O(1) and well under a millisecond. The speed comes from avoiding the disk, not from parallelism — and RAM cost caps the dataset.</p></div>
+      <div><h4><span>03</span>Persistence</h4><p>RDB snapshots and the AOF log run in the background as a safety net. Unless carefully configured, a crash can still lose recent writes — never make Redis the only copy.</p></div>
+      <div><h4><span>04</span>Cache layers</h4><p>CPU cache, application memory, Redis, CDN: the same idea at scales from bytes to terabytes. HTTP Cache-Control is the most widely deployed and most underused of them.</p></div>
+      <div><h4><span>05</span>What to cache</h4><p>Read often, changes rarely, costly to compute, shared across users, tolerant of staleness. Never balances, stock levels or permissions that must be exact.</p></div>
+      <div><h4><span>06</span>The request</h4><p>A read arrives for product 42. Redis is always reached by the backend, never by the browser.</p></div>
+      <div><h4><span>07</span>Check the cache</h4><p>GET product:42. A hit returns in about a millisecond and PostgreSQL never sees the request. The code must also handle nil — assuming the value is always there crashes on the first miss.</p></div>
+      <div><h4><span>08</span>Miss, then query</h4><p>The first request, or the first after expiry, pays full price: a query of around 40 ms against the source of truth.</p></div>
+      <div><h4><span>09</span>Store with a TTL</h4><p>SET product:42 … EX 300. Every entry gets an expiry, turning "possibly wrong forever" into "wrong for at most five minutes".</p></div>
+      <div><h4><span>10</span>Return</h4><p>The response goes out; for the next five minutes every identical read takes the dashed shortcut over the line.</p></div>
+      <div><h4><span>11</span>Write the database</h4><p>Writes go to PostgreSQL first — the source of truth. Write-behind (cache now, database later) is fast and loses data on a crash.</p></div>
+      <div><h4><span>12</span>Delete the key</h4><p>Invalidate rather than update. Deleting is safe under concurrency; writing the new value can be overtaken by a slower concurrent writer and stay stale indefinitely.</p></div>
+      <div><h4><span>13</span>Next read misses</h4><p>The following read takes the miss path, fetches fresh data and repopulates. Plan for a cold cache too: a restart sends every request to the database at once.</p></div>
+      <div><h4><span>14</span>Hit rate</h4><p>At 95% the database sees 5% of reads; at 10% you added a system, a failure mode and a staleness risk for nothing. Measure it — above 80% is the usual bar.</p></div>
+      <div><h4><span>15</span>TTL</h4><p>Seconds for fast-moving data, minutes for pages, hours for reference data. A key without a TTL fills memory with data nobody reads.</p></div>
+      <div><h4><span>16</span>Eviction</h4><p>When memory is full something goes: least recently used is the sensible default, least frequently used suits stable popularity.</p></div>
+      <div><h4><span>17</span>Login</h4><p>HTTP forgets everything between requests, so the server issues a ticket after checking credentials once instead of receiving them on every request.</p></div>
+      <div><h4><span>18</span>Verify</h4><p>The password is checked with a hashed comparison. Only now does the server create any state for this user.</p></div>
+      <div><h4><span>19</span>Regenerate the ID</h4><p>A new session ID on login. Otherwise an attacker who planted a known ID before login inherits the authenticated session — session fixation.</p></div>
+      <div><h4><span>20</span>Store the session</h4><p>A small record — user id, roles, CSRF token — under a cryptographically random ID with a 30-minute TTL. Not the full user object, and nothing sensitive in plaintext.</p></div>
+      <div><h4><span>21</span>Set the cookie</h4><p>HttpOnly so script cannot read it, Secure so it never travels in plaintext, SameSite against CSRF. All three are required; each missing one has caused real breaches.</p></div>
+      <div><h4><span>22</span>Every request</h4><p>The browser sends the cookie automatically. Because the store is shared, any server behind the load balancer can answer — no sticky sessions needed.</p></div>
+      <div><h4><span>23</span>Look it up</h4><p>One Redis GET, well under a millisecond. Missing or expired means 401; found means the request proceeds as user 42 and the idle timeout is refreshed.</p></div>
+      <div><h4><span>24</span>Logout</h4><p>DEL session:&lt;id&gt; — effective immediately, everywhere. Invalidate all of a user's sessions on password change too, or a compromised account stays compromised.</p></div>
+      <div><h4><span>25</span>Session or JWT</h4><p>The deciding question is revocation. Sessions revoke instantly; JWTs need a blocklist, which reintroduces the lookup. JWTs fit many independent services and non-browser clients.</p></div>
+      <div><h4><span>26</span>Failure modes</h4><p>A down store logs everyone out, a compromised one hands over every session, and a personalised response under a shared key leaks data between users. Bind Redis privately, with ACLs and TLS.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 8 — MESSAGES AND LOCKS ══════════════════════ -->
+<div class="sheet" id="a8">
+  <div class="plate">
+    <span class="no">Sheet 8</span>
+    <h2>Messages and Locks</h2>
+    <span class="form">Timing diagram</span>
+    <span class="cov">Covers · Pub Sub · Distributed Lock · Redis · Transactions</span>
+  </div>
+  <p class="thesis">Once the same code runs on several servers, two new problems appear: telling every instance something, and making sure only one instance does something. Redis offers a primitive for each. <strong>Both are fast, simple and honest about one thing people skip — a broadcast can be missed and a lock can expire while you still hold it — so neither may carry anything that must not be lost or done twice.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="Five panels about coordination across servers. Panel A shows a chat message: server 1 persists it to the database, publishes it to Redis, and Redis fans it out to four servers; server 2 pushes it to user B, server 3 ignores it, server 4 is restarting and misses it, then reloads history from the database. Panel B compares pub/sub, queues and streams, and lists alternatives from Redis Pub/Sub to Kafka. Panel C is a timeline of a distributed lock over forty seconds: worker A acquires a thirty-second lock, stalls for thirty-five seconds, the lock expires, worker B acquires it, worker A wakes and deletes B's lock, and worker C acquires it while B is still working. Panel D separates locking for efficiency from locking for correctness. Panel E lists stronger alternatives: idempotency keys, row locks, unique indexes, queues and SKIP LOCKED.">
+        <defs>
+          <marker id="k8a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="k8b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="k8c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <!-- A: FAN-OUT -->
+        <rect x="30" y="40" width="660" height="330" fill="var(--z1)"/>
+        <text x="46" y="64" class="s-zone" fill="var(--line)">A · pub/sub — a radio broadcast across servers</text>
+        <text x="46" y="108" class="s-lab" font-size="11">user A</text>
+        <path d="M90,104 L106,104" stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#k8a)"/>
+        <rect x="110" y="86" width="110" height="36" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="165" y="109" text-anchor="middle" class="s-lab" font-size="11">server 1</text>
+        <path d="M165,122 L165,166" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#k8a)"/>
+        <text x="156" y="150" text-anchor="end" class="s-sub" font-size="10.5">01 · persist first</text>
+        <rect x="110" y="170" width="110" height="36" fill="var(--z3)" stroke="var(--ink)" stroke-width="2"/>
+        <text x="165" y="193" text-anchor="middle" class="s-lab" font-size="11">database</text>
+        <path d="M220,104 C262,104 268,168 296,172" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#k8a)"/>
+        <text x="232" y="86" class="s-mono" font-size="10">02 · PUBLISH room:42</text>
+        <rect x="300" y="150" width="120" height="50" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="360" y="172" text-anchor="middle" class="s-lab">Redis</text>
+        <text x="360" y="188" text-anchor="middle" class="s-sub" font-size="10.5">fans out</text>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#k8a)">
+          <path d="M420,168 L516,90"/><path d="M420,172 L516,153"/><path d="M420,180 L516,219"/>
+        </g>
+        <path d="M420,188 L516,283" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="6 5" fill="none" marker-end="url(#k8b)"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="520" y="70" width="154" height="36"/><rect x="520" y="136" width="154" height="36"/><rect x="520" y="202" width="154" height="36"/>
+        </g>
+        <rect x="520" y="268" width="154" height="36" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="6 4"/>
+        <g class="s-lab" font-size="11"><text x="530" y="85">server 1</text><text x="530" y="151">server 2</text><text x="530" y="217">server 3</text><text x="530" y="283" fill="var(--hazard)">server 4</text></g>
+        <g class="s-sub" font-size="10.5"><text x="530" y="100">its own room-42 users</text><text x="530" y="166">03 · pushes to user B</text><text x="530" y="232">04 · no users: ignores</text><text x="530" y="298" fill="var(--hazard)">05 · restarting: MISSED</text></g>
+        <path d="M520,300 C400,340 240,300 165,210" stroke="var(--learn)" stroke-width="2.5" stroke-dasharray="7 5" fill="none" marker-end="url(#k8c)"/>
+        <g class="s-sub" font-size="10.5"><text x="46" y="238">every subscriber gets</text><text x="46" y="252">every message; a queue</text><text x="46" y="266">gives each message to</text><text x="46" y="280">exactly one consumer</text></g>
+        <text x="46" y="340" class="s-learn">06 · its users reconnect and reload history from the database</text>
+        <text x="46" y="358" class="s-sub">Pub/sub delivers speed. The database delivers correctness.</text>
+
+        <!-- B: COMPARISON -->
+        <rect x="706" y="40" width="664" height="330" fill="var(--z3)"/>
+        <text x="722" y="64" class="s-zone" fill="var(--mute)">B · pub/sub, queue, stream</text>
+        <g class="s-lab" font-size="11"><text x="880" y="90">Pub/Sub</text><text x="1050" y="90">Queue</text><text x="1210" y="90">Stream (Kafka)</text></g>
+        <line x1="722" y1="98" x2="1354" y2="98" stroke="var(--rule)"/>
+        <g class="s-lab" font-size="10.5" style="fill:var(--mute)"><text x="722" y="116">delivery</text><text x="722" y="136">persistence</text><text x="722" y="156">offline subscriber</text><text x="722" y="176">replay</text><text x="722" y="196">use for</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="880" y="116">every subscriber</text><text x="880" y="136">usually none</text><text x="880" y="156" fill="var(--hazard)">misses it forever</text><text x="880" y="176">no</text><text x="880" y="196">live updates</text>
+          <text x="1050" y="116">one consumer</text><text x="1050" y="136">until acknowledged</text><text x="1050" y="156">gets it later</text><text x="1050" y="176">no</text><text x="1050" y="196">work distribution</text>
+          <text x="1210" y="116">all consumer groups</text><text x="1210" y="136">retained for days</text><text x="1210" y="156">resumes from offset</text><text x="1210" y="176">yes</text><text x="1210" y="196">event log, analytics</text>
+        </g>
+        <line x1="722" y1="208" x2="1354" y2="208" stroke="var(--rule)"/>
+        <text x="722" y="236" class="s-lab" font-size="11">The same idea, with more guarantees</text>
+        <g class="s-mono" font-size="10"><text x="722" y="258">Redis Pub/Sub</text><text x="722" y="276">Redis Streams</text><text x="722" y="294">NATS JetStream</text><text x="722" y="312">RabbitMQ fanout</text><text x="722" y="330">Kafka</text><text x="722" y="348">LISTEN/NOTIFY</text></g>
+        <g class="s-sub" font-size="10.5"><text x="880" y="258">simplest: no persistence, no acknowledgement, no retry</text><text x="880" y="276">persistent, consumer groups, replay</text><text x="880" y="294">very fast; persistence when you ask for it</text><text x="880" y="312">broadcast with acknowledgements and durability</text><text x="880" y="330">retained, replayable event log — the heavyweight</text><text x="880" y="348">no extra system; small payloads, no persistence</text></g>
+
+        <!-- C: LOCK TIMELINE -->
+        <rect x="30" y="386" width="1340" height="290" fill="var(--z4)"/>
+        <text x="46" y="410" class="s-zone" fill="var(--fast)">C · a distributed lock, and the stall it cannot prevent</text>
+        <g fill="var(--paper)" stroke="var(--rule)"><rect x="150" y="428" width="1020" height="24"/><rect x="150" y="482" width="1020" height="36"/><rect x="150" y="542" width="1020" height="36"/><rect x="150" y="602" width="1020" height="36"/></g>
+        <g class="s-lab" font-size="11"><text x="46" y="444">Redis key</text><text x="46" y="504">worker A</text><text x="46" y="564">worker B</text><text x="46" y="624">worker C</text></g>
+        <rect x="160" y="430" width="750" height="20" fill="var(--line)" opacity=".3"/>
+        <rect x="935" y="430" width="100" height="20" fill="var(--fast)" opacity=".45"/>
+        <rect x="1060" y="430" width="100" height="20" fill="var(--hazard)" opacity=".4"/>
+        <g class="s-mono" font-size="10"><text x="170" y="444">lock:job = a1f9 (A) · NX EX 30</text><text x="940" y="444">7c2e (B)</text><text x="1065" y="444">e41b (C)</text></g>
+        <rect x="160" y="488" width="125" height="24" fill="var(--line)" opacity=".85"/>
+        <rect x="285" y="488" width="750" height="24" fill="var(--hazard)" opacity=".18"/>
+        <text x="296" y="504" class="s-sub" font-size="10.5" style="fill:var(--hazard)">stalled: a GC pause, a slow query, the network — A has no idea its lock has expired</text>
+        <text x="170" y="566" class="s-sub" font-size="10.5">SET NX → nil at 0 s: backs off</text>
+        <text x="170" y="626" class="s-sub" font-size="10.5">SET NX → nil at 0 s: skips this run</text>
+        <rect x="935" y="548" width="225" height="24" fill="var(--fast)" opacity=".8"/>
+        <rect x="1060" y="608" width="100" height="24" fill="var(--hazard)" opacity=".7"/>
+        <g class="s-lab" font-size="10.5" style="fill:var(--paper)"><text x="945" y="564">B working</text><text x="1068" y="624">C working</text></g>
+        <g stroke-width="2" stroke-dasharray="4 4"><line x1="910" y1="422" x2="910" y2="640" stroke="var(--hazard)"/><line x1="1035" y1="422" x2="1035" y2="640" stroke="var(--hazard)"/></g>
+        <g fill="var(--hazard)"><circle cx="1035" cy="500" r="6"/></g>
+        <g class="s-num"><text x="164" y="477">07</text><text x="914" y="424">08</text><text x="939" y="537">09</text><text x="1039" y="477">10</text><text x="1064" y="597">11</text></g>
+        <g class="s-num" text-anchor="middle"><text x="160" y="654">0 s</text><text x="285" y="654">5</text><text x="410" y="654">10</text><text x="535" y="654">15</text><text x="660" y="654">20</text><text x="785" y="654">25</text><text x="910" y="654">30</text><text x="1035" y="654">35</text><text x="1160" y="654">40 s</text></g>
+        <text x="1160" y="670" text-anchor="end" class="s-haz" font-size="10.5">36–40 s: two workers, no lock</text>
+        <g class="s-num"><text x="1186" y="434">07</text><text x="1186" y="454">08</text><text x="1186" y="474">09</text><text x="1186" y="494">10</text><text x="1186" y="514">11</text></g>
+        <g class="s-sub" font-size="10.5"><text x="1210" y="434">A acquires, TTL 30 s</text><text x="1210" y="454">TTL runs out at 30 s</text><text x="1210" y="474">B acquires at 31 s</text><text x="1210" y="494" fill="var(--hazard)">A wakes, DELs B's lock</text><text x="1210" y="514" fill="var(--hazard)">C acquires: B and C run</text></g>
+        <text x="1186" y="548" class="s-lab" font-size="11">12 · release by token</text>
+        <text x="1186" y="566" class="s-mono" font-size="10">if GET(key) == token</text>
+        <text x="1186" y="580" class="s-mono" font-size="10">then DEL(key)</text>
+        <text x="1186" y="594" class="s-sub" font-size="10.5">atomically, in a Lua script</text>
+        <text x="1186" y="618" class="s-lab" font-size="11">13 · watchdog renewal</text>
+        <text x="1186" y="634" class="s-sub" font-size="10.5">renew while working — yet a</text>
+        <text x="1186" y="648" class="s-sub" font-size="10.5" style="fill:var(--hazard)">long pause still defeats it</text>
+
+        <!-- D: EFFICIENCY VS CORRECTNESS -->
+        <rect x="30" y="692" width="660" height="170" fill="var(--z5)"/>
+        <text x="46" y="716" class="s-zone" fill="var(--fast)">14 · efficiency or correctness?</text>
+        <text x="46" y="740" class="s-lab" font-size="11.5" style="fill:var(--line)">lock for efficiency</text>
+        <text x="46" y="758" class="s-sub">duplicate work is wasteful, not harmful:</text>
+        <text x="46" y="772" class="s-sub">a report, a cache rebuild, a cron job</text>
+        <text x="46" y="792" class="s-note">→ Redis SET NX EX is fine</text>
+        <text x="370" y="740" class="s-lab" font-size="11.5" style="fill:var(--hazard)">lock for correctness</text>
+        <text x="370" y="758" class="s-sub">a bug if it happens twice: money,</text>
+        <text x="370" y="772" class="s-sub">inventory, uniqueness</text>
+        <text x="370" y="792" class="s-haz">→ never trust a lock with it</text>
+        <text x="46" y="820" class="s-sub">A cron on three servers fires at 02:00; uncoordinated, every customer gets three invoices.</text>
+        <text x="46" y="838" class="s-sub" style="fill:var(--hazard)">Either way, make the job idempotent: a crashed run will be repeated after its TTL.</text>
+
+        <!-- E: STRONGER -->
+        <rect x="706" y="692" width="664" height="170" fill="var(--z2)"/>
+        <text x="722" y="716" class="s-zone" fill="var(--mute)">15 · stronger than any lock</text>
+        <g class="s-lab" font-size="11"><text x="722" y="740">duplicate charges</text><text x="722" y="758">double booking</text><text x="722" y="776">duplicate rows</text><text x="722" y="794">distributing jobs</text><text x="722" y="812">claiming work</text></g>
+        <g class="s-sub"><text x="900" y="740">an idempotency key with a unique constraint</text><text x="900" y="758">a transaction with SELECT … FOR UPDATE</text><text x="900" y="776">a unique index — enforced absolutely</text><text x="900" y="794">a queue: one consumer per message</text><text x="900" y="812">FOR UPDATE SKIP LOCKED, in plain PostgreSQL</text></g>
+        <text x="722" y="840" class="s-note">The transaction owns those locks, so they cannot expire while you still hold them.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the lock timeline slowly, because it is the whole argument.</b> Nothing in it is a bug: the acquisition was atomic, the TTL was set, and the pause was ordinary. Timeouts alone cannot tell a stalled holder from a dead one, which is why a distributed lock can only ever make duplicates rare — and why money goes through a database constraint instead.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — coordination, message by message and second by second</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Persist first</h4><p>Server 1 validates the chat message, authorises it and writes it to the database before anything else. Durability lives here, never in the broadcast.</p></div>
+      <div><h4><span>02</span>PUBLISH</h4><p>The message goes to the room:42 channel. The publisher does not know, or care, who is listening — which is exactly why adding a consumer never touches the producer.</p></div>
+      <div><h4><span>03</span>Delivered</h4><p>Server 2 holds user B's WebSocket and pushes the message down it. Without this bridge a chat app works on one server and breaks the moment a second is added.</p></div>
+      <div><h4><span>04</span>Ignored</h4><p>Server 3 has nobody in room 42 and discards the copy. Cost grows with subscribers × message rate, but nothing is stored.</p></div>
+      <div><h4><span>05</span>Missed</h4><p>Server 4 was restarting. Classic Redis Pub/Sub has no acknowledgement, no retry and no replay: the message is gone for that subscriber, permanently.</p></div>
+      <div><h4><span>06</span>Catch up</h4><p>Its users reconnect and load recent history from the database. The design assumes broadcasts can be missed and recovers from the system of record.</p></div>
+      <div><h4><span>07</span>Acquire</h4><p>SET lock:job &lt;random token&gt; NX EX 30 — set only if absent, expire on its own. Atomic acquisition and a TTL are both non-negotiable; check-then-set races by construction.</p></div>
+      <div><h4><span>08</span>Expiry</h4><p>A has stalled past its TTL. The lock expires exactly as designed, so a crashed holder cannot block the job forever — and a merely slow holder is now unprotected.</p></div>
+      <div><h4><span>09</span>B acquires</h4><p>From the lock store's point of view the key is free, so B takes it with its own token and starts the same work A believes it is still doing.</p></div>
+      <div><h4><span>10</span>A wakes and deletes</h4><p>A finishes and calls DEL unconditionally, deleting B's lock. Now the key is free while B is mid-job.</p></div>
+      <div><h4><span>11</span>C acquires</h4><p>C sees a free key and starts. Two workers run the "exclusive" job at once, and no step along the way raised an error.</p></div>
+      <div><h4><span>12</span>Release by token</h4><p>Delete only if the stored token is still yours, checked and deleted atomically in a Lua script. Fixes step 10; cannot fix step 08.</p></div>
+      <div><h4><span>13</span>Watchdog</h4><p>The holder renews its TTL periodically while working — every 60 s on a 300 s lock, as Redisson does. It narrows the window; a pause longer than the renewal interval still breaks it.</p></div>
+      <div><h4><span>14</span>Efficiency or correctness</h4><p>If a duplicate run is merely wasteful, a Redis lock is fine. If it is a bug — double charges, overselling, duplicate accounts — the lock is the wrong tool, and the job must be idempotent regardless.</p></div>
+      <div><h4><span>15</span>Stronger tools</h4><p>Idempotency keys with unique constraints, row locks, unique indexes, queues, and SELECT … FOR UPDATE SKIP LOCKED for job claiming. Each is enforced by a system that cannot be paused out of its guarantee.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Channels and lock keys are not access control</b>
+    <p>Any client connected to the broker can subscribe to user:42:private, and any client that can write to the lock store can take a critical lock and never release it. Keep Redis on a private network with authentication, let browsers talk only to your servers, publish identifiers rather than sensitive payloads, and use unpredictable lock tokens.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 9 — CHOOSING THE STORE ══════════════════════ -->
+<div class="sheet" id="a9">
+  <div class="plate">
+    <span class="no">Sheet 9</span>
+    <h2>Choosing the Store</h2>
+    <span class="form">Decision tree</span>
+    <span class="cov">Covers · Database Fundamentals · PostgreSQL · MySQL · MongoDB · Redis</span>
+  </div>
+  <p class="thesis">The decision every other sheet quietly assumed. Five questions, four destinations, and one strong default. <strong>Start with PostgreSQL unless a question below gives you a specific, measured reason not to — most "we need NoSQL" decisions are made before anyone knows the access patterns.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A decision tree for choosing a datastore. From 'new data needs a home', question 1 asks whether the data must survive a crash as the source of truth; if not, it goes to Redis. If so, question 2 asks whether it is relational. If relational, question 3 asks whether the ecosystem or team demands MySQL, leading to MySQL or to PostgreSQL, the default. If not relational, question 4 asks whether documents are read and written whole, bounded and varied; if not, PostgreSQL with JSONB. If so, question 5 asks whether horizontal write scaling is a real requirement; if yes, MongoDB, if not, PostgreSQL with JSONB. Along the bottom, panels on embedding versus referencing in MongoDB, write concern, and the insecure defaults that caused breaches.">
+        <defs>
+          <marker id="t9a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <rect x="560" y="30" width="280" height="36" fill="var(--band)" stroke="var(--ink)" stroke-width="2"/>
+        <text x="700" y="53" text-anchor="middle" class="s-lab">new data needs a home</text>
+
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#t9a)">
+          <path d="M700,66 L700,106"/>
+          <path d="M920,135 L956,135"/>
+          <path d="M700,160 L700,206"/>
+          <path d="M480,235 L250,235 L250,296"/>
+          <path d="M920,235 L1150,235 L1150,296"/>
+          <path d="M140,350 L140,406"/>
+          <path d="M360,350 L360,406"/>
+          <path d="M960,350 L960,480 L672,480"/>
+          <path d="M1260,350 L1260,406"/>
+          <path d="M1180,460 L1180,516"/>
+        </g>
+        <path d="M990,445 L960,445" stroke="var(--line)" stroke-width="2.5" fill="none"/>
+        <g class="s-sub" font-size="10.5" style="fill:var(--line)">
+          <text x="926" y="127">no</text><text x="708" y="188">yes</text><text x="448" y="228">yes</text><text x="930" y="228">no</text>
+          <text x="148" y="382">yes</text><text x="368" y="382">no</text><text x="690" y="472">no — JSONB covers it</text>
+          <text x="1268" y="382">yes</text><text x="966" y="438">no</text><text x="1188" y="492">yes</text>
+        </g>
+
+        <!-- QUESTIONS -->
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5">
+          <rect x="480" y="110" width="440" height="50"/><rect x="480" y="210" width="440" height="50"/>
+          <rect x="40" y="300" width="420" height="50"/><rect x="940" y="300" width="430" height="50"/><rect x="990" y="410" width="380" height="50"/>
+        </g>
+        <g class="s-num"><text x="490" y="130">01</text><text x="490" y="230">03</text><text x="50" y="320">04</text><text x="950" y="320">05</text><text x="1000" y="430">06</text></g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="706" y="132">Must it survive a crash — is it the record?</text>
+          <text x="706" y="232">Is it relational — joins, constraints, money?</text>
+          <text x="256" y="322">Does the ecosystem or team demand MySQL?</text>
+          <text x="1161" y="322">Read and written whole, bounded, varied?</text>
+          <text x="1186" y="432">Is horizontal write scaling a real need?</text>
+        </g>
+        <g class="s-sub" text-anchor="middle" font-size="10.5">
+          <text x="706" y="150">or could it be rebuilt from somewhere else?</text>
+          <text x="706" y="250">most business data is, whatever the tutorial stack said</text>
+          <text x="256" y="340">WordPress, an existing PHP stack, deep MySQL operations</text>
+          <text x="1161" y="340">a product catalogue, an event log, a user profile</text>
+          <text x="1186" y="450">measured, not predicted</text>
+        </g>
+
+        <!-- REDIS LEAF -->
+        <rect x="960" y="96" width="410" height="118" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="972" y="116" class="s-num">02</text><text x="996" y="116" class="s-lab">Redis — the fast copy, not the record</text>
+        <g class="s-sub" font-size="10.5"><text x="972" y="136">cache, sessions, locks, pub/sub · sheets 7 and 8</text><text x="972" y="150">sub-millisecond, TTL built in, capped by RAM</text><text x="972" y="164">Valkey is the fork; Memcached if you only cache</text></g>
+        <text x="972" y="188" class="s-haz" font-size="10.5">Redis with no source of truth behind it is</text>
+        <text x="972" y="202" class="s-haz" font-size="10.5">a fragile database, not a cache.</text>
+
+        <!-- MYSQL LEAF -->
+        <rect x="40" y="410" width="200" height="210" fill="var(--z3)" stroke="var(--line)" stroke-width="2"/>
+        <text x="52" y="430" class="s-num">07</text><text x="74" y="430" class="s-name">MySQL</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="450">InnoDB, always — never</text><text x="52" y="464">MyISAM</text><text x="52" y="478">utf8mb4, always</text><text x="52" y="492">threads, not processes</text>
+          <text x="52" y="506">the most mature</text><text x="52" y="520">replication there is</text><text x="52" y="534">buffer pool at 70–80%</text><text x="52" y="548">of RAM</text>
+        </g>
+        <g class="s-haz" font-size="10.5"><text x="52" y="572">design for replica lag:</text><text x="52" y="586">read-after-write goes</text><text x="52" y="600">to the primary</text></g>
+
+        <!-- POSTGRES LEAF -->
+        <rect x="260" y="410" width="408" height="270" fill="var(--z1)" stroke="var(--line)" stroke-width="3"/>
+        <text x="272" y="432" class="s-num">08</text><text x="296" y="432" class="s-name">PostgreSQL — the default</text>
+        <text x="272" y="452" class="s-sub">the burden of proof is on choosing anything else</text>
+        <g class="s-mono" font-size="10"><text x="272" y="476">JSONB · tsvector full-text search</text><text x="272" y="492">PostGIS · pgvector · TimescaleDB</text><text x="272" y="508">SKIP LOCKED queues · LISTEN/NOTIFY</text><text x="272" y="524">partial and expression indexes</text></g>
+        <text x="272" y="550" class="s-note">Every datastore you avoid is one you never</text>
+        <text x="272" y="566" class="s-note">operate, secure, back up or keep in sync.</text>
+        <text x="272" y="590" class="s-sub">Its two operational essentials: a pooler in front,</text>
+        <text x="272" y="604" class="s-sub">and an autovacuum that keeps up.</text>
+        <g class="s-haz" font-size="10.5"><text x="272" y="628">Not for: extreme multi-node writes (Cassandra,</text><text x="272" y="642">ScyllaDB), warehouse analytics (ClickHouse,</text><text x="272" y="656">BigQuery), or pure caching (Redis).</text></g>
+
+        <!-- ASIDE -->
+        <text x="690" y="540" class="s-note">Most "we need NoSQL for scale"</text>
+        <text x="690" y="556" class="s-note">decisions are made before anyone</text>
+        <text x="690" y="572" class="s-note">knows the access patterns.</text>
+        <text x="690" y="596" class="s-sub">A single well-indexed PostgreSQL</text>
+        <text x="690" y="610" class="s-sub">handles tens of thousands of</text>
+        <text x="690" y="624" class="s-sub">queries per second. Stack Overflow</text>
+        <text x="690" y="638" class="s-sub">served enormous traffic from one</text>
+        <text x="690" y="652" class="s-sub">SQL Server behind a cache.</text>
+
+        <!-- MONGO LEAF -->
+        <rect x="990" y="520" width="380" height="170" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="1002" y="540" class="s-num">09</text><text x="1026" y="540" class="s-name">MongoDB — documents, read whole</text>
+        <g class="s-sub" font-size="10.5"><text x="1002" y="560">a replica set, never a single node</text><text x="1002" y="574">write concern set explicitly — panel 11</text><text x="1002" y="588">embed what is bounded, reference the rest</text><text x="1002" y="602">a shard key chosen once, and carefully</text><text x="1002" y="616">auth on, bound to a private interface</text></g>
+        <g class="s-haz" font-size="10.5"><text x="1002" y="640">Joining, transacting across documents and</text><text x="1002" y="654">enforcing a schema in code? The data was</text><text x="1002" y="668">relational all along.</text></g>
+
+        <!-- BOTTOM PANELS -->
+        <rect x="30" y="700" width="440" height="180" fill="var(--z2)"/>
+        <text x="46" y="724" class="s-zone" fill="var(--mute)">10 · embed or reference</text>
+        <rect x="46" y="736" width="190" height="64" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="256" y="736" width="198" height="64" fill="var(--paper)" stroke="var(--rule)" stroke-width="2"/>
+        <g class="s-mono" font-size="10"><text x="56" y="754">{ order: 7,</text><text x="56" y="768">items: [ … ] }</text><text x="266" y="754">{ order: 7,</text><text x="266" y="768">item_ids: [1, 2, 3] }</text></g>
+        <g class="s-sub" font-size="10.5"><text x="56" y="790" fill="var(--line)">one read, atomic update</text><text x="266" y="790">separate queries, manual joins</text></g>
+        <text x="46" y="822" class="s-sub">Embed what is bounded and read together; reference the rest.</text>
+        <text x="46" y="844" class="s-haz" font-size="10.5">A user embedding every login_event grows toward the</text>
+        <text x="46" y="858" class="s-haz" font-size="10.5">16 MB document cap and makes every read expensive.</text>
+
+        <rect x="490" y="700" width="440" height="180" fill="var(--z4)"/>
+        <text x="506" y="724" class="s-zone" fill="var(--mute)">11 · write concern</text>
+        <g stroke="var(--line)" stroke-width="2" stroke-dasharray="5 4"><line x1="580" y1="770" x2="652" y2="752"/><line x1="580" y1="780" x2="652" y2="798"/></g>
+        <circle cx="560" cy="775" r="22" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <circle cx="670" cy="750" r="18" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <circle cx="670" cy="800" r="18" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <g class="s-lab" text-anchor="middle" font-size="11"><text x="560" y="779">P</text><text x="670" y="754">S</text><text x="670" y="804">S</text></g>
+        <text x="600" y="840" text-anchor="middle" class="s-sub" font-size="10.5">oplog → secondaries</text>
+        <text x="730" y="752" class="s-mono" font-size="10.5" style="fill:var(--hazard)">w: 1</text>
+        <g class="s-sub" font-size="10.5"><text x="730" y="766">acked by the primary only —</text><text x="730" y="780" fill="var(--hazard)">a failover can lose it</text></g>
+        <text x="730" y="806" class="s-mono" font-size="10.5" style="fill:var(--line)">w: "majority"</text>
+        <text x="730" y="820" class="s-sub" font-size="10.5">2 of 3 acknowledge: durable</text>
+        <text x="506" y="866" class="s-sub" style="fill:var(--fast)">Defaults changed across versions — set it explicitly, per write.</text>
+
+        <rect x="950" y="700" width="420" height="180" fill="var(--band)"/>
+        <text x="966" y="724" class="s-zone" fill="var(--hazard)">12 · the defaults that got breached</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="966" y="748">MongoDB shipped with no auth, bound to every</text><text x="966" y="762">interface — tens of thousands were ransomed</text>
+          <text x="966" y="782">Redis historically shipped with no password</text>
+          <text x="966" y="802">never expose 5432 or 3306 to the internet</text>
+          <text x="966" y="822">never let the app connect as superuser or root</text>
+        </g>
+        <text x="966" y="846" class="s-haz" font-size="10.5">Test a restore: an untested backup is a hope,</text>
+        <text x="966" y="860" class="s-haz" font-size="10.5">not a plan.</text>
+      </svg>
+    </div>
+    <figcaption><b>The tree is short on purpose.</b> Most data is relational, most relational workloads fit PostgreSQL, and the rare exceptions are recognisable by measured need — write volume across many nodes, documents genuinely read whole, or state that is only ever a fast copy. Normalise by default; denormalise deliberately, with a written reason.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the questions and where they lead</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Source of truth?</h4><p>If losing the data means losing it for good, it needs durable, ACID storage. If it can be recomputed or re-fetched, a faster, losable store is on the table.</p></div>
+      <div><h4><span>02</span>Redis</h4><p>An in-memory key-value store for cache, sessions, locks and pub/sub. Wrong when data must never be lost, when the dataset exceeds RAM, or when every request is unique and nothing would be hit.</p></div>
+      <div><h4><span>03</span>Relational?</h4><p>Joins, foreign keys, constraints, money, anything spanning two tables in one transaction. The two families differ exactly here: tables with enforced schemas and ACID, or documents and key-value with flexible schemas.</p></div>
+      <div><h4><span>04</span>MySQL demanded?</h4><p>Ecosystem and team experience are real advantages. WordPress, an existing PHP stack or deep MySQL replication skills justify it; for a new project without them, PostgreSQL is usually the better default.</p></div>
+      <div><h4><span>05</span>Document-shaped?</h4><p>Read whole, written whole, bounded in size, with genuinely varying structure per record. If not, PostgreSQL's JSONB stores documents with real indexes while keeping joins and transactions.</p></div>
+      <div><h4><span>06</span>Horizontal writes?</h4><p>Built-in sharding is MongoDB's strongest argument — but only for a measured need. A single well-indexed PostgreSQL handles far more than most teams assume.</p></div>
+      <div><h4><span>07</span>MySQL</h4><p>The most widely deployed relational database: fast simple reads, lightweight threads per connection, very mature replication. InnoDB and utf8mb4 always; YouTube's Vitess shows how to scale it without replacing it.</p></div>
+      <div><h4><span>08</span>PostgreSQL</h4><p>Correct, extensible, and capable of absorbing documents, search, geospatial, vectors, time series and job queues. Run it behind PgBouncer with a healthy autovacuum and it is the only datastore most projects need.</p></div>
+      <div><h4><span>09</span>MongoDB</h4><p>Documents in collections, stored in the shape the application uses. A replica set in production, explicit write concern, bounded embedding, and a shard key chosen as if it can never change — because in practice it cannot.</p></div>
+      <div><h4><span>10</span>Embed or reference</h4><p>Embed bounded data read together for one read and an atomic update; reference unbounded or shared data. Unbounded embedded arrays are the classic MongoDB failure, ending at the 16 MB document limit.</p></div>
+      <div><h4><span>11</span>Write concern</h4><p>How many replica-set members must acknowledge a write before it is "done". w: 1 is fast and can vanish in a failover; w: "majority" is slower and survives it. A correctness decision, not a tuning knob.</p></div>
+      <div><h4><span>12</span>Breached defaults</h4><p>Unauthenticated MongoDB and Redis on public interfaces, databases reachable on their default ports, applications connecting as superuser. Every one of these has been a real, repeated incident — and every restore you have not tested is another.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>A database is a library, not a warehouse</b>
+    <p>Whatever you choose, the shape on sheet 1 does not change: a catalogue so you never walk every shelf, a lending record so two people cannot borrow the same book, and a reading room holding what is in use right now. Choosing the store picks the building. The indexes, transactions and buffer pool are still the work.</p>
+  </div>
+</div>
+
+</div>

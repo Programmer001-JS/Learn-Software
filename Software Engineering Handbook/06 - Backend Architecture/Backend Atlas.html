@@ -1,0 +1,1366 @@
+<meta charset="utf-8">
+<title>Atlas of the Backend — seven sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 06 Backend Architecture · seven sheets</p>
+  <h1>Atlas of the <em>Backend</em></h1>
+  <p class="thesis">One request, from a TLS handshake at the edge to a row in PostgreSQL and back. Sheet 1 is the route it actually travels; every other sheet magnifies one stretch of that route, or the decision you made before the route existed. <strong>The backend is the only place truth can be stored, rules enforced and secrets kept — so every stop on this atlas is either doing one of those three jobs or protecting the ones that do.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 7</span>
+    <span><b>Numbered steps</b> 121</span>
+    <span><b>Read first</b> Sheet 1 end to end, then the sheet for the layer you are deploying or debugging</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Request Line</h4><p>One request, eighteen stops, six zones — and six exits that end the journey before your business logic ever runs.</p><em>Transit diagram</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Edge</h4><p>Nginx opened up: eight steps in order, the C10K bargain, buffering, where TLS terminates, and the interface to the app server.</p><em>Cutaway section</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>The Worker Floor</h4><p>Gunicorn's master and its workers, the three concurrency models, and the arithmetic of memory, connections and cold starts.</p><em>Process plant</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>The Event Loop</h4><p>How one Uvicorn worker holds thousands of waiting requests — and the single blocking call that stalls all of them.</p><em>Closed circuit</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>The Framework Choice</h4><p>Seven frameworks, one question order: team, ecosystem, workload, lifespan — and benchmarks last, because the database owns the latency.</p><em>Decision tree</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>Seven Pipelines</h4><p>The same request anatomy in FastAPI, Express, NestJS, Spring Boot, Django, Laravel and ASP.NET Core, row by row.</p><em>Parallel sections</em></span></a>
+    <a href="#a7"><span class="n">7</span><span><h4>The Failure Ledger</h4><p>Deploys that drop requests, timeouts that disagree, and the security defaults that only fail when someone switches them off.</p><em>Hazard map</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 300" role="img" aria-label="How the seven sheets fit together. Sheet 1, the request line, runs across the middle as the route one request takes. Above it, sheets 2, 3 and 4 zoom into the edge server, the worker processes and the event loop inside each worker. Below it, sheet 5 is the framework decision made before any code exists and sheet 6 compares how seven frameworks implement the framework stretch of the line. Sheet 7 runs underneath everything as the failure modes of deploys, timeouts and disabled defaults.">
+        <rect x="30" y="118" width="1340" height="62" fill="var(--z3)"/>
+        <text x="46" y="144" class="s-zone" fill="var(--mute)">Sheet 1 — the route one request takes, from TLS handshake to database and back</text>
+        <text x="46" y="164" class="s-sub">everything else on this atlas is a zoom into one stretch of it, or a decision that fixed what that stretch looks like</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M300,118 L300,80"/><path d="M700,118 L700,80"/><path d="M1100,118 L1100,80"/>
+          <path d="M420,180 L420,216"/><path d="M980,180 L980,216"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="300" y="68">2 · the edge</text>
+          <text x="700" y="68">3 · the worker floor</text>
+          <text x="1100" y="68">4 · the event loop</text>
+          <text x="420" y="234">5 · the framework choice</text>
+          <text x="980" y="234">6 · seven pipelines</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="300" y="50">stops 02 to 06, magnified — Nginx</text>
+          <text x="700" y="50">stop 07 — processes, memory, pools</text>
+          <text x="1100" y="50">stops 13 and 14 — what happens during the wait</text>
+          <text x="420" y="252">made once, before the line exists</text>
+          <text x="980" y="252">stops 08 to 16 in seven dialects</text>
+        </g>
+        <rect x="30" y="276" width="1340" height="10" fill="color-mix(in srgb,var(--hazard) 22%,transparent)"/>
+        <text x="1370" y="270" text-anchor="end" class="s-haz">Sheet 7 — deploys, timeouts and disabled defaults run under every sheet</text>
+      </svg>
+    </div>
+    <figcaption>Read it as three layers with three owners. <b>The edge</b> — sheet 2 — handles connections and is written in C. <b>The app server</b> — sheets 3 and 4 — decides how many requests run at once and in how many processes. <b>The framework and your code</b> — sheets 5 and 6 — are the only part that knows what the product is. Most deployment confusion is a job done in the wrong layer.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE REQUEST LINE ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Request Line</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Backend Fundamentals · Web Servers · Nginx · Backend Frameworks</span>
+  </div>
+  <p class="thesis">One request, one route, eighteen stops. Your business logic is one of them. <strong>Six exits end the journey early — three at the edge that save your workers, three in the framework that save your data — and stop 14 is drawn with a loop because a backend spends most of its life waiting, not computing.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 2200 800" role="img" aria-label="A transit map of one HTTP request. Fourteen outbound stations run left to right through six zones: client, the edge, the app server, the framework, your code and the data. Stations 3, 4 and 5 at the edge each have a dashed exit to the return line: a static file served from disk, a 429 from the rate limiter, and a proxy cache hit. Stations 9, 10 and 11 in the framework have exits for 401, 422 and 403. Station 7 has a branch down to the Gunicorn master and four workers. A loop between stations 13 and 14 marks the wait on the database. A dashed branch below station 12 leads to background work. The return line runs right to left through stations 15 to 18 back to the client.">
+        <defs>
+          <marker id="b1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="b3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <rect x="30" y="150" width="130" height="250" fill="var(--z1)"/>
+        <rect x="160" y="150" width="700" height="250" fill="var(--z2)"/>
+        <rect x="860" y="150" width="170" height="250" fill="var(--z3)"/>
+        <rect x="1030" y="150" width="450" height="250" fill="var(--z4)"/>
+        <rect x="1480" y="150" width="300" height="250" fill="var(--z5)"/>
+        <rect x="1780" y="150" width="390" height="250" fill="var(--z6)"/>
+        <g class="s-zone" fill="var(--mute)">
+          <text x="40" y="172">Client</text><text x="172" y="172">The edge · Nginx</text>
+          <text x="872" y="172">App server</text><text x="1042" y="172">The framework</text>
+          <text x="1492" y="172">Your code</text><text x="1792" y="172">The data</text>
+        </g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="160" y1="150" x2="160" y2="400"/><line x1="860" y1="150" x2="860" y2="400"/>
+          <line x1="1030" y1="150" x2="1030" y2="400"/><line x1="1480" y1="150" x2="1480" y2="400"/>
+          <line x1="1780" y1="150" x2="1780" y2="400"/>
+        </g>
+
+        <line x1="60" y1="290" x2="2110" y2="290" stroke="var(--line)" stroke-width="7"/>
+        <line x1="60" y1="273" x2="60" y2="307" stroke="var(--line)" stroke-width="7"/>
+        <path d="M2110,290 C2164,290 2164,700 2110,700" fill="none" stroke="var(--line)" stroke-width="7"/>
+        <line x1="2110" y1="700" x2="72" y2="700" stroke="var(--line)" stroke-width="7" marker-end="url(#b1)"/>
+
+        <g class="st"><circle cx="80" cy="290" r="9"/><circle cx="230" cy="290" r="9"/><circle cx="790" cy="290" r="9"/><circle cx="950" cy="290" r="9"/><circle cx="1100" cy="290" r="9"/><circle cx="1700" cy="290" r="9"/><circle cx="1850" cy="290" r="9"/><circle cx="2010" cy="290" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"><circle cx="370" cy="290" r="13"/><circle cx="650" cy="290" r="13"/></g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3.5"><circle cx="510" cy="290" r="13"/><circle cx="1250" cy="290" r="13"/><circle cx="1400" cy="290" r="13"/><circle cx="1550" cy="290" r="13"/></g>
+
+        <g class="s-num">
+          <text x="40" y="206">01</text><text x="190" y="206">02</text><text x="330" y="206">03</text><text x="470" y="206">04</text><text x="610" y="206">05</text><text x="750" y="206">06</text><text x="910" y="206">07</text><text x="1060" y="206">08</text><text x="1210" y="206">09</text><text x="1360" y="206">10</text><text x="1510" y="206">11</text><text x="1660" y="206">12</text><text x="1810" y="206">13</text><text x="1970" y="206">14</text>
+        </g>
+        <g class="s-lab">
+          <text x="40" y="224">you send</text><text x="190" y="224">TLS ends</text><text x="330" y="224">location</text><text x="470" y="224">rate limit</text><text x="610" y="224">proxy cache</text><text x="750" y="224">buffer, pick</text><text x="910" y="224">a worker</text><text x="1060" y="224">route + mw</text><text x="1210" y="224">who is it?</text><text x="1360" y="224">well-formed?</text><text x="1510" y="224">allowed?</text><text x="1660" y="224">the logic</text><text x="1810" y="224">data access</text><text x="1970" y="224">the database</text>
+        </g>
+        <g class="s-sub">
+          <text x="40" y="242">browser, app,</text><text x="40" y="256">or any script</text>
+          <text x="190" y="242">cert lives here;</text><text x="190" y="256">plain HTTP inside</text>
+          <text x="330" y="242">server and</text><text x="330" y="256">location blocks</text>
+          <text x="470" y="242">limit_req, per</text><text x="470" y="256">client IP</text>
+          <text x="610" y="242">response cached</text><text x="610" y="256">at the proxy?</text>
+          <text x="750" y="242">whole body read,</text><text x="750" y="256">healthy upstream</text>
+          <text x="910" y="242">socket → one</text><text x="910" y="256">worker process</text>
+          <text x="1060" y="242">logging, CORS,</text><text x="1060" y="256">request id</text>
+          <text x="1210" y="242">authentication:</text><text x="1210" y="256">token, session</text>
+          <text x="1360" y="242">validation:</text><text x="1360" y="256">shape and types</text>
+          <text x="1510" y="242">THIS user, THIS</text><text x="1510" y="256">action, THIS row</text>
+          <text x="1660" y="242">the only stop</text><text x="1660" y="256">that is product</text>
+          <text x="1810" y="242">Redis first,</text><text x="1810" y="256">then the pool</text>
+          <text x="1970" y="242">PostgreSQL: the</text><text x="1970" y="256">stored truth</text>
+        </g>
+
+        <path d="M370,303 L370,694" fill="none" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#b2)"/>
+        <circle cx="370" cy="540" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="370" y="544" text-anchor="middle" class="s-note" font-size="12">A</text>
+        <text x="390" y="536" class="s-note">static file</text>
+        <text x="390" y="550" class="s-sub" style="fill:var(--fast)">from disk, 10–100×</text>
+
+        <path d="M510,303 L510,694" fill="none" stroke="var(--hazard)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#b3)"/>
+        <circle cx="510" cy="590" r="12.5" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <text x="510" y="594" text-anchor="middle" class="s-haz" font-size="12">B</text>
+        <text x="530" y="586" class="s-haz">429 · throttled</text>
+        <text x="530" y="600" class="s-sub" style="fill:var(--hazard)">limit_req said no</text>
+
+        <path d="M650,303 L650,694" fill="none" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#b2)"/>
+        <circle cx="650" cy="640" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="650" y="644" text-anchor="middle" class="s-note" font-size="12">C</text>
+        <text x="670" y="636" class="s-note">cache hit</text>
+        <text x="670" y="650" class="s-sub" style="fill:var(--fast)">no worker woken</text>
+
+        <g fill="none" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="9 7" marker-end="url(#b3)">
+          <path d="M1250,303 L1250,694"/><path d="M1400,303 L1400,694"/><path d="M1550,303 L1550,694"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"><circle cx="1250" cy="610" r="12.5"/><circle cx="1400" cy="610" r="12.5"/><circle cx="1550" cy="610" r="12.5"/></g>
+        <g class="s-haz" font-size="12" text-anchor="middle"><text x="1250" y="614">D</text><text x="1400" y="614">E</text><text x="1550" y="614">F</text></g>
+        <g class="s-haz"><text x="1270" y="602">401 · who?</text><text x="1420" y="602">422 · malformed</text><text x="1570" y="602">403 · not yours</text></g>
+        <g class="s-sub" style="fill:var(--hazard)"><text x="1270" y="630">no valid token</text><text x="1420" y="630">per-field errors</text><text x="1570" y="630">ownership fails</text></g>
+
+        <rect x="700" y="430" width="360" height="190" fill="var(--band)" stroke="var(--line)" stroke-width="2" stroke-dasharray="7 6"/>
+        <path d="M950,303 L950,482" fill="none" stroke="var(--line)" stroke-width="4"/>
+        <text x="714" y="452" class="s-zone" fill="var(--line)">Worker floor</text>
+        <text x="714" y="470" class="s-sub">sheet 3 opens it up</text>
+        <rect x="716" y="482" width="326" height="26" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="728" y="499" class="s-lab" font-size="11">Gunicorn master · owns the socket</text>
+        <g fill="var(--paper)" stroke="var(--rule)"><rect x="716" y="520" width="74" height="40"/><rect x="800" y="520" width="74" height="40"/><rect x="884" y="520" width="74" height="40"/><rect x="968" y="520" width="74" height="40"/></g>
+        <g class="s-lab" font-size="10.5"><text x="724" y="537">worker 1</text><text x="808" y="537">worker 2</text><text x="892" y="537">worker 3</text><text x="976" y="537">worker 4</text></g>
+        <g class="s-sub" font-size="10"><text x="724" y="551">own memory</text><text x="808" y="551">own pool</text><text x="892" y="551">own cache</text><text x="976" y="551">shares none</text></g>
+        <text x="714" y="584" class="s-sub">4 workers × 250 MB = 1 GB before request one</text>
+        <text x="714" y="604" class="s-haz" font-size="10.5">workers share nothing — shared state lives in Redis</text>
+
+        <path d="M1850,306 C1850,410 2010,410 2010,311" fill="none" stroke="var(--fast)" stroke-width="4" marker-end="url(#b2)"/>
+        <text x="1930" y="436" text-anchor="middle" class="s-note">await: the worker serves others</text>
+        <text x="1930" y="452" text-anchor="middle" class="s-sub" style="fill:var(--fast)">2 ms of your code, 40 ms of waiting</text>
+
+        <rect x="1620" y="480" width="470" height="92" fill="var(--z6)" stroke="var(--learn)" stroke-width="2" stroke-dasharray="7 6"/>
+        <path d="M1700,303 L1700,476" fill="none" stroke="var(--learn)" stroke-width="3.5" stroke-dasharray="8 6"/>
+        <text x="1720" y="502" class="s-learn">not everything belongs on this line</text>
+        <text x="1720" y="520" class="s-sub">Email, reports, CPU-heavy work: enqueue it and reply now.</text>
+        <text x="1720" y="534" class="s-sub">A background worker does it off the request path, where</text>
+        <text x="1720" y="548" class="s-sub">it cannot block a loop or hold a worker for seconds.</text>
+
+        <g class="st"><circle cx="1900" cy="700" r="9"/><circle cx="1690" cy="700" r="9"/><circle cx="1100" cy="700" r="9"/><circle cx="850" cy="700" r="9"/></g>
+        <line x1="80" y1="683" x2="80" y2="717" stroke="var(--line)" stroke-width="7"/>
+        <g class="s-num"><text x="1860" y="662">15</text><text x="1650" y="662">16</text><text x="1060" y="662">17</text><text x="810" y="662">18</text></g>
+        <g class="s-lab"><text x="1860" y="680">serialise</text><text x="1650" y="680">errors → codes</text><text x="1060" y="680">compress, cache</text><text x="810" y="680">keep-alive</text><text x="100" y="680">the response</text></g>
+        <g class="s-sub">
+          <text x="1860" y="726">declared fields only —</text><text x="1860" y="740">a DTO, never an entity</text>
+          <text x="1650" y="726">exceptions become</text><text x="1650" y="740">codes, not traces</text>
+          <text x="1060" y="726">gzip or brotli at Nginx;</text><text x="1060" y="740">stored if cacheable</text>
+          <text x="810" y="726">connection held open</text><text x="810" y="740">for the next request</text>
+          <text x="100" y="726">and a durable change</text><text x="100" y="740">to the truth</text>
+        </g>
+        <text x="2170" y="784" text-anchor="end" class="s-sub">Budget for a typical request: under 1 ms at the edge, ~2 ms in your code, ~40 ms waiting on I/O. Stops 13–14 own almost all of it.</text>
+      </svg>
+    </div>
+    <figcaption><b>Three things on this map surprise people.</b> The product is one stop out of eighteen — the other seventeen are the same in every backend ever built, which is why frameworks exist. The three edge exits are nearly free: a static file, a throttled bot or a cached page never touches Python, Java or PHP. And the three framework exits are ordered deliberately — identity, then shape, then permission — because stop 11 can only ask "is this row yours?" once stops 09 and 10 have established who you are and what you asked for.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every stop on this sheet, and what it does</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>You send</h4><p>A request arrives from a browser, a mobile app, another service — or a script that has never seen your UI. Everything the client sends is hostile until proven otherwise, including from your own frontend.</p></div>
+      <div><h4><span>02</span>TLS ends</h4><p>Nginx or a cloud load balancer terminates TLS, so certificates live in one place. Behind it, traffic is plain HTTP over the private network — acceptable only if you still trust that network.</p></div>
+      <div><h4><span>03</span>Location match</h4><p>The request is matched against <code>server</code> and <code>location</code> blocks. A block that accidentally serves the application directory is a full source-code disclosure.</p></div>
+      <div><h4><span>04</span>Rate limit</h4><p><code>limit_req</code> counts requests per client and refuses the excess. The cheapest defence against brute force and scraping — and it only works if the proxy sees the real client IP.</p></div>
+      <div><h4><span>05</span>Proxy cache</h4><p>If a cacheable response is already stored, Nginx returns it. No worker, no framework, no database query was involved.</p></div>
+      <div><h4><span>06</span>Buffer, pick upstream</h4><p>Nginx reads the whole request body first, then chooses a healthy upstream by round robin or least connections. The buffering is what stops a slow mobile client holding a worker for seconds.</p></div>
+      <div><h4><span>07</span>A worker</h4><p>The Gunicorn master owns the listening socket; the kernel hands the connection to one worker process. That worker has its own memory, its own cache and its own database pool.</p></div>
+      <div><h4><span>08</span>Route + middleware</h4><p>The framework finds the handler for this URL and runs the middleware chain — logging, CORS, compression, a request id. Order matters: middleware registered too late never runs.</p></div>
+      <div><h4><span>09</span>Authentication</h4><p>Who is this? A token or session is verified and an identity attached to the request. Identity only — it says nothing yet about what they may touch.</p></div>
+      <div><h4><span>10</span>Validation</h4><p>Is the input well-formed? Body, query and headers become typed objects, or the request is rejected with per-field errors. Validation checks shape, never permission.</p></div>
+      <div><h4><span>11</span>Authorisation</h4><p>May THIS user do THIS to THIS object? Checking that someone is logged in but not that order 42 is theirs is the single most common serious backend vulnerability.</p></div>
+      <div><h4><span>12</span>Business logic</h4><p>The rules that make it your product — ideally in a service, not the controller, so it can be tested and reused. About 2 ms of the request's life.</p></div>
+      <div><h4><span>13</span>Data access</h4><p>Cache first (Redis), then the database through this worker's connection pool. Most backend performance work is here: fewer queries, cached reads, no N+1.</p></div>
+      <div><h4><span>14</span>The database</h4><p>Where the truth lives. A typical request waits ~40 ms here — which is why async models and pooling matter more than language speed, and why "rewrite it in a faster language" disappoints.</p></div>
+      <div><h4><span>15</span>Serialise</h4><p>Objects become JSON or HTML. Only declared fields should leave — a <code>response_model</code>, a DTO, an <code>@Exclude</code> — or a column added next year leaks through an endpoint nobody reviewed.</p></div>
+      <div><h4><span>16</span>Errors → status codes</h4><p>Exceptions are mapped to clean status codes by error middleware, exception filters or <code>@ControllerAdvice</code>. Stack traces and exception details never reach the client.</p></div>
+      <div><h4><span>17</span>Compress, cache</h4><p>On the way out Nginx applies gzip or brotli and stores the response if it is cacheable — without a line of application code.</p></div>
+      <div><h4><span>18</span>Keep-alive</h4><p>The response returns to the client and the connection is kept open for reuse, saving the next request its TCP and TLS handshake.</p></div>
+      <div><h4><span>A</span>Static file</h4><p>A <code>location /static/</code> block serves from disk, often 10–100× faster than through a framework. Serving static files through the app while Nginx sits idle is a classic waste.</p></div>
+      <div><h4><span>B</span>429 Too Many Requests</h4><p>The rate limiter refused. Cheap for you, expensive for an attacker — but useless if <code>X-Forwarded-For</code> is missing and every client appears to have the proxy's IP.</p></div>
+      <div><h4><span>C</span>Proxy cache hit</h4><p>A stored response goes straight back. Stack Overflow served vast traffic from a handful of servers largely because caching removed most database work.</p></div>
+      <div><h4><span>D</span>401 Unauthorized</h4><p>No valid identity. Raised by an auth dependency, guard, filter chain or middleware before the handler runs.</p></div>
+      <div><h4><span>E</span>422 / 400</h4><p>Malformed input, returned with per-field errors — 422 from Pydantic or a Laravel Form Request, 400 from Nest pipes and ASP.NET model binding. Rejecting early keeps garbage out of your logic.</p></div>
+      <div><h4><span>F</span>403 Forbidden</h4><p>Known user, wrong object. A policy, <code>@PreAuthorize</code> or an explicit ownership check in the handler. Frameworks check roles; object ownership is almost always yours to write.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Steps 09 and 11 are different</b>
+    <p>Authentication is identity; authorisation is permission. A route that checks "is logged in" and then loads <code>/orders/{id}</code> by id alone lets any customer read any order by changing a number. No framework on sheet 6 prevents this by default — every one of them leaves the ownership check to you.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE EDGE ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Edge</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · Web Servers · Nginx</span>
+  </div>
+  <p class="thesis">Stops 02 to 06 of sheet 1, opened up. On the left, the eight things Nginx does to every request, in order; on the right, why it can do them for tens of thousands of connections on a few megabytes. <strong>The reverse proxy is not an optional speed-up — it is the component that keeps slow clients, bots and TLS handshakes away from the processes that run your code.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 870" role="img" aria-label="A cutaway of the edge server. On the left, a vertical chain of eight Nginx steps: accept the connection, terminate TLS, match a location, serve a static file, check the proxy cache, pick an upstream, buffer and compress, return. On the right, six panels: the C10K problem comparing ten thousand threads with four event-loop workers; the annotated configuration; a timeline showing how buffering protects workers from a slow client; three options for where TLS terminates; a table of the interfaces between server and application in each ecosystem; and a hardening checklist with alternatives to Nginx.">
+        <defs>
+          <marker id="e1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <!-- LEFT COLUMN -->
+        <text x="40" y="40" class="s-zone" fill="var(--mute)">Nginx, in order</text>
+        <text x="40" y="60" class="s-sub">one HTTPS request, eight steps</text>
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#e1)">
+          <path d="M165,126 L165,136"/><path d="M165,184 L165,194"/><path d="M165,242 L165,252"/><path d="M165,300 L165,310"/>
+          <path d="M165,358 L165,368"/><path d="M165,416 L165,426"/><path d="M165,474 L165,484"/>
+        </g>
+        <g>
+          <rect x="40" y="80" width="250" height="46" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="40" y="138" width="250" height="46" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="40" y="196" width="250" height="46" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="40" y="254" width="250" height="46" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="40" y="312" width="250" height="46" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="40" y="370" width="250" height="46" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="40" y="428" width="250" height="46" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="40" y="486" width="250" height="46" fill="var(--z2)" stroke="var(--rule)"/>
+        </g>
+        <g class="s-num"><text x="52" y="99">01</text><text x="52" y="157">02</text><text x="52" y="215">03</text><text x="52" y="273">04</text><text x="52" y="331">05</text><text x="52" y="389">06</text><text x="52" y="447">07</text><text x="52" y="505">08</text></g>
+        <g class="s-lab">
+          <text x="82" y="99">accept TCP</text><text x="82" y="157">terminate TLS</text><text x="82" y="215">match a location</text><text x="82" y="273">static file?</text>
+          <text x="82" y="331">in the proxy cache?</text><text x="82" y="389">pick an upstream</text><text x="82" y="447">buffer · compress · headers</text><text x="82" y="505">return, keep alive</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="82" y="116">tens of thousands per worker</text><text x="82" y="174">the main CPU cost, hw-accelerated</text><text x="82" y="232">server_name, then location</text><text x="82" y="290">served from disk → finished</text>
+          <text x="82" y="348">served from cache → finished</text><text x="82" y="406">healthy; round robin or least conn</text><text x="82" y="464">gzip/brotli, HSTS, X-Forwarded-*</text><text x="82" y="522">reused by the next request</text>
+        </g>
+        <text x="40" y="558" class="s-note">04 and 05 end at the edge.</text>
+        <text x="40" y="574" class="s-sub">The application never hears of them.</text>
+
+        <!-- PANEL A: C10K -->
+        <rect x="320" y="30" width="510" height="270" fill="var(--z3)"/>
+        <text x="336" y="54" class="s-zone" fill="var(--mute)">A · the C10K problem, and the fix</text>
+        <text x="336" y="80" class="s-lab" font-size="11">thread per connection</text>
+        <g fill="var(--hazard)" opacity=".45">
+          <rect x="336" y="94" width="14" height="10"/><rect x="354" y="94" width="14" height="10"/><rect x="372" y="94" width="14" height="10"/><rect x="390" y="94" width="14" height="10"/><rect x="408" y="94" width="14" height="10"/><rect x="426" y="94" width="14" height="10"/><rect x="444" y="94" width="14" height="10"/><rect x="462" y="94" width="14" height="10"/><rect x="480" y="94" width="14" height="10"/><rect x="498" y="94" width="14" height="10"/><rect x="516" y="94" width="14" height="10"/><rect x="534" y="94" width="14" height="10"/>
+          <rect x="336" y="108" width="14" height="10"/><rect x="354" y="108" width="14" height="10"/><rect x="372" y="108" width="14" height="10"/><rect x="390" y="108" width="14" height="10"/><rect x="408" y="108" width="14" height="10"/><rect x="426" y="108" width="14" height="10"/><rect x="444" y="108" width="14" height="10"/><rect x="462" y="108" width="14" height="10"/><rect x="480" y="108" width="14" height="10"/><rect x="498" y="108" width="14" height="10"/><rect x="516" y="108" width="14" height="10"/><rect x="534" y="108" width="14" height="10"/>
+          <rect x="336" y="122" width="14" height="10"/><rect x="354" y="122" width="14" height="10"/><rect x="372" y="122" width="14" height="10"/><rect x="390" y="122" width="14" height="10"/><rect x="408" y="122" width="14" height="10"/><rect x="426" y="122" width="14" height="10"/><rect x="444" y="122" width="14" height="10"/><rect x="462" y="122" width="14" height="10"/><rect x="480" y="122" width="14" height="10"/><rect x="498" y="122" width="14" height="10"/><rect x="516" y="122" width="14" height="10"/><rect x="534" y="122" width="14" height="10"/>
+          <rect x="336" y="136" width="14" height="10"/><rect x="354" y="136" width="14" height="10"/><rect x="372" y="136" width="14" height="10"/><rect x="390" y="136" width="14" height="10"/><rect x="408" y="136" width="14" height="10"/><rect x="426" y="136" width="14" height="10"/><rect x="444" y="136" width="14" height="10"/><rect x="462" y="136" width="14" height="10"/><rect x="480" y="136" width="14" height="10"/><rect x="498" y="136" width="14" height="10"/><rect x="516" y="136" width="14" height="10"/><rect x="534" y="136" width="14" height="10"/>
+          <rect x="336" y="150" width="14" height="10"/><rect x="354" y="150" width="14" height="10"/><rect x="372" y="150" width="14" height="10"/><rect x="390" y="150" width="14" height="10"/><rect x="408" y="150" width="14" height="10"/><rect x="426" y="150" width="14" height="10"/><rect x="444" y="150" width="14" height="10"/><rect x="462" y="150" width="14" height="10"/><rect x="480" y="150" width="14" height="10"/><rect x="498" y="150" width="14" height="10"/><rect x="516" y="150" width="14" height="10"/><rect x="534" y="150" width="14" height="10"/>
+          <rect x="336" y="164" width="14" height="10"/><rect x="354" y="164" width="14" height="10"/><rect x="372" y="164" width="14" height="10"/><rect x="390" y="164" width="14" height="10"/><rect x="408" y="164" width="14" height="10"/><rect x="426" y="164" width="14" height="10"/><rect x="444" y="164" width="14" height="10"/><rect x="462" y="164" width="14" height="10"/><rect x="480" y="164" width="14" height="10"/><rect x="498" y="164" width="14" height="10"/><rect x="516" y="164" width="14" height="10"/><rect x="534" y="164" width="14" height="10"/>
+        </g>
+        <g class="s-sub"><text x="336" y="198">10,000 connections = 10,000 threads</text><text x="336" y="212">~10 GB of thread stacks</text><text x="336" y="226" fill="var(--hazard)">constant context switching</text></g>
+
+        <text x="620" y="80" class="s-lab" font-size="11">Nginx, event-driven</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="620" y="96" width="44" height="64"/><rect x="672" y="96" width="44" height="64"/><rect x="724" y="96" width="44" height="64"/><rect x="776" y="96" width="44" height="64"/></g>
+        <g fill="none" stroke="var(--line)" stroke-width="2.5"><circle cx="642" cy="122" r="12"/><circle cx="694" cy="122" r="12"/><circle cx="746" cy="122" r="12"/><circle cx="798" cy="122" r="12"/></g>
+        <g class="s-sub" font-size="10" text-anchor="middle"><text x="642" y="152">w1</text><text x="694" y="152">w2</text><text x="746" y="152">w3</text><text x="798" y="152">w4</text></g>
+        <g class="s-sub"><text x="620" y="198">4 worker processes</text><text x="620" y="212">~10 MB in total</text><text x="620" y="226" fill="var(--line)">one event loop per worker</text></g>
+        <text x="336" y="256" class="s-note">Node's event loop idea — written in C, purely for connections.</text>
+        <text x="336" y="274" class="s-sub">A few MB per worker, sub-millisecond latency added, never blocking.</text>
+
+        <!-- PANEL B: config -->
+        <rect x="846" y="30" width="524" height="270" fill="var(--z1)"/>
+        <text x="862" y="54" class="s-zone" fill="var(--line)">B · the configuration that matters</text>
+        <g class="s-mono" font-size="10">
+          <text x="862" y="78">upstream app {</text>
+          <text x="862" y="93">  server 127.0.0.1:8000;</text>
+          <text x="862" y="108">  server 127.0.0.1:8001;</text>
+          <text x="862" y="123">}</text>
+          <text x="862" y="143">location /static/ { root /var/www; expires 1y; }</text>
+          <text x="862" y="163">location / {</text>
+          <text x="862" y="178">  proxy_pass http://app;</text>
+          <text x="862" y="193">  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</text>
+          <text x="862" y="208">  proxy_set_header X-Forwarded-Proto $scheme;</text>
+          <text x="862" y="223">  proxy_read_timeout 30s;</text>
+          <text x="862" y="238">}</text>
+        </g>
+        <g class="s-note" font-size="10.5"><text x="1210" y="100">two app servers</text><text x="1210" y="143">never hits the app</text><text x="1210" y="223">must agree with the app</text></g>
+        <text x="862" y="262" class="s-haz" font-size="10.5">Drop the two X-Forwarded-* headers and the app logs the proxy's IP for every</text>
+        <text x="862" y="276" class="s-sub" style="fill:var(--hazard)">client and believes the connection is plain HTTP — breaking rate limits,</text>
+        <text x="862" y="290" class="s-sub" style="fill:var(--hazard)">redirects and secure cookies at once.</text>
+
+        <!-- PANEL C: buffering -->
+        <rect x="320" y="316" width="510" height="250" fill="var(--z4)"/>
+        <text x="336" y="340" class="s-zone" fill="var(--mute)">C · buffering, drawn as time</text>
+        <text x="336" y="360" class="s-sub">A phone on a bad connection takes 8 seconds to upload a request body.</text>
+        <text x="336" y="394" class="s-lab" font-size="11">no proxy</text>
+        <rect x="440" y="380" width="360" height="20" fill="var(--hazard)" opacity=".7"/>
+        <text x="450" y="394" class="s-lab" font-size="10.5" style="fill:var(--paper)">an app worker held for all 8 s</text>
+        <text x="336" y="444" class="s-lab" font-size="11">behind Nginx</text>
+        <rect x="440" y="430" width="350" height="20" fill="var(--line)" opacity=".35"/>
+        <text x="450" y="444" class="s-sub" font-size="10.5" style="fill:var(--ink)">Nginx holds the slow connection — cheap</text>
+        <rect x="790" y="460" width="14" height="20" fill="var(--fast)"/>
+        <text x="784" y="474" text-anchor="end" class="s-note" font-size="10.5">worker busy 40 ms</text>
+        <line x1="440" y1="498" x2="804" y2="498" stroke="var(--rule)" stroke-width="1.5"/>
+        <g class="s-sub" font-size="10"><text x="440" y="512">0 s</text><text x="804" y="512" text-anchor="end">8 s</text></g>
+        <text x="336" y="536" class="s-haz" font-size="10.5">Slowloris: a handful of trickling connections can occupy every sync worker.</text>
+        <text x="336" y="552" class="s-sub">Buffering is the standard fix: Gunicorn never faces the internet.</text>
+
+        <!-- PANEL D: TLS -->
+        <rect x="846" y="316" width="524" height="250" fill="var(--z2)"/>
+        <text x="862" y="340" class="s-zone" fill="var(--mute)">D · where TLS terminates</text>
+        <g class="s-lab" font-size="11"><text x="862" y="366">A · cloud load balancer terminates</text><text x="862" y="424">B · Nginx terminates</text><text x="862" y="482">C · end to end, mTLS inside (zero trust)</text></g>
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="862" y="374" width="70" height="22"/><rect x="1020" y="374" width="80" height="22"/><rect x="1190" y="374" width="80" height="22"/>
+          <rect x="862" y="432" width="70" height="22"/><rect x="1020" y="432" width="80" height="22"/><rect x="1190" y="432" width="80" height="22"/>
+          <rect x="862" y="490" width="70" height="22"/><rect x="1020" y="490" width="80" height="22"/><rect x="1190" y="490" width="80" height="22"/>
+        </g>
+        <g class="s-lab" font-size="10.5" text-anchor="middle">
+          <text x="897" y="389">client</text><text x="1060" y="389">cloud LB</text><text x="1230" y="389">app</text>
+          <text x="897" y="447">client</text><text x="1060" y="447">Nginx</text><text x="1230" y="447">app</text>
+          <text x="897" y="505">client</text><text x="1060" y="505">proxy</text><text x="1230" y="505">app</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="3"><line x1="932" y1="385" x2="1020" y2="385"/><line x1="932" y1="443" x2="1020" y2="443"/><line x1="932" y1="501" x2="1020" y2="501"/><line x1="1100" y1="501" x2="1190" y2="501"/></g>
+        <g stroke="var(--hazard)" stroke-width="3" stroke-dasharray="6 4"><line x1="1100" y1="385" x2="1190" y2="385"/><line x1="1100" y1="443" x2="1190" y2="443"/></g>
+        <g class="s-sub" font-size="10" text-anchor="middle"><text x="976" y="380" fill="var(--line)">TLS</text><text x="976" y="438" fill="var(--line)">TLS</text><text x="976" y="496" fill="var(--line)">TLS</text><text x="1145" y="380" fill="var(--hazard)">plaintext</text><text x="1145" y="438" fill="var(--hazard)">plaintext</text><text x="1145" y="496" fill="var(--line)">TLS</text></g>
+        <text x="862" y="536" class="s-haz" font-size="10.5">A and B leave traffic inside your network in plaintext. Zero trust assumes</text>
+        <text x="862" y="552" class="s-sub" style="fill:var(--hazard)">that network is hostile — which is why internal TLS and mTLS are spreading.</text>
+
+        <!-- PANEL E: interfaces -->
+        <rect x="30" y="590" width="660" height="270" fill="var(--band)"/>
+        <text x="46" y="614" class="s-zone" fill="var(--mute)">E · the interface between the two layers</text>
+        <g class="s-lab" font-size="11"><text x="46" y="640">Ecosystem</text><text x="210" y="640">Interface</text><text x="420" y="640">Application servers</text></g>
+        <line x1="46" y1="648" x2="674" y2="648" stroke="var(--rule)"/>
+        <g class="s-sub">
+          <text x="46" y="666">Python, sync</text><text x="210" y="666" class="s-mono" font-size="10.5">WSGI</text><text x="420" y="666">Gunicorn, uWSGI</text>
+          <text x="46" y="686">Python, async</text><text x="210" y="686" class="s-mono" font-size="10.5">ASGI</text><text x="420" y="686">Uvicorn, Hypercorn</text>
+          <text x="46" y="706">Java</text><text x="210" y="706" class="s-mono" font-size="10.5">Servlet API</text><text x="420" y="706">Tomcat, Jetty, Undertow</text>
+          <text x="46" y="726">.NET</text><text x="210" y="726" class="s-mono" font-size="10.5">middleware pipeline</text><text x="420" y="726">Kestrel</text>
+          <text x="46" y="746">Node.js</text><text x="210" y="746" class="s-mono" font-size="10.5">the runtime is the server</text><text x="420" y="746">http module, Express</text>
+          <text x="46" y="766">PHP</text><text x="210" y="766" class="s-mono" font-size="10.5">FastCGI</text><text x="420" y="766">PHP-FPM</text>
+          <text x="46" y="786">Go</text><text x="210" y="786" class="s-mono" font-size="10.5">built in</text><text x="420" y="786">net/http</text>
+        </g>
+        <text x="46" y="816" class="s-note">Go and Node ship a production HTTP server — still put a proxy in front for TLS.</text>
+        <text x="46" y="834" class="s-sub">Dev servers (flask run, manage.py runserver, next dev) are single-threaded and unhardened:</text>
+        <text x="46" y="848" class="s-haz" font-size="10.5">never in production, and never an app server exposed directly.</text>
+
+        <!-- PANEL F: hardening -->
+        <rect x="706" y="590" width="664" height="270" fill="var(--z5)"/>
+        <text x="722" y="614" class="s-zone" fill="var(--fast)">F · hardening the outermost defence</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="722" y="640">client_max_body_size 10m;</text>
+          <text x="722" y="678">limit_req zone=api;</text>
+          <text x="722" y="716">server_tokens off;</text>
+          <text x="722" y="754">add_header Strict-Transport-Security …</text>
+          <text x="722" y="792">proxy_set_header X-Forwarded-For $remote_addr;</text>
+        </g>
+        <g class="s-sub">
+          <text x="722" y="654">the default invites 413s or disk-filling uploads</text>
+          <text x="722" y="692">429 before brute force reaches the app</text>
+          <text x="722" y="730">hide the version from fingerprinting</text>
+          <text x="722" y="768">HSTS, nosniff, CSP — once, centrally</text>
+          <text x="722" y="806">overwrite it, or clients forge their IP</text>
+        </g>
+        <text x="1080" y="640" class="s-lab" font-size="11">Alternatives, by strength</text>
+        <g class="s-sub">
+          <text x="1080" y="662">Caddy · automatic HTTPS, tiny config</text>
+          <text x="1080" y="682">HAProxy · load balancing, health checks</text>
+          <text x="1080" y="702">Envoy · service mesh, dynamic config</text>
+          <text x="1080" y="722">Traefik · discovers containers itself</text>
+          <text x="1080" y="742">Cloud LB · managed, no config files</text>
+          <text x="1080" y="762">K8s Ingress · usually Nginx inside</text>
+        </g>
+        <text x="1080" y="790" class="s-note">Small project? Caddy.</text>
+        <text x="1080" y="806" class="s-sub">Certificates renew themselves.</text>
+        <text x="722" y="834" class="s-haz" font-size="10.5">A location block that serves your app directory is full source disclosure.</text>
+        <text x="722" y="850" class="s-sub" style="fill:var(--hazard)">Keep complex logic out of the config: it is untestable.</text>
+      </svg>
+    </div>
+    <figcaption><b>The division of labour is the whole design:</b> C-level connection handling in front, application logic behind. Nginx in front of Gunicorn is the most common Python deployment in existence, and Kubernetes did not replace the idea — the Ingress controller is usually the same Nginx, now routing into containers.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the edge, step by step and panel by panel</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Accept the connection</h4><p>A worker's event loop registers the new TCP connection and moves on. Nginx holds tens of thousands per worker because none of them gets a thread.</p></div>
+      <div><h4><span>02</span>Terminate TLS</h4><p>Decrypt once, at the edge, with certificates in one place. TLS is Nginx's main CPU cost, and it is hardware-accelerated. Remember to reload after a certificate renewal.</p></div>
+      <div><h4><span>03</span>Match a location</h4><p><code>server_name</code> selects the site, <code>location</code> blocks select the behaviour. Declarative and fast — and very hard to test once it grows conditionals and rewrites.</p></div>
+      <div><h4><span>04</span>Static file</h4><p>Anything under <code>/static/</code> is read from disk with long <code>expires</code> headers. Often 10–100× faster than the same file through a framework.</p></div>
+      <div><h4><span>05</span>Proxy cache</h4><p>Stored responses are returned without contacting an upstream. Rate-limit checks come before it, so a cached endpoint still cannot be hammered.</p></div>
+      <div><h4><span>06</span>Pick an upstream</h4><p>Choose a healthy application server from the <code>upstream</code> block by round robin or least connections, and remove failing backends from rotation.</p></div>
+      <div><h4><span>07</span>Buffer, compress, add headers</h4><p>The full request is buffered before forwarding; the response is compressed with gzip or brotli, given security headers, and cached if allowed.</p></div>
+      <div><h4><span>08</span>Return, keep alive</h4><p>The response goes back and the connection is kept open for reuse. Configuration reloads happen without dropping any of these connections.</p></div>
+      <div><h4><span>A</span>C10K</h4><p>The classic Apache model gave each connection a process or thread: 10,000 connections, 10,000 threads, gigabytes of stacks. An event loop per worker handles the same load in megabytes.</p></div>
+      <div><h4><span>B</span>X-Forwarded-For / -Proto</h4><p>Not optional. Without them the application sees the proxy as every client and believes it is on HTTP — breaking logging, rate limiting, redirects and cookie security.</p></div>
+      <div><h4><span>C</span>Buffering</h4><p>The proxy absorbs slow uploads so a worker only sees a complete request. It is the standard defence against Slowloris and the reason an app server must never face clients directly.</p></div>
+      <div><h4><span>D</span>TLS termination</h4><p>At a cloud load balancer, at Nginx, or end to end. The first two mean plaintext inside your network, which zero-trust architecture no longer accepts by default.</p></div>
+      <div><h4><span>E</span>Server interface</h4><p>WSGI, ASGI, Servlet, Kestrel's pipeline, FastCGI: the contract by which an application server hands a request to your framework. It decides which servers can run which apps.</p></div>
+      <div><h4><span>F</span>Hardening</h4><p>Body size limit, rate limiting, version hidden, security headers set centrally, <code>X-Forwarded-For</code> overwritten rather than appended. Internet-facing C code: keep it patched.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Two timeouts that must agree</b>
+    <p><code>proxy_read_timeout 30s</code> in Nginx and <code>--timeout</code> in Gunicorn are the same deadline seen from two sides. When they disagree, one kills the request while the other is still waiting, and the client sees a 502 that neither log explains. Decide which is longer on purpose — sheet 7 draws the whole ladder.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — THE WORKER FLOOR ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Worker Floor</h2>
+    <span class="form">Process plant</span>
+    <span class="cov">Covers · Runtime Explained · Gunicorn · Uvicorn</span>
+  </div>
+  <p class="thesis">Stop 07 of sheet 1, drawn as a plant: one master, N identical workers, and the shared stores they all lean on. <strong>How many workers you run is not a tuning preference — it follows from the runtime's concurrency model, and it is almost always capped by memory and database connections before it is capped by CPU.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A process plant. Across the top, Nginx feeds a Gunicorn master, which forks four identical workers, each with its own memory, pool and cache; the workers connect to Redis for shared state and through PgBouncer to PostgreSQL. Below the master, its four supervisory jobs: replacing crashed workers, killing timed-out ones, reloading on SIGHUP and recycling after max requests. The middle row compares the process-based, thread-based and event-loop concurrency models. The bottom row works through the arithmetic of memory against a container limit, database connections against max_connections, and worker counts per runtime.">
+        <defs>
+          <marker id="w1b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="w2b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <text x="40" y="36" class="s-zone" fill="var(--line)">The plant · one machine, one master, N workers, shared stores outside</text>
+
+        <rect x="40" y="70" width="150" height="80" fill="var(--z2)" stroke="var(--rule)"/>
+        <text x="52" y="90" class="s-num">01</text><text x="78" y="90" class="s-lab">Nginx</text>
+        <text x="52" y="110" class="s-sub">complete, buffered</text><text x="52" y="124" class="s-sub">requests to :8000</text>
+        <line x1="190" y1="110" x2="244" y2="110" stroke="var(--line)" stroke-width="3" marker-end="url(#w1b)"/>
+
+        <rect x="250" y="60" width="200" height="100" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="262" y="80" class="s-num">02</text><text x="288" y="80" class="s-lab">Gunicorn master</text>
+        <text x="262" y="100" class="s-sub">binds the port, forks N</text><text x="262" y="114" class="s-sub">workers and supervises</text><text x="262" y="128" class="s-sub">them. Handles no requests.</text>
+        <text x="262" y="148" class="s-sub" font-size="10" style="fill:var(--line)">fork() is cheap: copy-on-write</text>
+
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#w1b)">
+          <path d="M450,110 C480,110 484,85 514,85"/><path d="M450,110 C480,110 484,145 514,145"/><path d="M450,110 C480,110 484,205 514,205"/><path d="M450,110 C480,110 484,265 514,265"/>
+        </g>
+        <text x="520" y="52" class="s-num">03</text><text x="544" y="52" class="s-lab" font-size="11">N identical workers · they share nothing</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="520" y="60" width="260" height="50"/><rect x="520" y="120" width="260" height="50"/><rect x="520" y="180" width="260" height="50"/><rect x="520" y="240" width="260" height="50"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="532" y="80">worker 1 · UvicornWorker</text><text x="532" y="140">worker 2 · UvicornWorker</text><text x="532" y="200">worker 3 · UvicornWorker</text><text x="532" y="260">worker 4 · UvicornWorker</text></g>
+        <g class="s-sub" font-size="10.5"><text x="532" y="98">≈250 MB · pool of 10 · own cache</text><text x="532" y="158">≈250 MB · pool of 10 · own cache</text><text x="532" y="218">≈250 MB · pool of 10 · own cache</text><text x="532" y="278">≈250 MB · pool of 10 · own cache</text></g>
+
+        <rect x="40" y="172" width="410" height="162" fill="var(--band)"/>
+        <text x="52" y="192" class="s-lab" font-size="11">The master's whole job</text>
+        <g class="s-num"><text x="52" y="214">04</text><text x="52" y="236">05</text><text x="52" y="258">06</text><text x="52" y="280">07</text></g>
+        <g class="s-mono" font-size="10.5"><text x="76" y="214">crash</text><text x="76" y="236">--timeout</text><text x="76" y="258">SIGHUP</text><text x="76" y="280">--max-requests</text></g>
+        <g class="s-sub"><text x="196" y="214">fork a replacement</text><text x="196" y="236">kill the worker, replace it</text><text x="196" y="258">reload one by one, no drops</text><text x="196" y="280">recycle; leaks stay bounded</text></g>
+        <text x="52" y="306" class="s-sub">In Kubernetes, one Uvicorn per container and the</text>
+        <text x="52" y="320" class="s-sub">orchestrator for replicas beats two process managers.</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M780,85 C810,85 810,230 836,230"/><path d="M780,145 C805,145 810,230 836,230"/><path d="M780,205 C800,205 810,230 836,230"/><path d="M780,265 C800,265 810,230 836,230"/>
+        </g>
+        <path d="M780,70 C900,70 940,92 1054,92" fill="none" stroke="var(--learn)" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#w2b)"/>
+
+        <rect x="1060" y="56" width="300" height="72" fill="var(--z6)" stroke="var(--learn)" stroke-width="2"/>
+        <text x="1072" y="76" class="s-num">08</text><text x="1098" y="76" class="s-lab">Redis · shared state</text>
+        <text x="1072" y="96" class="s-sub">sessions, caches, counters, rate limits —</text><text x="1072" y="110" class="s-sub">anything two workers must both see</text>
+
+        <rect x="840" y="190" width="170" height="80" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="852" y="210" class="s-num">09</text><text x="878" y="210" class="s-lab">PgBouncer</text>
+        <text x="852" y="228" class="s-sub">many client connections</text><text x="852" y="242" class="s-sub">funnelled into few real</text><text x="852" y="256" class="s-sub">ones, once totals grow</text>
+        <line x1="1010" y1="230" x2="1054" y2="230" stroke="var(--line)" stroke-width="3" marker-end="url(#w1b)"/>
+
+        <rect x="1060" y="190" width="300" height="80" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="1072" y="210" class="s-num">10</text><text x="1098" y="210" class="s-lab">PostgreSQL</text>
+        <text x="1072" y="228" class="s-sub">max_connections = 100 by default</text><text x="1072" y="242" class="s-sub">every pool on every worker on every</text><text x="1072" y="256" class="s-sub" style="fill:var(--hazard)">replica counts against that one number</text>
+
+        <text x="840" y="304" class="s-note">An in-memory cache or counter exists once per worker.</text>
+        <text x="840" y="320" class="s-sub">Set in worker 1, invisible to worker 3: shared state belongs in 08 or 10.</text>
+
+        <!-- ROW 2: MODELS -->
+        <rect x="30" y="350" width="440" height="240" fill="var(--z2)"/>
+        <text x="46" y="374" class="s-zone" fill="var(--mute)">11 · process-based</text>
+        <text x="46" y="394" class="s-sub">CPython + Gunicorn sync workers, PHP-FPM</text>
+        <g fill="var(--paper)" stroke="var(--rule)"><rect x="46" y="410" width="88" height="70"/><rect x="146" y="410" width="88" height="70"/><rect x="246" y="410" width="88" height="70"/><rect x="346" y="410" width="88" height="70"/></g>
+        <g fill="var(--line)" opacity=".8"><rect x="80" y="440" width="20" height="20"/><rect x="180" y="440" width="20" height="20"/><rect x="280" y="440" width="20" height="20"/><rect x="380" y="440" width="20" height="20"/></g>
+        <g class="s-sub" font-size="10"><text x="56" y="428">process</text><text x="156" y="428">process</text><text x="256" y="428">process</text><text x="356" y="428">process</text></g>
+        <text x="46" y="504" class="s-lab" font-size="11">parallelism = number of processes</text>
+        <text x="46" y="522" class="s-sub">one request per process at a time (plus async inside)</text>
+        <text x="46" y="546" class="s-haz" font-size="10.5">The GIL: threads never run Python on two cores at once,</text>
+        <text x="46" y="562" class="s-sub" style="fill:var(--hazard)">so an 8-core box with one process leaves 7 cores idle.</text>
+
+        <rect x="480" y="350" width="440" height="240" fill="var(--z3)"/>
+        <text x="496" y="374" class="s-zone" fill="var(--mute)">12 · thread-based</text>
+        <text x="496" y="394" class="s-sub">JVM and .NET — Spring Boot, ASP.NET Core</text>
+        <rect x="496" y="410" width="408" height="70" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="506" y="428" class="s-sub" font-size="10">one process, one heap, a thread pool</text>
+        <g stroke="var(--line)" stroke-width="3"><line x1="520" y1="440" x2="520" y2="472"/><line x1="568" y1="440" x2="568" y2="472"/><line x1="616" y1="440" x2="616" y2="472"/><line x1="664" y1="440" x2="664" y2="472"/><line x1="712" y1="440" x2="712" y2="472"/><line x1="760" y1="440" x2="760" y2="472"/><line x1="808" y1="440" x2="808" y2="472"/><line x1="856" y1="440" x2="856" y2="472"/></g>
+        <text x="496" y="504" class="s-lab" font-size="11">parallelism = number of cores, in one process</text>
+        <text x="496" y="522" class="s-sub">real threads, no GIL, no extra processes needed</text>
+        <text x="496" y="546" class="s-note" font-size="10.5">await hands the thread back to the pool during I/O;</text>
+        <text x="496" y="562" class="s-sub" style="fill:var(--fast)">virtual threads (Java 21+) change the arithmetic again.</text>
+
+        <rect x="930" y="350" width="440" height="240" fill="var(--z1)"/>
+        <text x="946" y="374" class="s-zone" fill="var(--line)">13 · event loop</text>
+        <text x="946" y="394" class="s-sub">Node.js, Python asyncio under Uvicorn, Go (hybrid)</text>
+        <rect x="946" y="410" width="120" height="70" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <circle cx="1006" cy="448" r="18" fill="none" stroke="var(--line)" stroke-width="3"/>
+        <text x="956" y="428" class="s-sub" font-size="10">one thread</text>
+        <g fill="var(--fast)" opacity=".75">
+          <circle cx="1096" cy="420" r="4"/><circle cx="1116" cy="420" r="4"/><circle cx="1136" cy="420" r="4"/><circle cx="1156" cy="420" r="4"/><circle cx="1176" cy="420" r="4"/><circle cx="1196" cy="420" r="4"/><circle cx="1216" cy="420" r="4"/><circle cx="1236" cy="420" r="4"/><circle cx="1256" cy="420" r="4"/><circle cx="1276" cy="420" r="4"/><circle cx="1296" cy="420" r="4"/><circle cx="1316" cy="420" r="4"/><circle cx="1336" cy="420" r="4"/>
+          <circle cx="1096" cy="445" r="4"/><circle cx="1116" cy="445" r="4"/><circle cx="1136" cy="445" r="4"/><circle cx="1156" cy="445" r="4"/><circle cx="1176" cy="445" r="4"/><circle cx="1196" cy="445" r="4"/><circle cx="1216" cy="445" r="4"/><circle cx="1236" cy="445" r="4"/><circle cx="1256" cy="445" r="4"/><circle cx="1276" cy="445" r="4"/><circle cx="1296" cy="445" r="4"/><circle cx="1316" cy="445" r="4"/><circle cx="1336" cy="445" r="4"/>
+          <circle cx="1096" cy="470" r="4"/><circle cx="1116" cy="470" r="4"/><circle cx="1136" cy="470" r="4"/><circle cx="1156" cy="470" r="4"/><circle cx="1176" cy="470" r="4"/><circle cx="1196" cy="470" r="4"/><circle cx="1216" cy="470" r="4"/><circle cx="1236" cy="470" r="4"/><circle cx="1256" cy="470" r="4"/><circle cx="1276" cy="470" r="4"/><circle cx="1296" cy="470" r="4"/><circle cx="1316" cy="470" r="4"/><circle cx="1336" cy="470" r="4"/>
+        </g>
+        <text x="946" y="504" class="s-lab" font-size="11">thousands of concurrent waits, one core</text>
+        <text x="946" y="522" class="s-sub">parallelism = 1 per loop; scale with processes</text>
+        <text x="946" y="546" class="s-note" font-size="10.5">Concurrency is not parallelism.</text>
+        <text x="946" y="562" class="s-sub" style="fill:var(--fast)">10,000 requests on one core — highly concurrent, not parallel.</text>
+
+        <!-- ROW 3: ARITHMETIC -->
+        <rect x="30" y="610" width="440" height="256" fill="var(--z5)"/>
+        <text x="46" y="634" class="s-zone" fill="var(--fast)">14 · memory, the real limit</text>
+        <g fill="var(--line)" opacity=".75"><rect x="46" y="656" width="88" height="30"/><rect x="136" y="656" width="88" height="30"/><rect x="226" y="656" width="88" height="30"/><rect x="316" y="656" width="88" height="30"/></g>
+        <g class="s-lab" font-size="10.5" style="fill:var(--paper)"><text x="58" y="675">200 MB</text><text x="148" y="675">200 MB</text><text x="238" y="675">200 MB</text><text x="328" y="675">200 MB</text></g>
+        <line x1="276" y1="646" x2="276" y2="700" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="5 4"/>
+        <text x="276" y="714" text-anchor="middle" class="s-haz" font-size="10.5">512 MB container limit</text>
+        <text x="412" y="676" class="s-mono" font-size="10">800</text>
+        <text x="46" y="740" class="s-mono" font-size="10.5">4 workers × 200 MB = 800 MB  &gt;  512 MB</text>
+        <text x="46" y="760" class="s-haz" font-size="10.5">OOM killed · exit code 137 · before a single request</text>
+        <text x="46" y="784" class="s-sub">Each worker carries its own interpreter and every imported</text>
+        <text x="46" y="798" class="s-sub">library — 100–300 MB for Django or ML-adjacent apps.</text>
+        <text x="46" y="824" class="s-note">Set container limits from measured worker</text>
+        <text x="46" y="840" class="s-note">memory × worker count, never from a guess.</text>
+
+        <rect x="480" y="610" width="440" height="256" fill="var(--z4)"/>
+        <text x="496" y="634" class="s-zone" fill="var(--mute)">15 · connections multiply twice</text>
+        <rect x="496" y="656" width="22" height="22" fill="var(--line)" opacity=".8"/>
+        <text x="566" y="672" class="s-mono" font-size="10">1 replica: 4 workers × pool 10 = 40</text>
+        <rect x="496" y="696" width="360" height="22" fill="var(--hazard)" opacity=".7"/>
+        <text x="606" y="712" class="s-lab" font-size="10.5" style="fill:var(--paper)">16 replicas × 4 × 10 = 640</text>
+        <line x1="552" y1="646" x2="552" y2="732" stroke="var(--fast)" stroke-width="3" stroke-dasharray="5 4"/>
+        <text x="560" y="746" class="s-note" font-size="10.5">PostgreSQL max_connections = 100</text>
+        <text x="496" y="772" class="s-haz" font-size="10.5">"too many connections" — usually during a scale-out</text>
+        <text x="496" y="796" class="s-sub">Size pools by the total across all workers and all replicas,</text>
+        <text x="496" y="810" class="s-sub">and put PgBouncer in front once the number gets large.</text>
+        <text x="496" y="836" class="s-mono" font-size="10.5" style="fill:var(--fast)">workers × pool × replicas ≤ what the DB allows</text>
+
+        <rect x="930" y="610" width="440" height="256" fill="var(--band)"/>
+        <text x="946" y="634" class="s-zone" fill="var(--mute)">16 · how many workers</text>
+        <g class="s-lab" font-size="11"><text x="946" y="658">Runtime</text><text x="1076" y="658">Topology</text><text x="1236" y="658">Because</text></g>
+        <line x1="946" y1="666" x2="1356" y2="666" stroke="var(--rule)"/>
+        <g class="s-sub">
+          <text x="946" y="684">Python, sync</text><text x="1076" y="684" class="s-mono" font-size="10.5">2 × cores + 1</text><text x="1236" y="684">GIL + I/O waits</text>
+          <text x="946" y="704">Python, async</text><text x="1076" y="704" class="s-mono" font-size="10.5">cores</text><text x="1236" y="704">loop does waiting</text>
+          <text x="946" y="724">Node.js</text><text x="1076" y="724" class="s-mono" font-size="10.5">cores (cluster, PM2)</text><text x="1236" y="724">one loop per core</text>
+          <text x="946" y="744">JVM / .NET</text><text x="1076" y="744" class="s-mono" font-size="10.5">1 process</text><text x="1236" y="744">real threads</text>
+          <text x="946" y="764">Go</text><text x="1076" y="764" class="s-mono" font-size="10.5">1 process</text><text x="1236" y="764">runtime spreads it</text>
+          <text x="946" y="784">CPU-bound work</text><text x="1076" y="784" class="s-mono" font-size="10.5">cores, no more</text><text x="1236" y="784">maths can't wait</text>
+        </g>
+        <text x="946" y="812" class="s-note">A worker count copied from a blog post is guesswork.</text>
+        <text x="946" y="830" class="s-sub">CPU-bound or I/O-bound? That answer picks the row.</text>
+        <text x="946" y="846" class="s-sub">More sync workers for I/O work buy memory, not throughput.</text>
+      </svg>
+    </div>
+    <figcaption><b>The standard Python deployment is this whole sheet in one command:</b> <code>gunicorn app:app --worker-class uvicorn.workers.UvicornWorker --workers 4</code>. Gunicorn's processes supply parallelism around the GIL; the Uvicorn loop inside each one supplies concurrency. Memory and connections then decide whether four was the right number.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the parts of the plant</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Reverse proxy</h4><p>Nginx hands over complete, buffered requests. Gunicorn has no TLS, no static files and weak protection against slow clients, so it is never exposed directly.</p></div>
+      <div><h4><span>02</span>Gunicorn master</h4><p>A pre-fork process manager. It binds the listening socket, forks workers and supervises them. It never handles a request itself, and systemd, Docker or Kubernetes keeps it alive.</p></div>
+      <div><h4><span>03</span>Worker process</h4><p>A full copy of the interpreter, the app and every library, with its own memory and its own database pool. Worker classes: sync, gthread, gevent, or UvicornWorker for ASGI apps.</p></div>
+      <div><h4><span>04</span>Crash recovery</h4><p>When a worker dies, the master forks a replacement. One bad request kills one worker, not the service.</p></div>
+      <div><h4><span>05</span>--timeout</h4><p>A worker stuck longer than the timeout is killed and replaced. Blunt — the worker dies, not just the request — but without it one hung request holds a worker forever.</p></div>
+      <div><h4><span>06</span>SIGHUP</h4><p>Graceful reload: workers are replaced one at a time, so a single machine can deploy with no dropped connections.</p></div>
+      <div><h4><span>07</span>--max-requests</h4><p>Recycle each worker after N requests, with jitter so they do not all restart together. Caps the damage from slow memory leaks.</p></div>
+      <div><h4><span>08</span>Shared state</h4><p>Workers share nothing, so sessions, caches and counters that must be consistent live in Redis or the database. Keeping app servers stateless is what makes scaling and rolling deploys easy.</p></div>
+      <div><h4><span>09</span>Connection pooler</h4><p>PgBouncer multiplexes many client connections onto fewer real database connections — the fix once workers × pool × replicas outgrows the database.</p></div>
+      <div><h4><span>10</span>max_connections</h4><p>PostgreSQL's default is 100. It is a fleet-wide budget, and it is usually the first hard wall a horizontally scaled backend hits.</p></div>
+      <div><h4><span>11</span>Process-based</h4><p>One request per process at a time; parallelism comes only from more processes. CPython and PHP-FPM work this way, which is why they multiply memory.</p></div>
+      <div><h4><span>12</span>Thread-based</h4><p>A pool of real threads inside one process, parallel across all cores. The JVM and .NET run as a single process with a large heap — set <code>-Xmx</code> explicitly in containers.</p></div>
+      <div><h4><span>13</span>Event loop</h4><p>One thread juggling thousands of waits: excellent for I/O, useless for computation. Node, asyncio and Uvicorn; scale across cores with one loop per process.</p></div>
+      <div><h4><span>14</span>Memory per worker</h4><p>The usual binding constraint. Measure one worker under load, multiply by the count, and compare with the limit before the kernel does it for you with exit code 137.</p></div>
+      <div><h4><span>15</span>Total connections</h4><p>Pools are sized per worker but consumed fleet-wide. Doubling replicas doubles connections — which is why the outage arrives during the scale-out meant to prevent one.</p></div>
+      <div><h4><span>16</span>Worker count</h4><p>2 × cores + 1 for sync Python, cores for async Python and Node, one process for JVM, .NET and Go. Derived from the concurrency model, then trimmed to fit memory.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — THE EVENT LOOP ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>The Event Loop</h2>
+    <span class="form">Closed circuit</span>
+    <span class="cov">Covers · Uvicorn · FastAPI · Runtime Explained · Express.js · ASP.NET Core</span>
+  </div>
+  <p class="thesis">Stops 13 and 14 of sheet 1, from inside one worker. A request's life is six steps around a loop, and the loop runs thousands of these circuits interleaved on a single thread. <strong>It works only because every request gives the thread back at each <code>await</code> — one call that refuses to yield freezes every circuit in the worker at once.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 870" role="img" aria-label="A closed circuit of six steps inside one Uvicorn worker: a request arrives, its coroutine is scheduled, it awaits the database and suspends, the loop serves other requests, the database responds and the coroutine resumes, and the response is written. To the right, a timeline comparing a sync worker handling three 50 millisecond database waits one after another with an async worker handling them together, then a timeline showing one time.sleep call freezing every request in the worker, with bad and good code side by side. Along the bottom, the escape hatches, the same trap in Node and .NET, and the costs of async.">
+        <defs>
+          <marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <text x="40" y="46" class="s-zone" fill="var(--line)">One request, one lap</text>
+        <g fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#v1)">
+          <path d="M368,157 A190,190 0 0,1 487,222"/>
+          <path d="M513,272 A190,190 0 0,1 513,408"/>
+          <path d="M487,458 A190,190 0 0,1 368,523" stroke="var(--fast)" marker-end="url(#v2)"/>
+          <path d="M312,523 A190,190 0 0,1 193,458"/>
+          <path d="M167,408 A190,190 0 0,1 167,272"/>
+          <path d="M193,222 A190,190 0 0,1 312,157"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="3.5">
+          <circle cx="340" cy="150" r="26"/><circle cx="504" cy="245" r="26"/><circle cx="176" cy="435" r="26"/><circle cx="176" cy="245" r="26"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"><circle cx="504" cy="435" r="26"/><circle cx="340" cy="530" r="26"/></g>
+        <g class="s-big" text-anchor="middle" style="fill:var(--line)">
+          <text x="340" y="157">1</text><text x="504" y="252">2</text><text x="504" y="442" fill="var(--fast)">3</text><text x="340" y="537" fill="var(--fast)">4</text><text x="176" y="442">5</text><text x="176" y="252">6</text>
+        </g>
+        <text x="340" y="100" text-anchor="middle" class="s-lab">request arrives</text>
+        <g class="s-sub" text-anchor="middle"><text x="340" y="116">Gunicorn hands it to one</text><text x="340" y="130">Uvicorn worker's loop</text></g>
+        <text x="546" y="238" class="s-lab">coroutine scheduled</text>
+        <g class="s-sub"><text x="546" y="256">routing, validation,</text><text x="546" y="270">dependencies resolved</text></g>
+        <text x="546" y="424" class="s-lab">await db.fetch()</text>
+        <g class="s-sub"><text x="546" y="442">coroutine suspends;</text><text x="546" y="456">a few KB, not a thread</text></g>
+        <text x="340" y="580" text-anchor="middle" class="s-lab">the loop serves others</text>
+        <g class="s-sub" text-anchor="middle"><text x="340" y="596">other coroutines run during the 50 ms wait —</text><text x="340" y="610">this is the entire point of Uvicorn</text></g>
+        <text x="134" y="424" text-anchor="end" class="s-lab">DB responds</text>
+        <g class="s-sub" text-anchor="end"><text x="134" y="442">I/O event fires;</text><text x="134" y="456">it resumes</text></g>
+        <text x="134" y="238" text-anchor="end" class="s-lab">response sent</text>
+        <g class="s-sub" text-anchor="end"><text x="134" y="256">serialised;</text><text x="134" y="270">loop moves on</text></g>
+
+        <text x="340" y="322" text-anchor="middle" class="s-note" font-size="13">one worker · one thread</text>
+        <text x="340" y="342" text-anchor="middle" class="s-sub">thousands of these laps</text>
+        <text x="340" y="356" text-anchor="middle" class="s-sub">interleaved at every await</text>
+        <text x="340" y="392" text-anchor="middle" class="s-haz" font-size="10.5">a blocking call at 3 never</text>
+        <text x="340" y="406" text-anchor="middle" class="s-haz" font-size="10.5">yields to 4 — see 08</text>
+
+        <!-- PANEL 07 -->
+        <rect x="700" y="30" width="670" height="270" fill="var(--z1)"/>
+        <text x="716" y="54" class="s-zone" fill="var(--line)">07 · three requests, each waiting 50 ms on the database</text>
+        <text x="716" y="92" class="s-lab" font-size="11">sync worker</text><text x="716" y="106" class="s-sub" font-size="10.5">WSGI, one at a time</text>
+        <g fill="var(--fast)"><rect x="850" y="82" width="6" height="26"/><rect x="1016" y="82" width="6" height="26"/><rect x="1182" y="82" width="6" height="26"/></g>
+        <g fill="var(--line)" opacity=".35"><rect x="856" y="82" width="160" height="26"/><rect x="1022" y="82" width="160" height="26"/><rect x="1188" y="82" width="160" height="26"/></g>
+        <g class="s-sub" font-size="10" style="fill:var(--ink)"><text x="864" y="99">req 1 · waits 50 ms</text><text x="1030" y="99">req 2 · waits 50 ms</text><text x="1196" y="99">req 3 · waits 50 ms</text></g>
+        <text x="716" y="162" class="s-lab" font-size="11">async worker</text><text x="716" y="176" class="s-sub" font-size="10.5">ASGI, together</text>
+        <g fill="var(--fast)"><rect x="850" y="138" width="6" height="18"/><rect x="853" y="162" width="6" height="18"/><rect x="856" y="186" width="6" height="18"/></g>
+        <g fill="var(--line)" opacity=".35"><rect x="856" y="138" width="160" height="18"/><rect x="859" y="162" width="160" height="18"/><rect x="862" y="186" width="160" height="18"/></g>
+        <g class="s-sub" font-size="10" style="fill:var(--ink)"><text x="866" y="151">req 1 · suspended</text><text x="869" y="175">req 2 · suspended</text><text x="872" y="199">req 3 · suspended</text></g>
+        <line x1="850" y1="220" x2="1350" y2="220" stroke="var(--rule)" stroke-width="1.5"/>
+        <g class="s-sub" font-size="10"><text x="850" y="234">0</text><text x="1016" y="234" text-anchor="middle">50 ms</text><text x="1182" y="234" text-anchor="middle">100 ms</text><text x="1350" y="234" text-anchor="end">156 ms</text></g>
+        <text x="716" y="262" class="s-note">Same worker, same CPU: the async one finishes all three in a third of the time.</text>
+        <text x="716" y="280" class="s-sub">It did not compute faster — it stopped standing idle while the database worked.</text>
+
+        <!-- PANEL 08 -->
+        <rect x="700" y="316" width="670" height="270" fill="var(--band)"/>
+        <text x="716" y="340" class="s-zone" fill="var(--hazard)">08 · one blocking call stalls the whole worker</text>
+        <text x="716" y="379" class="s-lab" font-size="11">req 1 · /bad</text>
+        <rect x="850" y="366" width="480" height="18" fill="var(--hazard)" opacity=".75"/>
+        <text x="860" y="379" class="s-lab" font-size="10.5" style="fill:var(--paper)">time.sleep(2) — the loop cannot switch away</text>
+        <text x="716" y="405" class="s-lab" font-size="11">req 2</text><text x="716" y="431" class="s-lab" font-size="11">req 3</text>
+        <g fill="none" stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="5 4"><rect x="850" y="392" width="480" height="18"/><rect x="850" y="418" width="480" height="18"/></g>
+        <g fill="var(--fast)"><rect x="1330" y="392" width="20" height="18"/><rect x="1330" y="418" width="20" height="18"/></g>
+        <g class="s-sub" font-size="10" style="fill:var(--hazard)"><text x="860" y="405">ready in 50 ms, waiting anyway</text><text x="860" y="431">every request in this worker waits 2 s</text></g>
+        <line x1="850" y1="448" x2="1350" y2="448" stroke="var(--rule)" stroke-width="1.5"/>
+        <g class="s-sub" font-size="10"><text x="850" y="462">0 s</text><text x="1350" y="462" text-anchor="end">2 s</text></g>
+        <g class="s-mono" font-size="10">
+          <text x="716" y="490">async def bad():</text><text x="716" y="506">    time.sleep(2)           ✗</text><text x="716" y="522">    requests.get(url)       ✗</text><text x="716" y="538">    psycopg2 query          ✗</text>
+          <text x="1046" y="490">async def good():</text><text x="1046" y="506">    await asyncio.sleep(2)  ✓</text><text x="1046" y="522">    await client.get(url)   ✓</text><text x="1046" y="538">    asyncpg / psycopg 3     ✓</text>
+        </g>
+        <text x="716" y="566" class="s-haz" font-size="10.5">Blocking the loop is also a denial-of-service vector: one slow call, every request.</text>
+
+        <!-- PANEL 09 -->
+        <rect x="30" y="640" width="420" height="215" fill="var(--z2)"/>
+        <text x="46" y="664" class="s-zone" fill="var(--mute)">09 · escape hatches</text>
+        <text x="46" y="690" class="s-lab" font-size="11">plain def instead of async def</text>
+        <text x="46" y="706" class="s-sub">FastAPI runs sync handlers in a thread pool — safe</text>
+        <text x="46" y="732" class="s-lab" font-size="11">run_in_executor</text>
+        <text x="46" y="748" class="s-sub">for a library with no async version at all</text>
+        <text x="46" y="774" class="s-lab" font-size="11">a background worker</text>
+        <text x="46" y="790" class="s-sub">CPU-heavy work never belongs on the loop</text>
+        <text x="46" y="818" class="s-note">Blocking calls inside async def break things —</text>
+        <text x="46" y="834" class="s-sub" style="fill:var(--fast)">plain def was never the mistake.</text>
+
+        <!-- PANEL 10-12 -->
+        <rect x="470" y="640" width="440" height="215" fill="var(--z3)"/>
+        <text x="486" y="664" class="s-zone" fill="var(--mute)">The same trap in other runtimes</text>
+        <g class="s-num"><text x="486" y="690">10</text><text x="486" y="738">11</text><text x="486" y="800">12</text></g>
+        <g class="s-lab" font-size="11"><text x="510" y="690">Node · Express, NestJS</text><text x="510" y="738">Express 4 · an async rejection</text><text x="510" y="800">.NET · .Result and .Wait()</text></g>
+        <g class="s-sub">
+          <text x="510" y="706">one loop per process: a CPU-heavy handler stalls all</text>
+          <text x="510" y="754">never reaches error middleware — the request hangs;</text>
+          <text x="510" y="768">wrap handlers, use express-async-errors, or Express 5</text>
+          <text x="510" y="816">block a pool thread waiting for a pool thread —</text>
+          <text x="510" y="830" fill="var(--hazard)">thread-pool starvation and deadlocks under load</text>
+        </g>
+
+        <!-- PANEL 13-14 -->
+        <rect x="930" y="640" width="440" height="215" fill="var(--z4)"/>
+        <text x="946" y="664" class="s-zone" fill="var(--mute)">What async costs, and buys</text>
+        <g class="s-num"><text x="946" y="690">13</text><text x="946" y="752">14</text></g>
+        <g class="s-lab" font-size="11"><text x="970" y="690">async all the way down</text><text x="970" y="752">what ASGI can express</text></g>
+        <g class="s-sub">
+          <text x="970" y="706">asyncpg, httpx, redis.asyncio — one sync driver</text>
+          <text x="970" y="720">(psycopg2, requests) removes the whole benefit</text>
+          <text x="970" y="768">WebSockets, server-sent events, long streams —</text>
+          <text x="970" y="782">impossible under one-request-per-worker WSGI</text>
+        </g>
+        <text x="946" y="810" class="s-haz" font-size="10.5">No advantage for CPU-bound handlers, and async code</text>
+        <text x="946" y="826" class="s-sub" style="fill:var(--hazard)">is harder to debug. Teams new to it write blocking handlers.</text>
+      </svg>
+    </div>
+    <figcaption><b>The mental model is a waiter who never stands at a table waiting for the kitchen.</b> One waiter serves a hundred tables by moving on at every order. The moment they sit down to chop vegetables themselves, every table waits — that is a synchronous call inside an async handler, and no worker count on sheet 3 can compensate for it.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the lap, and what breaks it</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Request arrives</h4><p>The process manager has already picked a worker; inside it, Uvicorn's event loop receives the request. Nothing is waiting on a thread yet.</p></div>
+      <div><h4><span>02</span>Coroutine scheduled</h4><p>The loop assigns the request to a coroutine. FastAPI routes it, resolves dependencies such as the DB session and current user, and validates the body with Pydantic.</p></div>
+      <div><h4><span>03</span>await</h4><p>At <code>await db.fetch()</code> the coroutine suspends. Its pending state costs a few kilobytes — versus megabytes for a thread — which is how one worker holds thousands.</p></div>
+      <div><h4><span>04</span>The loop serves others</h4><p>While the database works, the loop runs every other ready coroutine. A 50 ms query becomes 50 ms of serving others instead of 50 ms blocked.</p></div>
+      <div><h4><span>05</span>Resume</h4><p>The database answers, an I/O readiness event fires, and the coroutine continues exactly where it stopped, on the same thread.</p></div>
+      <div><h4><span>06</span>Response written</h4><p>The result is filtered through <code>response_model</code>, serialised and sent. The loop immediately picks up the next ready coroutine.</p></div>
+      <div><h4><span>07</span>Concurrency, measured</h4><p>WSGI occupies a worker for the whole request: concurrency equals worker count. ASGI frees the worker during I/O: thousands of concurrent requests per worker, still one core each.</p></div>
+      <div><h4><span>08</span>The blocking call</h4><p><code>time.sleep</code>, <code>requests</code>, a synchronous driver like <code>psycopg2</code> — any call that never yields stalls the loop and every request on it. The single mistake that removes the reason for running Uvicorn.</p></div>
+      <div><h4><span>09</span>Escape hatches</h4><p>Declare the handler as plain <code>def</code> and FastAPI dispatches it to a thread pool; wrap a sync-only library in <code>run_in_executor</code>; move CPU work to a background worker.</p></div>
+      <div><h4><span>10</span>Node's loop</h4><p>Express and NestJS sit on the same single-threaded model. NestJS's structure does not change it: a blocking handler stalls every concurrent request, and cores are used via cluster or PM2.</p></div>
+      <div><h4><span>11</span>Express 4 rejections</h4><p>An unhandled promise rejection in an async handler never reaches error middleware; the client simply times out. Wrap every async handler, or move to Express 5.</p></div>
+      <div><h4><span>12</span>Sync-over-async in .NET</h4><p>ASP.NET Core's <code>await</code> returns the thread to the pool during I/O. <code>.Result</code> and <code>.Wait()</code> undo that: a pool thread blocks waiting on work that needs a pool thread.</p></div>
+      <div><h4><span>13</span>Async end to end</h4><p>Every I/O library in the path must be async: <code>asyncpg</code> or psycopg 3, <code>httpx</code>, <code>redis.asyncio</code>, SQLAlchemy's async engine. Do not mix sync and async sessions in one codebase.</p></div>
+      <div><h4><span>14</span>What only ASGI can do</h4><p>WebSockets, server-sent events and long-lived streams. Django gains WebSockets by running under Uvicorn with Channels; WSGI cannot express them at all.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — THE FRAMEWORK CHOICE ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>The Framework Choice</h2>
+    <span class="form">Decision tree</span>
+    <span class="cov">Covers · Backend Frameworks · FastAPI · Django · Express.js · NestJS · Laravel · Spring Boot · ASP.NET Core</span>
+  </div>
+  <p class="thesis">The decision that fixes what stops 08 to 16 look like, made before any request exists. Seven frameworks, five questions, asked in a deliberate order. <strong>The team's existing knowledge usually settles it at question one, and benchmarks come last — because a request spending 40 ms in the database does not care whether the framework takes 2 ms or 1.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="A decision tree for choosing a backend framework. On the left, the five questions in order: what the team knows, what the ecosystem offers, whether the workload is I/O or CPU bound, how long the system will live, and only then benchmarks. On the right, a branching tree: services beside Python models lead to Django for full web products or FastAPI for APIs; TypeScript teams lead to NestJS for large long-lived codebases or Express and Fastify for small ones; otherwise enterprise-scale systems lead to Spring Boot for JVM shops or ASP.NET Core for C# shops, and small-team CRUD products lead to Laravel. Along the bottom, the spectrum from minimal to batteries-included, a bar chart showing why framework benchmarks barely change request time, and what no framework provides.">
+        <defs>
+          <marker id="f1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <!-- RAIL -->
+        <text x="30" y="40" class="s-zone" fill="var(--fast)">The order of questions</text>
+        <g>
+          <rect x="30" y="58" width="270" height="80" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="30" y="154" width="270" height="80" fill="var(--z4)" stroke="var(--rule)"/>
+          <rect x="30" y="250" width="270" height="80" fill="var(--z4)" stroke="var(--rule)"/>
+          <rect x="30" y="346" width="270" height="80" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="30" y="442" width="270" height="80" fill="var(--band)" stroke="var(--rule)" stroke-dasharray="5 4"/>
+        </g>
+        <g stroke="var(--fast)" stroke-width="2.5" fill="none" marker-end="url(#f1)"><path d="M165,138 L165,150"/><path d="M165,234 L165,246"/><path d="M165,330 L165,342"/><path d="M165,426 L165,438"/></g>
+        <g class="s-num"><text x="42" y="78">01</text><text x="42" y="174">02</text><text x="42" y="270">03</text><text x="42" y="366">04</text><text x="42" y="462">05</text></g>
+        <g class="s-lab"><text x="68" y="78">What does the team know?</text><text x="68" y="174">What does the ecosystem offer?</text><text x="68" y="270">I/O-bound or CPU-bound?</text><text x="68" y="366">How long will it live?</text><text x="68" y="462" fill="var(--mute)">Only then: benchmarks</text></g>
+        <g class="s-sub">
+          <text x="42" y="98">usually decides it outright</text><text x="42" y="112">a known framework beats a better</text><text x="42" y="126">one the team learns in production</text>
+          <text x="42" y="194">AI and ML → Python</text><text x="42" y="208">enterprise, Kafka, banks → Java/.NET</text><text x="42" y="222">web product, cheap hosting → PHP</text>
+          <text x="42" y="290">waiting → async (sheet 4)</text><text x="42" y="304">computing → real threads or</text><text x="42" y="318">processes, or a background worker</text>
+          <text x="42" y="386">and who maintains it? Structure</text><text x="42" y="400">matters more at 30 developers</text><text x="42" y="414">and ten years than at 3 and one</text>
+          <text x="42" y="482">close to irrelevant for most apps</text><text x="42" y="496">— see panel B below</text>
+        </g>
+
+        <!-- TREE -->
+        <text x="340" y="34" class="s-zone" fill="var(--mute)">Then the workload decides between the seven</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2.5">
+          <rect x="680" y="50" width="340" height="46" rx="23"/>
+          <rect x="310" y="160" width="280" height="46" rx="23"/>
+          <rect x="930" y="160" width="260" height="46" rx="23"/>
+          <rect x="690" y="250" width="260" height="46" rx="23"/>
+          <rect x="1120" y="250" width="240" height="46" rx="23"/>
+          <rect x="1180" y="340" width="190" height="46" rx="23"/>
+        </g>
+        <g class="s-lab" font-size="11" text-anchor="middle">
+          <text x="850" y="77">Beside ML models or Python data work?</text>
+          <text x="450" y="187">Full product: admin, auth, templates?</text>
+          <text x="1060" y="187">Is the team's language TypeScript?</text>
+          <text x="820" y="277">Large, long-lived, 10+ developers?</text>
+          <text x="1240" y="277">Enterprise scale, decade lifespan?</text>
+          <text x="1275" y="367">JVM or C# shop?</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#f1)">
+          <path d="M800,96 C700,130 520,120 470,156"/><path d="M900,96 C960,130 1040,120 1055,156"/>
+          <path d="M420,206 L382,426"/><path d="M480,206 L536,426"/>
+          <path d="M1000,206 C940,230 860,220 835,246"/><path d="M1120,206 C1180,225 1230,225 1240,246"/>
+          <path d="M790,296 L716,426"/><path d="M850,296 L876,426"/>
+          <path d="M1150,296 L1040,426"/><path d="M1275,296 L1275,336"/>
+          <path d="M1250,386 L1200,426"/><path d="M1300,386 L1312,426"/>
+        </g>
+        <g class="s-note" font-size="11">
+          <text x="610" y="106">yes</text><text x="1010" y="112">no</text>
+          <text x="370" y="320">yes</text><text x="524" y="320">no</text>
+          <text x="956" y="244">yes</text><text x="1150" y="238">no</text>
+          <text x="728" y="360">no</text><text x="872" y="360">yes</text>
+          <text x="1066" y="360">no</text><text x="1284" y="322">yes</text>
+          <text x="1168" y="412">JVM</text><text x="1320" y="412">C#</text>
+        </g>
+
+        <g fill="var(--z1)" stroke="var(--line)" stroke-width="2">
+          <rect x="305" y="430" width="150" height="90"/><rect x="465" y="430" width="150" height="90"/>
+          <rect x="635" y="430" width="150" height="90"/><rect x="805" y="430" width="150" height="90"/>
+          <rect x="960" y="430" width="150" height="90"/><rect x="1140" y="430" width="110" height="90"/><rect x="1260" y="430" width="110" height="90"/>
+        </g>
+        <g class="s-num"><text x="315" y="446">06</text><text x="475" y="446">07</text><text x="645" y="446">08</text><text x="815" y="446">09</text><text x="970" y="446">10</text><text x="1150" y="446">11</text><text x="1270" y="446">12</text></g>
+        <g class="s-lab"><text x="315" y="464">Django</text><text x="475" y="464">FastAPI</text><text x="645" y="464">Express / Fastify</text><text x="815" y="464">NestJS</text><text x="970" y="464">Laravel</text><text x="1150" y="464">Spring Boot</text><text x="1270" y="464">ASP.NET Core</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="315" y="482">ORM, admin, auth,</text><text x="315" y="496">migrations, day one</text>
+          <text x="475" y="482">async JSON APIs,</text><text x="475" y="496">ML model serving</text>
+          <text x="645" y="482">small APIs, total</text><text x="645" y="496">control</text>
+          <text x="815" y="482">modules, DI, guards:</text><text x="815" y="496">one shape for 30</text>
+          <text x="970" y="482">small team, CRUD</text><text x="970" y="496">SaaS, cheap hosting</text>
+          <text x="1150" y="482">JVM, Actuator,</text><text x="1150" y="496">huge ecosystem</text>
+          <text x="1270" y="482">Kestrel, typed,</text><text x="1270" y="496">async in C#</text>
+        </g>
+        <text x="645" y="512" class="s-sub" font-size="10" style="fill:var(--fast)">Fastify for new work</text>
+        <text x="340" y="552" class="s-note">If question 01 already has a confident answer, the tree is advice, not a verdict.</text>
+        <text x="340" y="570" class="s-sub">Instagram on Django and Netflix on Spring Boot both scaled on batteries-included frameworks — with their own architecture on top.</text>
+
+        <!-- PANEL A: SPECTRUM -->
+        <rect x="30" y="600" width="660" height="250" fill="var(--z2)"/>
+        <text x="46" y="624" class="s-zone" fill="var(--mute)">A · how much the framework decides for you</text>
+        <text x="46" y="648" class="s-sub">minimal: routing + middleware</text>
+        <text x="674" y="648" text-anchor="end" class="s-sub">batteries: ORM, auth, admin, migrations</text>
+        <line x1="60" y1="684" x2="660" y2="684" stroke="var(--line)" stroke-width="4"/>
+        <g class="st" stroke-width="2.5"><circle cx="80" cy="684" r="7"/><circle cx="170" cy="684" r="7"/><circle cx="270" cy="684" r="7"/><circle cx="380" cy="684" r="7"/><circle cx="480" cy="684" r="7"/><circle cx="570" cy="684" r="7"/><circle cx="650" cy="684" r="7"/></g>
+        <g class="s-lab" font-size="11" text-anchor="middle">
+          <text x="80" y="670">Express</text><text x="270" y="670">NestJS</text><text x="480" y="670">Spring Boot</text><text x="640" y="670">Django</text>
+          <text x="170" y="706">FastAPI</text><text x="380" y="706">ASP.NET Core</text><text x="570" y="706">Laravel</text>
+        </g>
+        <text x="46" y="736" class="s-lab" font-size="11">Minimal</text>
+        <g class="s-sub"><text x="46" y="754">you choose every library</text><text x="46" y="768">maximum flexibility</text><text x="46" y="782">consistency depends on discipline</text></g>
+        <text x="370" y="736" class="s-lab" font-size="11">Batteries-included</text>
+        <g class="s-sub"><text x="370" y="754">conventions already decided</text><text x="370" y="768">maximum speed to first feature</text><text x="370" y="782">consistency enforced for you</text></g>
+        <text x="46" y="812" class="s-note">Neither is better. The question is whether your team wants to make those</text>
+        <text x="46" y="828" class="s-sub" style="fill:var(--fast)">decisions — and whether it will make them the same way every time.</text>
+
+        <!-- PANEL B: BENCHMARKS -->
+        <rect x="710" y="600" width="320" height="250" fill="var(--z4)"/>
+        <text x="726" y="624" class="s-zone" fill="var(--fast)">B · why benchmarks come last</text>
+        <text x="726" y="648" class="s-sub">framework 2 ms + database 40 ms = 42 ms</text>
+        <rect x="726" y="656" width="12" height="22" fill="var(--fast)"/><rect x="738" y="656" width="240" height="22" fill="var(--line)" opacity=".35"/>
+        <text x="726" y="702" class="s-sub">2× faster framework: 1 + 40 = 41 ms</text>
+        <rect x="726" y="710" width="6" height="22" fill="var(--fast)"/><rect x="732" y="710" width="240" height="22" fill="var(--line)" opacity=".35"/>
+        <text x="746" y="671" class="s-sub" font-size="10" style="fill:var(--ink)">waiting on the database</text>
+        <text x="740" y="725" class="s-sub" font-size="10" style="fill:var(--ink)">waiting on the database</text>
+        <text x="726" y="760" class="s-note">2.4% faster. Nobody will notice.</text>
+        <text x="726" y="780" class="s-sub">Choose for ecosystem, team and</text>
+        <text x="726" y="794" class="s-sub">maintainability. The bottleneck</text>
+        <text x="726" y="808" class="s-sub">was never the framework.</text>
+
+        <!-- PANEL C: NOT INCLUDED -->
+        <rect x="1050" y="600" width="320" height="250" fill="var(--band)"/>
+        <text x="1066" y="624" class="s-zone" fill="var(--hazard)">C · what no framework gives</text>
+        <text x="1066" y="650" class="s-lab" font-size="11">Architecture</text>
+        <text x="1066" y="666" class="s-sub">it routes; it will not stop logic</text>
+        <text x="1066" y="680" class="s-sub">piling up in controllers</text>
+        <text x="1066" y="704" class="s-lab" font-size="11">Authorisation</text>
+        <text x="1066" y="720" class="s-sub">good defaults help; ownership</text>
+        <text x="1066" y="734" class="s-sub">checks are always yours</text>
+        <text x="1066" y="758" class="s-lab" font-size="11">Operational readiness</text>
+        <text x="1066" y="774" class="s-sub">logs, metrics, health checks,</text>
+        <text x="1066" y="788" class="s-sub">graceful shutdown</text>
+        <text x="1066" y="816" class="s-haz" font-size="10.5">Every tutorial puts business logic in</text>
+        <text x="1066" y="830" class="s-haz" font-size="10.5">the controller. Every codebase regrets it.</text>
+      </svg>
+    </div>
+    <figcaption><b>Frameworks solve HTTP, not architecture.</b> Whichever leaf you land on, the framework handles routing, parsing, validation and serialisation — and none of them will decide where your business rules live or check that order 42 belongs to the caller. Choose one for its ecosystem and your team, then impose the structure yourself.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the questions and the leaves</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Team knowledge</h4><p>What the team already knows usually decides the framework outright. Productivity and correct defaults come from familiarity, not from a feature matrix.</p></div>
+      <div><h4><span>02</span>Ecosystem</h4><p>AI and ML point to Python because the models live there. Enterprise integration points to Java or .NET. The libraries you need outrank the syntax you prefer.</p></div>
+      <div><h4><span>03</span>Workload shape</h4><p>I/O-bound services gain from async runtimes; CPU-bound ones need real threads or processes. Sheet 4 shows why this changes more than raw speed.</p></div>
+      <div><h4><span>04</span>Lifespan and maintainers</h4><p>A three-endpoint service and a decade-long system with thirty developers need different amounts of structure. Heavy frameworks on tiny services are ceremony; minimal ones on huge teams drift.</p></div>
+      <div><h4><span>05</span>Benchmarks</h4><p>The last question, not the first. The database owns the latency of most requests, so a framework twice as fast rarely moves the total by more than a few percent.</p></div>
+      <div><h4><span>06</span>Django</h4><p>Batteries included: ORM, migrations, auth, templates, and an admin generated from your models. Its performance ceiling is set by ORM query patterns — N+1 — far more than by the framework.</p></div>
+      <div><h4><span>07</span>FastAPI</h4><p>Type hints drive validation, serialisation and OpenAPI docs from one declaration. The best Python API layer, and the default for ML services — provided nobody blocks the loop.</p></div>
+      <div><h4><span>08</span>Express / Fastify</h4><p>Routing and an ordered middleware chain, nothing else. Its minimalism made it universal; for new Node APIs, Fastify adds schema validation, better async handling and speed.</p></div>
+      <div><h4><span>09</span>NestJS</h4><p>Modules, providers, dependency injection, guards and pipes on top of Express or Fastify, so any developer opening any module finds the same layout. Overhead for small services.</p></div>
+      <div><h4><span>10</span>Laravel</h4><p>Eloquent, queues, scheduler, mail, auth and Blade in one PHP framework with excellent ergonomics. Each request boots fresh — no leaks, but a poor fit for persistent connections.</p></div>
+      <div><h4><span>11</span>Spring Boot</h4><p>Auto-configuration over the Spring ecosystem on the JVM: very high throughput once warm, the deepest enterprise ecosystem — and a 1–3 s start with a 200–500 MB baseline.</p></div>
+      <div><h4><span>12</span>ASP.NET Core</h4><p>Spring Boot's sibling in C#: built-in DI, middleware pipeline, Kestrel, and async designed into the language. ~100 ms startup, ~10 ms with Native AOT.</p></div>
+      <div><h4><span>A</span>Minimal vs batteries-included</h4><p>The most useful comparison axis is not language but how much the framework decides. Minimal trades speed-to-first-feature for freedom; batteries-included trades freedom for enforced consistency.</p></div>
+      <div><h4><span>B</span>The 42 ms request</h4><p>2 ms of framework and code, 40 ms waiting on I/O. Halving the first saves one millisecond. This is why "we rewrote it in a faster framework" so often disappoints.</p></div>
+      <div><h4><span>C</span>What frameworks leave out</h4><p>Architecture, domain modelling, authorisation logic and operational readiness. Keep business rules in services, not controllers — the tutorial layout is where regret starts.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — SEVEN PIPELINES ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>Seven Pipelines</h2>
+    <span class="form">Parallel sections</span>
+    <span class="cov">Covers · FastAPI · Express.js · NestJS · Spring Boot · Django · Laravel · ASP.NET Core</span>
+  </div>
+  <p class="thesis">The framework stretch of sheet 1 — stops 07 to 16 — cut through seven frameworks side by side. Every column runs the same anatomy in the same order; only the names change. <strong>Read across row 06 and the columns stop differing: no framework on this sheet checks that the object belongs to the caller, and each one has a signature trap that comes from switching a safe default off.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A matrix of parallel sections. Seven columns, one per framework: FastAPI, Express.js, NestJS, Spring Boot, Django, Laravel and ASP.NET Core. Ten rows follow the request in order: server and runtime, startup and memory, middleware, authentication, validation, authorisation, handler, data access, what leaves in the response, and error mapping. Each cell names the framework's mechanism and the status code it returns. A final row in red lists each framework's signature trap. Below the matrix, three notes: the shared anatomy, why authorisation is identical everywhere, and which frameworks enforce structure.">
+        <text x="30" y="30" class="s-zone" fill="var(--line)">Read down a column for one framework · read across a row for one job</text>
+        <rect x="160" y="42" width="171" height="58" fill="var(--band)" stroke="var(--line)" stroke-width="2"/>
+        <text x="168" y="62" class="s-num">11</text><text x="192" y="62" class="s-lab">FastAPI</text>
+        <text x="168" y="78" class="s-sub" font-size="10.5">Python · ASGI</text><text x="168" y="92" class="s-sub" font-size="10.5" style="fill:var(--fast)">micro + validation</text>
+        <rect x="335" y="42" width="171" height="58" fill="var(--band)" stroke="var(--line)" stroke-width="2"/>
+        <text x="343" y="62" class="s-num">12</text><text x="367" y="62" class="s-lab">Express.js</text>
+        <text x="343" y="78" class="s-sub" font-size="10.5">JavaScript · Node</text><text x="343" y="92" class="s-sub" font-size="10.5" style="fill:var(--fast)">minimal</text>
+        <rect x="510" y="42" width="171" height="58" fill="var(--band)" stroke="var(--line)" stroke-width="2"/>
+        <text x="518" y="62" class="s-num">13</text><text x="542" y="62" class="s-lab">NestJS</text>
+        <text x="518" y="78" class="s-sub" font-size="10.5">TypeScript · Node</text><text x="518" y="92" class="s-sub" font-size="10.5" style="fill:var(--fast)">structured, opinionated</text>
+        <rect x="685" y="42" width="171" height="58" fill="var(--band)" stroke="var(--line)" stroke-width="2"/>
+        <text x="693" y="62" class="s-num">14</text><text x="717" y="62" class="s-lab">Spring Boot</text>
+        <text x="693" y="78" class="s-sub" font-size="10.5">Java · JVM</text><text x="693" y="92" class="s-sub" font-size="10.5" style="fill:var(--fast)">batteries-included</text>
+        <rect x="860" y="42" width="171" height="58" fill="var(--band)" stroke="var(--line)" stroke-width="2"/>
+        <text x="868" y="62" class="s-num">15</text><text x="892" y="62" class="s-lab">Django</text>
+        <text x="868" y="78" class="s-sub" font-size="10.5">Python · WSGI/ASGI</text><text x="868" y="92" class="s-sub" font-size="10.5" style="fill:var(--fast)">batteries-included</text>
+        <rect x="1035" y="42" width="171" height="58" fill="var(--band)" stroke="var(--line)" stroke-width="2"/>
+        <text x="1043" y="62" class="s-num">16</text><text x="1067" y="62" class="s-lab">Laravel</text>
+        <text x="1043" y="78" class="s-sub" font-size="10.5">PHP · PHP-FPM</text><text x="1043" y="92" class="s-sub" font-size="10.5" style="fill:var(--fast)">batteries-included</text>
+        <rect x="1210" y="42" width="171" height="58" fill="var(--band)" stroke="var(--line)" stroke-width="2"/>
+        <text x="1218" y="62" class="s-num">17</text><text x="1242" y="62" class="s-lab">ASP.NET Core</text>
+        <text x="1218" y="78" class="s-sub" font-size="10.5">C# · .NET</text><text x="1218" y="92" class="s-sub" font-size="10.5" style="fill:var(--fast)">batteries-included</text>
+        <rect x="30" y="108" width="1355" height="48" fill="var(--z3)"/>
+        <text x="38" y="128" class="s-num">01</text><text x="62" y="128" class="s-lab" font-size="11">server</text><text x="38" y="144" class="s-sub" font-size="10.5">runtime</text>
+        <text x="168" y="128" class="s-sub" font-size="10.5" style="fill:var(--ink)">Uvicorn worker (loop)</text><text x="168" y="144" class="s-sub" font-size="10.5">under Gunicorn</text>
+        <text x="343" y="128" class="s-sub" font-size="10.5" style="fill:var(--ink)">Node process, one loop</text><text x="343" y="144" class="s-sub" font-size="10.5">PM2: one per core</text>
+        <text x="518" y="128" class="s-sub" font-size="10.5" style="fill:var(--ink)">Express or Fastify</text><text x="518" y="144" class="s-sub" font-size="10.5">adapter, Node loop</text>
+        <text x="693" y="128" class="s-sub" font-size="10.5" style="fill:var(--ink)">embedded Tomcat/Netty</text><text x="693" y="144" class="s-sub" font-size="10.5">thread pool, one JAR</text>
+        <text x="868" y="128" class="s-sub" font-size="10.5" style="fill:var(--ink)">Gunicorn WSGI worker</text><text x="868" y="144" class="s-sub" font-size="10.5">or Uvicorn for ASGI</text>
+        <text x="1043" y="128" class="s-sub" font-size="10.5" style="fill:var(--ink)">PHP-FPM process</text><text x="1043" y="144" class="s-sub" font-size="10.5">one request at a time</text>
+        <text x="1218" y="128" class="s-sub" font-size="10.5" style="fill:var(--ink)">Kestrel, built in</text><text x="1218" y="144" class="s-sub" font-size="10.5">real threads + async</text>
+        <rect x="30" y="158" width="1355" height="48" fill="var(--z3)"/>
+        <text x="38" y="178" class="s-num">02</text><text x="62" y="178" class="s-lab" font-size="11">startup</text><text x="38" y="194" class="s-sub" font-size="10.5">memory</text>
+        <text x="168" y="178" class="s-sub" font-size="10.5" style="fill:var(--ink)">~50 ms + heavy imports</text><text x="168" y="194" class="s-sub" font-size="10.5">interpreter per worker</text>
+        <text x="343" y="178" class="s-sub" font-size="10.5" style="fill:var(--ink)">~50 ms</text><text x="343" y="194" class="s-sub" font-size="10.5">very light</text>
+        <text x="518" y="178" class="s-sub" font-size="10.5" style="fill:var(--ink)">slower: DI container</text><text x="518" y="194" class="s-sub" font-size="10.5">built at boot</text>
+        <text x="693" y="178" class="s-sub" font-size="10.5" style="fill:var(--ink)">1–3 s; ~50 ms native</text><text x="693" y="194" class="s-sub" font-size="10.5">200–500 MB baseline</text>
+        <text x="868" y="178" class="s-sub" font-size="10.5" style="fill:var(--ink)">imports dominate</text><text x="868" y="194" class="s-sub" font-size="10.5">100–300 MB per worker</text>
+        <text x="1043" y="178" class="s-sub" font-size="10.5" style="fill:var(--ink)">boots every request</text><text x="1043" y="194" class="s-sub" font-size="10.5">memory freed after</text>
+        <text x="1218" y="178" class="s-sub" font-size="10.5" style="fill:var(--ink)">~100 ms; ~10 ms AOT</text><text x="1218" y="194" class="s-sub" font-size="10.5">lower than the JVM</text>
+        <rect x="30" y="208" width="1355" height="48" fill="var(--z4)"/>
+        <text x="38" y="228" class="s-num">03</text><text x="62" y="228" class="s-lab" font-size="11">middleware</text><text x="38" y="244" class="s-sub" font-size="10.5">before routing</text>
+        <text x="168" y="228" class="s-sub" font-size="10.5" style="fill:var(--ink)">Starlette middleware</text><text x="168" y="244" class="s-sub" font-size="10.5">CORS off by default</text>
+        <text x="343" y="228" class="s-sub" font-size="10.5" style="fill:var(--ink)">app.use() chain</text><text x="343" y="244" class="s-sub" font-size="10.5">order is everything</text>
+        <text x="518" y="228" class="s-sub" font-size="10.5" style="fill:var(--ink)">global middleware,</text><text x="518" y="244" class="s-sub" font-size="10.5">then interceptors</text>
+        <text x="693" y="228" class="s-sub" font-size="10.5" style="fill:var(--ink)">security filter chain</text><text x="693" y="244" class="s-sub" font-size="10.5">plus interceptors</text>
+        <text x="868" y="228" class="s-sub" font-size="10.5" style="fill:var(--ink)">security, session,</text><text x="868" y="244" class="s-sub" font-size="10.5">CSRF, auth middleware</text>
+        <text x="1043" y="228" class="s-sub" font-size="10.5" style="fill:var(--ink)">session, CSRF,</text><text x="1043" y="244" class="s-sub" font-size="10.5">auth, throttle</text>
+        <text x="1218" y="228" class="s-sub" font-size="10.5" style="fill:var(--ink)">HTTPS → HSTS → authN</text><text x="1218" y="244" class="s-sub" font-size="10.5">→ authZ → routing</text>
+        <rect x="30" y="258" width="1355" height="48" fill="var(--z4)"/>
+        <text x="38" y="278" class="s-num">04</text><text x="62" y="278" class="s-lab" font-size="11">authenticate</text><text x="38" y="294" class="s-sub" font-size="10.5">→ 401</text>
+        <text x="168" y="278" class="s-sub" font-size="10.5" style="fill:var(--ink)">Depends(current_user)</text><text x="168" y="294" class="s-sub" font-size="10.5">cached per request</text>
+        <text x="343" y="278" class="s-sub" font-size="10.5" style="fill:var(--ink)">passport or custom</text><text x="343" y="294" class="s-sub" font-size="10.5">middleware, next(err)</text>
+        <text x="518" y="278" class="s-sub" font-size="10.5" style="fill:var(--ink)">AuthGuard checks JWT</text><text x="518" y="294" class="s-sub" font-size="10.5">attaches user or 401</text>
+        <text x="693" y="278" class="s-sub" font-size="10.5" style="fill:var(--ink)">Spring Security</text><text x="693" y="294" class="s-sub" font-size="10.5">filter chain → 401</text>
+        <text x="868" y="278" class="s-sub" font-size="10.5" style="fill:var(--ink)">auth middleware,</text><text x="868" y="294" class="s-sub" font-size="10.5">DRF auth classes</text>
+        <text x="1043" y="278" class="s-sub" font-size="10.5" style="fill:var(--ink)">Sanctum / Passport</text><text x="1043" y="294" class="s-sub" font-size="10.5">auth middleware</text>
+        <text x="1218" y="278" class="s-sub" font-size="10.5" style="fill:var(--ink)">authentication →</text><text x="1218" y="294" class="s-sub" font-size="10.5">claims principal</text>
+        <rect x="30" y="308" width="1355" height="48" fill="var(--z4)"/>
+        <text x="38" y="328" class="s-num">05</text><text x="62" y="328" class="s-lab" font-size="11">validate</text><text x="38" y="344" class="s-sub" font-size="10.5">→ 400 / 422</text>
+        <text x="168" y="328" class="s-sub" font-size="10.5" style="fill:var(--ink)">Pydantic → 422</text><text x="168" y="344" class="s-sub" font-size="10.5">per-field errors</text>
+        <text x="343" y="328" class="s-sub" font-size="10.5" style="fill:var(--ink)">nothing built in:</text><text x="343" y="344" class="s-sub" font-size="10.5">Zod or Joi, yours</text>
+        <text x="518" y="328" class="s-sub" font-size="10.5" style="fill:var(--ink)">ValidationPipe → 400</text><text x="518" y="344" class="s-sub" font-size="10.5">whitelist: true, global</text>
+        <text x="693" y="328" class="s-sub" font-size="10.5" style="fill:var(--ink)">@Valid binding → 400</text><text x="693" y="344" class="s-sub" font-size="10.5">bound to a DTO</text>
+        <text x="868" y="328" class="s-sub" font-size="10.5" style="fill:var(--ink)">Form or DRF serializer</text><text x="868" y="344" class="s-sub" font-size="10.5">rejects bad input</text>
+        <text x="1043" y="328" class="s-sub" font-size="10.5" style="fill:var(--ink)">Form Request → 422</text><text x="1043" y="344" class="s-sub" font-size="10.5">per-field errors</text>
+        <text x="1218" y="328" class="s-sub" font-size="10.5" style="fill:var(--ink)">model binding +</text><text x="1218" y="344" class="s-sub" font-size="10.5">DataAnnotations → 400</text>
+        <rect x="30" y="358" width="1355" height="48" fill="var(--z5)"/>
+        <text x="38" y="378" class="s-num">06</text><text x="62" y="378" class="s-lab" font-size="11">authorise</text><text x="38" y="394" class="s-sub" font-size="10.5">→ 403</text>
+        <text x="168" y="378" class="s-sub" font-size="10.5" style="fill:var(--ink)">yours, in the handler</text><text x="168" y="394" class="s-sub" font-size="10.5">validation ≠ permission</text>
+        <text x="343" y="378" class="s-sub" font-size="10.5" style="fill:var(--ink)">yours, entirely</text><text x="343" y="394" class="s-sub" font-size="10.5">nothing provided</text>
+        <text x="518" y="378" class="s-sub" font-size="10.5" style="fill:var(--ink)">Guards — must check</text><text x="518" y="394" class="s-sub" font-size="10.5">the object, not a role</text>
+        <text x="693" y="378" class="s-sub" font-size="10.5" style="fill:var(--ink)">@PreAuthorize on</text><text x="693" y="394" class="s-sub" font-size="10.5">methods, not just URLs</text>
+        <text x="868" y="378" class="s-sub" font-size="10.5" style="fill:var(--ink)">model perms built in;</text><text x="868" y="394" class="s-sub" font-size="10.5">object perms are yours</text>
+        <text x="1043" y="378" class="s-sub" font-size="10.5" style="fill:var(--ink)">Policies and Gates</text><text x="1043" y="394" class="s-sub" font-size="10.5">check the object → 403</text>
+        <text x="1218" y="378" class="s-sub" font-size="10.5" style="fill:var(--ink)">[Authorize] = roles;</text><text x="1218" y="394" class="s-sub" font-size="10.5">ownership is yours</text>
+        <rect x="30" y="408" width="1355" height="48" fill="var(--z1)"/>
+        <text x="38" y="428" class="s-num">07</text><text x="62" y="428" class="s-lab" font-size="11">handler</text><text x="38" y="444" class="s-sub" font-size="10.5">your logic</text>
+        <text x="168" y="428" class="s-sub" font-size="10.5" style="fill:var(--ink)">async def handler</text><text x="168" y="444" class="s-sub" font-size="10.5">→ service layer</text>
+        <text x="343" y="428" class="s-sub" font-size="10.5" style="fill:var(--ink)">route handler</text><text x="343" y="444" class="s-sub" font-size="10.5">logic drifts in here</text>
+        <text x="518" y="428" class="s-sub" font-size="10.5" style="fill:var(--ink)">Controller (HTTP only)</text><text x="518" y="444" class="s-sub" font-size="10.5">→ injected Service</text>
+        <text x="693" y="428" class="s-sub" font-size="10.5" style="fill:var(--ink)">@RestController →</text><text x="693" y="444" class="s-sub" font-size="10.5">@Service @Transactional</text>
+        <text x="868" y="428" class="s-sub" font-size="10.5" style="fill:var(--ink)">View (the controller)</text><text x="868" y="444" class="s-sub" font-size="10.5">→ add a service layer</text>
+        <text x="1043" y="428" class="s-sub" font-size="10.5" style="fill:var(--ink)">Controller →</text><text x="1043" y="444" class="s-sub" font-size="10.5">Service or Action</text>
+        <text x="1218" y="428" class="s-sub" font-size="10.5" style="fill:var(--ink)">Controller / Minimal API</text><text x="1218" y="444" class="s-sub" font-size="10.5">→ injected service</text>
+        <rect x="30" y="458" width="1355" height="48" fill="var(--z1)"/>
+        <text x="38" y="478" class="s-num">08</text><text x="62" y="478" class="s-lab" font-size="11">data</text><text x="38" y="494" class="s-sub" font-size="10.5">ORM or driver</text>
+        <text x="168" y="478" class="s-sub" font-size="10.5" style="fill:var(--ink)">SQLAlchemy async,</text><text x="168" y="494" class="s-sub" font-size="10.5">asyncpg</text>
+        <text x="343" y="478" class="s-sub" font-size="10.5" style="fill:var(--ink)">Prisma, Knex, pg</text><text x="343" y="494" class="s-sub" font-size="10.5">your choice</text>
+        <text x="518" y="478" class="s-sub" font-size="10.5" style="fill:var(--ink)">TypeORM, Prisma</text><text x="518" y="494" class="s-sub" font-size="10.5">via a Repository</text>
+        <text x="693" y="478" class="s-sub" font-size="10.5" style="fill:var(--ink)">Spring Data JPA,</text><text x="693" y="494" class="s-sub" font-size="10.5">Hibernate · watch N+1</text>
+        <text x="868" y="478" class="s-sub" font-size="10.5" style="fill:var(--ink)">Django ORM · N+1:</text><text x="868" y="494" class="s-sub" font-size="10.5">select_related</text>
+        <text x="1043" y="478" class="s-sub" font-size="10.5" style="fill:var(--ink)">Eloquent · N+1:</text><text x="1043" y="494" class="s-sub" font-size="10.5">with() eager loading</text>
+        <text x="1218" y="478" class="s-sub" font-size="10.5" style="fill:var(--ink)">EF Core or Dapper</text><text x="1218" y="494" class="s-sub" font-size="10.5">N+1 easy to write</text>
+        <rect x="30" y="508" width="1355" height="48" fill="var(--z2)"/>
+        <text x="38" y="528" class="s-num">09</text><text x="62" y="528" class="s-lab" font-size="11">what leaves</text><text x="38" y="544" class="s-sub" font-size="10.5">serialisation</text>
+        <text x="168" y="528" class="s-sub" font-size="10.5" style="fill:var(--ink)">response_model filters</text><text x="168" y="544" class="s-sub" font-size="10.5">declared fields only</text>
+        <text x="343" y="528" class="s-sub" font-size="10.5" style="fill:var(--ink)">res.json(anything)</text><text x="343" y="544" class="s-sub" font-size="10.5">nothing filters it</text>
+        <text x="518" y="528" class="s-sub" font-size="10.5" style="fill:var(--ink)">@Exclude, applied by</text><text x="518" y="544" class="s-sub" font-size="10.5">an interceptor</text>
+        <text x="693" y="528" class="s-sub" font-size="10.5" style="fill:var(--ink)">DTO, never an entity</text><text x="693" y="544" class="s-sub" font-size="10.5">(leaks, lazy loading)</text>
+        <text x="868" y="528" class="s-sub" font-size="10.5" style="fill:var(--ink)">serializer fields, or</text><text x="868" y="544" class="s-sub" font-size="10.5">auto-escaped template</text>
+        <text x="1043" y="528" class="s-sub" font-size="10.5" style="fill:var(--ink)">JSON resource, or</text><text x="1043" y="544" class="s-sub" font-size="10.5">auto-escaped Blade</text>
+        <text x="1218" y="528" class="s-sub" font-size="10.5" style="fill:var(--ink)">DTO → JSON</text><text x="1218" y="544" class="s-sub" font-size="10.5">never the EF entity</text>
+        <rect x="30" y="558" width="1355" height="48" fill="var(--z2)"/>
+        <text x="38" y="578" class="s-num">10</text><text x="62" y="578" class="s-lab" font-size="11">errors</text><text x="38" y="594" class="s-sub" font-size="10.5">→ status code</text>
+        <text x="168" y="578" class="s-sub" font-size="10.5" style="fill:var(--ink)">HTTPException;</text><text x="168" y="594" class="s-sub" font-size="10.5">never leak details</text>
+        <text x="343" y="578" class="s-sub" font-size="10.5" style="fill:var(--ink)">error middleware, last</text><text x="343" y="594" class="s-sub" font-size="10.5">reached via next(err)</text>
+        <text x="518" y="578" class="s-sub" font-size="10.5" style="fill:var(--ink)">exception filters</text><text x="518" y="594" class="s-sub" font-size="10.5">no stack traces out</text>
+        <text x="693" y="578" class="s-sub" font-size="10.5" style="fill:var(--ink)">@ControllerAdvice</text><text x="693" y="594" class="s-sub" font-size="10.5">exception → status</text>
+        <text x="868" y="578" class="s-sub" font-size="10.5" style="fill:var(--ink)">middleware in reverse</text><text x="868" y="594" class="s-sub" font-size="10.5">DEBUG = False</text>
+        <text x="1043" y="578" class="s-sub" font-size="10.5" style="fill:var(--ink)">handler → status code</text><text x="1043" y="594" class="s-sub" font-size="10.5">APP_DEBUG=false</text>
+        <text x="1218" y="578" class="s-sub" font-size="10.5" style="fill:var(--ink)">exception middleware</text><text x="1218" y="594" class="s-sub" font-size="10.5">no dev page in prod</text>
+        <rect x="30" y="608" width="1355" height="48" fill="color-mix(in srgb,var(--hazard) 10%,transparent)" stroke="var(--hazard)" stroke-width="1.5"/>
+        <text x="38" y="628" class="s-haz" font-size="11">signature</text><text x="38" y="644" class="s-haz" font-size="11">trap</text>
+        <text x="168" y="628" class="s-haz" font-size="10.5">sync call in async def,</text><text x="168" y="644" class="s-sub" font-size="10.5" style="fill:var(--hazard)">no response_model</text>
+        <text x="343" y="628" class="s-haz" font-size="10.5">unwrapped async (v4),</text><text x="343" y="644" class="s-sub" font-size="10.5" style="fill:var(--hazard)">no helmet, no limits</text>
+        <text x="518" y="628" class="s-haz" font-size="10.5">role-only guards,</text><text x="518" y="644" class="s-sub" font-size="10.5" style="fill:var(--hazard)">pipe not global</text>
+        <text x="693" y="628" class="s-haz" font-size="10.5">no -Xmx; public</text><text x="693" y="644" class="s-sub" font-size="10.5" style="fill:var(--hazard)">/actuator/env</text>
+        <text x="868" y="628" class="s-haz" font-size="10.5">DEBUG = True,</text><text x="868" y="644" class="s-sub" font-size="10.5" style="fill:var(--hazard)">|safe, csrf_exempt</text>
+        <text x="1043" y="628" class="s-haz" font-size="10.5">no $fillable,</text><text x="1043" y="644" class="s-sub" font-size="10.5" style="fill:var(--hazard)">{!! !!}, DB::raw()</text>
+        <text x="1218" y="628" class="s-haz" font-size="10.5">.Result / .Wait(),</text><text x="1218" y="644" class="s-sub" font-size="10.5" style="fill:var(--hazard)">binding to entities</text>
+        <g stroke="var(--rule)" stroke-width="1"><line x1="158" y1="108" x2="158" y2="656"/><line x1="333" y1="108" x2="333" y2="656"/><line x1="508" y1="108" x2="508" y2="656"/><line x1="683" y1="108" x2="683" y2="656"/><line x1="858" y1="108" x2="858" y2="656"/><line x1="1033" y1="108" x2="1033" y2="656"/><line x1="1208" y1="108" x2="1208" y2="656"/></g>
+        <!-- NOTES -->
+        <rect x="30" y="684" width="440" height="186" fill="var(--z3)"/>
+        <text x="46" y="708" class="s-zone" fill="var(--mute)">A · same anatomy, seven dialects</text>
+        <g class="s-sub"><text x="46" y="732">Every column runs sheet 1's stops 07 to 16 in the same</text><text x="46" y="746">order. The names differ — pipe, Form Request, @Valid —</text><text x="46" y="760">the sequence does not: identity, shape, permission, logic.</text></g>
+        <text x="46" y="788" class="s-haz" font-size="10.5">Order bugs are the dialect-independent failure:</text>
+        <g class="s-sub"><text x="46" y="804">auth middleware registered after the route (Express);</text><text x="46" y="818">authorisation before authentication (ASP.NET) does nothing;</text><text x="46" y="832">a pipe applied per controller, forgotten on one (NestJS).</text></g>
+        <text x="46" y="856" class="s-note">Draw your own middleware chain in order before trusting it.</text>
+
+        <rect x="490" y="684" width="440" height="186" fill="var(--z5)"/>
+        <text x="506" y="708" class="s-zone" fill="var(--fast)">B · row 06 is identical everywhere</text>
+        <g class="s-sub"><text x="506" y="732">Frameworks differ most on rows 05 and 09: Pydantic, pipes</text><text x="506" y="746">and Form Requests validate for you; Express does nothing.</text><text x="506" y="760">On row 06 they converge — roles at most. That order 42</text><text x="506" y="774">belongs to the caller is a line you write, every time.</text></g>
+        <text x="506" y="802" class="s-haz" font-size="10.5">Mass assignment is row 05's twin: a body that sets is_admin.</text>
+        <text x="506" y="818" class="s-mono" font-size="10.5">whitelist: true · $fillable · bind to a DTO</text>
+        <text x="506" y="846" class="s-note">Validation checks shape. It never checks permission.</text>
+
+        <rect x="950" y="684" width="435" height="186" fill="var(--z1)"/>
+        <text x="966" y="708" class="s-zone" fill="var(--line)">C · the structure dividend</text>
+        <g class="s-sub"><text x="966" y="732">NestJS, Spring Boot and ASP.NET Core enforce controller →</text><text x="966" y="746">service → repository by their shape, and DI makes a fake</text><text x="966" y="760">repository a one-line test override. Express, FastAPI and</text><text x="966" y="774">Django leave that split to discipline.</text></g>
+        <text x="966" y="802" class="s-haz" font-size="10.5">Every tutorial puts the logic in the controller.</text>
+        <text x="966" y="830" class="s-note">Structure pays for its boilerplate at 30 developers —</text>
+        <text x="966" y="846" class="s-sub" style="fill:var(--fast)">and is pure ceremony on a three-endpoint service.</text>
+      </svg>
+    </div>
+    <figcaption><b>The columns are dialects, the rows are the language.</b> Once you can name what each row does, moving between these frameworks is vocabulary, not relearning — and the bottom row is the short list of switches to search for first in any codebase you inherit.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the rows, then the columns</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Server and runtime</h4><p>What actually executes the framework: an event loop (Uvicorn, Node), a pre-forked process (Gunicorn, PHP-FPM) or a thread pool (Tomcat, Kestrel). It fixes the concurrency model from sheet 3.</p></div>
+      <div><h4><span>02</span>Startup and memory</h4><p>Matters for autoscaling and serverless. Spring Boot's 1–3 s cold start disqualifies it for short-lived work without a native image; Laravel pays a boot on every request.</p></div>
+      <div><h4><span>03</span>Middleware</h4><p>Cross-cutting concerns in registration order — logging, CORS, sessions, CSRF, HSTS. In Express everything is middleware, including routes, so order is behaviour.</p></div>
+      <div><h4><span>04</span>Authentication</h4><p>Establish identity and attach it to the request, or return 401. A dependency in FastAPI, a guard in NestJS, a filter chain in Spring, middleware elsewhere.</p></div>
+      <div><h4><span>05</span>Validation</h4><p>Turn untyped input into typed objects or reject it with 400 or 422. Built in almost everywhere except Express. Apply it globally and strip unexpected properties.</p></div>
+      <div><h4><span>06</span>Authorisation</h4><p>Object-level permission. Laravel's Policies and Spring's <code>@PreAuthorize</code> give it a home; everywhere, the ownership check itself is your code, and it is the most commonly missing one.</p></div>
+      <div><h4><span>07</span>Handler</h4><p>Controller, view, route handler or minimal API endpoint. It should translate HTTP into a call to a service and back — nothing more.</p></div>
+      <div><h4><span>08</span>Data access</h4><p>ORM or driver. In Django, Laravel, JPA and EF Core the dominant performance risk is N+1 queries, fixed by eager loading, not by tuning the framework.</p></div>
+      <div><h4><span>09</span>What leaves</h4><p>Declared output only: <code>response_model</code>, <code>@Exclude</code>, DTOs, JSON resources. Returning an ORM entity serialises every column, including ones added long after the endpoint was reviewed.</p></div>
+      <div><h4><span>10</span>Error mapping</h4><p>Exceptions become status codes in one place. Debug pages and stack traces — <code>DEBUG=True</code>, <code>APP_DEBUG=true</code>, the developer exception page — expose settings and secrets.</p></div>
+      <div><h4><span>11</span>FastAPI</h4><p>Starlette + Pydantic on ASGI. One declaration yields validation, serialisation and OpenAPI docs at <code>/docs</code> — disable it in production if the API is not public.</p></div>
+      <div><h4><span>12</span>Express.js</h4><p>Almost no security defaults: add helmet, a rate limiter and a body size limit such as <code>express.json({ limit: "100kb" })</code>, and wrap async handlers on v4.</p></div>
+      <div><h4><span>13</span>NestJS</h4><p>Middleware → guards → interceptors → pipes → controller → service → repository → exception filters. The shape is enforced; the ownership check inside the guard is not.</p></div>
+      <div><h4><span>14</span>Spring Boot</h4><p>Security filter chain, controllers, <code>@Transactional</code> services, JPA repositories, <code>@ControllerAdvice</code>. Restrict Actuator, set <code>-Xmx</code>, and never benchmark without warm-up.</p></div>
+      <div><h4><span>15</span>Django</h4><p>The best security defaults in the section — CSRF, auto-escaping, parameterised ORM — so incidents come from turning them off. Run <code>manage.py check --deploy</code> before going live.</p></div>
+      <div><h4><span>16</span>Laravel</h4><p>Form Requests validate, Policies authorise, Eloquent loads with <code>with()</code>. Keep <code>.env</code> out of the repository and the web root, and define <code>$fillable</code>.</p></div>
+      <div><h4><span>17</span>ASP.NET Core</h4><p>Kestrel, a middleware pipeline where authentication must precede authorisation, DI-resolved controllers and EF Core. Bind requests to DTOs, never to entities.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 7 — THE FAILURE LEDGER ══════════════════════ -->
+<div class="sheet" id="a7">
+  <div class="plate">
+    <span class="no">Sheet 7</span>
+    <h2>The Failure Ledger</h2>
+    <span class="form">Hazard map</span>
+    <span class="cov">Covers · Backend Fundamentals · Runtime Explained · Backend Frameworks · Django · Laravel · Spring Boot · ASP.NET Core · Nginx</span>
+  </div>
+  <p class="thesis">What runs under every other sheet: releases, restarts, timeouts and defaults. Almost nothing here is exotic — a signal nobody handled, two timeouts nobody compared, a debug flag nobody reset. <strong>Backends rarely fail because a framework was weak; they fail because a safe behaviour was available and somebody switched it off, or never switched it on.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A hazard map. Across the top, a release drawn twice as a timeline: a backend that handles SIGTERM stops accepting requests, drains in-flight work, closes database connections and exits cleanly; a backend that ignores SIGTERM keeps working until the grace period expires, is SIGKILLed, and its in-flight requests die as 502s. The middle row shows cold start times per runtime on a logarithmic scale, and a ladder of nested timeouts from the client down to outbound calls. The bottom row is a ledger of framework security defaults and the exact switches that disable them, beside panels on stateless servers, request ids and secrets.">
+        <defs>
+          <marker id="h1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="h2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="40" y="30" class="s-zone" fill="var(--line)">A release, drawn twice</text>
+        <rect x="30" y="40" width="1340" height="264" fill="var(--z2)"/>
+        <line x1="60" y1="110" x2="1000" y2="110" stroke="var(--line)" stroke-width="6" marker-end="url(#h1)"/>
+        <line x1="260" y1="110" x2="260" y2="200" stroke="var(--rule)" stroke-width="2" stroke-dasharray="4 4"/>
+        <line x1="60" y1="200" x2="1300" y2="200" stroke="var(--hazard)" stroke-width="6" stroke-dasharray="14 6" marker-end="url(#h2)"/>
+        <rect x="440" y="124" width="360" height="14" fill="var(--line)" opacity=".25"/>
+        <text x="620" y="134" text-anchor="middle" class="s-sub" font-size="10">in-flight requests drain</text>
+        <g class="st"><circle cx="90" cy="110" r="9"/><circle cx="260" cy="110" r="9"/><circle cx="440" cy="110" r="9"/><circle cx="620" cy="110" r="9"/><circle cx="800" cy="110" r="9"/><circle cx="960" cy="110" r="9"/><circle cx="90" cy="200" r="9"/><circle cx="260" cy="200" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3.5"><circle cx="1080" cy="200" r="12"/><circle cx="1240" cy="200" r="12"/></g>
+        <g class="s-num"><text x="78" y="58">01</text><text x="248" y="58">02</text><text x="428" y="58">03</text><text x="608" y="58">04</text><text x="788" y="58">05</text><text x="948" y="58">06</text><text x="1068" y="228">07</text><text x="1228" y="228">08</text></g>
+        <g class="s-lab"><text x="78" y="76">deploy starts</text><text x="248" y="76">SIGTERM</text><text x="428" y="76">stop accepting</text><text x="608" y="76">finish in-flight</text><text x="788" y="76">close the pool</text><text x="948" y="76">exit</text></g>
+        <g class="s-sub"><text x="78" y="92">new version rolls out</text><text x="248" y="92">orchestrator asks</text><text x="428" y="92">no new requests</text><text x="608" y="92">drain what runs</text><text x="788" y="92">DB connections closed</text><text x="948" y="92">nothing lost</text></g>
+        <text x="1020" y="106" class="s-note">handles SIGTERM:</text>
+        <text x="1020" y="122" class="s-sub" style="fill:var(--fast)">zero dropped requests</text>
+        <text x="330" y="190" class="s-haz">ignores SIGTERM: keeps accepting, never drains</text>
+        <g class="s-haz"><text x="1068" y="246">SIGKILL</text><text x="1228" y="246">requests die</text></g>
+        <g class="s-sub" style="fill:var(--hazard)"><text x="1068" y="262">grace period over</text><text x="1228" y="262">intermittent 502s</text></g>
+        <g stroke="var(--mute)" stroke-width="1.5" fill="none"><path d="M260,284 L260,294 L1080,294 L1080,284"/></g>
+        <text x="670" y="288" text-anchor="middle" class="s-sub" font-size="10.5">grace period — the only time you are given</text>
+        <text x="46" y="262" class="s-sub">Gunicorn's SIGHUP does the top line one worker at a time;</text>
+        <text x="46" y="276" class="s-sub">a pod needs the same discipline from your code.</text>
+
+        <!-- COLD STARTS -->
+        <rect x="30" y="320" width="660" height="244" fill="var(--z3)"/>
+        <text x="46" y="344" class="s-zone" fill="var(--mute)">09 · cold starts decide how fast you can scale</text>
+        <g class="s-lab" font-size="11"><text x="46" y="378">Go</text><text x="46" y="404">Node.js</text><text x="46" y="430">Python</text><text x="46" y="456">.NET</text><text x="46" y="482">JVM</text></g>
+        <g opacity=".8">
+          <rect x="140" y="366" width="16" height="16" fill="var(--line)"/>
+          <rect x="140" y="392" width="203" height="16" fill="var(--line)"/>
+          <rect x="140" y="418" width="203" height="16" fill="var(--line)"/><rect x="343" y="418" width="176" height="16" fill="var(--hazard)" opacity=".55"/>
+          <rect x="140" y="444" width="236" height="16" fill="var(--line)"/>
+          <rect x="140" y="470" width="346" height="16" fill="var(--hazard)" opacity=".75"/><rect x="486" y="470" width="53" height="16" fill="var(--hazard)" opacity=".4"/>
+        </g>
+        <g stroke="var(--fast)" stroke-width="3"><line x1="266" y1="440" x2="266" y2="464"/><line x1="343" y1="466" x2="343" y2="490"/></g>
+        <g class="s-mono" font-size="10"><text x="552" y="378">~1 ms</text><text x="552" y="404">~50 ms</text><text x="552" y="430">~50 ms + imports</text><text x="552" y="456">~100 ms · AOT ~10</text><text x="552" y="482">1–3 s · native ~50</text></g>
+        <line x1="140" y1="498" x2="540" y2="498" stroke="var(--rule)" stroke-width="1.5"/>
+        <g class="s-sub" font-size="10" text-anchor="middle"><text x="156" y="512">1 ms</text><text x="266" y="512">10 ms</text><text x="376" y="512">100 ms</text><text x="486" y="512">1 s</text></g>
+        <text x="46" y="536" class="s-note">A runtime that takes 3 s to start cannot answer a traffic spike quickly.</text>
+        <text x="46" y="554" class="s-sub">Python's cost is imports, not the interpreter. Amber ticks mark AOT and GraalVM native builds.</text>
+
+        <!-- TIMEOUT LADDER -->
+        <rect x="710" y="320" width="660" height="244" fill="var(--z5)"/>
+        <text x="726" y="344" class="s-zone" fill="var(--fast)">10 · the timeout ladder</text>
+        <g>
+          <rect x="726" y="358" width="620" height="28" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="726" y="392" width="520" height="28" fill="var(--z1)" stroke="var(--line)" stroke-width="1.5"/>
+          <rect x="726" y="426" width="420" height="28" fill="var(--z1)" stroke="var(--line)" stroke-width="1.5"/>
+          <rect x="726" y="460" width="320" height="28" fill="var(--z4)" stroke="var(--fast)" stroke-width="1.5"/>
+        </g>
+        <g class="s-lab" font-size="10.5"><text x="736" y="376">client or cloud load balancer gives up</text><text x="736" y="410">Nginx · proxy_read_timeout 30s</text><text x="736" y="444">Gunicorn · --timeout</text><text x="736" y="478">outbound calls: DB, APIs</text></g>
+        <text x="1356" y="478" text-anchor="end" class="s-note" font-size="10.5">each inner rung</text>
+        <text x="1356" y="492" text-anchor="end" class="s-note" font-size="10.5">shorter than the one outside</text>
+        <text x="726" y="514" class="s-haz" font-size="10.5">Inverted, an outer layer gives up first: a 502 while the app is still working,</text>
+        <text x="726" y="530" class="s-sub" style="fill:var(--hazard)">or a worker killed mid-query with nothing useful in the application log.</text>
+        <text x="726" y="552" class="s-note" font-size="11">No timeout on an outbound call lets one slow dependency hang everything.</text>
+
+        <!-- DEFAULTS LEDGER -->
+        <rect x="30" y="584" width="880" height="286" fill="var(--band)"/>
+        <text x="46" y="608" class="s-zone" fill="var(--hazard)">The defaults that protect you, and the switch that turns each one off</text>
+        <g class="s-lab" font-size="11"><text x="72" y="632">Protection</text><text x="300" y="632">Provided by</text><text x="540" y="632">Switched off by</text></g>
+        <line x1="46" y1="640" x2="894" y2="640" stroke="var(--rule)"/>
+        <g class="s-num"><text x="46" y="660">11</text><text x="46" y="686">12</text><text x="46" y="712">13</text><text x="46" y="738">14</text><text x="46" y="764">15</text><text x="46" y="790">16</text><text x="46" y="816">17</text><text x="46" y="842">18</text></g>
+        <g class="s-lab" font-size="11"><text x="72" y="660">SQL injection</text><text x="72" y="686">XSS</text><text x="72" y="712">CSRF</text><text x="72" y="738">Secrets on error pages</text><text x="72" y="764">Leaked fields</text><text x="72" y="790">Mass assignment</text><text x="72" y="816">Exposed internals</text><text x="72" y="842">Fingerprinting</text></g>
+        <g class="s-sub"><text x="300" y="660">parameterised ORM queries</text><text x="300" y="686">template auto-escaping</text><text x="300" y="712">token middleware</text><text x="300" y="738">debug off in production</text><text x="300" y="764">declared output shapes</text><text x="300" y="790">allow-lists, DTO binding</text><text x="300" y="816">locked admin endpoints</text><text x="300" y="842">hidden version headers</text></g>
+        <g class="s-mono" font-size="10.5" style="fill:var(--hazard)"><text x="540" y="660">raw SQL strings · DB::raw(input)</text><text x="540" y="686">|safe · {!! !!}</text><text x="540" y="712">csrf_exempt "while debugging"</text><text x="540" y="738">DEBUG = True · APP_DEBUG=true</text><text x="540" y="764">return entity · no response_model</text><text x="540" y="790">no $fillable · bind to entity</text><text x="540" y="816">public /actuator/env · /docs</text><text x="540" y="842">server_tokens on · x-powered-by</text></g>
+        <text x="46" y="862" class="s-sub">Treat every # nosec, |safe, csrf_exempt and raw SQL string as a change that needs a written reason.</text>
+
+        <!-- STATE, IDS, SECRETS -->
+        <rect x="930" y="584" width="440" height="286" fill="var(--z1)"/>
+        <text x="946" y="608" class="s-lab" font-size="11">19 · stateless by default</text>
+        <text x="946" y="628" class="s-zone" fill="var(--hazard)">Stateful</text><text x="1156" y="628" class="s-zone" fill="var(--line)">Stateless</text>
+        <g class="s-sub"><text x="946" y="646">session in server memory</text><text x="946" y="660">user must return to server 2</text><text x="946" y="674" fill="var(--hazard)">scaling and restarts hurt</text>
+        <text x="1156" y="646">session in Redis or a token</text><text x="1156" y="660">any server, any request</text><text x="1156" y="674" fill="var(--line)">add, remove, restart freely</text></g>
+        <text x="946" y="704" class="s-lab" font-size="11">20 · a request id on every log line</text>
+        <text x="946" y="720" class="s-sub">Structured logs and request ids, or an incident is a guess.</text>
+        <text x="946" y="734" class="s-sub">Set it at the edge; carry it through every layer.</text>
+        <text x="946" y="764" class="s-lab" font-size="11">21 · secrets outside the code</text>
+        <text x="946" y="780" class="s-sub">SECRET_KEY, .env, user secrets: environment variables or a</text>
+        <text x="946" y="794" class="s-sub">secrets manager — never source control or the web root.</text>
+        <text x="946" y="826" class="s-note">Authentication is identity; authorisation is permission.</text>
+        <text x="946" y="842" class="s-sub" style="fill:var(--fast)">Checking only the first is the most common serious bug.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the ledger as a search list, not a lecture.</b> Every line in the bottom-left table is a string you can grep for in a codebase this afternoon, and every rung of the timeout ladder is a number you can read from two config files. The hardest failures on this sheet are also the cheapest to find.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the ledger</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Deploy starts</h4><p>A new version rolls out and old instances must stop. How they stop decides whether users notice.</p></div>
+      <div><h4><span>02</span>SIGTERM</h4><p>The orchestrator's polite request to shut down. One signal handler is the difference between a clean release and a burst of errors.</p></div>
+      <div><h4><span>03</span>Stop accepting</h4><p>Close the listener and fail readiness so the load balancer stops routing new requests here.</p></div>
+      <div><h4><span>04</span>Finish in-flight</h4><p>Let running requests complete inside the grace period. This is the step that makes a rolling deploy invisible.</p></div>
+      <div><h4><span>05</span>Close the pool</h4><p>Return database connections cleanly instead of leaving the server to time them out against <code>max_connections</code>.</p></div>
+      <div><h4><span>06</span>Exit</h4><p>A clean exit before the deadline. Nothing was dropped, nothing retried.</p></div>
+      <div><h4><span>07</span>SIGKILL</h4><p>The grace period expired on a process that ignored SIGTERM. It is killed immediately, with no chance to finish anything.</p></div>
+      <div><h4><span>08</span>Mysterious 502s</h4><p>In-flight requests die mid-response on every deploy. One of the most common causes of intermittent release-time errors — and fixed by handling one signal.</p></div>
+      <div><h4><span>09</span>Cold start</h4><p>Go ~1 ms, Node ~50 ms, Python ~50 ms plus imports, .NET ~100 ms (~10 ms AOT), JVM 1–3 s (~50 ms GraalVM native). It governs serverless fitness and how fast autoscaling can respond.</p></div>
+      <div><h4><span>10</span>Timeout ladder</h4><p>Client, proxy, app server and outbound calls each have a deadline. Mismatched, they produce 502s nobody can explain; missing on outbound calls, one slow dependency hangs everything.</p></div>
+      <div><h4><span>11</span>SQL injection</h4><p>ORMs parameterise queries by default. Raw SQL built with string formatting — or <code>DB::raw()</code> with user input — walks straight past that protection.</p></div>
+      <div><h4><span>12</span>XSS</h4><p>Django templates and Blade escape output automatically. <code>|safe</code> and <code>{!! !!}</code> turn it off for exactly the content that most needs it.</p></div>
+      <div><h4><span>13</span>CSRF</h4><p>Token middleware protects form posts in Django and Laravel. <code>csrf_exempt</code> added while debugging and never removed is a classic. Express ships none at all.</p></div>
+      <div><h4><span>14</span>Debug mode</h4><p><code>DEBUG = True</code> or <code>APP_DEBUG=true</code> in production exposes settings, environment variables and credentials on any error page. It has caused real breaches, repeatedly.</p></div>
+      <div><h4><span>15</span>Leaked fields</h4><p>Returning an ORM entity serialises every attribute, including a password hash added next quarter. Declare output with <code>response_model</code>, DTOs or <code>@Exclude</code>.</p></div>
+      <div><h4><span>16</span>Mass assignment</h4><p>Binding a request body straight to a model lets a caller set <code>is_admin</code>. Define <code>$fillable</code>, use <code>whitelist: true</code>, bind to DTOs.</p></div>
+      <div><h4><span>17</span>Exposed internals</h4><p>Spring's <code>/actuator/env</code> can leak configuration and secrets; the Django admin grants direct database access; FastAPI's <code>/docs</code> maps an internal API. Restrict all three.</p></div>
+      <div><h4><span>18</span>Fingerprinting</h4><p><code>server_tokens off</code> in Nginx and <code>app.disable('x-powered-by')</code> in Express cost nothing and stop advertising exact versions to scanners.</p></div>
+      <div><h4><span>19</span>Stateless servers</h4><p>Push sessions and shared state into Redis or a token. This one decision is what makes horizontal scaling, rolling deploys and crash recovery straightforward.</p></div>
+      <div><h4><span>20</span>Request ids</h4><p>A request id attached at the edge and logged by every layer turns "something failed around 14:02" into one traceable request.</p></div>
+      <div><h4><span>21</span>Secrets</h4><p>The backend exists partly to hold secrets a client never may. Keys in source control, or a <code>.env</code> readable from the web root, undo that purpose entirely.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The closing loop</b>
+    <p>Sheet 5 chose a framework; sheet 6 showed its defaults; this sheet listed how those defaults get switched off. Sheets 2 to 4 sized the processes that run it, and sheet 1 is what a user experiences when all of that holds. Every incident on this atlas starts as a line on this sheet — which is why the cheapest review you can run is a search for the strings in its ledger.</p>
+  </div>
+</div>
+
+</div>

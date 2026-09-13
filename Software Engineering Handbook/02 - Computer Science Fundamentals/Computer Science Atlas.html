@@ -1,0 +1,1610 @@
+<meta charset="utf-8">
+<title>Atlas of a Computer — eight sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 02 Computer Science Fundamentals · eight sheets</p>
+  <h1>Atlas of a <em>Computer</em></h1>
+  <p class="thesis">One machine, three floors. Hardware at the bottom does one tiny thing billions of times a second; the kernel in the middle owns that hardware and rents it out; your processes and threads live on the top floor and ask for everything. <strong>Every slow request, killed container and lost update you will ever debug is one of these floors doing exactly what it was designed to do.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 8</span>
+    <span><b>Numbered steps</b> 125</span>
+    <span><b>Read first</b> Sheet 1 — the memory ladder prices every arrow on every other sheet</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Memory Ladder</h4><p>Registers to network: eight rungs, nine orders of magnitude, and the one rule — move the work up.</p><em>Ladder plate</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Instruction Cycle</h4><p>From x = 5 + 3 to a register holding 8: the toolchain, then fetch, decode, execute, write back.</p><em>Closed circuit</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>Few Minds, Many Hands</h4><p>A CPU and a GPU opened side by side, the PCIe copy between them, and one inference request crossing it.</p><em>Cutaway section</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>The Two Worlds</h4><p>One HTTP request drawn as a line crossing the user/kernel boundary — every crossing a system call.</p><em>Transit diagram</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>The Address Plant</h4><p>Virtual addresses, page tables, the MMU and the page fault — and what happens when the promise of memory is called in.</p><em>Process plant</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>The Read Path</h4><p>open() and read() from path to platter: VFS, inode, page cache, block layer, SSD or HDD.</p><em>Sorting line</em></span></a>
+    <a href="#a7"><span class="n">7</span><span><h4>Processes, Threads, and the Choice</h4><p>What is shared, what is private, where races come from, and which concurrency model the work actually needs.</p><em>Decision tree</em></span></a>
+    <a href="#a8"><span class="n">8</span><span><h4>The Scheduler and the Switch</h4><p>Ready, running, blocked: how a few cores pretend to be hundreds, and what each pretence costs.</p><em>Control loop</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 340" role="img" aria-label="How the eight sheets fit together, drawn as three floors of one machine. The top floor is user space, holding sheet 7, processes and threads. A dashed boundary below it is sheet 4, the system call gate between the two worlds. The middle floor is the kernel, holding sheet 8 the scheduler, sheet 5 memory management and sheet 6 the file read path. The bottom floor is hardware, holding sheet 2 the instruction cycle, sheet 3 the CPU and GPU, and sheet 1 the memory ladder. A strip along the bottom notes that the memory ladder prices every arrow on the atlas.">
+        <rect x="30" y="40" width="1340" height="76" fill="var(--z6)"/>
+        <rect x="30" y="152" width="1340" height="76" fill="var(--z1)"/>
+        <rect x="30" y="236" width="1340" height="76" fill="var(--z4)"/>
+        <g class="s-zone">
+          <text x="46" y="62" fill="var(--learn)">User space</text>
+          <text x="46" y="174" fill="var(--line)">Kernel space</text>
+          <text x="46" y="258" fill="var(--fast)">Hardware</text>
+        </g>
+
+        <line x1="30" y1="134" x2="1370" y2="134" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="10 7"/>
+        <rect x="520" y="122" width="360" height="24" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="700" y="139" text-anchor="middle" class="s-haz">4 · the two worlds — the system call gate</text>
+
+        <g class="s-lab" text-anchor="middle">
+          <text x="700" y="80">7 · processes, threads, and the choice</text>
+          <text x="300" y="192">8 · the scheduler and the switch</text>
+          <text x="700" y="192">5 · the address plant</text>
+          <text x="1100" y="192">6 · the read path</text>
+          <text x="300" y="276">2 · the instruction cycle</text>
+          <text x="700" y="276">3 · few minds, many hands</text>
+          <text x="1100" y="276">1 · the memory ladder</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="700" y="98">what you write runs here: isolated memory, shared heaps, races</text>
+          <text x="300" y="210">who gets a core next, and the switch</text>
+          <text x="700" y="210">virtual pages mapped onto real frames</text>
+          <text x="1100" y="210">a path becomes blocks, mostly from RAM</text>
+          <text x="300" y="294">fetch · decode · execute · write back</text>
+          <text x="700" y="294">eight smart cores or ten thousand simple ones</text>
+          <text x="1100" y="294">registers, cache, RAM, SSD, HDD, network</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M1240,116 L1240,152"/><path d="M160,116 L160,152"/>
+          <path d="M1240,228 L1240,236"/><path d="M160,228 L160,236"/>
+        </g>
+        <rect x="30" y="322" width="1340" height="10" fill="color-mix(in srgb,var(--fast) 26%,transparent)"/>
+        <text x="1370" y="317" text-anchor="end" class="s-note">Sheet 1 — the price of reaching data runs under every sheet on this atlas</text>
+      </svg>
+    </div>
+    <figcaption>Read it as one building. <b>Down is power, up is safety.</b> Code at the top may do anything to its own memory and nothing to the machine; code at the bottom may do anything at all. Sheet 4 is the only staircase between them, and every trip down it is paid for in time — which is why the performance sheets (1, 6, 8) and the safety sheets (4, 5, 7) keep describing the same trade from opposite ends.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE MEMORY LADDER ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Memory Ladder</h2>
+    <span class="form">Ladder plate</span>
+    <span class="cov">Covers · How Computers Work · Registers · Cache Memory · RAM · SSD and HDD</span>
+  </div>
+  <p class="thesis">The CPU does one tiny thing extremely fast; what it spends its life doing is waiting for data to arrive. Eight rungs, from a few bytes inside the chip to a warehouse in another city, span nine orders of magnitude. <strong>Performance is almost entirely about how far the data has to travel — every serious optimisation is an attempt to move work up this ladder.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 820" role="img" aria-label="A ladder of eight storage rungs drawn as rows: registers, L1, L2 and L3 cache, RAM, SSD, HDD and network. Each row gives typical size and latency, a bar on a logarithmic latency scale where every tick is ten times slower, and the same latency rescaled so one nanosecond lasts one second — from a third of a second for a register to nearly five years for a slow network call. Rows are grouped into zones: inside the CPU, the memory bus, storage and network. Below, three panels: locality and the 64-byte cache line, RAM volatility and the page cache, and the mechanical difference between a hard disk and a solid state drive.">
+        <text x="40" y="40" class="s-zone" fill="var(--line)">The ladder · each rung larger, slower and cheaper than the one above it</text>
+
+        <rect x="30" y="80" width="1340" height="176" fill="var(--z1)"/>
+        <rect x="30" y="256" width="1340" height="44" fill="var(--z3)"/>
+        <rect x="30" y="300" width="1340" height="88" fill="var(--z4)"/>
+        <rect x="30" y="388" width="1340" height="44" fill="var(--z5)"/>
+        <g class="s-zone" text-anchor="end">
+          <text x="1356" y="172" fill="var(--line)">Inside the CPU</text>
+          <text x="1356" y="282" fill="var(--mute)">Memory bus</text>
+          <text x="1356" y="348" fill="var(--fast)">Storage</text>
+          <text x="1356" y="414" fill="var(--hazard)">Network</text>
+        </g>
+
+        <g class="s-num">
+          <text x="46" y="70">no.</text><text x="76" y="70">rung</text><text x="220" y="70">typical size</text><text x="380" y="70">latency</text><text x="470" y="70">log scale — every tick is ×10 slower</text><text x="1040" y="70">if 1 ns lasted 1 second</text>
+        </g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="470" y1="80" x2="470" y2="432"/><line x1="530" y1="80" x2="530" y2="432"/><line x1="590" y1="80" x2="590" y2="432"/><line x1="650" y1="80" x2="650" y2="432"/><line x1="710" y1="80" x2="710" y2="432"/>
+          <line x1="770" y1="80" x2="770" y2="432"/><line x1="830" y1="80" x2="830" y2="432"/><line x1="890" y1="80" x2="890" y2="432"/><line x1="950" y1="80" x2="950" y2="432"/><line x1="1010" y1="80" x2="1010" y2="432"/>
+        </g>
+
+        <g class="s-num"><text x="46" y="106">01</text><text x="46" y="150">02</text><text x="46" y="194">03</text><text x="46" y="238">04</text><text x="46" y="282">05</text><text x="46" y="326">06</text><text x="46" y="370">07</text><text x="46" y="414">08</text></g>
+        <g class="s-lab">
+          <text x="76" y="106">registers</text><text x="76" y="150">L1 cache · per core</text><text x="76" y="194">L2 cache · per core</text><text x="76" y="238">L3 cache · shared</text>
+          <text x="76" y="282">RAM</text><text x="76" y="326">SSD</text><text x="76" y="370">HDD</text><text x="76" y="414">network</text>
+        </g>
+        <g class="s-mono">
+          <text x="220" y="106">~1 KB</text><text x="220" y="150">32–64 KB</text><text x="220" y="194">256 KB–2 MB</text><text x="220" y="238">8–64 MB</text>
+          <text x="220" y="282">8–128 GB</text><text x="220" y="326">0.5–8 TB</text><text x="220" y="370">1–20 TB</text><text x="220" y="414">unlimited</text>
+          <text x="380" y="106">~0.3 ns</text><text x="380" y="150">~1 ns</text><text x="380" y="194">~4 ns</text><text x="380" y="238">~40 ns</text>
+          <text x="380" y="282">~100 ns</text><text x="380" y="326">~100 µs</text><text x="380" y="370">~10 ms</text><text x="380" y="414">0.5–150 ms</text>
+        </g>
+        <g opacity=".85">
+          <rect x="470" y="93" width="29" height="18" fill="var(--line)"/>
+          <rect x="470" y="137" width="60" height="18" fill="var(--line)"/>
+          <rect x="470" y="181" width="96" height="18" fill="var(--line)"/>
+          <rect x="470" y="225" width="156" height="18" fill="var(--line)"/>
+          <rect x="470" y="269" width="180" height="18" fill="var(--cool)"/>
+          <rect x="470" y="313" width="360" height="18" fill="var(--fast)"/>
+          <rect x="470" y="357" width="480" height="18" fill="var(--fast)"/>
+          <rect x="470" y="401" width="551" height="18" fill="var(--hazard)"/>
+        </g>
+        <g class="s-sub">
+          <text x="1040" y="106">0.3 s — a blink</text><text x="1040" y="150">1 second</text><text x="1040" y="194">4 seconds</text><text x="1040" y="238">40 seconds</text>
+          <text x="1040" y="282">under 2 minutes</text><text x="1040" y="326">about a day</text><text x="1040" y="370">about 4 months</text><text x="1040" y="414">up to ~4.8 years</text>
+        </g>
+
+        <text x="46" y="456" class="s-note">RAM is ~100× slower than cache · an SSD ~1,000× slower than RAM · a network call ~1,000,000× slower than a RAM read</text>
+        <text x="46" y="474" class="s-sub">A CPU waiting on RAM stalls for ~300 of its own cycles. Redis moves data from disk to RAM, PostgreSQL's buffer pool keeps pages off the disk, a CDN keeps bytes off the network — the same move, three layers.</text>
+
+        <!-- PANEL A: locality -->
+        <rect x="30" y="496" width="440" height="300" fill="var(--z3)"/>
+        <text x="46" y="520" class="s-zone" fill="var(--mute)">09 · Locality — why the desk works</text>
+        <text x="46" y="546" class="s-sub">It never fetches one byte — it fetches a 64-byte line.</text>
+        <g fill="var(--z1)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="46" y="558" width="44" height="34"/><rect x="96" y="558" width="44" height="34"/><rect x="146" y="558" width="44" height="34"/>
+          <rect x="246" y="558" width="44" height="34"/><rect x="296" y="558" width="44" height="34"/><rect x="346" y="558" width="44" height="34"/><rect x="396" y="558" width="44" height="34"/>
+        </g>
+        <rect x="196" y="558" width="44" height="34" fill="var(--fast)" opacity=".8" stroke="var(--fast)" stroke-width="1.5"/>
+        <g class="s-mono" font-size="10" text-anchor="middle">
+          <text x="68" y="579">a[0]</text><text x="118" y="579">a[1]</text><text x="168" y="579">a[2]</text><text x="218" y="579">a[3]</text><text x="268" y="579">a[4]</text><text x="318" y="579">a[5]</text><text x="368" y="579">a[6]</text><text x="418" y="579">a[7]</text>
+        </g>
+        <text x="46" y="612" class="s-note">asked for a[3] — seven neighbours came along free</text>
+        <text x="46" y="636" class="s-sub">Temporal locality: used now, probably used again soon.</text>
+        <text x="46" y="652" class="s-sub">Spatial locality: the neighbours are probably next.</text>
+        <text x="46" y="678" class="s-lab" font-size="11">Same logic, different layout</text>
+        <text x="46" y="696" class="s-mono" font-size="10" style="fill:var(--line)">array of structs, in order   → hits</text>
+        <text x="46" y="712" class="s-mono" font-size="10">linked list, scattered nodes → a miss per node</text>
+        <text x="46" y="728" class="s-mono" font-size="10" style="fill:var(--hazard)">random keys into a huge map  → mostly misses</text>
+        <text x="46" y="756" class="s-haz" font-size="10.5">10 · false sharing — invisible in the source code</text>
+        <text x="46" y="772" class="s-sub">Two threads writing neighbours on one line wreck each other.</text>
+        <text x="46" y="786" class="s-sub">Game engines win 2–10× from layout alone; a CRUD app, nothing.</text>
+
+        <!-- PANEL B: RAM -->
+        <rect x="490" y="496" width="440" height="300" fill="var(--z2)"/>
+        <text x="506" y="520" class="s-zone" fill="var(--mute)">11 · RAM — the desk wiped every night</text>
+        <text x="506" y="546" class="s-sub">Each bit is charge in a tiny capacitor that leaks, so DRAM</text>
+        <text x="506" y="560" class="s-sub">is refreshed thousands of times a second. No power, no data.</text>
+        <rect x="506" y="574" width="160" height="28" fill="var(--line)" opacity=".85"/>
+        <rect x="666" y="574" width="190" height="28" fill="var(--cool)" opacity=".7"/>
+        <rect x="856" y="574" width="58" height="28" fill="var(--paper)" stroke="var(--rule)"/>
+        <g class="s-lab" font-size="11"><text x="514" y="592" fill="var(--paper)">your processes</text><text x="674" y="592" fill="var(--paper)">page cache</text><text x="864" y="592">free</text></g>
+        <text x="506" y="622" class="s-sub">"95% used" is usually healthy: idle RAM is lent to the</text>
+        <text x="506" y="636" class="s-sub">page cache and handed back the moment a process asks.</text>
+        <text x="506" y="662" class="s-lab" font-size="11">12 · When RAM runs out</text>
+        <text x="506" y="680" class="s-sub">Swap keeps it alive at ~1,000× slower — up, but useless.</text>
+        <text x="506" y="694" class="s-sub">In a container, over the limit is not slow — it is killed.</text>
+        <text x="506" y="720" class="s-haz" font-size="10.5">Never keep in RAM what you cannot rebuild —</text>
+        <text x="506" y="734" class="s-haz" font-size="10.5">a restart, a crash or a deploy erases all of it.</text>
+        <text x="506" y="760" class="s-note">Keep in RAM what is read often and can be rebuilt.</text>
+        <text x="506" y="776" class="s-sub">That one rule justifies Redis, buffer pools and every cache.</text>
+
+        <!-- PANEL C: disks -->
+        <rect x="950" y="496" width="420" height="300" fill="var(--z4)"/>
+        <text x="966" y="520" class="s-zone" fill="var(--fast)">13 · Moving arm, or moving charge</text>
+        <circle cx="1010" cy="580" r="38" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+        <circle cx="1010" cy="580" r="22" fill="none" stroke="var(--rule)" stroke-width="1.5"/>
+        <circle cx="1010" cy="580" r="5" fill="var(--fast)"/>
+        <line x1="1090" y1="612" x2="1026" y2="566" stroke="var(--ink)" stroke-width="3"/>
+        <circle cx="1090" cy="612" r="5" fill="var(--ink)"/>
+        <g stroke="var(--line)" stroke-width="12" stroke-dasharray="12 4" opacity=".8">
+          <line x1="1184" y1="558" x2="1350" y2="558"/><line x1="1184" y1="576" x2="1350" y2="576"/><line x1="1184" y1="594" x2="1350" y2="594"/>
+        </g>
+        <text x="966" y="642" class="s-lab" font-size="11">HDD · a record player</text>
+        <text x="966" y="658" class="s-sub">seek 5–10 ms + rotation ~4 ms</text>
+        <text x="1184" y="642" class="s-lab" font-size="11">SSD · flash, no parts</text>
+        <text x="1184" y="658" class="s-sub">~100 µs, purely electronic</text>
+        <text x="966" y="684" class="s-lab" font-size="11">14 · What the SSD hides</text>
+        <text x="966" y="702" class="s-sub">Cells wear out: wear levelling spreads writes across chips,</text>
+        <text x="966" y="716" class="s-sub">and blocks are erased before rewriting — heavy writes slow.</text>
+        <text x="966" y="734" class="s-sub">SATA ~550 MB/s · NVMe over PCIe, several GB/s.</text>
+        <text x="966" y="760" class="s-haz" font-size="10.5">Random reads on an HDD: ~100× slower, not 2×.</text>
+        <text x="966" y="776" class="s-haz" font-size="10.5">RAID survives a dead disk, not a DELETE. Deleted ≠ erased.</text>
+      </svg>
+    </div>
+    <figcaption><b>Redraw this ladder from memory, with the timings, and most performance arguments settle themselves.</b> A database query that avoids one disk read beats any amount of loop tuning; a microservice call that could have been a function call costs the equivalent of years on the right-hand scale.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every rung, and what lives on it</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Registers</h4><p>A few dozen 64-bit slots of flip-flops wired straight into the execution units. The only place the CPU actually computes; everything below exists to feed them.</p></div>
+      <div><h4><span>02</span>L1 cache</h4><p>32–64 KB per core, ~1 ns. Holds what the core touched a moment ago. The only memory registers exchange data with directly.</p></div>
+      <div><h4><span>03</span>L2 cache</h4><p>256 KB to 2 MB per core, ~4 ns. The second place the CPU checks before giving up and walking to RAM.</p></div>
+      <div><h4><span>04</span>L3 cache</h4><p>8–64 MB shared by all cores, ~40 ns. Helps multi-core work on common data, and forces cores to keep their caches coherent.</p></div>
+      <div><h4><span>05</span>RAM</h4><p>Gigabytes of working memory at ~100 ns, the same speed for box 3 and box 3 billion — that uniformity is what "random access" means. Volatile.</p></div>
+      <div><h4><span>06</span>SSD</h4><p>Flash cells at ~100 µs, permanent, no moving parts. Made random access affordable and changed how databases are built.</p></div>
+      <div><h4><span>07</span>HDD</h4><p>Spinning platters at ~10 ms. Respectable for sequential reads, catastrophic for random ones, and ~10× cheaper per terabyte — backups, archives, video libraries.</p></div>
+      <div><h4><span>08</span>Network</h4><p>Unlimited and 0.5–150 ms away. Object storage, other services, other continents. "Just one more network call" is never free.</p></div>
+      <div><h4><span>09</span>Locality</h4><p>Temporal: used now, used again soon. Spatial: the neighbours are next. Both usually true, and the reason a cache the size of a few MB can hide a gap of 100×.</p></div>
+      <div><h4><span>10</span>False sharing</h4><p>Two threads writing different variables that happen to sit on the same 64-byte cache line keep invalidating each other's cache. Correct code, mysteriously slow.</p></div>
+      <div><h4><span>11</span>Volatility and the page cache</h4><p>DRAM forgets without constant refresh. The kernel lends idle RAM to cache file blocks, so high "used" memory is often healthy rather than a leak.</p></div>
+      <div><h4><span>12</span>Swap and the OOM kill</h4><p>Out of RAM, pages go to disk at ~1,000× the cost, or a process is killed. In a container you get the kill: exit code 137, not a slowdown.</p></div>
+      <div><h4><span>13</span>Seek and rotation</h4><p>An HDD read waits 5–10 ms for the arm and ~4 ms for the platter. An SSD's controller maps a logical block to a flash page electronically in ~100 µs.</p></div>
+      <div><h4><span>14</span>Wear levelling</h4><p>Flash cells survive a limited number of rewrites and cannot be overwritten in place, so the controller spreads and erases. Also why "deleted" data lingers in cells nobody references.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The ladder has no free rungs</b>
+    <p>Going up costs money and capacity; going down costs time and, above the disk line, durability. RAM is not storage — anything not on a disk is gone after a restart — and a single disk is not a backup. RAID survives a dead drive, never a mistaken DELETE.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE INSTRUCTION CYCLE ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Instruction Cycle</h2>
+    <span class="form">Closed circuit</span>
+    <span class="cov">Covers · CPU · Binary and Machine Code · Registers · How Computers Work</span>
+  </div>
+  <p class="thesis">On the left, one line of code travelling down the toolchain until it is nothing but numbers in RAM. In the middle, the loop the CPU runs on those numbers, about three billion times a second. <strong>The CPU is not clever — it is a very simple machine repeated at an unimaginable rate, and it cannot tell an instruction from data unless someone else marks the difference.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="On the left, seven boxes descending: source code x equals 5 plus 3, parser, compiler producing MOV and ADD instructions, assembler producing hex bytes B8 05 00 00 00 and 83 C0 03, linker, operating system loader, and the CPU. In the centre, a closed circuit of four numbered steps: fetch, decode, execute and write back, repeated about three billion times per second. On the right, a cutaway of one core: control unit, registers beside the arithmetic logic unit, three cache levels and RAM, with the four-instruction load, load, add, store sequence. Along the bottom, three panels: one byte read as a number, a letter or an instruction; why machine code is tied to one instruction set; and how data became code in buffer overflow attacks, with the defences DEP, ASLR and stack canaries.">
+        <defs>
+          <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- TOOLCHAIN -->
+        <text x="40" y="44" class="s-zone" fill="var(--mute)">Down the toolchain</text>
+        <g>
+          <rect x="40" y="64" width="280" height="52" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="40" y="128" width="280" height="52" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="40" y="192" width="280" height="52" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="40" y="256" width="280" height="52" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="40" y="320" width="280" height="52" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="40" y="384" width="280" height="52" fill="var(--z4)" stroke="var(--rule)"/>
+          <rect x="40" y="448" width="280" height="52" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#c1)">
+          <path d="M180,116 L180,126"/><path d="M180,180 L180,190"/><path d="M180,244 L180,254"/><path d="M180,308 L180,318"/><path d="M180,372 L180,382"/><path d="M180,436 L180,446"/>
+          <path d="M320,474 L350,474"/>
+        </g>
+        <g class="s-num"><text x="52" y="84">01</text><text x="52" y="148">02</text><text x="52" y="212">03</text><text x="52" y="276">04</text><text x="52" y="340">05</text><text x="52" y="404">06</text><text x="52" y="468">07</text></g>
+        <g class="s-lab"><text x="80" y="84">your source</text><text x="80" y="148">parser</text><text x="80" y="212">compiler → assembly</text><text x="80" y="276">assembler → machine code</text><text x="80" y="340">linker</text><text x="80" y="404">OS loader</text><text x="80" y="468">the CPU</text></g>
+        <text x="80" y="104" class="s-mono">x = 5 + 3</text>
+        <text x="80" y="168" class="s-sub">an abstract syntax tree</text>
+        <text x="80" y="232" class="s-mono">MOV eax, 5 · ADD eax, 3</text>
+        <text x="80" y="296" class="s-mono">B8 05 00 00 00 · 83 C0 03</text>
+        <text x="80" y="360" class="s-sub">one executable: ELF, PE, Mach-O</text>
+        <text x="80" y="424" class="s-sub">into RAM; pages marked executable</text>
+        <text x="80" y="488" class="s-sub">fetches it — and the circuit begins</text>
+        <text x="40" y="524" class="s-sub">Assembly is a naming of those bytes,</text>
+        <text x="40" y="538" class="s-sub">one-to-one — not an abstraction.</text>
+
+        <!-- CIRCUIT -->
+        <g fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#c1)">
+          <path d="M736,145 A140,140 0 0,1 835,244"/>
+          <path d="M835,316 A140,140 0 0,1 736,415"/>
+          <path d="M664,415 A140,140 0 0,1 565,316"/>
+          <path d="M565,244 A140,140 0 0,1 664,145"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="3.5">
+          <circle cx="700" cy="140" r="26"/><circle cx="840" cy="280" r="26"/><circle cx="560" cy="280" r="26"/>
+        </g>
+        <circle cx="700" cy="420" r="26" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <g class="s-big" text-anchor="middle" style="fill:var(--line)"><text x="700" y="146">08</text><text x="840" y="286">09</text><text x="560" y="286">11</text></g>
+        <text x="700" y="426" text-anchor="middle" class="s-big" style="fill:var(--fast)">10</text>
+
+        <text x="700" y="78" text-anchor="middle" class="s-lab">fetch</text>
+        <text x="700" y="94" text-anchor="middle" class="s-sub">read the bytes the program counter</text>
+        <text x="700" y="108" text-anchor="middle" class="s-sub">points at, from cache or RAM</text>
+        <text x="880" y="266" class="s-lab">decode</text>
+        <text x="880" y="282" class="s-sub">control unit splits opcode</text>
+        <text x="880" y="296" class="s-sub">from operands</text>
+        <text x="700" y="466" text-anchor="middle" class="s-lab">execute</text>
+        <text x="700" y="482" text-anchor="middle" class="s-sub">the ALU adds, compares, moves, jumps</text>
+        <text x="700" y="496" text-anchor="middle" class="s-sub">and sets flags: zero, carry, overflow</text>
+        <text x="520" y="266" text-anchor="end" class="s-lab">write back</text>
+        <text x="520" y="282" text-anchor="end" class="s-sub">result into a register</text>
+        <text x="520" y="296" text-anchor="end" class="s-sub">or out to memory; program</text>
+        <text x="520" y="310" text-anchor="end" class="s-sub">counter moves on</text>
+
+        <text x="700" y="272" text-anchor="middle" class="s-note" font-size="13">one cycle</text>
+        <text x="700" y="290" text-anchor="middle" class="s-sub">~3 billion times a second</text>
+        <text x="700" y="304" text-anchor="middle" class="s-sub">one clock tick, one step</text>
+
+        <text x="370" y="534" class="s-lab" font-size="11">12 · How modern CPUs avoid waiting</text>
+        <text x="370" y="552" class="s-sub">Pipelining overlaps the four steps; superscalar cores run several at once; branch prediction guesses.</text>
+        <text x="370" y="570" class="s-haz" font-size="10.5">Spectre and Meltdown: speculation leaked memory across security boundaries, and the fixes cost speed.</text>
+
+        <!-- INSIDE THE CORE -->
+        <rect x="1070" y="60" width="300" height="512" fill="var(--z3)"/>
+        <text x="1086" y="84" class="s-zone" fill="var(--mute)">13 · Inside one core</text>
+        <rect x="1086" y="100" width="268" height="42" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="1098" y="118" class="s-lab" font-size="11">control unit</text>
+        <text x="1098" y="134" class="s-sub" font-size="10.5">decodes, then drives everything else</text>
+        <rect x="1086" y="156" width="120" height="112" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="1234" y="156" width="120" height="112" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <path d="M1210,212 L1230,212" stroke="var(--line)" stroke-width="2.5" fill="none" marker-start="url(#c1)" marker-end="url(#c1)"/>
+        <text x="1098" y="174" class="s-lab" font-size="11">registers</text>
+        <g class="s-mono" font-size="10"><text x="1098" y="194">R1    5</text><text x="1098" y="210">R2    3</text><text x="1098" y="226">R3    8</text><text x="1098" y="242">PC    0x4006</text><text x="1098" y="258">FLAGS Z0 C0</text></g>
+        <text x="1246" y="174" class="s-lab" font-size="11">ALU</text>
+        <text x="1246" y="192" class="s-sub" font-size="10.5">arithmetic and</text>
+        <text x="1246" y="206" class="s-sub" font-size="10.5">logic unit</text>
+        <text x="1294" y="248" text-anchor="middle" class="s-big" font-size="26" style="fill:var(--line)">+</text>
+        <g>
+          <rect x="1086" y="284" width="268" height="26" fill="var(--z1)" stroke="var(--rule)"/>
+          <rect x="1086" y="316" width="268" height="26" fill="var(--z1)" stroke="var(--rule)"/>
+          <rect x="1086" y="348" width="268" height="26" fill="var(--z1)" stroke="var(--rule)"/>
+          <rect x="1086" y="404" width="268" height="26" fill="var(--z4)" stroke="var(--fast)" stroke-width="1.5"/>
+        </g>
+        <g class="s-sub" font-size="10.5"><text x="1098" y="301">L1 · ~1 ns · per core</text><text x="1098" y="333">L2 · ~4 ns · per core</text><text x="1098" y="365">L3 · ~40 ns · shared</text><text x="1098" y="421">RAM · ~100 ns · outside the chip</text></g>
+        <path d="M1220,376 L1220,400" stroke="var(--fast)" stroke-width="2.5" fill="none" marker-end="url(#c2)"/>
+        <text x="1230" y="393" class="s-sub" font-size="10">memory bus</text>
+        <text x="1086" y="456" class="s-lab" font-size="11">"Add two numbers", really</text>
+        <g class="s-mono" font-size="10">
+          <text x="1086" y="476">LOAD  R1, [A]    ~1 ns</text>
+          <text x="1086" y="492">LOAD  R2, [B]</text>
+          <text x="1086" y="508">ADD   R3, R1, R2 ~0.3 ns</text>
+          <text x="1086" y="524">STORE [C], R3</text>
+        </g>
+        <text x="1086" y="546" class="s-sub">Memory is only loaded from and stored</text>
+        <text x="1086" y="560" class="s-sub">to. The work happens in registers.</text>
+
+        <!-- BOTTOM: ONE BYTE -->
+        <rect x="30" y="596" width="440" height="244" fill="var(--z1)"/>
+        <text x="46" y="620" class="s-zone" fill="var(--line)">14 · One byte, three meanings</text>
+        <g stroke="var(--line)" stroke-width="1.5">
+          <rect x="46" y="632" width="36" height="34" fill="var(--paper)"/><rect x="86" y="632" width="36" height="34" fill="var(--line)" opacity=".85"/><rect x="126" y="632" width="36" height="34" fill="var(--paper)"/><rect x="166" y="632" width="36" height="34" fill="var(--paper)"/>
+          <rect x="206" y="632" width="36" height="34" fill="var(--paper)"/><rect x="246" y="632" width="36" height="34" fill="var(--paper)"/><rect x="286" y="632" width="36" height="34" fill="var(--paper)"/><rect x="326" y="632" width="36" height="34" fill="var(--line)" opacity=".85"/>
+        </g>
+        <g class="s-mono" font-size="13" text-anchor="middle"><text x="64" y="654">0</text><text x="104" y="654" fill="var(--paper)">1</text><text x="144" y="654">0</text><text x="184" y="654">0</text><text x="224" y="654">0</text><text x="264" y="654">0</text><text x="304" y="654">0</text><text x="344" y="654" fill="var(--paper)">1</text></g>
+        <text x="376" y="654" class="s-sub">8 bits</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="46" y="692">read as an integer   → 65</text>
+          <text x="46" y="708">read as ASCII text   → 'A'</text>
+          <text x="46" y="724">read by the CPU      → part of an instruction</text>
+        </g>
+        <text x="46" y="752" class="s-note">A file has no inherent type.</text>
+        <text x="46" y="768" class="s-sub">A .jpg is bytes image software agreed to read as pixels.</text>
+        <text x="46" y="782" class="s-sub">Garbled names are encoding mismatches, not corruption.</text>
+        <text x="46" y="808" class="s-mono" font-size="10">0011 = 3 · 1010 = 10 · 11111111 = 255, one byte</text>
+
+        <!-- BOTTOM: PORTABILITY -->
+        <rect x="490" y="596" width="440" height="244" fill="var(--z2)"/>
+        <text x="506" y="620" class="s-zone" fill="var(--mute)">15 · Tied to one instruction set</text>
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="506" y="634" width="130" height="42"/><rect x="646" y="634" width="130" height="42"/><rect x="786" y="634" width="128" height="42"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="516" y="652">x86-64</text><text x="656" y="652">ARM64</text><text x="796" y="652">RISC-V</text></g>
+        <g class="s-sub" font-size="10"><text x="516" y="668">Intel · AMD · clouds</text><text x="656" y="668">Apple M · phones</text><text x="796" y="668">open specification</text></g>
+        <text x="506" y="700" class="s-sub">The same bytes mean different things on each. An image</text>
+        <text x="506" y="714" class="s-sub">built on an M1 Mac will not run on an x86 server unaided;</text>
+        <text x="506" y="728" class="s-sub">Rosetta 2 translated x86 apps to ARM ahead of time.</text>
+        <text x="506" y="754" class="s-lab" font-size="11">The portability ladder</text>
+        <g class="s-mono" font-size="10">
+          <text x="506" y="772">machine code  fastest, one architecture</text>
+          <text x="506" y="788">bytecode      portable, needs a VM (JVM, CPython)</text>
+          <text x="506" y="804">interpreted   no build step, slowest</text>
+          <text x="506" y="820">WebAssembly   portable, sandboxed binary</text>
+        </g>
+
+        <!-- BOTTOM: DATA BECOMES CODE -->
+        <rect x="950" y="596" width="420" height="244" fill="var(--z5)"/>
+        <text x="966" y="620" class="s-zone" fill="var(--hazard)">16 · When data becomes code</text>
+        <text x="966" y="644" class="s-sub">The CPU does not know bytes are instructions: it runs</text>
+        <text x="966" y="658" class="s-sub">whatever the instruction pointer points at. Classic buffer</text>
+        <text x="966" y="672" class="s-sub">overflows wrote code into a data buffer and jumped to it.</text>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="1.5">
+          <rect x="966" y="686" width="124" height="42"/><rect x="1100" y="686" width="124" height="42"/><rect x="1234" y="686" width="122" height="42"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="976" y="704">DEP / NX</text><text x="1110" y="704">ASLR</text><text x="1244" y="704">stack canaries</text></g>
+        <g class="s-sub" font-size="10"><text x="976" y="720">data can't execute</text><text x="1110" y="720">random addresses</text><text x="1244" y="720">tripwire on return</text></g>
+        <text x="966" y="754" class="s-haz" font-size="10.5">A compromised compiler emits compromised machine code</text>
+        <text x="966" y="768" class="s-sub">from perfectly innocent-looking source.</text>
+        <text x="966" y="792" class="s-sub">Shipping binaries hides nothing: decompilers are very good.</text>
+        <text x="966" y="816" class="s-note">Understand machine code; almost never write it.</text>
+      </svg>
+    </div>
+    <figcaption><b>Follow the 8 down the left column and around the circle.</b> Four human-readable characters become eight bytes, the loader places them in RAM, and the CPU spends one fetch–decode–execute–write-back cycle per instruction. Everything a computer does — browsers, databases, neural networks — is built from these four steps.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the toolchain and the cycle</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Source</h4><p>What a human writes. Python, JavaScript and Java all start here; whether they reach machine code by compiler, VM or JIT is a later decision.</p></div>
+      <div><h4><span>02</span>Parser</h4><p>Turns text into an abstract syntax tree — the structure of the program, with the spelling thrown away.</p></div>
+      <div><h4><span>03</span>Compiler</h4><p>Turns the tree into instructions for one CPU family. Register allocation — deciding which values earn a register — is among its biggest optimisations.</p></div>
+      <div><h4><span>04</span>Assembler</h4><p>Maps each mnemonic to its bytes: "MOV eax, 5" is B8 05 00 00 00, "RET" is C3. An opcode says what to do; operands say to what.</p></div>
+      <div><h4><span>05</span>Linker</h4><p>Combines object files and libraries into one executable in the platform's format: ELF on Linux, PE on Windows, Mach-O on macOS.</p></div>
+      <div><h4><span>06</span>Loader</h4><p>The operating system maps the executable into memory and marks which pages may execute. That marking is a security control, not bookkeeping.</p></div>
+      <div><h4><span>07</span>CPU</h4><p>The only component that decides anything. RAM and disks store, networks transport; the CPU reads instructions from memory, which is what makes a machine reprogrammable rather than rebuilt.</p></div>
+      <div><h4><span>08</span>Fetch</h4><p>Read the instruction at the program counter — from L1 if lucky, from RAM if not, stalling ~300 cycles on a full miss.</p></div>
+      <div><h4><span>09</span>Decode</h4><p>The control unit works out the opcode and operands and sets up the path the data will take through the core.</p></div>
+      <div><h4><span>10</span>Execute</h4><p>The ALU performs one operation — add, compare, move, jump — and updates flags that the next instruction may test.</p></div>
+      <div><h4><span>11</span>Write back</h4><p>The result lands in a register or memory, and the program counter advances. Then the clock ticks and the circuit runs again.</p></div>
+      <div><h4><span>12</span>Speculation</h4><p>Pipelining, superscalar execution and branch prediction keep the core busy instead of waiting. Spectre and Meltdown turned that guessing into a way to read memory across boundaries.</p></div>
+      <div><h4><span>13</span>Registers and ALU</h4><p>All real work happens between registers: load, load, add, store. Memory is only a place values are loaded from and stored back to.</p></div>
+      <div><h4><span>14</span>Interpretation</h4><p>01000001 is 65, or 'A', or part of an instruction, depending entirely on what reads it. Type is convention, never a property of the bytes.</p></div>
+      <div><h4><span>15</span>Instruction set architecture</h4><p>x86-64, ARM64, RISC-V: each defines its own registers and encodings. Machine code does not cross between them without recompiling or translating.</p></div>
+      <div><h4><span>16</span>DEP, ASLR, canaries</h4><p>Three defences against one property — the CPU cannot tell data from code. Non-executable data pages, randomised addresses, and a tripwire value that detects an overwritten stack.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — FEW MINDS, MANY HANDS ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>Few Minds, Many Hands</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · GPU · CPU · RAM</span>
+  </div>
+  <p class="thesis">Two processors opened side by side. The CPU spends its silicon on cleverness — prediction, reordering, big caches — so a handful of cores can handle anything. The GPU spends it on count. <strong>A GPU is fast only when the same operation is applied to thousands of independent items at once; for everything else, including the copy to reach it, the CPU wins.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 840" role="img" aria-label="Cutaway of a CPU on the left with eight large cores, each labelled with branch predictor, out-of-order execution and its own L1 and L2 cache, above a shared L3 cache. Cutaway of a GPU on the right as a dense grid of thousands of tiny cores above its own VRAM. Between them, the PCIe bus with one arrow copying input from system RAM to VRAM and one copying results back, marked as a real cost. Middle left, the SIMT model: eight data elements, eight cores running the same kernel, eight results, and why branching wastes half the work. Middle right, workloads where a GPU wins and where it hurts, the accelerator ladder, and cost. Along the bottom, one AI inference request as a line: tokenise on the CPU, copy to VRAM, run the model, copy back, decode on the CPU, with a note on batching.">
+        <defs>
+          <marker id="p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- CPU DIE -->
+        <text x="40" y="56" class="s-zone" fill="var(--line)">01 · The CPU — 8 to 64 cores, each very smart</text>
+        <rect x="40" y="70" width="476" height="300" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="60" y="84" width="100" height="100"/><rect x="172" y="84" width="100" height="100"/><rect x="284" y="84" width="100" height="100"/><rect x="396" y="84" width="100" height="100"/>
+          <rect x="60" y="196" width="100" height="100"/><rect x="172" y="196" width="100" height="100"/><rect x="284" y="196" width="100" height="100"/><rect x="396" y="196" width="100" height="100"/>
+        </g>
+        <g class="s-lab" font-size="11">
+          <text x="70" y="106">core 0</text><text x="182" y="106">core 1</text><text x="294" y="106">core 2</text><text x="406" y="106">core 3</text>
+          <text x="70" y="218">core 4</text><text x="182" y="218">core 5</text><text x="294" y="218">core 6</text><text x="406" y="218">core 7</text>
+        </g>
+        <g class="s-sub" font-size="9.5">
+          <text x="70" y="126">branch predictor</text><text x="70" y="140">out-of-order</text><text x="70" y="154">L1 + L2 cache</text>
+          <text x="182" y="126">branch predictor</text><text x="182" y="140">out-of-order</text><text x="182" y="154">L1 + L2 cache</text>
+          <text x="294" y="126">branch predictor</text><text x="294" y="140">out-of-order</text><text x="294" y="154">L1 + L2 cache</text>
+          <text x="406" y="126">branch predictor</text><text x="406" y="140">out-of-order</text><text x="406" y="154">L1 + L2 cache</text>
+          <text x="70" y="238">branch predictor</text><text x="70" y="252">out-of-order</text><text x="70" y="266">L1 + L2 cache</text>
+          <text x="182" y="238">branch predictor</text><text x="182" y="252">out-of-order</text><text x="182" y="266">L1 + L2 cache</text>
+          <text x="294" y="238">branch predictor</text><text x="294" y="252">out-of-order</text><text x="294" y="266">L1 + L2 cache</text>
+          <text x="406" y="238">branch predictor</text><text x="406" y="252">out-of-order</text><text x="406" y="266">L1 + L2 cache</text>
+        </g>
+        <rect x="60" y="312" width="436" height="42" fill="var(--z2)" stroke="var(--rule)"/>
+        <text x="72" y="331" class="s-lab" font-size="11">02 · L3 cache — shared by every core</text>
+        <text x="72" y="346" class="s-sub" font-size="10">8–64 MB, keeps irregular memory access tolerable</text>
+        <text x="40" y="398" class="s-sub">Few cores, big caches, deep prediction: built for branching logic.</text>
+
+        <!-- PCIe -->
+        <text x="700" y="104" text-anchor="middle" class="s-sub">PCIe · or unified memory on Apple Silicon</text>
+        <text x="700" y="158" text-anchor="middle" class="s-lab" font-size="11">03 · copy the input: RAM → VRAM</text>
+        <path d="M526,170 L874,170" stroke="var(--fast)" stroke-width="4" fill="none" marker-end="url(#p2)"/>
+        <text x="700" y="214" text-anchor="middle" class="s-haz">the copy is a real cost</text>
+        <text x="700" y="232" text-anchor="middle" class="s-sub" style="fill:var(--hazard)">and the usual reason GPU code disappoints</text>
+        <path d="M874,270 L526,270" stroke="var(--fast)" stroke-width="4" fill="none" marker-end="url(#p2)"/>
+        <text x="700" y="292" text-anchor="middle" class="s-lab" font-size="11">copy the result back: VRAM → RAM</text>
+        <text x="700" y="338" text-anchor="middle" class="s-sub">small job? the two copies can cost</text>
+        <text x="700" y="352" text-anchor="middle" class="s-sub">more than the computation saves</text>
+
+        <!-- GPU DIE -->
+        <text x="880" y="56" class="s-zone" fill="var(--fast)">04 · The GPU — 5,000 to 20,000 simple cores</text>
+        <rect x="880" y="70" width="480" height="300" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g stroke="var(--fast)" stroke-width="10" stroke-dasharray="10 4" opacity=".55">
+          <line x1="900" y1="96" x2="1340" y2="96"/><line x1="900" y1="110" x2="1340" y2="110"/><line x1="900" y1="124" x2="1340" y2="124"/><line x1="900" y1="138" x2="1340" y2="138"/>
+          <line x1="900" y1="166" x2="1340" y2="166"/><line x1="900" y1="180" x2="1340" y2="180"/><line x1="900" y1="194" x2="1340" y2="194"/><line x1="900" y1="208" x2="1340" y2="208"/>
+          <line x1="900" y1="222" x2="1340" y2="222"/><line x1="900" y1="236" x2="1340" y2="236"/><line x1="900" y1="250" x2="1340" y2="250"/><line x1="900" y1="264" x2="1340" y2="264"/>
+        </g>
+        <line x1="900" y1="152" x2="1340" y2="152" stroke="var(--line)" stroke-width="10" stroke-dasharray="10 4"/>
+        <text x="900" y="290" class="s-sub" font-size="10.5">teal row = one group of threads running in lockstep</text>
+        <rect x="900" y="312" width="440" height="42" fill="var(--z5)" stroke="var(--fast)" stroke-width="1.5"/>
+        <text x="912" y="331" class="s-lab" font-size="11">05 · VRAM — separate, scarce, very high bandwidth</text>
+        <text x="912" y="346" class="s-sub" font-size="10">usually the binding limit on model size: "CUDA out of memory"</text>
+        <text x="880" y="398" class="s-sub">Cleverness traded for count, plus very high memory bandwidth.</text>
+
+        <!-- SIMT -->
+        <rect x="30" y="428" width="660" height="228" fill="var(--z3)"/>
+        <text x="46" y="452" class="s-zone" fill="var(--mute)">06 · SIMT — one kernel, every element at once</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="46" y="466" width="54" height="26"/><rect x="112" y="466" width="54" height="26"/><rect x="178" y="466" width="54" height="26"/><rect x="244" y="466" width="54" height="26"/>
+          <rect x="310" y="466" width="54" height="26"/><rect x="376" y="466" width="54" height="26"/><rect x="442" y="466" width="54" height="26"/><rect x="508" y="466" width="54" height="26"/>
+          <rect x="46" y="568" width="54" height="26"/><rect x="112" y="568" width="54" height="26"/><rect x="178" y="568" width="54" height="26"/><rect x="244" y="568" width="54" height="26"/>
+          <rect x="310" y="568" width="54" height="26"/><rect x="376" y="568" width="54" height="26"/><rect x="442" y="568" width="54" height="26"/><rect x="508" y="568" width="54" height="26"/>
+        </g>
+        <g fill="var(--z4)" stroke="var(--fast)" stroke-width="2">
+          <circle cx="73" cy="530" r="15"/><circle cx="139" cy="530" r="15"/><circle cx="205" cy="530" r="15"/><circle cx="271" cy="530" r="15"/>
+          <circle cx="337" cy="530" r="15"/><circle cx="403" cy="530" r="15"/><circle cx="469" cy="530" r="15"/><circle cx="535" cy="530" r="15"/>
+        </g>
+        <g class="s-mono" font-size="10" text-anchor="middle">
+          <text x="73" y="483">a1</text><text x="139" y="483">a2</text><text x="205" y="483">a3</text><text x="271" y="483">a4</text><text x="337" y="483">a5</text><text x="403" y="483">a6</text><text x="469" y="483">…</text><text x="535" y="483">a20000</text>
+          <text x="73" y="534">c1</text><text x="139" y="534">c2</text><text x="205" y="534">c3</text><text x="271" y="534">c4</text><text x="337" y="534">c5</text><text x="403" y="534">c6</text><text x="469" y="534">…</text><text x="535" y="534" font-size="8">c20k</text>
+          <text x="73" y="585">r1</text><text x="139" y="585">r2</text><text x="205" y="585">r3</text><text x="271" y="585">r4</text><text x="337" y="585">r5</text><text x="403" y="585">r6</text><text x="469" y="585">…</text><text x="535" y="585">r20000</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none" marker-end="url(#p1)">
+          <path d="M73,494 L73,512"/><path d="M139,494 L139,512"/><path d="M205,494 L205,512"/><path d="M271,494 L271,512"/><path d="M337,494 L337,512"/><path d="M403,494 L403,512"/><path d="M535,494 L535,512"/>
+          <path d="M73,546 L73,564"/><path d="M139,546 L139,564"/><path d="M205,546 L205,564"/><path d="M271,546 L271,564"/><path d="M337,546 L337,564"/><path d="M403,546 L403,564"/><path d="M535,546 L535,564"/>
+        </g>
+        <g class="s-sub" font-size="10.5"><text x="578" y="484">data in VRAM</text><text x="578" y="534">same kernel</text><text x="578" y="586">results</text></g>
+        <text x="46" y="620" class="s-sub">Single Instruction, Multiple Threads: one small program, the kernel, runs on every slice.</text>
+        <text x="46" y="642" class="s-haz" font-size="10.5">07 · Threads in a group move in lockstep — take different branches of an if, and both paths run.</text>
+
+        <!-- WINS / HURTS -->
+        <rect x="710" y="428" width="660" height="228" fill="var(--z2)"/>
+        <text x="726" y="452" class="s-zone" fill="var(--mute)">A few mathematicians, or 20,000 children</text>
+        <text x="726" y="482" class="s-lab" font-size="11" style="fill:var(--line)">08 · a GPU wins</text>
+        <text x="1046" y="482" class="s-lab" font-size="11" style="fill:var(--hazard)">09 · a GPU hurts</text>
+        <g class="s-sub">
+          <text x="726" y="500">model training and inference</text><text x="726" y="516">image and video processing</text><text x="726" y="532">scientific simulation</text><text x="726" y="548">large matrix maths</text>
+          <text x="1046" y="500">sequential or branching logic</text><text x="1046" y="516">small data: the copy dominates</text><text x="1046" y="532">I/O-bound web applications</text><text x="1046" y="548">a model that already fits a CPU</text>
+        </g>
+        <text x="726" y="578" class="s-lab" font-size="11">10 · The accelerator ladder</text>
+        <text x="726" y="596" class="s-mono" font-size="10.5">CPU → GPU → TPU → NPU → FPGA / ASIC</text>
+        <text x="726" y="612" class="s-sub">general-purpose on the left, one fixed job on the right</text>
+        <text x="726" y="640" class="s-note" font-size="11">Cloud GPUs cost 10–40× a CPU instance — an idle one is a space heater.</text>
+
+        <!-- INFERENCE LINE -->
+        <rect x="30" y="676" width="200" height="130" fill="var(--z1)"/>
+        <rect x="230" y="676" width="260" height="130" fill="var(--z3)"/>
+        <rect x="490" y="676" width="260" height="130" fill="var(--z4)"/>
+        <rect x="750" y="676" width="260" height="130" fill="var(--z3)"/>
+        <rect x="1010" y="676" width="360" height="130" fill="var(--z1)"/>
+        <g class="s-zone" fill="var(--mute)"><text x="46" y="698">CPU</text><text x="246" y="698">PCIe</text><text x="506" y="698">GPU + VRAM</text><text x="766" y="698">PCIe</text><text x="1026" y="698">CPU</text></g>
+        <line x1="70" y1="730" x2="1330" y2="730" stroke="var(--line)" stroke-width="6" marker-end="url(#p1)"/>
+        <g class="st"><circle cx="110" cy="730" r="9"/><circle cx="1140" cy="730" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"><circle cx="360" cy="730" r="11"/><circle cx="880" cy="730" r="11"/></g>
+        <circle cx="620" cy="730" r="13" fill="var(--paper)" stroke="var(--line)" stroke-width="3.5"/>
+        <g class="s-num"><text x="100" y="762">11</text><text x="350" y="762">12</text><text x="610" y="762">13</text><text x="870" y="762">14</text><text x="1130" y="762">15</text></g>
+        <g class="s-lab" font-size="11"><text x="100" y="778">tokenise</text><text x="350" y="778">copy to VRAM</text><text x="610" y="778">run the model</text><text x="870" y="778">copy back to RAM</text><text x="1130" y="778">decode, respond</text></g>
+        <g class="s-sub" font-size="10.5"><text x="100" y="794">request → tensor</text><text x="350" y="794">over PCIe — pure cost</text><text x="610" y="794">cores multiply matrices</text><text x="870" y="794">output tensor returns</text><text x="1130" y="794">tokens → HTTP response</text></g>
+        <text x="40" y="830" class="s-note">16 · Batch before the GPU: 32 inputs processed together cost barely more than one — unbatched serving wastes most of the hardware.</text>
+      </svg>
+    </div>
+    <figcaption><b>The CPU stays in charge.</b> It prepares data, copies it across, waits, and copies the answer home. So "GPU utilisation is low" usually means the CPU-side pipeline is the bottleneck, and "the GPU version is slower" usually means the job was too small to repay two trips across the bus.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the two processors and the bus between them</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>CPU core</h4><p>A powerful, general core with branch prediction, out-of-order execution and its own cache. Typically 4–64 of them. Unbeatable at sequential, branching logic.</p></div>
+      <div><h4><span>02</span>Shared L3</h4><p>Megabytes of cache every core can use. Large caches are why a CPU copes with irregular memory access that would cripple a GPU.</p></div>
+      <div><h4><span>03</span>The copy</h4><p>Data must travel from system RAM to VRAM over PCIe, and results must travel back. Ignoring this is the most common reason GPU code is slower than expected.</p></div>
+      <div><h4><span>04</span>GPU cores</h4><p>Thousands of simple cores with weak prediction and tiny caches. Each is far dumber than a CPU core; together they do one thing twenty thousand times at once.</p></div>
+      <div><h4><span>05</span>VRAM</h4><p>The GPU's own memory: separate from system RAM, much faster to feed the cores, and scarce. It is usually what limits the model, not compute speed.</p></div>
+      <div><h4><span>06</span>Kernel and SIMT</h4><p>A small function executed by every GPU thread on its own element. Single Instruction, Multiple Threads — the shape of pixels, and of matrix multiplication.</p></div>
+      <div><h4><span>07</span>Branch divergence</h4><p>Threads in one group run in lockstep. If they disagree about an if, the hardware runs both paths and throws half away. Branching costs a GPU what it never costs a CPU.</p></div>
+      <div><h4><span>08</span>Parallel-shaped work</h4><p>Training and inference, video encoding, image processing, simulation. Many independent multiply-adds with no conversation between them.</p></div>
+      <div><h4><span>09</span>Wrong-shaped work</h4><p>Branch-heavy code, small datasets, and I/O-bound services — which describes almost every ordinary web application. A GPU adds cost and latency there.</p></div>
+      <div><h4><span>10</span>Other accelerators</h4><p>TPUs for tensor operations, NPUs in phones and laptops, FPGAs and ASICs for one fixed job. Faster and less flexible the further right you go.</p></div>
+      <div><h4><span>11</span>Tokenise on the CPU</h4><p>The API server receives the request and turns text into a tensor. Ordinary CPU work — and if it is slow, the GPU sits idle.</p></div>
+      <div><h4><span>12</span>Copy to VRAM</h4><p>The tensor crosses PCIe into GPU memory. No useful computation happens during the trip.</p></div>
+      <div><h4><span>13</span>Run the model</h4><p>Thousands of cores perform the matrix multiplications of every layer. The only step on the line that actually needs a GPU.</p></div>
+      <div><h4><span>14</span>Copy back</h4><p>The output tensor returns to system RAM, because the CPU cannot read VRAM directly on most machines.</p></div>
+      <div><h4><span>15</span>Decode and respond</h4><p>The CPU converts the output back into text and writes the HTTP response. The GPU never touched the network.</p></div>
+      <div><h4><span>16</span>Batching</h4><p>Grouping requests so the cores stay busy: 32 inputs together cost barely more than one. The main reason AI serving systems obsess over batch formation.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>An idle GPU is an expensive space heater</b>
+    <p>Rented GPUs cost 10–40× a comparable CPU instance, and a forgotten one is the single most common cloud cost disaster. VRAM is not reliably cleared between tenants on every platform either — on shared GPU hosting, assume the previous workload's data may still be there.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — THE TWO WORLDS ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>The Two Worlds</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Operating Systems · Kernel · User Space · System Calls</span>
+  </div>
+  <p class="thesis">One HTTP request, drawn as a line through three floors. Your code runs in user space with no access to hardware; the kernel runs with all of it; the CPU enforces the difference. <strong>Every real thing your program does — a byte read, a packet sent — is a system call, and every system call is a trip through a guarded gate that costs time and a copy.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="A transit map of one HTTP request through three horizontal bands: user space at the top, kernel space in the middle and hardware at the bottom, with a dashed system call gate between user and kernel space. The line starts at the network card, rises into the kernel through an interrupt, the network stack and the socket buffer, crosses the gate upward as read returns, runs through your code in user space, crosses down to send a database query, blocks in the kernel while the database answers, crosses up again with the reply, builds the response in user space, and crosses down one last time to write it out through the network card. Four gate crossings are marked. Below, three panels: the seven steps inside one crossing with an open, read, close example; the categories of system calls and how to make fewer crossings; and the gate as the kernel's attack surface, including containers sharing one kernel.">
+        <rect x="30" y="50" width="1340" height="180" fill="var(--z6)"/>
+        <rect x="30" y="230" width="1340" height="80" fill="var(--band)"/>
+        <rect x="30" y="310" width="1340" height="170" fill="var(--z1)"/>
+        <rect x="30" y="490" width="1340" height="60" fill="var(--z4)"/>
+        <g class="s-zone">
+          <text x="46" y="74" fill="var(--learn)">User space · ring 3</text>
+          <text x="46" y="334" fill="var(--line)">Kernel space · ring 0</text>
+          <text x="560" y="514" fill="var(--fast)">Hardware</text>
+        </g>
+        <line x1="30" y1="270" x2="1370" y2="270" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="10 7"/>
+        <text x="46" y="292" class="s-haz" font-size="10.5">the gate · system calls only</text>
+        <text x="46" y="570" class="s-haz" font-size="10.5">four crossings for one request — each ~100 ns to 1 µs, each with a copy</text>
+
+        <path d="M80,520 L80,410 L480,410 L480,130 L800,130 L800,410 L1040,410 L1040,130 L1330,130 L1330,520" fill="none" stroke="var(--line)" stroke-width="7" stroke-linejoin="round"/>
+        <path d="M800,418 L800,520" fill="none" stroke="var(--line)" stroke-width="3.5" stroke-dasharray="8 6"/>
+        <g class="st">
+          <circle cx="80" cy="520" r="9"/><circle cx="80" cy="410" r="9"/><circle cx="230" cy="410" r="9"/><circle cx="380" cy="410" r="9"/>
+          <circle cx="640" cy="130" r="9"/><circle cx="800" cy="410" r="9"/><circle cx="940" cy="410" r="9"/><circle cx="1180" cy="130" r="9"/><circle cx="1330" cy="520" r="9"/>
+        </g>
+        <circle cx="800" cy="520" r="6" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3.5">
+          <circle cx="480" cy="270" r="13"/><circle cx="800" cy="270" r="13"/><circle cx="1040" cy="270" r="13"/><circle cx="1330" cy="270" r="13"/>
+        </g>
+
+        <text x="96" y="510" class="s-num">01</text>
+        <text x="120" y="510" class="s-lab" font-size="11">network card</text>
+        <text x="96" y="530" class="s-sub" font-size="10.5">a packet for port 443</text>
+
+        <g class="s-num"><text x="60" y="436">02</text><text x="210" y="436">03</text><text x="360" y="436">04</text></g>
+        <g class="s-lab" font-size="11"><text x="60" y="452">interrupt</text><text x="210" y="452">network stack</text><text x="360" y="452">socket buffer</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="60" y="466">the CPU switches</text><text x="60" y="478">to kernel mode</text>
+          <text x="210" y="466">TCP/IP reassembles</text><text x="210" y="478">the bytes</text>
+          <text x="360" y="466">your blocked thread</text><text x="360" y="478">is made READY</text>
+        </g>
+
+        <text x="498" y="244" class="s-lab" font-size="11">05 · read() returns</text>
+        <text x="498" y="258" class="s-sub" font-size="10.5">bytes copied into your buffer</text>
+
+        <text x="640" y="84" text-anchor="middle" class="s-lab">06 · your code</text>
+        <text x="640" y="100" text-anchor="middle" class="s-sub">routing, validation, business logic</text>
+        <text x="640" y="114" text-anchor="middle" class="s-sub">no kernel involved — full speed</text>
+
+        <text x="818" y="244" class="s-lab" font-size="11">07 · send() the query</text>
+        <text x="818" y="258" class="s-sub" font-size="10.5">down through the gate again</text>
+
+        <text x="816" y="436" class="s-lab" font-size="11">08 · packet out</text>
+        <text x="816" y="452" class="s-sub" font-size="10.5">thread BLOCKED — no</text>
+        <text x="816" y="466" class="s-sub" font-size="10.5">CPU used while waiting</text>
+        <text x="816" y="530" class="s-sub" font-size="10.5">to the database, over the network</text>
+
+        <text x="880" y="370" class="s-lab" font-size="11">09 · reply arrives</text>
+        <text x="880" y="384" class="s-sub" font-size="10.5">~5 ms later → READY</text>
+
+        <text x="1058" y="244" class="s-lab" font-size="11">10 · read() returns</text>
+        <text x="1058" y="258" class="s-sub" font-size="10.5">the reply copied up</text>
+
+        <text x="1180" y="84" text-anchor="middle" class="s-lab">11 · build the response</text>
+        <text x="1180" y="100" text-anchor="middle" class="s-sub">serialise JSON, still no kernel</text>
+
+        <text x="1312" y="292" text-anchor="end" class="s-lab" font-size="11">12 · write() the response</text>
+        <text x="1312" y="306" text-anchor="end" class="s-sub" font-size="10.5">down one last time</text>
+        <text x="1312" y="512" text-anchor="end" class="s-lab" font-size="11">13 · NIC transmits</text>
+        <text x="1312" y="528" text-anchor="end" class="s-sub" font-size="10.5">the kernel sends it</text>
+
+        <!-- PANEL A -->
+        <rect x="30" y="580" width="530" height="264" fill="var(--z3)"/>
+        <text x="46" y="604" class="s-zone" fill="var(--mute)">14 · Inside one crossing</text>
+        <g class="s-num"><text x="46" y="628">1</text><text x="46" y="646">2</text><text x="46" y="664">3</text><text x="46" y="682">4</text><text x="46" y="700">5</text><text x="46" y="718">6</text><text x="46" y="736">7</text></g>
+        <g class="s-sub">
+          <text x="64" y="628">the program executes the syscall instruction, number in a register</text>
+          <text x="64" y="646">the CPU switches from user mode (ring 3) to kernel mode (ring 0)</text>
+          <text x="64" y="664">the kernel jumps to the handler from its table — never where you choose</text>
+          <text x="64" y="682">arguments and permissions are validated; user pointers are never trusted</text>
+          <text x="64" y="700">the operation runs in its subsystem: VFS, network stack, memory</text>
+          <text x="64" y="718">the result is copied back into user space</text>
+          <text x="64" y="736">the CPU returns to user mode with an fd, a byte count, or an error code</text>
+        </g>
+        <text x="46" y="764" class="s-lab" font-size="11">Reading config.json costs three crossings</text>
+        <g class="s-mono" font-size="10">
+          <text x="46" y="782">open("config.json")  syscall #2 → fd = 3</text>
+          <text x="46" y="798">read(3, buf, 4096)   syscall #0 → page cache hit, 4096 bytes</text>
+          <text x="46" y="814">close(3)             syscall #3 → descriptor released</text>
+        </g>
+        <text x="46" y="834" class="s-haz" font-size="10.5">Now do it per log line, per request, at 5,000 requests a second.</text>
+
+        <!-- PANEL B -->
+        <rect x="580" y="580" width="380" height="264" fill="var(--z2)"/>
+        <text x="596" y="604" class="s-zone" fill="var(--mute)">15 · What passes through</text>
+        <g class="s-lab" font-size="11"><text x="596" y="630">Files</text><text x="596" y="648">Processes</text><text x="596" y="666">Memory</text><text x="596" y="684">Network</text><text x="596" y="702">Time</text><text x="596" y="720">Sync</text></g>
+        <g class="s-mono" font-size="10">
+          <text x="680" y="630">open read write close stat</text><text x="680" y="648">fork execve wait exit kill</text><text x="680" y="666">mmap munmap brk</text>
+          <text x="680" y="684">socket bind listen accept send recv</text><text x="680" y="702">clock_gettime nanosleep</text><text x="680" y="720">futex poll epoll io_uring</text>
+        </g>
+        <text x="596" y="748" class="s-lab" font-size="11">Make fewer, larger crossings</text>
+        <text x="596" y="766" class="s-sub">One 64 KB write beats 64,000 one-byte writes</text>
+        <text x="596" y="780" class="s-sub">by orders of magnitude. Buffer your I/O.</text>
+        <text x="596" y="804" class="s-mono" font-size="10" style="fill:var(--line)">syscall → epoll / io_uring → vDSO → DPDK</text>
+        <text x="596" y="820" class="s-sub" font-size="10.5">one per op · many per crossing · none · bypass</text>
+
+        <!-- PANEL C -->
+        <rect x="980" y="580" width="390" height="264" fill="var(--z5)"/>
+        <text x="996" y="604" class="s-zone" fill="var(--hazard)">16 · The gate is the attack surface</text>
+        <text x="996" y="628" class="s-sub">Only the kernel touches hardware, enforced by the CPU's</text>
+        <text x="996" y="642" class="s-sub">privilege rings — not a convention code can talk past.</text>
+        <text x="996" y="666" class="s-lab" font-size="11">Containers share one kernel</text>
+        <text x="996" y="682" class="s-sub">Namespaces hide, cgroups limit — a kernel exploit</text>
+        <text x="996" y="696" class="s-sub">escapes all of them. Exit 137 is the OOM killer.</text>
+        <text x="996" y="720" class="s-lab" font-size="11">Monolithic or micro</text>
+        <text x="996" y="736" class="s-sub">Linux keeps drivers inside: fast, but one bug is fatal.</text>
+        <text x="996" y="750" class="s-sub">Microkernels such as seL4 and QNX are safer, and slower.</text>
+        <text x="996" y="776" class="s-haz" font-size="10.5">seccomp: allow only the syscalls a process needs.</text>
+        <text x="996" y="794" class="s-haz" font-size="10.5">Patch the kernel. Run as non-root.</text>
+        <text x="996" y="818" class="s-sub">Never solve an app problem in a kernel module —</text>
+        <text x="996" y="832" class="s-sub">in user space a crash is contained; there, it is not.</text>
+      </svg>
+    </div>
+    <figcaption><b>Count the red rings.</b> The CPU-heavy part of the request — station 06 — never touches the kernel at all; everything slow about it is waiting at stations 08 and 09 or paying at the four crossings. That is why a server can sit at 5% CPU and be saturated, and why Nginx uses epoll to learn about thousands of sockets in one call.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the journey and the gate</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Network card</h4><p>Hardware receives the packet. No user-space program can talk to it; only the kernel's driver can.</p></div>
+      <div><h4><span>02</span>Interrupt</h4><p>The device signals the CPU, which switches to kernel mode and runs the handler. One of three ways into the kernel, with system calls and exceptions.</p></div>
+      <div><h4><span>03</span>Network stack</h4><p>TCP/IP lives entirely in the kernel: reassembly, routing, sockets. High-throughput systems sometimes bypass it with DPDK or io_uring.</p></div>
+      <div><h4><span>04</span>Socket buffer</h4><p>Bytes wait here until the process asks. The thread that was blocked in accept() or read() becomes runnable.</p></div>
+      <div><h4><span>05</span>Crossing up</h4><p>read() returns: data is copied from kernel memory into your buffer and the CPU drops back to ring 3. Copying is pure overhead in I/O-heavy systems.</p></div>
+      <div><h4><span>06</span>User space</h4><p>Routing, validation, business logic. Ordinary computation needs no kernel and runs at full speed. Almost everything you write — even PostgreSQL, Docker and Kubernetes — lives here.</p></div>
+      <div><h4><span>07</span>Crossing down</h4><p>send() on the database socket. The program cannot choose where in the kernel it lands; the kernel does. That is what makes the gate safe.</p></div>
+      <div><h4><span>08</span>Blocked</h4><p>The packet leaves and the thread waits. A blocked thread consumes no CPU — which is why "slow" and "CPU-busy" are different problems.</p></div>
+      <div><h4><span>09</span>Reply arrives</h4><p>Another interrupt, another pass through the network stack, and the thread is made READY again, roughly 5 ms later.</p></div>
+      <div><h4><span>10</span>Crossing up again</h4><p>The reply is copied into user space. Two crossings already, and the response has not been written yet.</p></div>
+      <div><h4><span>11</span>Build the response</h4><p>Serialisation and templating: CPU work, still without the kernel. The only place where a faster language would help.</p></div>
+      <div><h4><span>12</span>Crossing down again</h4><p>write() hands the response to the kernel. Unbuffered, one write per chunk would multiply this crossing.</p></div>
+      <div><h4><span>13</span>Transmit</h4><p>The kernel's driver sends the packet. Every hardware effect of the request was performed by the kernel on your code's behalf.</p></div>
+      <div><h4><span>14</span>System call</h4><p>Number and arguments in registers, a privilege switch, validation, the work, a copy back, and a return value or error code such as EACCES, ENOENT or EAGAIN. Roughly 100 ns – 1 µs each.</p></div>
+      <div><h4><span>15</span>Batched interfaces</h4><p>epoll and io_uring service many operations per crossing; the vDSO answers clock_gettime without entering the kernel; DPDK and SPDK skip it for extreme throughput.</p></div>
+      <div><h4><span>16</span>Kernel as target</h4><p>A kernel bug defeats user permissions, process separation and container isolation at once. seccomp narrows the gate; patching keeps it shut; eBPF offers verified in-kernel code without writing a module.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Most production mysteries live below your code</b>
+    <p>A container dies with exit code 137: the kernel's OOM killer. Only 1024 connections open: the file descriptor limit. Works locally, fails in Docker: a different kernel, different limits, a different file system. Check what the operating system says before debugging the application.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — THE ADDRESS PLANT ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>The Address Plant</h2>
+    <span class="form">Process plant</span>
+    <span class="cov">Covers · Memory Management · RAM · User Space</span>
+  </div>
+  <p class="thesis">No process ever sees physical memory. Each is handed a private, clean, imaginary address space, and the kernel and the MMU quietly map it onto shared, fragmented RAM — in hardware, on every single access. <strong>Allocation is a promise, not a purchase: memory is only paid for when it is touched, and when the machine cannot pay, something is swapped or something is killed.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 850" role="img" aria-label="Top: two processes, A and B, each with the same virtual addresses 0x1000 to 0x4000. Their pages feed a page table and MMU box that translates them: A's 0x1000 to frame 7, B's 0x1000 to frame 2, A's 0x2000 to nothing yet, B's 0x3000 to swap. Physical RAM is drawn as ten 4 KB frames owned by the kernel, A, B and the page cache. A dashed line leads to a swap area on disk. Middle: a process line for malloc of one gigabyte — reserve the range, first write, page fault, map a 4 KB frame, write succeeds and repeats, then a decision when RAM runs out: keep the promise, swap to disk, or let the OOM killer end a process with exit code 137. Bottom: fork with copy-on-write, overcommit as a bet, and memory-safety defences.">
+        <defs>
+          <marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="m2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+        <text x="40" y="44" class="s-zone" fill="var(--line)">Two processes, one RAM · every address translated in hardware, on every access</text>
+
+        <!-- VIRTUAL SPACES -->
+        <text x="60" y="88" class="s-lab" font-size="11">01 · process A · virtual</text>
+        <text x="60" y="228" class="s-lab" font-size="11">01 · process B · virtual</text>
+        <g stroke-width="1.5">
+          <rect x="60" y="96" width="170" height="24" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="60" y="122" width="170" height="24" fill="var(--paper)" stroke="var(--mute)" stroke-dasharray="4 3"/>
+          <rect x="60" y="148" width="170" height="24" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="60" y="174" width="170" height="24" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="60" y="236" width="170" height="24" fill="var(--z6)" stroke="var(--learn)"/>
+          <rect x="60" y="262" width="170" height="24" fill="var(--z6)" stroke="var(--learn)"/>
+          <rect x="60" y="288" width="170" height="24" fill="var(--z5)" stroke="var(--fast)"/>
+          <rect x="60" y="314" width="170" height="24" fill="var(--paper)" stroke="var(--mute)" stroke-dasharray="4 3"/>
+        </g>
+        <g class="s-mono" font-size="10">
+          <text x="70" y="112">0x1000</text><text x="70" y="138">0x2000</text><text x="70" y="164">0x3000</text><text x="70" y="190">0x4000</text>
+          <text x="70" y="252">0x1000</text><text x="70" y="278">0x2000</text><text x="70" y="304">0x3000</text><text x="70" y="330">0x4000</text>
+        </g>
+        <g class="s-sub" font-size="10" text-anchor="end">
+          <text x="222" y="112">frame 7</text><text x="222" y="138">untouched</text><text x="222" y="164">frame 8</text><text x="222" y="190">frame 4</text>
+          <text x="222" y="252">frame 2</text><text x="222" y="278">frame 5</text><text x="222" y="304">on disk</text><text x="222" y="330">untouched</text>
+        </g>
+        <path d="M234,148 L474,190" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#m1)"/>
+        <path d="M234,288 L474,250" stroke="var(--learn)" stroke-width="2.5" fill="none" marker-end="url(#m2)"/>
+
+        <!-- MMU -->
+        <rect x="480" y="96" width="220" height="242" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="494" y="118" class="s-lab" font-size="11">02 · page tables</text>
+        <text x="494" y="134" class="s-sub" font-size="10.5">one per process, in the kernel</text>
+        <text x="494" y="156" class="s-lab" font-size="11">03 · MMU</text>
+        <text x="494" y="172" class="s-sub" font-size="10.5">translates every access</text>
+        <text x="494" y="194" class="s-lab" font-size="11">04 · TLB</text>
+        <text x="494" y="210" class="s-sub" font-size="10.5">caches recent translations</text>
+        <g class="s-mono" font-size="10">
+          <text x="494" y="236" fill="var(--line)">A 0x1000 → frame 7</text>
+          <text x="494" y="252" fill="var(--learn)">B 0x1000 → frame 2</text>
+          <text x="494" y="268">A 0x2000 → nothing yet</text>
+          <text x="494" y="284" fill="var(--fast)">B 0x3000 → swapped out</text>
+        </g>
+        <text x="494" y="310" class="s-note" font-size="10.5">same number, different memory</text>
+        <text x="494" y="326" class="s-sub" font-size="10.5">no mapping — nothing to bypass</text>
+
+        <!-- FRAMES -->
+        <text x="780" y="86" class="s-lab" font-size="11">05 · physical RAM · 4 KB frames</text>
+        <g stroke-width="1.5">
+          <rect x="780" y="96" width="180" height="22" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="780" y="120" width="180" height="22" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="780" y="144" width="180" height="22" fill="var(--z6)" stroke="var(--learn)"/>
+          <rect x="780" y="168" width="180" height="22" fill="var(--band)" stroke="var(--cool)"/>
+          <rect x="780" y="192" width="180" height="22" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="780" y="216" width="180" height="22" fill="var(--z6)" stroke="var(--learn)"/>
+          <rect x="780" y="240" width="180" height="22" fill="var(--band)" stroke="var(--cool)"/>
+          <rect x="780" y="264" width="180" height="22" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="780" y="288" width="180" height="22" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="780" y="312" width="180" height="22" fill="var(--paper)" stroke="var(--rule)"/>
+        </g>
+        <g class="s-mono" font-size="10">
+          <text x="790" y="111">0 · kernel</text><text x="790" y="135">1 · kernel</text><text x="790" y="159">2 · B 0x1000</text><text x="790" y="183">3 · page cache</text><text x="790" y="207">4 · A 0x4000</text>
+          <text x="790" y="231">5 · B 0x2000</text><text x="790" y="255">6 · page cache</text><text x="790" y="279">7 · A 0x1000</text><text x="790" y="303">8 · A 0x3000</text><text x="790" y="327">9 · free</text>
+        </g>
+        <path d="M704,236 L776,275" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#m1)"/>
+        <path d="M704,252 L776,155" stroke="var(--learn)" stroke-width="2.5" fill="none" marker-end="url(#m2)"/>
+        <path d="M704,284 C760,420 1000,420 1036,322" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="7 5" fill="none"/>
+
+        <rect x="1040" y="250" width="210" height="88" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="1052" y="272" class="s-lab" font-size="11">06 · swap, on disk</text>
+        <text x="1052" y="290" class="s-sub" font-size="10.5">holds B's 0x3000 now</text>
+        <text x="1052" y="304" class="s-sub" font-size="10.5">getting it back: a page</text>
+        <text x="1052" y="318" class="s-sub" font-size="10.5">fault plus a disk read</text>
+
+        <text x="1040" y="112" class="s-lab" font-size="11">Three jobs at once</text>
+        <text x="1040" y="130" class="s-sub">isolation — no process can name another's frames</text>
+        <text x="1040" y="146" class="s-sub">abstraction — a clean, contiguous space for all</text>
+        <text x="1040" y="162" class="s-sub">efficiency — RAM shared, reused, overcommitted</text>
+        <text x="1040" y="192" class="s-note" font-size="10.5">TLB hit: nearly free.</text>
+        <text x="1040" y="208" class="s-sub">Page fault: microseconds to milliseconds.</text>
+        <text x="1040" y="224" class="s-sub">Swap: about a thousand times slower than RAM.</text>
+
+        <!-- THE PROMISE LINE -->
+        <rect x="30" y="392" width="1340" height="246" fill="var(--z3)"/>
+        <text x="46" y="416" class="s-zone" fill="var(--mute)">The promise and the bill · malloc(1 GB) on Linux</text>
+        <line x1="60" y1="510" x2="1044" y2="510" stroke="var(--line)" stroke-width="6"/>
+        <line x1="1076" y1="510" x2="1230" y2="510" stroke="var(--line)" stroke-width="6"/>
+        <polygon points="1060,492 1078,510 1060,528 1042,510" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <g class="st"><circle cx="80" cy="510" r="9"/><circle cx="280" cy="510" r="9"/><circle cx="680" cy="510" r="9"/><circle cx="860" cy="510" r="9"/><circle cx="1230" cy="510" r="9"/></g>
+        <circle cx="480" cy="510" r="12" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <g class="s-num"><text x="60" y="452">07</text><text x="260" y="452">08</text><text x="460" y="452">09</text><text x="660" y="452">10</text><text x="840" y="452">11</text><text x="1040" y="452">12</text></g>
+        <g class="s-lab"><text x="60" y="468">malloc(1 GB)</text><text x="260" y="468">first write</text><text x="460" y="468">page fault</text><text x="660" y="468">4 KB frame mapped</text><text x="840" y="468">write succeeds</text></g>
+        <text x="1032" y="468" class="s-note">RAM left?</text>
+        <g class="s-sub">
+          <text x="60" y="484">a range reserved — no RAM</text><text x="260" y="484">to a page with no frame</text><text x="460" y="484">the MMU traps to the kernel</text><text x="660" y="484">page table updated, retry</text><text x="840" y="484">repeated per page touched</text>
+        </g>
+        <text x="1200" y="468" class="s-lab" font-size="11">yes — kept</text>
+        <text x="1200" y="484" class="s-sub" font-size="10.5">nobody noticed</text>
+        <path d="M1060,528 L1004,578" stroke="var(--fast)" stroke-width="3" stroke-dasharray="7 5" fill="none"/>
+        <path d="M1060,528 L1116,578" stroke="var(--hazard)" stroke-width="3" stroke-dasharray="7 5" fill="none"/>
+        <circle cx="1000" cy="586" r="9" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <circle cx="1120" cy="586" r="9" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <text x="984" y="584" text-anchor="end" class="s-note">no — swap</text>
+        <text x="984" y="600" text-anchor="end" class="s-sub">~1,000× slower: up, but useless</text>
+        <text x="1136" y="584" class="s-haz">no — the OOM killer</text>
+        <text x="1136" y="600" class="s-sub" style="fill:var(--hazard)">a process dies with exit 137</text>
+        <text x="46" y="626" class="s-sub">Allocation is a promise, cashed only when memory is touched — which is why malloc succeeds and the process still dies an hour later, somewhere else in the code.</text>
+
+        <!-- PANEL A: fork -->
+        <rect x="30" y="656" width="440" height="184" fill="var(--z1)"/>
+        <text x="46" y="680" class="s-zone" fill="var(--line)">13 · fork() and copy-on-write</text>
+        <rect x="46" y="696" width="96" height="34" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="46" y="770" width="96" height="34" fill="var(--paper)" stroke="var(--learn)" stroke-width="2"/>
+        <g class="s-lab" font-size="11"><text x="58" y="718">parent</text><text x="58" y="792">child</text></g>
+        <g stroke-width="1.5">
+          <rect x="184" y="692" width="90" height="22" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="184" y="718" width="90" height="22" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="184" y="744" width="90" height="22" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="184" y="782" width="90" height="22" fill="var(--z5)" stroke="var(--fast)"/>
+        </g>
+        <g class="s-mono" font-size="10"><text x="192" y="707">page 1</text><text x="192" y="733">page 2</text><text x="192" y="759">page 3</text><text x="192" y="797">page 2′</text></g>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none"><path d="M142,713 L184,703"/><path d="M142,713 L184,729"/><path d="M142,713 L184,755"/></g>
+        <g stroke="var(--learn)" stroke-width="1.5" fill="none" stroke-dasharray="4 3"><path d="M142,787 L184,703"/><path d="M142,787 L184,755"/><path d="M142,787 L184,793"/></g>
+        <g class="s-sub">
+          <text x="296" y="702">fork() shares every page</text><text x="296" y="716">read-only; a write copies</text><text x="296" y="730">just that one 4 KB page.</text>
+          <text x="296" y="770">Redis background saves,</text><text x="296" y="784">Gunicorn and Celery</text><text x="296" y="798">pre-forked workers.</text>
+        </g>
+        <text x="296" y="754" class="s-lab" font-size="11">Who relies on it</text>
+        <text x="296" y="824" class="s-note" font-size="10.5">a child in microseconds</text>
+
+        <!-- PANEL B: overcommit -->
+        <rect x="490" y="656" width="440" height="184" fill="var(--z2)"/>
+        <text x="506" y="680" class="s-zone" fill="var(--mute)">14 · Overcommit — the kernel's bet</text>
+        <rect x="506" y="696" width="400" height="22" fill="none" stroke="var(--line)" stroke-width="2" stroke-dasharray="6 4"/>
+        <rect x="506" y="726" width="250" height="22" fill="var(--line)" opacity=".85"/>
+        <text x="514" y="711" class="s-sub" font-size="10.5">memory promised to processes</text>
+        <text x="514" y="741" class="s-lab" font-size="10.5" style="fill:var(--paper)">physical RAM</text>
+        <text x="506" y="772" class="s-sub">Linux hands out more than it has, betting not every</text>
+        <text x="506" y="786" class="s-sub">process touches its full allocation. Usually right.</text>
+        <text x="506" y="810" class="s-haz" font-size="10.5">When wrong, the OOM killer picks a victim — in a</text>
+        <text x="506" y="824" class="s-haz" font-size="10.5">container, at its cgroup limit, not the machine's.</text>
+
+        <!-- PANEL C: safety -->
+        <rect x="950" y="656" width="420" height="184" fill="var(--z5)"/>
+        <text x="966" y="680" class="s-zone" fill="var(--hazard)">15 · When memory is not safe</text>
+        <text x="966" y="702" class="s-sub">Buffer overflows, use-after-free and double free are</text>
+        <text x="966" y="716" class="s-sub">still among the largest sources of serious bugs.</text>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="1.5">
+          <rect x="966" y="728" width="124" height="38"/><rect x="1100" y="728" width="124" height="38"/><rect x="1234" y="728" width="122" height="38"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="976" y="744">ASLR</text><text x="1110" y="744">DEP / NX</text><text x="1244" y="744">Rust</text></g>
+        <g class="s-sub" font-size="10"><text x="976" y="758">random addresses</text><text x="1110" y="758">data can't run</text><text x="1244" y="758">checked at compile</text></g>
+        <text x="966" y="790" class="s-haz" font-size="10.5">Secrets sit in RAM as plaintext while in use:</text>
+        <text x="966" y="804" class="s-haz" font-size="10.5">keep them brief, and out of core dumps and logs.</text>
+        <text x="966" y="826" class="s-sub">Spectre read across processes without any software bug.</text>
+      </svg>
+    </div>
+    <figcaption><b>Two pictures to keep.</b> Up top, isolation is not a permission check a clever process might dodge — B's 0x1000 simply has no path to A's frame. Down the middle, memory is lent on credit: the kernel says yes to malloc, pays page by page as memory is touched, and settles any shortfall with swap or with a kill.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the plant and its vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Virtual address space</h4><p>Each process's private map, starting at zero and apparently contiguous. Identical addresses in two processes point at entirely different physical pages.</p></div>
+      <div><h4><span>02</span>Page table</h4><p>The kernel's per-process mapping from virtual pages to physical frames. Consumes memory itself, and is swapped along with everything else on a process switch.</p></div>
+      <div><h4><span>03</span>MMU</h4><p>The memory management unit in the CPU performs translation on every access, in hardware. Without it, isolation could not be enforced at useful speed.</p></div>
+      <div><h4><span>04</span>TLB</h4><p>A small cache of recent translations. A hit makes translation nearly free; flushing it on a process switch is part of why those switches cost more.</p></div>
+      <div><h4><span>05</span>Frame</h4><p>A 4 KB slice of physical RAM. Frames are shared, reused and fragmented; free ones are lent to the page cache until a process wants them.</p></div>
+      <div><h4><span>06</span>Swap</h4><p>Disk space holding pages evicted from RAM. An emergency exit, not extra memory: a swapping application is effectively down while still appearing alive.</p></div>
+      <div><h4><span>07</span>Reservation</h4><p>malloc or mmap reserves an address range and returns immediately. No physical RAM is used yet.</p></div>
+      <div><h4><span>08</span>First touch</h4><p>The program writes to a page that has no frame behind it. This, not the allocation, is when memory is actually consumed.</p></div>
+      <div><h4><span>09</span>Page fault</h4><p>The MMU cannot translate and traps to the kernel, which allocates a frame, loads the page from disk, or kills the process for an invalid access — a segmentation fault.</p></div>
+      <div><h4><span>10</span>Mapping</h4><p>The kernel installs one 4 KB frame in the page table and retries the instruction. The program never sees any of it.</p></div>
+      <div><h4><span>11</span>Lazy allocation</h4><p>Repeated page by page, only for pages actually touched. A 1 GB allocation that writes 10 MB costs 10 MB.</p></div>
+      <div><h4><span>12</span>Out of RAM</h4><p>When touched memory exceeds physical RAM, the kernel swaps pages out or the OOM killer terminates a process. Exit code 137 is that decision, not an application crash.</p></div>
+      <div><h4><span>13</span>Copy-on-write</h4><p>fork() gives the child the parent's pages read-only and copies a page only when either side writes. How Redis snapshots and pre-forked workers start in microseconds.</p></div>
+      <div><h4><span>14</span>Overcommit</h4><p>Promising more memory than exists, betting it will not all be touched. Allocation succeeding does not mean usage will — set container limits knowing how they fail.</p></div>
+      <div><h4><span>15</span>Memory safety</h4><p>Manual management invites overflows and use-after-free; garbage collection trades them for pauses; Rust checks ownership at compile time. ASLR and DEP/NX limit what a bug can become.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>High memory usage is not the problem you think</b>
+    <p>The kernel deliberately fills idle RAM with page cache, so a busy server at 95% "used" is usually healthy. The real warnings are memory that climbs for an hour and never stabilises — a leak — and any sign of swapping. Stream large files and paginate large results rather than loading them whole.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — THE READ PATH ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>The Read Path</h2>
+    <span class="form">Sorting line</span>
+    <span class="cov">Covers · File Systems · SSD and HDD · System Calls · Kernel</span>
+  </div>
+  <p class="thesis">A program asks for "/var/app/config.json"; the disk only understands "block 88,213". Between them sits a sorting line that resolves names, checks rights, and above all tries not to touch the disk. <strong>The decisive station is the page cache: a hit costs about a hundred nanoseconds, a miss costs a thousand times more on an SSD and a hundred thousand times more on an HDD.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 820" role="img" aria-label="A sorting line for reading a file. The top line, the hit path, runs through open with a system call, walking the path component by component, a permission check, reading the inode, returning file descriptor 3, then read with a second system call, and a diamond asking whether the block is in the page cache. If yes, a memory copy of about 100 nanoseconds delivers the bytes. If no, a lower line runs through the file system mapping the offset to block numbers, the block layer and driver, and the physical disk read — an SSD at about 100 microseconds or an HDD at about 10 milliseconds — then caches the block in RAM and rejoins. Lower left, the anatomy of a directory entry pointing at an inode with owner, mode, size, link count and block pointers, plus the superblock and journal. Along the bottom: write is not the same as on disk, choosing file system versus object storage, and path traversal with common error codes.">
+        <defs>
+          <marker id="f1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <rect x="30" y="64" width="1340" height="160" fill="var(--z1)"/>
+        <rect x="30" y="240" width="1340" height="240" fill="var(--z4)"/>
+        <text x="46" y="86" class="s-zone" fill="var(--line)">Hit path · most reads stop in RAM</text>
+        <text x="46" y="262" class="s-zone" fill="var(--fast)">Miss path · the disk is touched, once</text>
+
+        <line x1="60" y1="150" x2="1320" y2="150" stroke="var(--line)" stroke-width="7"/>
+        <path d="M850,168 L850,360 L1320,360 L1320,150" fill="none" stroke="var(--fast)" stroke-width="6" stroke-linejoin="round"/>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3.5"><circle cx="70" cy="150" r="12"/><circle cx="720" cy="150" r="12"/></g>
+        <g class="st"><circle cx="200" cy="150" r="9"/><circle cx="330" cy="150" r="9"/><circle cx="460" cy="150" r="9"/><circle cx="590" cy="150" r="9"/><circle cx="1320" cy="150" r="11"/></g>
+        <circle cx="1040" cy="150" r="12" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <polygon points="850,132 868,150 850,168 832,150" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3"><circle cx="980" cy="360" r="9"/><circle cx="1110" cy="360" r="9"/><circle cx="1240" cy="360" r="9"/><circle cx="1320" cy="260" r="9"/></g>
+
+        <g class="s-num"><text x="56" y="178">01</text><text x="186" y="178">02</text><text x="316" y="178">03</text><text x="446" y="178">04</text><text x="576" y="178">05</text><text x="706" y="178">06</text><text x="836" y="178">07</text><text x="1026" y="178">08</text><text x="1306" y="178" text-anchor="end">13</text></g>
+        <g class="s-lab" font-size="11">
+          <text x="56" y="194">open(path)</text><text x="186" y="194">walk the path</text><text x="316" y="194">check permission</text><text x="446" y="194">read the inode</text><text x="576" y="194">fd = 3</text>
+          <text x="706" y="194">read(3, 4096)</text><text x="876" y="194">in page cache?</text><text x="1026" y="194">yes — memcpy</text><text x="1306" y="194" text-anchor="end">bytes in your buffer</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="56" y="208">syscall #2</text><text x="186" y="208">/ → var → app → …</text><text x="316" y="208">rwx vs uid and gid</text><text x="446" y="208">often already cached</text><text x="576" y="208">a small integer</text>
+          <text x="706" y="208">syscall #0</text><text x="876" y="208">decides everything</text><text x="1026" y="208">~100 ns, no disk</text><text x="1306" y="208" text-anchor="end">read() returns 4096</text>
+        </g>
+        <text x="130" y="128" class="s-sub" font-size="10.5">VFS · one interface over ext4, XFS, NTFS, overlayfs, NFS — your code never knows which</text>
+        <text x="1300" y="128" text-anchor="end" class="s-note" font-size="10.5">hit: RAM speed</text>
+
+        <g class="s-num"><text x="966" y="310">09</text><text x="1096" y="310">10</text><text x="1226" y="310">11</text></g>
+        <g class="s-lab" font-size="11"><text x="966" y="326">file system</text><text x="1096" y="326">block layer</text><text x="1226" y="326">disk read</text></g>
+        <g class="s-sub" font-size="10.5"><text x="966" y="340">offset → block no.</text><text x="1096" y="340">→ device driver</text><text x="1226" y="340">one 4 KB block</text></g>
+        <text x="1306" y="280" text-anchor="end" class="s-lab" font-size="11">12 · cached for next time</text>
+        <text x="862" y="300" class="s-note" font-size="10.5">no</text>
+
+        <path d="M1240,369 L1110,390" stroke="var(--fast)" stroke-width="2" fill="none"/>
+        <path d="M1240,369 L1278,390" stroke="var(--fast)" stroke-width="2" fill="none"/>
+        <rect x="1030" y="392" width="150" height="62" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="1200" y="392" width="156" height="62" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="1042" y="410" class="s-lab" font-size="11">SSD</text>
+        <text x="1042" y="426" class="s-sub" font-size="10.5">~100 µs · flash page</text>
+        <text x="1042" y="440" class="s-sub" font-size="10.5">nothing moves</text>
+        <text x="1212" y="410" class="s-lab" font-size="11">HDD</text>
+        <text x="1212" y="426" class="s-sub" font-size="10.5">~10 ms · seek 5–10 ms</text>
+        <text x="1212" y="440" class="s-sub" font-size="10.5">+ rotation ~4 ms</text>
+        <text x="1030" y="472" class="s-haz" font-size="10.5">random reads on an HDD: ~100× worse than SSD</text>
+
+        <!-- INODE ANATOMY -->
+        <rect x="60" y="296" width="210" height="48" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="72" y="314" class="s-lab" font-size="11">14 · directory /var/app</text>
+        <text x="72" y="334" class="s-mono" font-size="10">config.json → inode 4211</text>
+        <path d="M270,320 L314,320" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#f1)"/>
+        <rect x="320" y="284" width="260" height="150" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="332" y="302" class="s-lab" font-size="11">15 · inode 4211</text>
+        <g class="s-mono" font-size="10">
+          <text x="332" y="322">owner   app:app</text><text x="332" y="338">mode    rw-r-----</text><text x="332" y="354">size    2,931 bytes</text>
+          <text x="332" y="370">links   1</text><text x="332" y="386">blocks  → 88213, 88214</text><text x="332" y="402">times   created, modified</text>
+        </g>
+        <text x="332" y="424" class="s-note" font-size="10.5">no file name anywhere in here</text>
+        <path d="M580,392 L614,392" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#f1)"/>
+        <rect x="620" y="370" width="100" height="22" fill="var(--z2)" stroke="var(--rule)"/>
+        <rect x="620" y="396" width="100" height="22" fill="var(--z2)" stroke="var(--rule)"/>
+        <g class="s-mono" font-size="10"><text x="630" y="385">block 88213</text><text x="630" y="411">block 88214</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="60" y="366">The name lives in the</text><text x="60" y="380">directory, not the inode:</text><text x="60" y="394">hard links work, and a</text><text x="60" y="408">deleted file still open</text><text x="60" y="422">keeps its space.</text>
+        </g>
+        <text x="60" y="450" class="s-sub" font-size="10.5">superblock — describes the file system as a whole</text>
+        <text x="60" y="468" class="s-note" font-size="10.5">16 · journal — intent written before any change, replayed after a crash</text>
+
+        <!-- PANEL A -->
+        <rect x="30" y="500" width="440" height="300" fill="var(--z3)"/>
+        <text x="46" y="524" class="s-zone" fill="var(--mute)">17 · write() is not on disk</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="46" y="540" width="90" height="36"/><rect x="160" y="540" width="110" height="36"/><rect x="294" y="540" width="80" height="36"/><rect x="398" y="540" width="56" height="36"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="58" y="562">write()</text><text x="172" y="562">page cache</text><text x="306" y="562">fsync()</text><text x="410" y="562">disk</text></g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#f1)"><path d="M136,558 L156,558"/><path d="M270,558 L290,558"/><path d="M374,558 L394,558"/></g>
+        <g class="s-sub">
+          <text x="46" y="600">write() returns once bytes are in the page cache. A crash</text>
+          <text x="46" y="614">before the flush loses them. Only fsync guarantees they</text>
+          <text x="46" y="628">reached the disk — which is why PostgreSQL calls it itself</text>
+          <text x="46" y="642">and keeps its write-ahead log sequential.</text>
+        </g>
+        <text x="46" y="668" class="s-lab" font-size="11">Buffer, then write</text>
+        <text x="46" y="686" class="s-sub">One 64 KB block beats 64,000 one-byte writes.</text>
+        <text x="46" y="712" class="s-note" font-size="10.5">Cached reads cost ~100 ns; uncached reads pay the disk.</text>
+        <text x="46" y="738" class="s-haz" font-size="10.5">Monitor free space and free inodes: df -h and df -i.</text>
+        <text x="46" y="754" class="s-sub">A full disk breaks databases and logging at the same time.</text>
+        <text x="46" y="780" class="s-sub">"Used" RAM full of page cache is the kernel doing its job.</text>
+
+        <!-- PANEL B -->
+        <rect x="490" y="500" width="440" height="300" fill="var(--z2)"/>
+        <text x="506" y="524" class="s-zone" fill="var(--mute)">Pick the right store</text>
+        <g class="s-mono" font-size="10">
+          <text x="506" y="546">ext4       Linux default, well understood</text>
+          <text x="506" y="562">XFS        large files, parallel I/O</text>
+          <text x="506" y="578">Btrfs/ZFS  snapshots, checksums, heavier</text>
+          <text x="506" y="594">NTFS/APFS  Windows and macOS defaults</text>
+          <text x="506" y="610">overlayfs  the stacked layers of Docker images</text>
+          <text x="506" y="626">NFS/SMB    over the network, unreliable locks</text>
+          <text x="506" y="642" fill="var(--line)">S3/MinIO   object storage — not a file system</text>
+        </g>
+        <text x="506" y="668" class="s-note" font-size="10.5">User uploads belong in object storage.</text>
+        <text x="506" y="684" class="s-sub">Add a second server and half the requests cannot find a</text>
+        <text x="506" y="698" class="s-sub">file saved on the first server's local disk.</text>
+        <text x="506" y="722" class="s-lab" font-size="11">Not a database, not a queue</text>
+        <text x="506" y="738" class="s-sub">No transactions across files, no queries. Directory-scan</text>
+        <text x="506" y="752" class="s-sub">queues lose data under concurrency, and millions of files</text>
+        <text x="506" y="766" class="s-sub">in one directory perform badly.</text>
+        <text x="506" y="788" class="s-sub">Docker pulls are fast because unchanged layers are shared.</text>
+
+        <!-- PANEL C -->
+        <rect x="950" y="500" width="420" height="300" fill="var(--z5)"/>
+        <text x="966" y="524" class="s-zone" fill="var(--hazard)">18 · Path traversal and friends</text>
+        <text x="966" y="546" class="s-mono" font-size="10" style="fill:var(--hazard)">open("/uploads/" + name)</text>
+        <text x="966" y="562" class="s-mono" font-size="10">name = "../../etc/passwd"</text>
+        <text x="966" y="586" class="s-sub">A user-supplied filename reaching a file operation is</text>
+        <text x="966" y="600" class="s-sub">among the most common web vulnerabilities. Validate first.</text>
+        <text x="966" y="624" class="s-lab" font-size="11">The error codes that page you</text>
+        <g class="s-mono" font-size="10">
+          <text x="966" y="642">ENOENT  no such file</text>
+          <text x="966" y="658">EACCES  permission denied</text>
+          <text x="966" y="674">ENOSPC  disk full — or out of inodes</text>
+        </g>
+        <text x="966" y="700" class="s-sub">A symlink swapped between check and use redirects a</text>
+        <text x="966" y="714" class="s-sub">privileged write; chmod 777 fixes nothing; predictable</text>
+        <text x="966" y="728" class="s-sub">temp-file names in shared directories are an old hole.</text>
+        <text x="966" y="754" class="s-haz" font-size="10.5">Deleted is not erased — encrypt at rest (LUKS, BitLocker).</text>
+        <text x="966" y="778" class="s-sub">Backups inherit the sensitivity of what they hold.</text>
+      </svg>
+    </div>
+    <figcaption><b>The shape to remember is the detour.</b> Stations 01 to 08 are all RAM-speed work in the kernel; only when station 07 answers "no" does the line drop to the disk, and station 12 exists so the same read never drops twice. Databases, buffer pools and CDNs are this sheet rebuilt at larger scale.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — from a path to a platter</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>open()</h4><p>The first system call. Applications never talk to a disk; they name a path and ask the kernel.</p></div>
+      <div><h4><span>02</span>Path resolution</h4><p>The virtual file system walks / → var → app → config.json one component at a time, routing to whichever file system owns each part.</p></div>
+      <div><h4><span>03</span>Permission check</h4><p>The inode's owner, group and rwx bits are compared with the calling process's user and group. Failure returns EACCES.</p></div>
+      <div><h4><span>04</span>Inode lookup</h4><p>Metadata for the file, usually already cached in RAM. Missing path components produce ENOENT here.</p></div>
+      <div><h4><span>05</span>File descriptor</h4><p>A small integer naming the open file for this process. A real kernel resource with a real limit — leak them and new connections fail.</p></div>
+      <div><h4><span>06</span>read()</h4><p>The second system call: descriptor 3, a buffer, 4096 bytes. Byte-at-a-time reads multiply this crossing and are a classic cause of slow I/O.</p></div>
+      <div><h4><span>07</span>Page cache check</h4><p>Is the block already in RAM? The kernel keeps recently read file blocks in otherwise idle memory, so repeated reads usually never reach the disk.</p></div>
+      <div><h4><span>08</span>Cache hit</h4><p>A memory copy into your buffer, around 100 ns. The fast path, and the common one.</p></div>
+      <div><h4><span>09</span>File system mapping</h4><p>ext4, XFS or overlayfs translates the file offset into block numbers using the inode's block pointers.</p></div>
+      <div><h4><span>10</span>Block layer and driver</h4><p>Requests are queued, merged and handed to the device driver in blocks, typically 4 KB, never individual bytes.</p></div>
+      <div><h4><span>11</span>Physical read</h4><p>An SSD controller maps the block to a flash page in ~100 µs; an HDD moves an arm and waits for the platter, ~10 ms.</p></div>
+      <div><h4><span>12</span>Cache fill</h4><p>The block is kept in the page cache, which is why the second read of a file is fast and why "used" RAM is often healthy.</p></div>
+      <div><h4><span>13</span>Delivered</h4><p>read() returns the byte count. From the program's view, one line of code; from the kernel's, a dozen stations.</p></div>
+      <div><h4><span>14</span>Directory entry</h4><p>A directory is a file whose contents map names to inode numbers. Two entries pointing at one inode is a hard link.</p></div>
+      <div><h4><span>15</span>Inode</h4><p>Everything about a file except its name: owner, permissions, size, times, block pointers. You can run out of inodes while disk space remains — a baffling "disk full".</p></div>
+      <div><h4><span>16</span>Journal</h4><p>Before changing structure, the file system writes down what it is about to do, and replays that after a crash. Protects the file system's integrity, not your unsynced data.</p></div>
+      <div><h4><span>17</span>fsync</h4><p>write() means "in the page cache". fsync means "on the disk". Databases call it explicitly because they cannot let the kernel reorder or delay their writes.</p></div>
+      <div><h4><span>18</span>Path traversal</h4><p>User input containing ../ reaching a file operation. Never build a path from unvalidated input; resolve it and confirm it stays inside the intended directory.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 7 — PROCESSES, THREADS, AND THE CHOICE ══════════════════════ -->
+<div class="sheet" id="a7">
+  <div class="plate">
+    <span class="no">Sheet 7</span>
+    <h2>Processes, Threads, and the Choice</h2>
+    <span class="form">Decision tree</span>
+    <span class="cov">Covers · Processes and Threads · Process · Thread · Multithreading</span>
+  </div>
+  <p class="thesis">A process is a company with its own locked office; threads are its employees sharing one filing cabinet. <strong>Processes buy isolation with overhead; threads buy speed with shared memory and the bugs that come with it — and the right choice is decided by whether the work is waiting or computing, long before anyone writes a lock.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 1050" role="img" aria-label="Top left, a cutaway of one process: a shared region holding the heap, globals and file descriptors, above three threads each with their own stack and registers. Top right, a table comparing processes and threads on memory, creation cost, footprint, isolation, crash impact, communication and main risk. Middle left, a timeline of two threads each incrementing a counter from 41, interleaving read, add and write so the counter ends at 42 and one increment is lost. Middle right, a chart of Amdahl's law: with 10 percent sequential work the speedup reaches 4.7 times at 8 cores, 8.8 at 64 and never exceeds 10, against an ideal linear line. Bottom, a decision ladder of four questions — must failures be contained, is the work waiting on I/O, is it CPU-bound Python, does it split into independent pieces — each yes leading to processes, async, multiprocessing or a thread pool, and a final no leading to staying single-threaded.">
+        <defs>
+          <marker id="h1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="h2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--mute)"/></marker>
+        </defs>
+
+        <!-- PROCESS CUTAWAY -->
+        <text x="46" y="58" class="s-zone" fill="var(--line)">01 · Process — own PID, own memory, own descriptors</text>
+        <rect x="46" y="70" width="614" height="266" fill="var(--band)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="62" y="86" width="582" height="80" fill="var(--z1)"/>
+        <text x="72" y="106" class="s-lab" font-size="11">02 · shared by every thread inside</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="72" y="118" width="170" height="36"/><rect x="254" y="118" width="170" height="36"/><rect x="436" y="118" width="198" height="36"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="82" y="134">heap</text><text x="264" y="134">globals</text><text x="446" y="134">file descriptors</text></g>
+        <g class="s-sub" font-size="10"><text x="82" y="148">objects, caches</text><text x="264" y="148">module-level state</text><text x="446" y="148">open files, sockets</text></g>
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="72" y="186" width="156" height="130"/><rect x="280" y="186" width="156" height="130"/><rect x="488" y="186" width="156" height="130"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="82" y="206">03 · thread 1</text><text x="290" y="206">thread 2</text><text x="498" y="206">thread 3</text></g>
+        <g fill="var(--z6)" stroke="var(--learn)" stroke-width="1">
+          <rect x="82" y="216" width="136" height="42"/><rect x="290" y="216" width="136" height="42"/><rect x="498" y="216" width="136" height="42"/>
+          <rect x="82" y="264" width="136" height="42"/><rect x="290" y="264" width="136" height="42"/><rect x="498" y="264" width="136" height="42"/>
+        </g>
+        <g class="s-lab" font-size="10.5"><text x="90" y="234">own stack</text><text x="298" y="234">own stack</text><text x="506" y="234">own stack</text><text x="90" y="282">own registers</text><text x="298" y="282">own registers</text><text x="506" y="282">own registers</text></g>
+        <g class="s-sub" font-size="10"><text x="90" y="250">1–8 MB, locals safe</text><text x="298" y="250">1–8 MB, locals safe</text><text x="506" y="250">1–8 MB, locals safe</text><text x="90" y="298">PC, stack pointer</text><text x="298" y="298">PC, stack pointer</text><text x="506" y="298">PC, stack pointer</text></g>
+        <g stroke="var(--hazard)" stroke-width="2" stroke-dasharray="5 4" fill="none"><path d="M150,186 L150,156"/><path d="M358,186 L210,156"/></g>
+        <text x="46" y="354" class="s-sub">The heap is shared, so two threads can reach one object; the stack is private, so locals are safe.</text>
+        <text x="46" y="368" class="s-sub">Almost every threading bug lives on that boundary — and a crash in any thread kills them all.</text>
+
+        <!-- TABLE -->
+        <rect x="700" y="46" width="670" height="326" fill="var(--z4)"/>
+        <text x="716" y="70" class="s-zone" fill="var(--fast)">04 · The trade, in one table</text>
+        <g class="s-lab" font-size="11"><text x="850" y="96">process</text><text x="1100" y="96">thread</text></g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="716" y1="104" x2="1354" y2="104"/><line x1="716" y1="130" x2="1354" y2="130"/><line x1="716" y1="156" x2="1354" y2="156"/><line x1="716" y1="182" x2="1354" y2="182"/>
+          <line x1="716" y1="208" x2="1354" y2="208"/><line x1="716" y1="234" x2="1354" y2="234"/><line x1="716" y1="260" x2="1354" y2="260"/><line x1="716" y1="286" x2="1354" y2="286"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="716" y="122">memory</text><text x="716" y="148">creation cost</text><text x="716" y="174">footprint</text><text x="716" y="200">isolation</text><text x="716" y="226">a crash kills</text><text x="716" y="252">talks via</text><text x="716" y="278">main risk</text></g>
+        <g class="s-sub">
+          <text x="850" y="122">private</text><text x="850" y="148">~1–10 ms</text><text x="850" y="174">50–200 MB per Python worker</text><text x="850" y="200">complete, hardware-enforced</text><text x="850" y="226">only itself</text><text x="850" y="252">pipes, sockets, signals</text><text x="850" y="278">overhead</text>
+          <text x="1100" y="122">shared with its siblings</text><text x="1100" y="148">~10–100 µs</text><text x="1100" y="174">1–8 MB of stack</text><text x="1100" y="200">none at all</text><text x="1100" y="226">the whole process</text><text x="1100" y="252">shared variables, instantly</text>
+        </g>
+        <text x="1100" y="278" class="s-haz" font-size="11">race conditions</text>
+        <text x="716" y="314" class="s-note">Processes are safe but expensive; threads are cheap but dangerous.</text>
+        <text x="716" y="332" class="s-sub">Everything else on this sheet follows from that sentence.</text>
+        <text x="716" y="356" class="s-sub">Coroutines and goroutines go cheaper still; containers and VMs go safer still.</text>
+
+        <!-- RACE -->
+        <rect x="30" y="386" width="470" height="254" fill="var(--z5)"/>
+        <text x="46" y="410" class="s-zone" fill="var(--hazard)">05 · counter = counter + 1 is three steps</text>
+        <g class="s-lab" font-size="11"><text x="46" y="438">T1</text><text x="46" y="484">T2</text><text x="46" y="544">heap</text></g>
+        <g stroke="var(--rule)" stroke-width="1"><line x1="90" y1="432" x2="486" y2="432"/><line x1="90" y1="478" x2="486" y2="478"/></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="100" y="420" width="58" height="24"/><rect x="224" y="420" width="58" height="24"/><rect x="348" y="420" width="58" height="24"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--learn)" stroke-width="1.5">
+          <rect x="162" y="466" width="58" height="24"/><rect x="286" y="466" width="58" height="24"/><rect x="410" y="466" width="58" height="24"/>
+        </g>
+        <g class="s-mono" font-size="10" text-anchor="middle">
+          <text x="129" y="436">read 41</text><text x="253" y="436">+1 = 42</text><text x="377" y="436">write 42</text>
+          <text x="191" y="482">read 41</text><text x="315" y="482">+1 = 42</text><text x="439" y="482">write 42</text>
+        </g>
+        <g stroke-width="1.5">
+          <rect x="100" y="528" width="244" height="24" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="348" y="528" width="58" height="24" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="410" y="528" width="58" height="24" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        </g>
+        <g class="s-mono" font-size="10"><text x="110" y="544">counter = 41</text><text x="356" y="544">42</text><text x="418" y="544" fill="var(--hazard)">42 !</text></g>
+        <path d="M100,570 L480,570" stroke="var(--mute)" stroke-width="1.5" fill="none" marker-end="url(#h2)"/>
+        <text x="100" y="584" class="s-sub" font-size="10">time →</text>
+        <text x="46" y="604" class="s-haz" font-size="10.5">06 · race condition — two increments, one lost, no error</text>
+        <text x="46" y="620" class="s-sub">Fix: a lock, an atomic, or a queue — pass messages instead.</text>
+        <text x="46" y="634" class="s-sub">07 · deadlock: two threads each hold the lock the other needs.</text>
+
+        <!-- AMDAHL -->
+        <rect x="520" y="386" width="850" height="254" fill="var(--z1)"/>
+        <text x="536" y="410" class="s-zone" fill="var(--line)">08 · Amdahl's law — 10% sequential caps the speedup at 10×</text>
+        <g stroke="var(--ink)" stroke-width="1.5"><line x1="600" y1="610" x2="1112" y2="610"/><line x1="600" y1="610" x2="600" y2="420"/></g>
+        <line x1="600" y1="420" x2="1112" y2="420" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="7 5"/>
+        <text x="1112" y="450" text-anchor="end" class="s-haz" font-size="10.5">ceiling 10×</text>
+        <polyline points="600,591 650,572 700,534 750,458 766,420" fill="none" stroke="var(--learn)" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <polyline points="600,591 650,575 700,552 750,521 800,488 850,462 900,443 1098,422" fill="none" stroke="var(--line)" stroke-width="3"/>
+        <g fill="var(--line)"><circle cx="650" cy="575" r="4"/><circle cx="700" cy="552" r="4"/><circle cx="750" cy="521" r="5"/><circle cx="800" cy="488" r="4"/><circle cx="850" cy="462" r="4"/><circle cx="900" cy="443" r="5"/><circle cx="1098" cy="422" r="5"/></g>
+        <g class="s-mono" font-size="10" text-anchor="middle"><text x="600" y="626">1</text><text x="650" y="626">2</text><text x="700" y="626">4</text><text x="750" y="626">8</text><text x="800" y="626">16</text><text x="850" y="626">32</text><text x="900" y="626">64</text><text x="1098" y="626">1000</text></g>
+        <g class="s-mono" font-size="10" text-anchor="end"><text x="592" y="595">1×</text><text x="592" y="519">5×</text><text x="592" y="424">10×</text></g>
+        <text x="950" y="626" class="s-sub" font-size="10">cores (log scale)</text>
+        <text x="606" y="478" class="s-sub" font-size="10.5" style="fill:var(--learn)">ideal N×</text>
+        <text x="920" y="470" class="s-sub" font-size="10.5" style="fill:var(--line)">actual, 10% sequential</text>
+        <text x="1140" y="440" class="s-lab" font-size="11">What the curve says</text>
+        <g class="s-sub"><text x="1140" y="458">8 cores → 4.7×, not 8×</text><text x="1140" y="472">64 cores → 8.8×</text><text x="1140" y="486">1,000 cores → 9.9×</text></g>
+        <text x="1140" y="510" class="s-note" font-size="10.5">Design for independence first.</text>
+        <g class="s-sub"><text x="1140" y="526">Tiles written to separate buffers</text><text x="1140" y="540">need no locks — that is why they</text><text x="1140" y="554">scale. Locks give the gain back.</text></g>
+        <text x="1140" y="580" class="s-lab" font-size="11">09 · A sane default</text>
+        <g class="s-sub"><text x="1140" y="596">CPU-bound: threads ≈ cores.</text><text x="1140" y="610">I/O-bound: async beats threads.</text></g>
+
+        <!-- DECISION LADDER -->
+        <rect x="30" y="660" width="1340" height="376" fill="var(--z2)"/>
+        <text x="46" y="684" class="s-zone" fill="var(--mute)">Which model does the work need? · ask in this order</text>
+        <g fill="var(--paper)" stroke="var(--ink)" stroke-width="2">
+          <rect x="46" y="696" width="400" height="48"/><rect x="46" y="766" width="400" height="48"/><rect x="46" y="836" width="400" height="48"/><rect x="46" y="906" width="400" height="48"/>
+        </g>
+        <rect x="46" y="976" width="400" height="48" fill="var(--band)" stroke="var(--mute)" stroke-width="2"/>
+        <g class="s-lab" font-size="11.5">
+          <text x="58" y="716">Must a crash or hostile input stay contained?</text>
+          <text x="58" y="786">Is the work mostly waiting — DB, network, disk?</text>
+          <text x="58" y="856">Is it CPU-bound Python, behind the GIL?</text>
+          <text x="58" y="926">Does it split into independent pieces?</text>
+          <text x="58" y="996">14 · stay single-threaded</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="58" y="734">one unit's bug must not reach the others' memory</text>
+          <text x="58" y="804">concurrency: a structure for many things at once</text>
+          <text x="58" y="874">only one thread runs Python bytecode at a time</text>
+          <text x="58" y="944">parallelism: hardware doing many things at once</text>
+          <text x="58" y="1014">shared state everywhere — locks would eat the gain</text>
+        </g>
+        <g stroke="var(--mute)" stroke-width="2" fill="none" marker-end="url(#h2)">
+          <path d="M246,744 L246,762"/><path d="M246,814 L246,832"/><path d="M246,884 L246,902"/><path d="M246,954 L246,972"/>
+        </g>
+        <g class="s-sub" font-size="10"><text x="256" y="758">no</text><text x="256" y="828">no</text><text x="256" y="898">no</text><text x="256" y="968">no</text></g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#h1)">
+          <path d="M446,720 L524,720"/><path d="M446,790 L524,790"/><path d="M446,860 L524,860"/><path d="M446,930 L524,930"/>
+        </g>
+        <g class="s-note" font-size="10.5"><text x="470" y="712">yes</text><text x="470" y="782">yes</text><text x="470" y="852">yes</text><text x="470" y="922">yes</text></g>
+        <g fill="var(--z1)" stroke="var(--line)" stroke-width="2">
+          <rect x="530" y="696" width="830" height="48"/><rect x="530" y="766" width="830" height="48"/><rect x="530" y="836" width="830" height="48"/><rect x="530" y="906" width="830" height="48"/>
+        </g>
+        <g class="s-lab" font-size="11.5">
+          <text x="544" y="716">10 · separate processes</text>
+          <text x="544" y="786">11 · async, an event loop</text>
+          <text x="544" y="856">12 · multiprocessing</text>
+          <text x="544" y="926">13 · a bounded thread pool, threads ≈ cores</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="544" y="734">Chrome runs a process per tab; PostgreSQL a process per connection. Pay in memory, buy fault containment.</text>
+          <text x="544" y="804">Nginx, Node.js, asyncio: one thread, thousands of I/O tasks, no locks. 10,000 threads would be gigabytes of waiting stacks.</text>
+          <text x="544" y="874">Gunicorn and Uvicorn workers, Celery: the only way Python computes on several cores at once.</text>
+          <text x="544" y="944">Java and .NET pools, ffmpeg segments, image tiles, Go goroutines. Each piece writes its own buffer.</text>
+        </g>
+        <text x="530" y="1004" class="s-note">Beyond one machine? Distributed workers and a queue — the same choice, one level up.</text>
+      </svg>
+    </div>
+    <figcaption><b>Adding threads to an I/O-bound system is the most common concurrency mistake there is:</b> they all wait, just in parallel, each holding megabytes of stack. Ask the ladder's questions in order and most designs pick themselves — and "unbounded" should never appear in any answer; every model above runs as a pool with a limit.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — units of execution, and how to choose</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Process</h4><p>A running program with its own virtual memory, PID, file descriptors and permissions. The operating system's unit of isolation, created by fork() then execve().</p></div>
+      <div><h4><span>02</span>Shared state</h4><p>Heap, globals and descriptors belong to the process, so every thread can reach them. Instant communication, and the source of every race.</p></div>
+      <div><h4><span>03</span>Thread</h4><p>One line of execution inside a process with only a stack and a register set of its own. The kernel's schedulable unit.</p></div>
+      <div><h4><span>04</span>The cost gap</h4><p>A process takes milliseconds and tens of megabytes to create; a thread, microseconds and a stack. Neither should be created per request — use a fixed pool.</p></div>
+      <div><h4><span>05</span>Non-atomic update</h4><p>counter = counter + 1 is read, add, write. Interleave two threads between those steps and one write overwrites the other.</p></div>
+      <div><h4><span>06</span>Race condition</h4><p>A result that depends on timing. Non-deterministic, load-dependent, often invisible on a fast laptop — and exploitable as TOCTOU when the race is between a check and an action.</p></div>
+      <div><h4><span>07</span>Deadlock</h4><p>Two threads each waiting for a lock the other holds, forever. Prevented by always acquiring locks in the same order.</p></div>
+      <div><h4><span>08</span>Amdahl's law</h4><p>The sequential fraction sets a hard ceiling: 10% sequential means at most 10×, even on 1,000 cores. Doubling threads almost never halves the time.</p></div>
+      <div><h4><span>09</span>Pool sizing</h4><p>For CPU-bound work, roughly one thread per core; more only adds switching. For I/O-bound work with threads, higher counts help — but async helps far more.</p></div>
+      <div><h4><span>10</span>Processes for isolation</h4><p>When one failure or one hostile input must not spread. Chrome and PostgreSQL pay the memory deliberately; a crashed worker is replaced, not fatal.</p></div>
+      <div><h4><span>11</span>Async for waiting</h4><p>Concurrency is structure — dealing with many things at once. An event loop multiplexes thousands of I/O tasks on one thread with no context switches and no locks.</p></div>
+      <div><h4><span>12</span>Multiprocessing under a GIL</h4><p>Python's global interpreter lock lets only one thread execute bytecode at a time. Threads still help I/O; CPU work needs separate processes.</p></div>
+      <div><h4><span>13</span>Multithreading for computing</h4><p>Parallelism is hardware — many things genuinely at once. Worth it for CPU-bound, independently splittable work in languages without a GIL: Java, C#, Go, Rust, C++.</p></div>
+      <div><h4><span>14</span>Single-threaded, or distributed</h4><p>If the pieces constantly share state, locks will serialise everything anyway. If one machine is not enough, distribute workers behind a queue.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>In-memory locks do not protect money</b>
+    <p>Races in payment, inventory or balance logic cause real losses, and a mutex only protects one process on one machine. Anything that matters across workers or servers needs a database transaction, not a lock in application memory.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 8 — THE SCHEDULER AND THE SWITCH ══════════════════════ -->
+<div class="sheet" id="a8">
+  <div class="plate">
+    <span class="no">Sheet 8</span>
+    <h2>The Scheduler and the Switch</h2>
+    <span class="form">Control loop</span>
+    <span class="cov">Covers · Scheduler · Context Switching · Process · Thread · Registers</span>
+  </div>
+  <p class="thesis">A laptop runs three hundred processes on eight cores by lying very fast. The scheduler hands each thread a few milliseconds, then a context switch saves everything it was doing and restores someone else. <strong>The paperwork costs microseconds; the cold caches afterwards cost more — which is why more threads is not more speed, and why async I/O exists at all.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="Top left, the thread state loop: NEW is admitted to READY, the scheduler picks a READY thread to RUN, a running thread is preempted back to READY or blocks on I/O into BLOCKED, a blocked thread wakes into READY, and a running thread exits to TERMINATED with an exit code. Top right, the six steps of a context switch beside a drawing of thread A's saved registers, the core's registers, and thread B's saved registers, with save and load arrows and a warning that switching processes also flushes the TLB. Middle, a timeline of one HTTP request on one core showing three context switches, other threads running while ours is blocked on the database and the socket, and a cold-cache warm-up after switch two. Bottom, three panels: the cost of each kind of switch, CPU throttling at a container limit, and thrashing when threads far outnumber cores.">
+        <defs>
+          <marker id="s8a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="s8b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="s8c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--mute)"/></marker>
+        </defs>
+
+        <!-- STATE LOOP -->
+        <rect x="30" y="40" width="660" height="392" fill="var(--z1)"/>
+        <text x="46" y="62" class="s-zone" fill="var(--line)">The loop every thread lives in</text>
+        <rect x="60" y="76" width="120" height="44" fill="var(--paper)" stroke="var(--rule)" stroke-width="2"/>
+        <rect x="490" y="76" width="150" height="44" fill="var(--paper)" stroke="var(--rule)" stroke-width="2"/>
+        <rect x="60" y="190" width="190" height="80" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="430" y="190" width="210" height="80" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <rect x="240" y="330" width="200" height="64" fill="var(--paper)" stroke="var(--mute)" stroke-width="2" stroke-dasharray="7 5"/>
+        <g class="s-lab" font-size="11"><text x="72" y="96">NEW</text><text x="502" y="96">TERMINATED</text><text x="72" y="210">READY</text><text x="442" y="210">RUNNING</text><text x="252" y="352">BLOCKED</text></g>
+        <g class="s-sub" font-size="10.5"><text x="72" y="112">fork + exec</text><text x="502" y="112">an exit code returned</text><text x="72" y="262">could run, needs a core</text><text x="442" y="262">on a core, for its slice</text><text x="252" y="368">waiting on I/O or a lock</text></g>
+        <text x="252" y="384" class="s-note" font-size="10.5">uses no CPU at all</text>
+        <g fill="var(--z1)" stroke="var(--line)" stroke-width="1.2">
+          <rect x="72" y="220" width="38" height="24"/><rect x="114" y="220" width="38" height="24"/><rect x="156" y="220" width="38" height="24"/><rect x="198" y="220" width="38" height="24"/>
+        </g>
+        <g class="s-mono" font-size="10" text-anchor="middle"><text x="91" y="236">T1</text><text x="133" y="236">T2</text><text x="175" y="236">T3</text><text x="217" y="236">T4</text></g>
+        <rect x="442" y="220" width="120" height="24" fill="var(--paper)" stroke="var(--fast)" stroke-width="1.5"/>
+        <text x="452" y="236" class="s-mono" font-size="10">core 0 · T7</text>
+
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#s8a)">
+          <path d="M120,120 L120,184"/>
+          <path d="M250,214 L424,214"/>
+          <path d="M565,190 L565,126"/>
+          <path d="M236,362 C150,362 150,330 150,276"/>
+        </g>
+        <path d="M430,250 L256,250" stroke="var(--fast)" stroke-width="3" fill="none" marker-end="url(#s8a)"/>
+        <path d="M535,270 C535,340 500,362 446,362" stroke="var(--mute)" stroke-width="3" fill="none" marker-end="url(#s8c)"/>
+
+        <text x="132" y="158" class="s-lab" font-size="11">01 · admitted</text>
+        <text x="340" y="204" text-anchor="middle" class="s-lab" font-size="11">02 · scheduler picks</text>
+        <text x="340" y="268" text-anchor="middle" class="s-lab" font-size="11">03 · preempted</text>
+        <text x="340" y="282" text-anchor="middle" class="s-sub" font-size="10.5">slice over, or priority</text>
+        <text x="552" y="312" class="s-lab" font-size="11">04 · blocks</text>
+        <text x="552" y="326" class="s-sub" font-size="10.5">socket, disk, lock</text>
+        <text x="138" y="312" text-anchor="end" class="s-lab" font-size="11">05 · wakes</text>
+        <text x="138" y="326" text-anchor="end" class="s-sub" font-size="10.5">I/O done</text>
+        <text x="577" y="158" class="s-lab" font-size="11">06 · exits</text>
+        <text x="46" y="414" class="s-mono" font-size="10.5">exit 0 success · 137 SIGKILL, usually the OOM killer · 143 SIGTERM</text>
+
+        <!-- THE SWITCH -->
+        <rect x="700" y="40" width="670" height="392" fill="var(--z3)"/>
+        <text x="716" y="62" class="s-zone" fill="var(--mute)">Inside one context switch · ~1–10 µs direct</text>
+        <g class="s-num"><text x="716" y="92">07</text><text x="716" y="140">08</text><text x="716" y="188">09</text><text x="716" y="236">10</text><text x="716" y="284">11</text><text x="716" y="332">12</text></g>
+        <g class="s-lab" font-size="11"><text x="740" y="92">save A</text><text x="740" y="140">account</text><text x="740" y="188">pick next</text><text x="740" y="236">load B</text><text x="740" y="284">new address space?</text><text x="740" y="332">resume B</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="740" y="108">every register, program counter, stack pointer</text><text x="740" y="122">and flags, into A's control block</text>
+          <text x="740" y="156">add the CPU time A just used, so fairness</text><text x="740" y="170">can be computed next time</text>
+          <text x="740" y="204">Linux CFS: the runnable thread with the least</text><text x="740" y="218">CPU time so far, weighted by priority</text>
+          <text x="740" y="252">B's saved registers copied back into the core</text><text x="740" y="266">— the reverse of step 07</text>
+          <text x="740" y="348">return to user mode; B continues exactly where</text><text x="740" y="362">it stopped, with cold caches for a while</text>
+        </g>
+        <text x="740" y="300" class="s-haz" font-size="10.5">if B is another process: switch page tables,</text>
+        <text x="740" y="314" class="s-haz" font-size="10.5">flush the TLB — the expensive part</text>
+
+        <rect x="1090" y="80" width="264" height="90" fill="var(--z6)" stroke="var(--learn)" stroke-width="1.5"/>
+        <rect x="1090" y="200" width="264" height="80" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="1090" y="310" width="264" height="90" fill="var(--z4)" stroke="var(--fast)" stroke-width="1.5"/>
+        <g class="s-lab" font-size="11"><text x="1102" y="98">thread A · control block</text><text x="1102" y="218">core 0 · registers</text><text x="1102" y="328">thread B · control block</text></g>
+        <g class="s-mono" font-size="10">
+          <text x="1102" y="118">R1…R15   saved</text><text x="1102" y="134">PC 0x4006  SP 0x7ffe…</text><text x="1102" y="150">RUNNING → READY</text>
+          <text x="1102" y="238">PC  SP  FLAGS  R1…R15</text>
+          <text x="1102" y="348">R1…R15   restored</text><text x="1102" y="364">PC 0x51a0  SP 0x7ffc…</text><text x="1102" y="380">READY → RUNNING</text>
+        </g>
+        <text x="1102" y="258" class="s-sub" font-size="10.5">all of them, every switch</text>
+        <path d="M1240,200 L1240,176" stroke="var(--learn)" stroke-width="3" fill="none" marker-end="url(#s8a)"/>
+        <path d="M1240,310 L1240,286" stroke="var(--fast)" stroke-width="3" fill="none" marker-end="url(#s8a)"/>
+        <text x="1252" y="192" class="s-sub" font-size="10.5">07 · save</text>
+        <text x="1252" y="302" class="s-sub" font-size="10.5">10 · load</text>
+        <text x="716" y="414" class="s-note" font-size="10.5">No useful work happens during any of these steps. It is overhead, budgeted for — never a feature.</text>
+
+        <!-- TIMELINE -->
+        <rect x="30" y="448" width="1340" height="196" fill="var(--z2)"/>
+        <text x="46" y="472" class="s-zone" fill="var(--mute)">One HTTP request on a thread-per-request server · three switches</text>
+        <g class="s-lab" font-size="11"><text x="46" y="506">core 0</text><text x="46" y="576">our thread</text></g>
+        <rect x="100" y="490" width="150" height="24" fill="var(--line)" opacity=".85"/>
+        <rect x="258" y="490" width="300" height="24" fill="var(--cool)" opacity=".6"/>
+        <rect x="566" y="490" width="40" height="24" fill="var(--fast)" opacity=".8"/>
+        <rect x="606" y="490" width="150" height="24" fill="var(--line)" opacity=".85"/>
+        <rect x="764" y="490" width="236" height="24" fill="var(--cool)" opacity=".6"/>
+        <g fill="var(--hazard)"><rect x="250" y="486" width="8" height="32"/><rect x="558" y="486" width="8" height="32"/><rect x="756" y="486" width="8" height="32"/></g>
+        <g class="s-haz" font-size="10.5" text-anchor="middle"><text x="254" y="482">#1</text><text x="562" y="482">#2</text><text x="760" y="482">#3</text></g>
+        <g class="s-lab" font-size="10.5" style="fill:var(--paper)"><text x="108" y="506">ours: parse request</text><text x="266" y="506">other threads run</text><text x="614" y="506">ours: build response</text><text x="772" y="506">others run while the socket drains</text></g>
+        <text x="566" y="536" class="s-note" font-size="10.5">13 · cold caches: slow until they refill</text>
+        <g stroke-width="1.5">
+          <rect x="100" y="560" width="150" height="24" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="258" y="560" width="300" height="24" fill="var(--paper)" stroke="var(--mute)" stroke-dasharray="5 4"/>
+          <rect x="566" y="560" width="190" height="24" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="764" y="560" width="236" height="24" fill="var(--paper)" stroke="var(--mute)" stroke-dasharray="5 4"/>
+        </g>
+        <g class="s-sub" font-size="10.5"><text x="108" y="576" fill="var(--ink)">RUNNING</text><text x="266" y="576">BLOCKED on the database · ~5 ms · no CPU</text><text x="574" y="576" fill="var(--ink)">RUNNING</text><text x="772" y="576">BLOCKED writing to the socket</text></g>
+        <path d="M100,608 L1000,608" stroke="var(--mute)" stroke-width="1.5" fill="none" marker-end="url(#s8c)"/>
+        <text x="100" y="626" class="s-sub" font-size="10">time →</text>
+        <text x="1030" y="500" class="s-lab" font-size="11">A budget, not a choice</text>
+        <g class="s-sub"><text x="1030" y="518">3 switches × 10,000 requests a second</text><text x="1030" y="532">= 30,000 switches every second.</text></g>
+        <text x="1030" y="556" class="s-note" font-size="10.5">An event loop brings that close to zero.</text>
+        <g class="s-sub"><text x="1030" y="580">Watch the cs column of vmstat: a rising</text><text x="1030" y="594">rate is the early warning of thrashing.</text></g>
+        <text x="1030" y="624" class="s-haz" font-size="10.5">Cache pollution never gets its own profiler line.</text>
+
+        <!-- PANEL A -->
+        <rect x="30" y="660" width="440" height="206" fill="var(--z1)"/>
+        <text x="46" y="684" class="s-zone" fill="var(--line)">14 · What a switch costs, by kind</text>
+        <g class="s-lab" font-size="11"><text x="46" y="712">OS thread switch</text><text x="46" y="746">OS process switch</text><text x="46" y="780">user-space switch</text><text x="46" y="814">event loop</text></g>
+        <rect x="180" y="700" width="170" height="16" fill="var(--hazard)" opacity=".7"/>
+        <rect x="180" y="734" width="274" height="16" fill="var(--hazard)" opacity=".85"/>
+        <rect x="180" y="768" width="30" height="16" fill="var(--line)" opacity=".85"/>
+        <g class="s-mono" font-size="10"><text x="358" y="712">1–10 µs</text><text x="188" y="746" fill="var(--paper)">more: page tables + TLB flush</text><text x="218" y="780">10–100 ns · goroutines, async</text><text x="180" y="814">no switch · one thread, many tasks</text></g>
+        <text x="46" y="840" class="s-sub">Go runs huge goroutine counts on a few OS threads.</text>
+        <text x="46" y="856" class="s-sub">Pinning (taskset, cpuset) keeps caches warm; rarely needed.</text>
+
+        <!-- PANEL B -->
+        <rect x="490" y="660" width="440" height="206" fill="var(--z4)"/>
+        <text x="506" y="684" class="s-zone" fill="var(--fast)">15 · Throttled, not killed</text>
+        <rect x="506" y="700" width="200" height="36" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="716" y="700" width="200" height="36" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="506" y="700" width="96" height="36" fill="var(--line)" opacity=".85"/>
+        <rect x="716" y="700" width="96" height="36" fill="var(--line)" opacity=".85"/>
+        <g fill="var(--hazard)" opacity=".18"><rect x="602" y="700" width="104" height="36"/><rect x="812" y="700" width="104" height="36"/></g>
+        <g class="s-lab" font-size="10.5"><text x="514" y="722" fill="var(--paper)">quota used</text><text x="724" y="722" fill="var(--paper)">quota used</text><text x="610" y="722" fill="var(--hazard)">throttled</text><text x="820" y="722" fill="var(--hazard)">throttled</text></g>
+        <g class="s-sub">
+          <text x="506" y="756">A container at its CPU limit is descheduled until the next</text>
+          <text x="506" y="770">period by cgroup bandwidth control — latency spikes that</text>
+          <text x="506" y="784">look exactly like application slowness.</text>
+        </g>
+        <text x="506" y="810" class="s-lab" font-size="11">5% CPU and fully saturated</text>
+        <text x="506" y="826" class="s-sub">Threads BLOCKED on I/O use no CPU. Adding cores to an</text>
+        <text x="506" y="840" class="s-sub">I/O-bound system changes nothing at all.</text>
+
+        <!-- PANEL C -->
+        <rect x="950" y="660" width="420" height="206" fill="var(--z5)"/>
+        <text x="966" y="684" class="s-zone" fill="var(--hazard)">16 · Thrashing — 8 cores</text>
+        <g class="s-lab" font-size="11"><text x="966" y="714">16 threads</text><text x="966" y="746">200 threads</text></g>
+        <rect x="1060" y="702" width="250" height="16" fill="var(--line)" opacity=".85"/>
+        <rect x="1310" y="702" width="20" height="16" fill="var(--hazard)" opacity=".8"/>
+        <rect x="1060" y="734" width="130" height="16" fill="var(--line)" opacity=".85"/>
+        <rect x="1190" y="734" width="140" height="16" fill="var(--hazard)" opacity=".8"/>
+        <rect x="1060" y="762" width="10" height="10" fill="var(--line)"/><text x="1076" y="771" class="s-sub" font-size="10">useful work</text>
+        <rect x="1160" y="762" width="10" height="10" fill="var(--hazard)"/><text x="1176" y="771" class="s-sub" font-size="10">switching, cold caches</text>
+        <text x="966" y="796" class="s-sub">Beyond about one thread per core, CPU-bound work gains</text>
+        <text x="966" y="810" class="s-sub">only switching. High CPU, low throughput is the symptom.</text>
+        <text x="966" y="834" class="s-haz" font-size="10.5">Don't reach for priorities or pinning first —</text>
+        <text x="966" y="850" class="s-sub">the real problem is usually I/O waiting or lock contention.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the timeline against the loop.</b> Our thread spends most of the request BLOCKED and costs no CPU there, but every return trip to a core is a switch with cold caches. A thread-per-request server pays that three times per request; Go, Node.js and asyncio switch in user space for nanoseconds, or not at all.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the loop and the switch</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Admitted</h4><p>fork and exec create the process and its main thread; the kernel sets up its control block and places it in the ready queue.</p></div>
+      <div><h4><span>02</span>Scheduled</h4><p>The scheduler picks a READY thread and switches it onto a core. It runs this decision thousands of times per second so everything appears simultaneous.</p></div>
+      <div><h4><span>03</span>Preempted</h4><p>A hardware timer interrupt lets the kernel take the core back when a slice expires or a higher-priority thread wakes. Every modern OS is preemptive; cooperative yielding is historical.</p></div>
+      <div><h4><span>04</span>Blocked</h4><p>The thread waits on a socket, a disk or a lock and releases the core immediately. Not the scheduler's problem — and not using CPU.</p></div>
+      <div><h4><span>05</span>Woken</h4><p>The I/O completes or the lock frees, and the thread returns to the ready queue to wait for a core again.</p></div>
+      <div><h4><span>06</span>Terminated</h4><p>An exit code: 0 for success, 137 for SIGKILL (usually the OOM killer), 143 for SIGTERM. Handle SIGTERM, or be killed mid-work; reap children, or leave zombies.</p></div>
+      <div><h4><span>07</span>Save state</h4><p>All registers, program counter, stack pointer and flags of the outgoing thread are written to its control block. Including any secrets they held at that instant.</p></div>
+      <div><h4><span>08</span>Accounting</h4><p>The CPU time just consumed is recorded. Without it there is no fairness, no nice values and no container CPU limits.</p></div>
+      <div><h4><span>09</span>Pick next</h4><p>Linux CFS runs the thread that has had the least CPU time, weighted by priority. Fair is not the same as low-latency: a sensitive task can still wait.</p></div>
+      <div><h4><span>10</span>Load state</h4><p>The incoming thread's saved registers are restored into the core. Direct cost of the whole exchange: roughly 1–10 µs.</p></div>
+      <div><h4><span>11</span>Address-space switch</h4><p>If the incoming thread belongs to another process, page tables change and the TLB is flushed, so memory access is slower until translations are cached again.</p></div>
+      <div><h4><span>12</span>Resume</h4><p>Return to user mode; the thread continues as if it never stopped. It has no idea it was ever away.</p></div>
+      <div><h4><span>13</span>Cache pollution</h4><p>The new thread's data is not in L1–L3, so it runs slowly while caches refill. Usually costlier than the switch itself, and invisible in profilers.</p></div>
+      <div><h4><span>14</span>User-space switching</h4><p>Goroutines, async/await, fibers and Java virtual threads switch in ~10–100 ns inside one process; an event loop avoids switching altogether.</p></div>
+      <div><h4><span>15</span>CPU throttling</h4><p>Kubernetes and Docker CPU limits are enforced by cgroup bandwidth control in the scheduler: over quota, a container is descheduled, not killed.</p></div>
+      <div><h4><span>16</span>Thrashing</h4><p>So many runnable threads that the machine spends its time switching instead of working. 200 threads on 8 cores can be slower than 16.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The scheduler is shared hardware, too</b>
+    <p>By timing its own work, one process can infer what another is doing — the basis of cross-tenant attacks on shared cloud machines — and every switch writes the outgoing thread's registers, secrets included, into kernel memory that can end up in a crash dump. Use constant-time comparison for secrets and cgroup limits for neighbours. This is the same lesson as sheet 1, seen from the other side: the machine is fast and shared, and both facts leak.</p>
+  </div>
+</div>
+
+</div>
+

@@ -1,0 +1,1231 @@
+<meta charset="utf-8">
+<title>Atlas of the Internet — six sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 04 Networking and Internet · six sheets</p>
+  <h1>Atlas of the <em>Internet</em></h1>
+  <p class="thesis">One URL typed into a browser, and the dozen independent systems that cooperate to answer it. Sheet 1 is the route that request travels; every other sheet magnifies one stretch of it — the wires underneath, the name lookup, the handshakes, the contract at the far end, and the choice of how to talk at all. <strong>Every stop costs a round trip, and a round trip is roughly a million times slower than reading RAM — so the whole discipline is crossing the network as rarely as possible.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 6</span>
+    <span><b>Numbered steps</b> 90</span>
+    <span><b>Read first</b> Sheet 1 end to end, then the sheet for whichever stop is failing you</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Page Load Line</h4><p>From a typed URL to a rendered page: caches, DNS, TCP, TLS, HTTP, the CDN, the server — and the exits that skip the network entirely.</p><em>Transit diagram</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Wire Underneath</h4><p>Four layers, four boxes: the switch, the router with its NAT table, the modem, the ISP — and the addresses each one reads.</p><em>Cutaway section</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>The Name Tree</h4><p>How a name becomes an address: four caches, three levels of servers, one TTL that decides how long a mistake lives.</p><em>Descent diagram</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>The Handshake Ladder</h4><p>SYN, SYN-ACK, ACK, then ClientHello and a certificate — every rung a round trip paid before one byte of content moves.</p><em>Ladder plate</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>The Request Counter</h4><p>An HTTP request at the far end: rate limit, authenticate, validate, idempotency, authorise, execute — each with its status code.</p><em>Process plant</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>Choosing the Wire</h4><p>REST, GraphQL, gRPC, WebSockets, SSE or polling — the questions that pick one, and what each costs you after.</p><em>Decision tree</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 300" role="img" aria-label="How the six sheets fit together. Sheet 1, the page load line, runs across the middle as the route one request takes. Above it, sheet 3 zooms into the DNS stop, sheet 4 into the TCP and TLS stops, and sheet 5 into the server stop. Below it, sheet 2 shows the physical network every stop runs on, and sheet 6 is the choice of protocol made before the line was built. A bar along the bottom marks latency, which every sheet pays.">
+        <rect x="30" y="118" width="1340" height="62" fill="var(--z3)"/>
+        <text x="46" y="144" class="s-zone" fill="var(--mute)">Sheet 1 — the route one request takes, from a typed URL to a rendered page</text>
+        <text x="46" y="164" class="s-sub">every other sheet is a magnification of one of its stops, the ground it runs on, or the choice that shaped it</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M360,118 L360,80"/><path d="M700,118 L700,80"/><path d="M1080,118 L1080,80"/>
+          <path d="M360,180 L360,216"/><path d="M1000,180 L1000,216"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="360" y="68">3 · the name tree</text>
+          <text x="700" y="68">4 · the handshake ladder</text>
+          <text x="1080" y="68">5 · the request counter</text>
+          <text x="360" y="234">2 · the wire underneath</text>
+          <text x="1000" y="234">6 · choosing the wire</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="360" y="50">the DNS stop, magnified</text>
+          <text x="700" y="50">the TCP and TLS stops, magnified</text>
+          <text x="1080" y="50">the server stop, magnified</text>
+          <text x="360" y="252">switches, routers, NAT, CIDR — what every packet crosses</text>
+          <text x="1000" y="252">HTTP, gRPC or a socket — decided before the first request</text>
+        </g>
+        <rect x="30" y="276" width="1340" height="10" fill="color-mix(in srgb,var(--fast) 26%,transparent)"/>
+        <text x="1370" y="270" text-anchor="end" class="s-note">Latency — 0.5 ms in a data centre, 150 ms across an ocean — is paid on every sheet</text>
+      </svg>
+    </div>
+    <figcaption>Read it as one conversation with two kinds of cost. <b>Setup cost</b> — sheets 3 and 4 — is paid once per host or per connection, and can be cached or reused away. <b>Per-request cost</b> — sheets 1 and 5 — is paid every time, and is reduced only by sending fewer, larger requests. Most slow systems are paying setup cost over and over without noticing.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE PAGE LOAD LINE ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Page Load Line</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Internet Fundamentals · DNS · TCP IP · TLS SSL · HTTP HTTPS</span>
+  </div>
+  <p class="thesis">One URL, one route, fifteen stops. The server — the part you actually wrote — is one of them. <strong>Four stations before it are pure setup, each costing a round trip, and the two fastest ways to serve a request are exits that leave the line before the network is ever touched.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1900 800" role="img" aria-label="A transit map of one HTTPS page load. Ten numbered outbound stations run left to right through five zones: their browser, finding the host, opening the line, the edge, and your server. Station 2, the browser cache, and station 8, the CDN, each have a dashed shortcut to the return line so later stations never run. Station 3, DNS, and station 6, TLS, each have a short hazard spur where the journey simply ends. The return line runs right to left through stations 11 to 15: the response, packet reassembly, parsing that sends the browser back to DNS for every other host, keep-alive which lets the next request re-enter at station 7, and render. A ruler above shows round-trip latency from half a millisecond to six hundred.">
+        <defs>
+          <marker id="p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="p4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <!-- latency ruler -->
+        <text x="40" y="48" class="s-zone" fill="var(--mute)">One round trip, by distance — every numbered stop below pays at least one</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="40" y="84">same data centre ~0.5 ms</text><text x="330" y="84">same city ~5 ms</text><text x="590" y="84">same continent ~30 ms</text><text x="900" y="84">across an ocean ~100–150 ms</text><text x="1280" y="84">geostationary satellite ~600 ms</text>
+        </g>
+        <g>
+          <rect x="40" y="96" width="3" height="10" fill="var(--line)"/><rect x="330" y="96" width="10" height="10" fill="var(--line)"/><rect x="590" y="96" width="40" height="10" fill="var(--line)"/><rect x="900" y="96" width="150" height="10" fill="var(--fast)"/><rect x="1280" y="96" width="480" height="10" fill="var(--hazard)" opacity=".8"/>
+        </g>
+        <text x="1860" y="126" text-anchor="end" class="s-note">a RAM read is roughly a million times faster than any of these</text>
+
+        <rect x="30" y="150" width="290" height="250" fill="var(--z1)"/>
+        <rect x="320" y="150" width="320" height="250" fill="var(--z2)"/>
+        <rect x="640" y="150" width="360" height="250" fill="var(--z3)"/>
+        <rect x="1000" y="150" width="480" height="250" fill="var(--z4)"/>
+        <rect x="1480" y="150" width="390" height="250" fill="var(--z5)"/>
+        <g class="s-zone" fill="var(--mute)">
+          <text x="42" y="172">Their browser</text><text x="332" y="172">Finding the host</text>
+          <text x="652" y="172">Opening the line</text><text x="1012" y="172">The edge</text><text x="1492" y="172">Your server</text>
+        </g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="320" y1="150" x2="320" y2="400"/><line x1="640" y1="150" x2="640" y2="400"/>
+          <line x1="1000" y1="150" x2="1000" y2="400"/><line x1="1480" y1="150" x2="1480" y2="400"/>
+        </g>
+
+        <line x1="70" y1="290" x2="1800" y2="290" stroke="var(--line)" stroke-width="7"/>
+        <line x1="70" y1="273" x2="70" y2="307" stroke="var(--line)" stroke-width="7"/>
+        <path d="M1800,290 C1856,290 1856,700 1800,700" fill="none" stroke="var(--line)" stroke-width="7"/>
+        <line x1="1800" y1="700" x2="82" y2="700" stroke="var(--line)" stroke-width="7" marker-end="url(#p1)"/>
+
+        <g class="st"><circle cx="90" cy="290" r="9"/><circle cx="400" cy="290" r="9"/><circle cx="540" cy="290" r="9"/><circle cx="700" cy="290" r="9"/><circle cx="850" cy="290" r="9"/><circle cx="1070" cy="290" r="9"/><circle cx="1370" cy="290" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"><circle cx="230" cy="290" r="13"/><circle cx="1230" cy="290" r="13"/></g>
+        <rect x="1550" y="277" width="60" height="26" rx="4" fill="var(--paper)" stroke="var(--line)" stroke-width="3.5"/>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none"><path d="M1558,284 h44"/><path d="M1558,290 h44"/><path d="M1558,296 h44"/></g>
+
+        <g class="s-num">
+          <text x="44" y="206">01</text><text x="194" y="206">02</text><text x="364" y="206">03</text><text x="504" y="206">04</text><text x="664" y="206">05</text><text x="814" y="206">06</text><text x="1034" y="206">07</text><text x="1194" y="206">08</text><text x="1334" y="206">09</text><text x="1544" y="206">10</text>
+        </g>
+        <g class="s-lab">
+          <text x="44" y="224">you type a URL</text><text x="194" y="224">browser cache</text><text x="364" y="224">DNS lookup</text><text x="504" y="224">an address</text><text x="664" y="224">TCP handshake</text><text x="814" y="224">TLS handshake</text><text x="1034" y="224">HTTP request</text><text x="1194" y="224">CDN / proxy</text><text x="1334" y="224">load balancer</text><text x="1544" y="224">application server</text>
+        </g>
+        <g class="s-sub">
+          <text x="44" y="242">https://example.com</text><text x="44" y="256">/api/orders/42</text>
+          <text x="194" y="242">still fresh under</text><text x="194" y="256">Cache-Control: max-age?</text>
+          <text x="364" y="242">name → IP, 20–120 ms</text><text x="364" y="256">uncached · sheet 3</text>
+          <text x="504" y="242">93.184.216.34, not</text><text x="504" y="256">local: send to gateway</text><text x="504" y="270">router · sheet 2</text>
+          <text x="664" y="242">SYN, SYN-ACK, ACK —</text><text x="664" y="256">1 round trip · sheet 4</text>
+          <text x="814" y="242">certificate checked, key agreed —</text><text x="814" y="256">1 round trip on TLS 1.3</text>
+          <text x="1034" y="242">GET, headers, a Bearer</text><text x="1034" y="256">token — encrypted now</text>
+          <text x="1194" y="242">can a copy nearby</text><text x="1194" y="256">answer this instead?</text>
+          <text x="1334" y="242">terminates TLS, then</text><text x="1334" y="256">plain HTTP inside</text>
+          <text x="1544" y="242">authenticate → authorise →</text><text x="1544" y="256">query the database</text><text x="1544" y="268">the only stop you wrote · sheet 5</text>
+        </g>
+
+        <!-- exit A -->
+        <path d="M230,303 L230,694" fill="none" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#p2)"/>
+        <circle cx="230" cy="350" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="230" y="354" text-anchor="middle" class="s-note" font-size="12">A</text>
+        <text x="208" y="344" text-anchor="end" class="s-note">fresh in the cache</text>
+        <text x="208" y="358" text-anchor="end" class="s-sub" style="fill:var(--fast)">no DNS, no TCP, no TLS,</text>
+        <text x="208" y="372" text-anchor="end" class="s-sub" style="fill:var(--fast)">no request at all — 0 ms</text>
+
+        <!-- hazard C -->
+        <path d="M400,299 L400,420" fill="none" stroke="var(--hazard)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#p3)"/>
+        <circle cx="400" cy="350" r="12.5" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <text x="400" y="354" text-anchor="middle" class="s-haz" font-size="12">C</text>
+        <text x="422" y="344" class="s-haz">NXDOMAIN, or no answer</text>
+        <text x="422" y="358" class="s-sub" style="fill:var(--hazard)">the journey ends here — healthy</text>
+        <text x="422" y="372" class="s-sub" style="fill:var(--hazard)">servers become unreachable</text>
+
+        <!-- hazard D -->
+        <path d="M850,299 L850,420" fill="none" stroke="var(--hazard)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#p3)"/>
+        <circle cx="850" cy="350" r="12.5" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <text x="850" y="354" text-anchor="middle" class="s-haz" font-size="12">D</text>
+        <text x="872" y="344" class="s-haz">certificate rejected</text>
+        <text x="872" y="358" class="s-sub" font-size="10.5" style="fill:var(--hazard)">expired, wrong name, bad</text>
+        <text x="872" y="372" class="s-sub" font-size="10.5" style="fill:var(--hazard)">chain — client refuses</text>
+
+        <!-- exit B -->
+        <path d="M1230,303 L1230,694" fill="none" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#p2)"/>
+        <circle cx="1230" cy="350" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="1230" y="354" text-anchor="middle" class="s-note" font-size="12">B</text>
+        <text x="1252" y="344" class="s-note">served from the edge</text>
+        <text x="1252" y="358" class="s-sub" style="fill:var(--fast)">200 from cache, a city away;</text>
+        <text x="1252" y="372" class="s-sub" style="fill:var(--fast)">the origin never sees it</text>
+
+        <!-- keep-alive re-entry -->
+        <path d="M960,691 C960,520 1070,480 1070,305" fill="none" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="8 6" marker-end="url(#p2)"/>
+        <text x="944" y="572" text-anchor="end" class="s-note">the next request re-enters at 07</text>
+        <text x="944" y="588" text-anchor="end" class="s-sub" style="fill:var(--fast)">same host, same open connection —</text>
+        <text x="944" y="602" text-anchor="end" class="s-sub" style="fill:var(--fast)">stops 03 to 06 are simply skipped</text>
+
+        <!-- the page is not one request -->
+        <rect x="1290" y="430" width="540" height="170" fill="var(--z6)" stroke="var(--learn)" stroke-width="2" stroke-dasharray="7 6"/>
+        <path d="M1360,691 L1360,606" fill="none" stroke="var(--learn)" stroke-width="3.5" stroke-dasharray="8 6" marker-end="url(#p4)"/>
+        <text x="1304" y="454" class="s-learn">a page is not one request</text>
+        <text x="1304" y="474" class="s-sub">The HTML names stylesheets, scripts, images and fonts, often on</text>
+        <text x="1304" y="488" class="s-sub">other hosts. Every new host sends the browser back to stop 03:</text>
+        <text x="1304" y="502" class="s-sub">another lookup, another TCP and TLS pair, another round of setup.</text>
+        <text x="1304" y="526" class="s-sub">This is why HTTP/2 multiplexing, connection reuse and CDNs matter</text>
+        <text x="1304" y="540" class="s-sub">more to perceived speed than faster server code does.</text>
+        <text x="1304" y="566" class="s-haz" font-size="10.5">Twenty third-party domains is twenty journeys down this line.</text>
+        <text x="1304" y="582" class="s-sub" font-size="10.5">Cutting hosts is a real, frequently overlooked performance win.</text>
+
+        <!-- return stations -->
+        <g class="st"><circle cx="1720" cy="700" r="9"/><circle cx="1540" cy="700" r="9"/><circle cx="1360" cy="700" r="9"/><circle cx="960" cy="700" r="9"/><circle cx="520" cy="700" r="9"/></g>
+        <line x1="90" y1="683" x2="90" y2="717" stroke="var(--line)" stroke-width="7"/>
+        <g class="s-num"><text x="1674" y="662">11</text><text x="1494" y="662">12</text><text x="1344" y="662" text-anchor="end">13</text><text x="944" y="662" text-anchor="end">14</text><text x="474" y="662">15</text></g>
+        <g class="s-lab"><text x="1674" y="680">the response</text><text x="1494" y="680">reassembled</text><text x="1344" y="680" text-anchor="end">parse, discover</text><text x="944" y="680" text-anchor="end">keep-alive</text><text x="474" y="680">render</text><text x="150" y="680">the page</text></g>
+        <g class="s-sub">
+          <text x="1674" y="726">200 OK, Cache-Control,</text><text x="1674" y="740">ETag — next time a 304</text>
+          <text x="1494" y="726">TCP reorders packets and</text><text x="1494" y="740">re-sends what was lost</text>
+          <text x="1314" y="726">CSS, JS, images, fonts</text><text x="1314" y="740">named in the HTML</text>
+          <text x="914" y="726">the connection is held</text><text x="914" y="740">open for the next request</text>
+          <text x="474" y="726">layout and paint —</text><text x="474" y="740">what the user calls "loaded"</text>
+          <text x="150" y="726">one URL, a dozen</text><text x="150" y="740">cooperating systems</text>
+        </g>
+        <text x="1860" y="784" text-anchor="end" class="s-sub">Across an ocean, stops 03 to 06 alone cost 300–450 ms before the first byte of content. Stops 02, 08 and 14 are how you stop paying it.</text>
+      </svg>
+    </div>
+    <figcaption><b>Three things on this map surprise people.</b> The code you wrote is one stop out of fifteen, and rarely the slow one. Four stops are setup that returns no content at all, which is why a reused connection beats a faster server. And the two dashed exits are where the biggest wins live: a response served from the browser or the edge never crosses the ocean.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every stop on this sheet, and what it does</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>You type a URL</h4><p>A scheme, a hostname and a path. The hostname is for humans; nothing on the network can route by it until stop 03 turns it into a number.</p></div>
+      <div><h4><span>02</span>Browser cache</h4><p>If an earlier response said <code>Cache-Control: max-age=3600</code> and the hour is not up, the browser answers itself. The cheapest request is the one never sent.</p></div>
+      <div><h4><span>A</span>Exit · fresh in the cache</h4><p>Nothing to the right runs: no lookup, no handshake, no server load. Correct cache headers are the most underused feature of HTTP.</p></div>
+      <div><h4><span>03</span>DNS lookup</h4><p>Browser cache, OS cache, recursive resolver, then root, TLD and authoritative servers. 20–120 ms uncached, near zero cached. Sheet 3 draws the whole descent.</p></div>
+      <div><h4><span>C</span>Hazard · DNS fails</h4><p>No address, no connection. Many of the largest outages — Facebook, Slack — were DNS or routing mistakes, with every server perfectly healthy behind them.</p></div>
+      <div><h4><span>04</span>An address</h4><p><code>93.184.216.34</code> is a location, not an identity. Not in the local subnet, so the packet goes to the default gateway and is routed hop by hop. Sheet 2.</p></div>
+      <div><h4><span>05</span>TCP handshake</h4><p>SYN, SYN-ACK, ACK: one full round trip before any data moves — about 150 ms across an ocean — to get a reliable, ordered byte stream on port 443.</p></div>
+      <div><h4><span>06</span>TLS handshake</h4><p>ClientHello, ServerHello plus certificate, key exchange. One round trip on TLS 1.3, two on 1.2, zero on a resumed session. After this, everything is encrypted.</p></div>
+      <div><h4><span>D</span>Hazard · certificate rejected</h4><p>Expired, wrong hostname, broken chain or a skewed clock. The client refuses — correctly. Certificate expiry is one of the commonest self-inflicted outages there is.</p></div>
+      <div><h4><span>07</span>HTTP request</h4><p>Method, path, headers, optional body. Stateless, so the Authorization header travels with every single request; the server remembers nothing between them.</p></div>
+      <div><h4><span>08</span>CDN / reverse proxy</h4><p>An HTTP cache placed near the user. If <code>Cache-Control</code> allows it, the edge answers and the request never reaches your origin.</p></div>
+      <div><h4><span>B</span>Exit · served from the edge</h4><p>Physics cannot be optimised away — light in glass sets intercontinental latency. CDNs exist to bring the data closer instead of making the network faster.</p></div>
+      <div><h4><span>09</span>Load balancer</h4><p>Usually terminates TLS and forwards plain HTTP to backends inside the private network. Standard, and a reminder that internal traffic is plaintext unless you encrypt it too.</p></div>
+      <div><h4><span>10</span>Application server</h4><p>Rate limit, authenticate, validate, authorise, execute, respond. The one stop you wrote, and the one sheet 5 opens up.</p></div>
+      <div><h4><span>11</span>The response</h4><p>Status code, headers, body. <code>ETag</code> lets the next request ask <code>If-None-Match</code> and receive <code>304 Not Modified</code> — a round trip with almost no bytes.</p></div>
+      <div><h4><span>12</span>Reassembled</h4><p>The response left as independently routed packets. Some arrived out of order, some not at all; TCP reorders, discards duplicates and re-requests the missing ones.</p></div>
+      <div><h4><span>13</span>Parse, discover</h4><p>The HTML reveals every other resource the page needs. Each new host restarts the line at stop 03 — the hidden multiplier on page load time.</p></div>
+      <div><h4><span>14</span>Keep-alive</h4><p>The connection stays open, so the next request to this host starts at stop 07. Disabling keep-alive, or opening a connection per call, pays setup cost forever.</p></div>
+      <div><h4><span>15</span>Render</h4><p>Layout and paint. What the user experiences as "fast" is mostly how many round trips happened before this stop, not how long the server took.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The network is not reliable, and it is not free</b>
+    <p>Every arrow on this sheet can lose packets, drop connections or time out, and every arrow costs a round trip. Chatty service-to-service calls, hard-coded addresses and missing timeouts are the three ways teams forget that — and "it works locally" is usually the network, not the code.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE WIRE UNDERNEATH ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Wire Underneath</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · Internet Fundamentals · ISP Router Switch Modem · IP Addresses</span>
+  </div>
+  <p class="thesis">Stop 04 of sheet 1, cut open. Above, the four envelopes every packet wears; across the middle, the physical boxes that open them one at a time. <strong>A switch works inside one network by MAC address, a router works between networks by IP address — and that single distinction explains NAT, subnets, VPCs and most "it works on my machine" mysteries.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="A cutaway of the network under one request. Top left, a packet drawn as four nested envelopes: an Ethernet frame around an IP packet around a TCP segment around the HTTP request. Top right, a table of the four layers with the question each answers, its identifier and which device reads it. Across the middle, nine numbered boxes from a laptop through a switch, a router performing NAT, a modem, the ISP, the backbone, the destination router, a data centre switch and the server, with the address each one reads beneath it and a NAT translation table under the router. Along the bottom, the router's forwarding decision, a CIDR size ruler, private ranges with IPv4 and IPv6, and where these details break backend systems.">
+        <defs>
+          <marker id="w2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="w2b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- ENCAPSULATION -->
+        <text x="40" y="48" class="s-zone" fill="var(--line)">10 · Encapsulation — each layer wraps the one above</text>
+        <rect x="40" y="66" width="620" height="180" fill="var(--z2)" stroke="var(--rule)"/>
+        <rect x="70" y="98" width="560" height="138" fill="var(--z3)" stroke="var(--rule)"/>
+        <rect x="100" y="142" width="500" height="86" fill="var(--z1)" stroke="var(--line)" stroke-width="1.5"/>
+        <rect x="130" y="182" width="440" height="38" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="52" y="86" class="s-lab">Link · Ethernet / Wi-Fi header</text>
+        <text x="650" y="86" text-anchor="end" class="s-note" font-size="10.5">rewritten at every hop</text>
+        <text x="82" y="118" class="s-lab">Internet · IP header</text>
+        <text x="620" y="118" text-anchor="end" class="s-note" font-size="10.5">unchanged end to end, except by NAT</text>
+        <text x="82" y="132" class="s-sub" font-size="10.5">93.184.216.34 — which machine</text>
+        <text x="112" y="160" class="s-lab">Transport · TCP header</text>
+        <text x="590" y="160" text-anchor="end" class="s-note" font-size="10.5">read only by the two endpoints</text>
+        <text x="112" y="174" class="s-sub" font-size="10.5">port 443 · sequence numbers · ACKs</text>
+        <text x="142" y="206" class="s-mono" font-size="10.5">GET /api/orders/42 HTTP/1.1 · Host: example.com</text>
+        <text x="40" y="266" class="s-note">A switch opens only the outer envelope. A router opens two. Only the server opens all four.</text>
+
+        <!-- LAYER TABLE -->
+        <text x="700" y="48" class="s-zone" fill="var(--mute)">The layer model · four questions, four identifiers</text>
+        <rect x="690" y="66" width="680" height="180" fill="var(--z3)"/>
+        <g class="s-zone" fill="var(--mute)" font-size="10"><text x="704" y="90">Layer</text><text x="820" y="90">Question it answers</text><text x="1060" y="90">Identifier</text><text x="1200" y="90">Who reads it</text></g>
+        <g stroke="var(--rule)" stroke-width="1"><line x1="700" y1="100" x2="1360" y2="100"/><line x1="700" y1="136" x2="1360" y2="136"/><line x1="700" y1="172" x2="1360" y2="172"/><line x1="700" y1="208" x2="1360" y2="208"/></g>
+        <g class="s-lab" font-size="11.5"><text x="704" y="122">Application</text><text x="704" y="158">Transport</text><text x="704" y="194">Internet</text><text x="704" y="230">Link</text></g>
+        <g class="s-sub"><text x="820" y="122">what does this data mean?</text><text x="820" y="158">which program — and did it arrive?</text><text x="820" y="194">which machine, and which way?</text><text x="820" y="230">next hop on this physical wire</text></g>
+        <g class="s-mono" font-size="10.5"><text x="1060" y="122">URL, hostname</text><text x="1060" y="158">port number</text><text x="1060" y="194">IP address</text><text x="1060" y="230">MAC address</text></g>
+        <g class="s-sub"><text x="1200" y="122">browser and server</text><text x="1200" y="158">the two kernels</text><text x="1200" y="194">every router on the path</text><text x="1200" y="230">switches, for one hop</text></g>
+        <text x="700" y="266" class="s-note">Switch = inside one network. Router = between networks. Everything else follows.</text>
+
+        <!-- THE PATH -->
+        <rect x="30" y="296" width="600" height="294" fill="var(--z1)"/>
+        <rect x="630" y="296" width="300" height="294" fill="var(--z3)"/>
+        <rect x="930" y="296" width="440" height="294" fill="var(--z1)"/>
+        <text x="42" y="318" class="s-zone" fill="var(--line)">Your local network</text>
+        <text x="254" y="318" class="s-sub" style="fill:var(--fast)">dashed · one home box does all three</text>
+        <text x="642" y="318" class="s-zone" fill="var(--mute)">The internet</text>
+        <text x="942" y="318" class="s-zone" fill="var(--line)">Their network</text>
+        <rect x="180" y="332" width="448" height="160" fill="none" stroke="var(--fast)" stroke-width="2" stroke-dasharray="7 6"/>
+
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="40" y="380" width="128" height="80"/><rect x="190" y="380" width="128" height="80"/>
+          <rect x="490" y="380" width="128" height="80"/><rect x="640" y="380" width="128" height="80"/><rect x="790" y="380" width="128" height="80"/>
+          <rect x="1090" y="380" width="128" height="80"/>
+        </g>
+        <rect x="340" y="380" width="128" height="80" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="940" y="380" width="128" height="80" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="1240" y="380" width="128" height="80" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#w2a)">
+          <path d="M168,420 L186,420"/><path d="M318,420 L336,420"/><path d="M468,420 L486,420"/><path d="M618,420 L636,420"/>
+          <path d="M768,420 L786,420"/><path d="M918,420 L936,420"/><path d="M1068,420 L1086,420"/><path d="M1218,420 L1236,420"/>
+        </g>
+        <g class="s-num"><text x="40" y="352">01</text><text x="190" y="352">02</text><text x="340" y="352">03</text><text x="490" y="352">04</text><text x="640" y="352">05</text><text x="790" y="352">06</text><text x="940" y="352">07</text><text x="1090" y="352">08</text><text x="1240" y="352">09</text></g>
+        <g class="s-lab"><text x="40" y="370">your laptop</text><text x="190" y="370">switch</text><text x="340" y="370">router + NAT</text><text x="490" y="370">modem</text><text x="640" y="370">your ISP</text><text x="790" y="370">the backbone</text><text x="940" y="370">their router</text><text x="1090" y="370">their switch</text><text x="1240" y="370">the server</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="50" y="400">192.168.1.7 —</text><text x="50" y="414">a private address</text><text x="50" y="428">shared by millions</text><text x="50" y="442">of other laptops</text>
+          <text x="200" y="400">delivers inside</text><text x="200" y="414">one network; learns</text><text x="200" y="428">which MAC is on</text><text x="200" y="442">which port</text>
+          <text x="350" y="400">between networks;</text><text x="350" y="414">picks the next hop,</text><text x="350" y="428">rewrites private</text><text x="350" y="442">to public via NAT</text>
+          <text x="500" y="400">Ethernet ↔ light,</text><text x="500" y="414">radio or DSL tones.</text><text x="500" y="428">Understands no</text><text x="500" y="442">IP addresses at all</text>
+          <text x="650" y="400">sells access to its</text><text x="650" y="414">piece; hands off at</text><text x="650" y="428">peering points to</text><text x="650" y="442">other ISPs</text>
+          <text x="800" y="400">Tier 1 networks,</text><text x="800" y="414">exchanges, undersea</text><text x="800" y="428">cables — the speed</text><text x="800" y="442">of light in glass</text>
+          <text x="950" y="400">the last hop: ARPs</text><text x="950" y="414">for the MAC that</text><text x="950" y="428">owns 93.184.216.34</text><text x="950" y="442">on its subnet</text>
+          <text x="1100" y="400">rack-level delivery</text><text x="1100" y="414">by MAC, exactly as</text><text x="1100" y="428">in your home —</text><text x="1100" y="442">or a VPC subnet</text>
+          <text x="1250" y="400">93.184.216.34:443</text><text x="1250" y="414">the kernel hands</text><text x="1250" y="428">the bytes to the</text><text x="1250" y="442">process on port 443</text>
+        </g>
+        <g class="s-mono" font-size="10" style="fill:var(--line)">
+          <text x="50" y="478">reads · nothing</text><text x="200" y="478">reads · MAC</text><text x="350" y="478">reads · IP + port</text><text x="500" y="478">reads · signal</text><text x="650" y="478">reads · IP</text><text x="800" y="478">reads · IP</text><text x="950" y="478">reads · IP → MAC</text><text x="1100" y="478">reads · MAC</text><text x="1250" y="478">reads · port</text>
+        </g>
+
+        <rect x="190" y="504" width="430" height="74" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <path d="M404,492 L404,500" stroke="var(--fast)" stroke-width="2"/>
+        <text x="202" y="522" class="s-note" font-size="11">03 · the NAT table, remembered per connection</text>
+        <text x="202" y="540" class="s-mono" font-size="10">inside  192.168.1.7:52814</text>
+        <text x="202" y="556" class="s-mono" font-size="10">outside 203.0.113.9:40001 → 93.184.216.34:443</text>
+        <text x="202" y="572" class="s-sub" font-size="10.5">no entry for an unsolicited inbound packet → dropped</text>
+
+        <text x="642" y="510" class="s-sub">Each router knows only the next hop, never</text>
+        <text x="642" y="524" class="s-sub">the whole route — so a cut cable is routed</text>
+        <text x="642" y="538" class="s-sub">around, not reported to anyone.</text>
+        <text x="642" y="562" class="s-note" font-size="10.5">traceroute prints each of these hops.</text>
+
+        <text x="942" y="510" class="s-sub">A cloud VPC is this whole network, rented by the hour:</text>
+        <text x="942" y="524" class="s-sub">subnets are switching domains, route tables are routing,</text>
+        <text x="942" y="538" class="s-sub">an internet gateway is the ISP link, a NAT gateway is 03.</text>
+        <text x="942" y="562" class="s-note" font-size="10.5">Kubernetes builds the same four ideas again, in software.</text>
+
+        <!-- BOTTOM PANELS -->
+        <rect x="30" y="610" width="330" height="236" fill="var(--z2)"/>
+        <text x="46" y="634" class="s-zone" fill="var(--mute)">11 · The router's one decision</text>
+        <rect x="46" y="648" width="298" height="30" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="58" y="668" class="s-lab" font-size="11">destination in a subnet I am on?</text>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#w2a)"><path d="M117,678 L117,696"/><path d="M273,678 L273,696"/></g>
+        <rect x="46" y="700" width="142" height="58" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="202" y="700" width="142" height="58" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="56" y="718" class="s-lab" font-size="11">yes</text><text x="56" y="734" class="s-sub" font-size="10.5">ARP: IP → MAC,</text><text x="56" y="748" class="s-sub" font-size="10.5">hand to the switch</text>
+        <text x="212" y="718" class="s-lab" font-size="11">no</text><text x="212" y="734" class="s-sub" font-size="10.5">longest prefix match,</text><text x="212" y="748" class="s-sub" font-size="10.5">forward one hop</text>
+        <text x="46" y="782" class="s-sub">No matching route → dropped; at best</text>
+        <text x="46" y="796" class="s-sub">an ICMP error comes back.</text>
+        <text x="46" y="820" class="s-note" font-size="10.5">Backbone tables hold ~1 million routes.</text>
+        <text x="46" y="836" class="s-sub" font-size="10.5">No router knows the whole path.</text>
+
+        <rect x="370" y="610" width="350" height="236" fill="var(--z1)"/>
+        <text x="386" y="634" class="s-zone" fill="var(--line)">12 · CIDR — the slash</text>
+        <g class="s-mono" font-size="10.5" text-anchor="end"><text x="422" y="664">/32</text><text x="422" y="690">/24</text><text x="422" y="716">/22</text><text x="422" y="742">/16</text></g>
+        <g fill="var(--line)" opacity=".85"><rect x="430" y="654" width="4" height="14"/><rect x="430" y="680" width="70" height="14"/><rect x="430" y="706" width="100" height="14"/><rect x="430" y="732" width="150" height="14"/></g>
+        <g class="s-sub" font-size="10.5"><text x="442" y="665">1 · a single host</text><text x="508" y="691">256 · a subnet</text><text x="538" y="717">1,024 addresses</text><text x="588" y="743">65,536 · a VPC</text></g>
+        <text x="386" y="772" class="s-sub">192.168.1.0/24 — the first 24 bits name the</text>
+        <text x="386" y="786" class="s-sub">network, the last 8 name the host.</text>
+        <text x="386" y="812" class="s-haz" font-size="10.5">Every environment on 10.0.0.0/16 collides the</text>
+        <text x="386" y="826" class="s-haz" font-size="10.5">day two of them must be peered.</text>
+
+        <rect x="730" y="610" width="310" height="236" fill="var(--z3)"/>
+        <text x="746" y="634" class="s-zone" fill="var(--mute)">13 · Private, public, IPv6</text>
+        <g class="s-mono" font-size="10.5"><text x="746" y="660">10.0.0.0    – 10.255.255.255</text><text x="746" y="676">172.16.0.0  – 172.31.255.255</text><text x="746" y="692">192.168.0.0 – 192.168.255.255</text></g>
+        <text x="746" y="710" class="s-sub">never routed on the internet; NAT maps</text>
+        <text x="746" y="724" class="s-sub">them onto one shared public address</text>
+        <text x="746" y="748" class="s-lab" font-size="11">IPv4 · 32 bits · ~4.3 billion</text>
+        <text x="746" y="764" class="s-sub">exhausted; NAT postponed the crisis</text>
+        <text x="746" y="786" class="s-lab" font-size="11">IPv6 · 128 bits · ~340 undecillion</text>
+        <text x="746" y="802" class="s-sub">about half of traffic; NAT rarely needed</text>
+        <text x="746" y="828" class="s-haz" font-size="10.5">An IP is where a machine is — never who it is.</text>
+
+        <rect x="1050" y="610" width="320" height="236" fill="var(--band)"/>
+        <text x="1066" y="634" class="s-zone" fill="var(--hazard)">14 · Where this bites you</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="1066" y="658">· A webhook cannot reach your laptop: NAT</text>
+          <text x="1066" y="672">  drops unsolicited inbound. Use a tunnel.</text>
+          <text x="1066" y="690">· Small requests work, large ones hang: MTU</text>
+          <text x="1066" y="704">  and fragmentation, often a VPN.</text>
+          <text x="1066" y="722">· X-Forwarded-For is forgeable unless your</text>
+          <text x="1066" y="736">  proxy overwrites it — rate limits bypassed.</text>
+          <text x="1066" y="754">· SSRF: refuse user URLs that resolve to</text>
+          <text x="1066" y="768">  169.254.169.254 or a private range.</text>
+          <text x="1066" y="786">· IP is not identity: shared behind NAT,</text>
+          <text x="1066" y="800">  changed on mobile, spoofed over UDP.</text>
+        </g>
+        <text x="1066" y="828" class="s-note" font-size="10.5">"It works locally" is usually routing or NAT.</text>
+      </svg>
+    </div>
+    <figcaption><b>The useful mental model is the postal system:</b> the IP address is the street address used across the country, the MAC address is the name on the door that only matters inside the building, routers are sorting offices that know only the next office, and NAT is a receptionist deciding which desk each delivery to a shared address belongs to.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the boxes, the envelopes and the addresses</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Your laptop</h4><p>Holds a private address such as <code>192.168.1.7</code>, handed out by DHCP, and a MAC address burned into its network card. Neither is visible, or reachable, from the internet.</p></div>
+      <div><h4><span>02</span>Switch</h4><p>Delivers frames inside one network by MAC address, learning which device sits on which port. Its obsolete ancestor, the hub, copied every frame to every port.</p></div>
+      <div><h4><span>03</span>Router and NAT</h4><p>Connects different networks and forwards each packet one hop closer. At home it also translates every device's private address to one shared public one and remembers which connection is whose.</p></div>
+      <div><h4><span>04</span>Modem</h4><p>Modulator–demodulator: converts Ethernet into light for fibre, radio frequencies for cable or tones for DSL. Knows nothing about IP.</p></div>
+      <div><h4><span>05</span>ISP</h4><p>Owns a piece of the network and sells access to it. Interconnects with other ISPs at peering points — which is what makes the internet one reachable network rather than islands.</p></div>
+      <div><h4><span>06</span>The backbone</h4><p>Tier 1 networks, exchanges and undersea cables carrying most intercontinental traffic. Latency here is set by the speed of light in glass, so bandwidth cannot shorten it.</p></div>
+      <div><h4><span>07</span>Their router</h4><p>The final routing hop. It uses ARP to find which MAC address owns the destination IP on its local network, then hands the packet down.</p></div>
+      <div><h4><span>08</span>Their switch</h4><p>The same job as 02, inside a data centre or a cloud subnet. A VPC subnet is a switching domain you rent rather than wire.</p></div>
+      <div><h4><span>09</span>The server</h4><p>The IP gets the packet to the machine; the port — 443 here — gets it to the process. The kernel's TCP stack reassembles the stream and hands it over through a socket.</p></div>
+      <div><h4><span>10</span>Encapsulation</h4><p>Each layer adds its own header around the one above: HTTP inside TCP inside IP inside Ethernet. Link headers are rewritten at every hop; IP headers survive end to end, NAT aside.</p></div>
+      <div><h4><span>11</span>Forwarding and ARP</h4><p>A router compares the destination against its table and takes the most specific matching prefix. On the final network, ARP turns the IP into a MAC. No match means a drop.</p></div>
+      <div><h4><span>12</span>CIDR</h4><p>Splits an address into network and host bits. <code>/24</code> is 256 addresses, <code>/16</code> is 65,536, <code>/32</code> is one host. Firewall rules, security groups and VPC subnets are all written this way.</p></div>
+      <div><h4><span>13</span>Private ranges and IPv6</h4><p>10/8, 172.16/12 and 192.168/16 are reusable and unroutable. IPv4's 4.3 billion addresses ran out; IPv6's 128 bits make NAT largely unnecessary, and it now carries about half of traffic.</p></div>
+      <div><h4><span>14</span>Where it bites</h4><p>NAT blocks inbound webhooks, MTU problems make large requests hang, forged <code>X-Forwarded-For</code> defeats IP rate limits, and SSRF abuses private ranges and the metadata address.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — THE NAME TREE ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Name Tree</h2>
+    <span class="form">Descent diagram</span>
+    <span class="cov">Covers · DNS · IP Addresses · Internet Fundamentals</span>
+  </div>
+  <p class="thesis">Stop 03 of sheet 1, drawn in full. A name goes down past three caches and, only if all of them miss, into a tree where no server knows the answer — each only knows who to ask next. <strong>Caching is what makes DNS fast and exactly what makes it slow to change: the TTL you set today decides how long tomorrow's mistake stays live.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="A descent diagram of DNS resolution. On the left, three caches step downward: the browser cache, the operating system cache and the recursive resolver, each with a hit exit that ends the lookup. From the resolver, three arrows reach into a tree on the right: the root servers, the .com top-level domain servers with sibling domains such as .org and .uk, and the authoritative server for example.com with siblings such as github.com. The authoritative server returns an A record with a TTL of 300, which is carried back up the chain and cached at every level before the browser connects. Along the bottom, record types, a TTL timeline comparing 24 hours with 5 minutes, and attacks on DNS.">
+        <defs>
+          <marker id="n1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="n2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- DESCENT -->
+        <text x="40" y="48" class="s-zone" fill="var(--line)">The descent · cheapest cache first</text>
+        <text x="40" y="68" class="s-sub">the browser needs an address for example.com</text>
+
+        <rect x="40" y="80" width="230" height="60" fill="var(--z2)" stroke="var(--rule)"/>
+        <rect x="100" y="170" width="230" height="60" fill="var(--z2)" stroke="var(--rule)"/>
+        <rect x="160" y="262" width="260" height="70" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <g class="s-num"><text x="52" y="98">01</text><text x="112" y="188">02</text><text x="172" y="280">03</text></g>
+        <g class="s-lab"><text x="78" y="98">browser cache</text><text x="138" y="188">OS resolver cache</text><text x="198" y="280">recursive resolver</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="116">its own short-lived copy</text><text x="52" y="130">of recent answers</text>
+          <text x="112" y="206">system-wide; /etc/hosts</text><text x="112" y="220">overrides it locally</text>
+          <text x="172" y="298">ISP, 1.1.1.1 or 8.8.8.8 —</text><text x="172" y="312">does the walk on your behalf</text><text x="172" y="326">and caches aggressively</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#n1)"><path d="M155,140 L155,166"/><path d="M215,230 L215,258"/><path d="M200,332 L200,436"/></g>
+        <text x="290" y="114" class="s-note">hit → answered, ~0 ms</text>
+        <text x="350" y="204" class="s-note">hit → answered, ~0 ms</text>
+        <text x="440" y="424" class="s-note">hit → answered by the resolver</text>
+        <text x="440" y="438" class="s-sub" style="fill:var(--fast)">most lookups never reach the root at all</text>
+
+        <!-- RESOLVER CONVERSATION -->
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-start="url(#n1)" marker-end="url(#n1)">
+          <path d="M424,280 L694,110"/><path d="M424,297 L694,248"/><path d="M424,314 L694,386"/>
+        </g>
+
+        <!-- TREE -->
+        <text x="700" y="52" class="s-zone" fill="var(--mute)">The tree · no server knows everything, each knows who is next</text>
+        <g stroke="var(--rule)" stroke-width="2" fill="none">
+          <path d="M810,140 L810,214"/><path d="M810,164 L1275,164"/><path d="M1015,164 L1015,214"/><path d="M1145,164 L1145,214"/><path d="M1275,164 L1275,214"/>
+          <path d="M810,280 L810,354"/><path d="M810,304 L1145,304"/><path d="M1015,304 L1015,354"/><path d="M1145,304 L1145,354"/>
+        </g>
+        <rect x="700" y="74" width="220" height="66" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="700" y="214" width="220" height="66" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <rect x="700" y="354" width="220" height="66" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g class="s-num"><text x="712" y="92">04</text><text x="712" y="232">05</text><text x="712" y="372">06</text></g>
+        <g class="s-lab"><text x="738" y="92">root servers</text><text x="738" y="232">.com TLD servers</text><text x="738" y="372">authoritative server</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="712" y="110">asked: who handles .com?</text><text x="712" y="126">says: these .com servers</text>
+          <text x="712" y="250">asked: who has example.com?</text><text x="712" y="266">says: ns1.example.com</text>
+          <text x="712" y="390">holds the real records, set</text><text x="712" y="406">via NS at the registrar</text>
+        </g>
+        <g fill="var(--paper)" stroke="var(--rule)">
+          <rect x="960" y="214" width="110" height="40"/><rect x="1090" y="214" width="110" height="40"/><rect x="1220" y="214" width="110" height="40"/>
+          <rect x="960" y="354" width="110" height="40"/><rect x="1090" y="354" width="110" height="40"/>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="1015" y="238">.org</text><text x="1145" y="238">.uk</text><text x="1275" y="238">.dev</text>
+          <text x="1015" y="378">github.com</text><text x="1145" y="378">stripe.com</text>
+        </g>
+        <text x="1220" y="378" class="s-sub">… millions more</text>
+        <text x="960" y="112" class="s-sub">the top of the hierarchy — the one place</text>
+        <text x="960" y="126" class="s-sub">every uncached lookup starts from</text>
+
+        <!-- ANSWER -->
+        <path d="M810,420 L810,456" stroke="var(--fast)" stroke-width="3.5" fill="none" marker-end="url(#n2)"/>
+        <rect x="700" y="460" width="330" height="76" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+        <text x="712" y="480" class="s-num">07</text><text x="738" y="480" class="s-lab">the answer</text>
+        <text x="712" y="500" class="s-mono" font-size="10.5">example.com  A  93.184.216.34  TTL 300</text>
+        <text x="712" y="522" class="s-sub" font-size="10.5">or NXDOMAIN, if the name does not exist</text>
+        <path d="M700,510 L330,510 L330,336" fill="none" stroke="var(--fast)" stroke-width="3.5" marker-end="url(#n2)"/>
+        <text x="350" y="530" class="s-note">back up the chain — 03, 02, 01 each keep a copy</text>
+        <text x="350" y="546" class="s-sub" style="fill:var(--fast)">for exactly the TTL: here, 300 seconds</text>
+
+        <rect x="40" y="440" width="250" height="64" fill="var(--z4)" stroke="var(--rule)"/>
+        <text x="52" y="460" class="s-num">08</text><text x="78" y="460" class="s-lab">connect</text>
+        <text x="52" y="478" class="s-sub" font-size="10.5">TCP to 93.184.216.34:443 —</text>
+        <text x="52" y="492" class="s-sub" font-size="10.5">now sheet 4 can begin</text>
+        <text x="40" y="530" class="s-sub">UDP port 53, TCP as fallback ·</text>
+        <text x="40" y="544" class="s-sub">20–120 ms uncached, ~0 cached</text>
+
+        <rect x="1060" y="440" width="310" height="130" fill="var(--z3)"/>
+        <text x="1076" y="462" class="s-zone" fill="var(--mute)">13 · DNS as a tool</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="1076" y="482">· CDNs answer by location: each user gets</text>
+          <text x="1076" y="496">  the address of the nearest edge.</text>
+          <text x="1076" y="512">· Blue-green and failover by record change.</text>
+          <text x="1076" y="528">· Kubernetes runs CoreDNS: services by name.</text>
+          <text x="1076" y="544">· Email lives in TXT: SPF, DKIM, DMARC.</text>
+        </g>
+        <text x="1076" y="562" class="s-note" font-size="10.5">Names stay stable while machines move.</text>
+
+        <!-- BOTTOM PANELS -->
+        <rect x="30" y="596" width="440" height="250" fill="var(--z2)"/>
+        <text x="46" y="620" class="s-zone" fill="var(--mute)">09 · Record types worth knowing</text>
+        <g class="s-mono" font-size="10.5" style="fill:var(--line)"><text x="46" y="646">A</text><text x="46" y="670">AAAA</text><text x="46" y="694">CNAME</text><text x="46" y="718">MX</text><text x="46" y="742">TXT</text><text x="46" y="766">NS</text><text x="46" y="790">SRV</text></g>
+        <g class="s-sub"><text x="110" y="646">name → IPv4 address</text><text x="110" y="670">name → IPv6 address</text><text x="110" y="694">alias to another name</text><text x="110" y="718">where email is delivered</text><text x="110" y="742">SPF, DKIM, verification</text><text x="110" y="766">who is authoritative</text><text x="110" y="790">service host and port</text></g>
+        <g class="s-mono" font-size="10"><text x="290" y="646">93.184.216.34</text><text x="290" y="670">2001:db8::1</text><text x="290" y="694">www → example.com</text><text x="290" y="718">mail.example.com</text><text x="290" y="742">"v=spf1 …"</text><text x="290" y="766">ns1.example.com</text><text x="290" y="790">discovery, internal</text></g>
+        <text x="46" y="822" class="s-note">In: a name and a type. Out: a value and a TTL.</text>
+
+        <rect x="480" y="596" width="450" height="250" fill="var(--z5)"/>
+        <text x="496" y="620" class="s-zone" fill="var(--fast)">10 · TTL — how long a mistake lives</text>
+        <text x="496" y="652" class="s-mono" font-size="10.5">TTL 86400</text>
+        <rect x="580" y="640" width="330" height="16" fill="var(--hazard)" opacity=".75"/>
+        <text x="580" y="672" class="s-sub" font-size="10.5" style="fill:var(--hazard)">old server still answers some users for a full day</text>
+        <text x="496" y="700" class="s-mono" font-size="10.5">TTL 300</text>
+        <rect x="580" y="688" width="12" height="16" fill="var(--line)"/>
+        <text x="600" y="700" class="s-sub" font-size="10.5">gone in 5 minutes, at the price of more DNS traffic</text>
+        <line x1="580" y1="716" x2="910" y2="716" stroke="var(--rule)" stroke-width="1.5"/>
+        <g class="s-sub" font-size="10"><text x="580" y="730">0</text><text x="745" y="730" text-anchor="middle">12 h</text><text x="910" y="730" text-anchor="end">24 h after the change</text></g>
+        <text x="496" y="756" class="s-lab" font-size="11">The migration recipe</text>
+        <text x="496" y="772" class="s-sub">day −2: lower the TTL to 300 · day 0: change the record ·</text>
+        <text x="496" y="786" class="s-sub">afterwards: raise it back to 86400</text>
+        <text x="496" y="814" class="s-haz" font-size="10.5">11 · Not for fast failover: some resolvers ignore short TTLs.</text>
+        <text x="496" y="830" class="s-sub" style="fill:var(--hazard)">Fail over in seconds with a health-checked load balancer.</text>
+
+        <rect x="940" y="596" width="430" height="250" fill="var(--band)"/>
+        <text x="956" y="620" class="s-zone" fill="var(--hazard)">12 · Attacks on the phone book</text>
+        <text x="956" y="644" class="s-lab" font-size="11">Spoofing and cache poisoning</text>
+        <text x="956" y="660" class="s-sub" font-size="10.5">Plaintext, unsigned answers can send users to the wrong server.</text>
+        <text x="956" y="674" class="s-sub" font-size="10.5">DNSSEC signs records; DoH and DoT encrypt the query itself.</text>
+        <text x="956" y="696" class="s-lab" font-size="11">Subdomain takeover</text>
+        <text x="956" y="712" class="s-sub" font-size="10.5">A CNAME left pointing at a deleted cloud resource lets anyone</text>
+        <text x="956" y="726" class="s-sub" font-size="10.5">claim that hostname. Audit dangling records.</text>
+        <text x="956" y="748" class="s-lab" font-size="11">Exfiltration over port 53</text>
+        <text x="956" y="764" class="s-sub" font-size="10.5">Stolen data leaves inside queries — port 53 is rarely blocked.</text>
+        <text x="956" y="786" class="s-lab" font-size="11">The registrar account</text>
+        <text x="956" y="802" class="s-sub" font-size="10.5">Lose it and you lose the domain. Strong MFA and registrar lock.</text>
+        <text x="956" y="830" class="s-haz" font-size="10.5">"The site is down" is frequently DNS. Check it first.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the descent as a price list:</b> stops 01 and 02 cost nothing, stop 03 costs a few milliseconds, and the walk through 04, 05 and 06 costs up to 120. Everything about DNS operations — TTLs, migrations, failover, outages — is a consequence of those caches holding answers you can no longer take back.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the lookup, and the vocabulary around it</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Browser cache</h4><p>The browser keeps its own recent answers. A hit ends the lookup instantly — and is one reason your machine can disagree with everyone else's after a change.</p></div>
+      <div><h4><span>02</span>OS resolver cache</h4><p>The operating system's shared cache, with <code>/etc/hosts</code> as a local override. Useful for testing, unmanageable as a way to run anything real.</p></div>
+      <div><h4><span>03</span>Recursive resolver</h4><p>Your ISP's, or a public one such as 1.1.1.1 or 8.8.8.8, configured by DHCP or <code>resolv.conf</code>. It walks the tree for you and caches everything it learns.</p></div>
+      <div><h4><span>04</span>Root servers</h4><p>The fixed entry point. They know nothing about example.com — only which servers are responsible for <code>.com</code>.</p></div>
+      <div><h4><span>05</span>TLD servers</h4><p>The <code>.com</code> servers refer the resolver to the name servers registered for example.com. That delegation is the NS record you set at your registrar.</p></div>
+      <div><h4><span>06</span>Authoritative server</h4><p>Holds the real records for the domain — BIND, PowerDNS, Knot, or your cloud provider's DNS. Every other layer only holds copies of what this one said.</p></div>
+      <div><h4><span>07</span>The answer</h4><p>A record value plus a TTL, or <code>NXDOMAIN</code>. It is cached at 03, 02 and 01 on the way back, and each copy lives for the TTL regardless of what you change afterwards.</p></div>
+      <div><h4><span>08</span>Connect</h4><p>Only now can the TCP handshake start. One extra round trip per distinct host, which is why fewer third-party domains on a page is a real performance win.</p></div>
+      <div><h4><span>09</span>Record types</h4><p>A and AAAA for addresses, CNAME for aliases, MX for mail, TXT for SPF, DKIM and verification, NS for delegation, SRV for service discovery.</p></div>
+      <div><h4><span>10</span>TTL</h4><p>How long resolvers may cache a record. 300 means quick changes and more lookups; 86400 means efficiency and a day-long migration. Lower it a day or two before any planned move.</p></div>
+      <div><h4><span>11</span>No fast failover</h4><p>Caches, and resolvers that ignore short TTLs, mean a change can take minutes to hours to reach everyone. Use DNS for planned moves and a load balancer with health checks for failover.</p></div>
+      <div><h4><span>12</span>Attacks</h4><p>Spoofing and cache poisoning (DNSSEC, DoH, DoT), subdomain takeover through dangling CNAMEs, data exfiltration through queries, and hijacked registrar accounts.</p></div>
+      <div><h4><span>13</span>DNS as a tool</h4><p>Geographic answers route users to the nearest CDN edge, record changes drive blue-green switches, and CoreDNS lets Kubernetes services find each other by name instead of by IP.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — THE HANDSHAKE LADDER ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>The Handshake Ladder</h2>
+    <span class="form">Ladder plate</span>
+    <span class="cov">Covers · TCP IP · TLS SSL · Internet Fundamentals</span>
+  </div>
+  <p class="thesis">Stops 05 and 06 of sheet 1, drawn to scale in time. Each rung is a packet crossing an ocean; each pair of rungs is a round trip nobody sees. <strong>A new HTTPS connection costs three round trips — about 450 ms — before the first byte of content, and all of it is saved by the one habit of reusing connections.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 910" role="img" aria-label="A sequence ladder of one new HTTPS connection across an ocean, time running downward at 150 milliseconds per round trip. Seven rungs slant between a client and a server: SYN, SYN-ACK, ACK with ClientHello, ServerHello with certificate, the client verifying the certificate, Finished with the HTTP request, and the response arriving at about 450 milliseconds. Brackets group the rungs into TCP, TLS 1.3 and HTTP. To the right, how TCP repairs lost and reordered packets, the port number ranges, and TCP compared with UDP. Along the bottom, the certificate chain of trust, asymmetric and symmetric encryption, and the ways connections fail.">
+        <defs>
+          <marker id="h1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="h2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="h3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <!-- LADDER -->
+        <text x="40" y="40" class="s-zone" fill="var(--line)">The ladder · across an ocean, 150 ms per round trip</text>
+        <g class="s-lab" text-anchor="middle"><text x="120" y="70">client</text><text x="540" y="70">server :443</text></g>
+        <g stroke="var(--ink)" stroke-width="2"><line x1="120" y1="80" x2="120" y2="656"/><line x1="540" y1="80" x2="540" y2="656"/></g>
+        <g class="s-num" text-anchor="end"><text x="100" y="104">0 ms</text><text x="100" y="194">75</text><text x="100" y="284">150</text><text x="100" y="374">225</text><text x="100" y="464">300</text><text x="100" y="554">375</text><text x="100" y="644">450</text></g>
+        <g stroke="var(--mute)" stroke-width="1.5" fill="none"><path d="M50,102 L44,102 L44,278 L50,278"/><path d="M50,282 L44,282 L44,458 L50,458"/><path d="M50,462 L44,462 L44,638 L50,638"/></g>
+        <g class="s-sub" font-size="10.5" text-anchor="middle">
+          <text x="34" y="190" transform="rotate(-90 34 190)">TCP · 1 round trip</text>
+          <text x="34" y="370" transform="rotate(-90 34 370)">TLS 1.3 · 1 round trip</text>
+          <text x="34" y="550" transform="rotate(-90 34 550)">HTTP · the content</text>
+        </g>
+
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#h1)">
+          <path d="M120,100 L536,189"/><path d="M540,190 L124,279"/><path d="M120,280 L536,369"/><path d="M540,370 L124,459"/><path d="M120,460 L536,549"/>
+        </g>
+        <path d="M540,550 L124,639" stroke="var(--fast)" stroke-width="3.5" fill="none" marker-end="url(#h2)"/>
+        <circle cx="120" cy="460" r="9" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+
+        <g fill="var(--paper)">
+          <rect x="295" y="134" width="70" height="18"/><rect x="282" y="224" width="96" height="18"/><rect x="247" y="314" width="166" height="18"/>
+          <rect x="220" y="404" width="220" height="18"/><rect x="205" y="494" width="250" height="18"/><rect x="240" y="584" width="180" height="18"/>
+        </g>
+        <g class="s-lab" font-size="11" text-anchor="middle">
+          <text x="330" y="147">01 · SYN</text><text x="330" y="237">02 · SYN-ACK</text><text x="330" y="327">03 · ACK + ClientHello</text>
+          <text x="330" y="417">04 · ServerHello + certificate</text><text x="330" y="507">06 · Finished + GET /api/orders/42</text>
+        </g>
+        <text x="330" y="597" text-anchor="middle" class="s-note" font-size="11">07 · 200 OK — first byte</text>
+
+        <g class="s-lab" font-size="11.5">
+          <text x="570" y="137">“I want to connect”</text><text x="570" y="227">“OK, and I want to as well”</text><text x="570" y="317">“Confirmed” — TCP is open</text>
+          <text x="570" y="407">cipher chosen, identity proven</text><text x="570" y="453">05 · client verifies the chain</text><text x="570" y="501">encrypted from here on</text><text x="570" y="591">first byte of content</text>
+        </g>
+        <g class="s-sub">
+          <text x="570" y="151">random initial sequence number</text><text x="570" y="241">server allocates connection state</text><text x="570" y="331">same flight starts the TLS 1.3 hello</text>
+          <text x="570" y="421">certificate + key share + Finished</text><text x="570" y="467">name, expiry, revocation — or refuses</text><text x="570" y="515">the request rides the final flight</text><text x="570" y="605">~450 ms after the first SYN</text>
+        </g>
+
+        <text x="40" y="676" class="s-note">14 · Three round trips before one byte of content. TLS 1.2 adds a fourth, +150 ms.</text>
+        <text x="40" y="692" class="s-sub">A reused connection skips rungs 01 to 05 entirely; a resumed TLS session (0-RTT) skips the handshake cost too.</text>
+
+        <!-- R1 RELIABILITY -->
+        <rect x="850" y="24" width="520" height="280" fill="var(--z1)"/>
+        <text x="866" y="48" class="s-zone" fill="var(--line)">08 · How TCP repairs the stream</text>
+        <g class="s-lab" font-size="11"><text x="866" y="84">sent</text><text x="866" y="134">arrived</text><text x="866" y="184">delivered</text></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="960" y="64" width="34" height="28"/><rect x="1004" y="64" width="34" height="28"/><rect x="1048" y="64" width="34" height="28"/><rect x="1092" y="64" width="34" height="28"/><rect x="1136" y="64" width="34" height="28"/>
+          <rect x="960" y="114" width="34" height="28"/><rect x="1004" y="114" width="34" height="28"/><rect x="1048" y="114" width="34" height="28"/><rect x="1092" y="114" width="34" height="28"/>
+          <rect x="960" y="164" width="34" height="28"/><rect x="1004" y="164" width="34" height="28"/><rect x="1048" y="164" width="34" height="28"/><rect x="1136" y="164" width="34" height="28"/>
+        </g>
+        <rect x="1136" y="114" width="34" height="28" fill="none" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="4 3"/>
+        <rect x="1092" y="164" width="34" height="28" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g class="s-mono" text-anchor="middle">
+          <text x="977" y="82">1</text><text x="1021" y="82">2</text><text x="1065" y="82">3</text><text x="1109" y="82">4</text><text x="1153" y="82">5</text>
+          <text x="977" y="132">1</text><text x="1021" y="132">3</text><text x="1065" y="132">5</text><text x="1109" y="132">2</text><text x="1153" y="132" fill="var(--hazard)">·</text>
+          <text x="977" y="182">1</text><text x="1021" y="182">2</text><text x="1065" y="182">3</text><text x="1109" y="182">4</text><text x="1153" y="182">5</text>
+        </g>
+        <text x="1186" y="82" class="s-sub">every byte numbered</text>
+        <text x="1186" y="132" class="s-haz" font-size="10.5">4 lost, order scrambled</text>
+        <text x="1186" y="182" class="s-note" font-size="10.5">4 re-sent, order restored</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="866" y="222">sequence numbers → ACKs → no ACK before the timeout? retransmit</text>
+          <text x="866" y="238">out-of-order segments buffered and reordered; duplicates discarded</text>
+          <text x="866" y="254">flow control: never send faster than the receiver can read</text>
+          <text x="866" y="270">congestion control: loss is read as congestion, and TCP backs off —</text>
+          <text x="866" y="286">which is why throughput collapses on lossy links</text>
+        </g>
+
+        <!-- R2 PORTS -->
+        <rect x="850" y="318" width="520" height="134" fill="var(--z3)"/>
+        <text x="866" y="342" class="s-zone" fill="var(--mute)">09 · Ports — which program</text>
+        <rect x="866" y="354" width="7" height="18" fill="var(--fast)"/>
+        <rect x="873" y="354" width="353" height="18" fill="var(--line)" opacity=".7"/>
+        <rect x="1226" y="354" width="120" height="18" fill="var(--cool)" opacity=".8"/>
+        <g class="s-mono" font-size="10"><text x="866" y="388">0–1023 well-known</text><text x="1000" y="388">1024–49151 registered</text><text x="1226" y="388">49152–65535 ephem.</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="866" y="408">well-known: 80 HTTP, 443 HTTPS, 22 SSH, 53 DNS</text>
+          <text x="866" y="422">registered: 5432 Postgres, 3306 MySQL, 6379 Redis</text>
+          <text x="866" y="436">ephemeral: handed to your outgoing connections — and they can run out</text>
+        </g>
+
+        <!-- R3 TCP vs UDP -->
+        <rect x="850" y="466" width="520" height="224" fill="var(--z4)"/>
+        <text x="866" y="490" class="s-zone" fill="var(--mute)">10 · TCP or UDP</text>
+        <text x="866" y="514" class="s-lab" font-size="11">TCP · registered post</text>
+        <text x="1120" y="514" class="s-lab" font-size="11">UDP · a postcard</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="866" y="530">handshake, ACKs, retransmits, order</text><text x="866" y="544">20+ byte header</text><text x="866" y="558">HTTP, SSH, databases, email</text>
+          <text x="1120" y="530">no connection, no guarantees</text><text x="1120" y="544">8 byte header</text><text x="1120" y="558">DNS, video calls, gaming, QUIC</text>
+        </g>
+        <text x="866" y="584" class="s-note" font-size="11">UDP is right when late data is useless:</text>
+        <text x="866" y="598" class="s-sub">retransmitting a video frame from two seconds ago helps nobody.</text>
+        <text x="866" y="624" class="s-lab" font-size="11">Head-of-line blocking</text>
+        <text x="866" y="640" class="s-sub">one lost packet stalls every stream sharing the TCP connection —</text>
+        <text x="866" y="654" class="s-sub">so HTTP/3 moved to QUIC over UDP, with reliability per stream.</text>
+        <text x="866" y="676" class="s-haz" font-size="10.5">TCP has no encryption and no authentication of its own.</text>
+
+        <!-- BOTTOM -->
+        <rect x="30" y="710" width="440" height="186" fill="var(--z1)"/>
+        <text x="46" y="734" class="s-zone" fill="var(--line)">11 · The chain of trust</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="46" y="746" width="120" height="46"/><rect x="196" y="746" width="130" height="46"/></g>
+        <rect x="356" y="746" width="100" height="46" fill="var(--paper)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#h1)"><path d="M166,769 L192,769"/><path d="M326,769 L352,769"/></g>
+        <g class="s-lab" font-size="11"><text x="56" y="765">Root CA</text><text x="206" y="765">Intermediate CA</text><text x="366" y="765">example.com</text></g>
+        <g class="s-sub" font-size="10"><text x="56" y="781">trusted by the OS</text><text x="206" y="781">signed by the root</text><text x="366" y="781">name + key</text></g>
+        <text x="46" y="814" class="s-sub">The client checks: valid signature chain, matching name,</text>
+        <text x="46" y="828" class="s-sub">not expired, not revoked. A skewed clock breaks it too.</text>
+        <text x="46" y="852" class="s-haz" font-size="10.5">Any of hundreds of CAs can issue for any domain —</text>
+        <text x="46" y="866" class="s-haz" font-size="10.5">Certificate Transparency makes misissuance visible.</text>
+
+        <rect x="480" y="710" width="450" height="186" fill="var(--z3)"/>
+        <text x="496" y="734" class="s-zone" fill="var(--mute)">12 · Two kinds of encryption</text>
+        <rect x="496" y="746" width="200" height="54" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <rect x="716" y="746" width="200" height="54" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <path d="M696,773 L712,773" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#h1)"/>
+        <text x="506" y="766" class="s-lab" font-size="11">asymmetric · RSA, ECDSA</text>
+        <text x="506" y="784" class="s-sub" font-size="10.5">slow; no shared secret needed</text>
+        <text x="726" y="766" class="s-lab" font-size="11">symmetric · AES, ChaCha20</text>
+        <text x="726" y="784" class="s-sub" font-size="10.5">fast; used for all the data</text>
+        <text x="496" y="822" class="s-sub">Pay for expensive cryptography once, in the handshake, to agree</text>
+        <text x="496" y="836" class="s-sub">a cheap shared key — then use that key for everything after.</text>
+        <text x="496" y="860" class="s-lab" font-size="11">Confidentiality · integrity · authenticity</text>
+        <text x="496" y="876" class="s-note" font-size="10.5">TLS proves who you are talking to — never what they may do.</text>
+
+        <rect x="940" y="710" width="430" height="186" fill="var(--band)"/>
+        <text x="956" y="734" class="s-zone" fill="var(--hazard)">13 · How connections fail</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="956" y="756">· verify=False, rejectUnauthorized: false, curl -k — HTTPS</text>
+          <text x="956" y="770">  becomes slower HTTP. Never, not even in tests.</text>
+          <text x="956" y="788">· Expired certificates: automate renewal, monitor it separately.</text>
+          <text x="956" y="806">· SYN flood exhausts handshake state; SYN cookies mitigate it.</text>
+          <text x="956" y="824">· No timeout: a half-open connection hangs a thread forever.</text>
+          <text x="956" y="842">· A connection per query: pool, or run out of ephemeral ports.</text>
+          <text x="956" y="860">· TLS terminated at the balancer: inside is plaintext — use mTLS.</text>
+        </g>
+        <text x="956" y="884" class="s-haz" font-size="10.5">TLS 1.0, 1.1 and every SSL version are broken, not old.</text>
+      </svg>
+    </div>
+    <figcaption><b>Count the rungs, not the milliseconds on your laptop.</b> On localhost every rung is free, which is why connection-per-request code passes every test and then adds half a second per call in production. Across an ocean the ladder is the latency; the server's own work is often the smallest number on the sheet.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every rung, and the machinery beside it</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>SYN</h4><p>The client asks to connect and picks a random initial sequence number — random so that connections cannot be hijacked by guessing it.</p></div>
+      <div><h4><span>02</span>SYN-ACK</h4><p>The server agrees, picks its own sequence number and allocates connection state. A SYN flood abuses exactly this allocation; SYN cookies avoid it.</p></div>
+      <div><h4><span>03</span>ACK + ClientHello</h4><p>TCP is open after one round trip. The client immediately sends its TLS hello: supported versions and cipher suites.</p></div>
+      <div><h4><span>04</span>ServerHello + certificate</h4><p>The server picks a cipher, sends its certificate as proof of identity, and completes its half of the key exchange. TLS 1.3 fits this into one round trip; TLS 1.2 needed two.</p></div>
+      <div><h4><span>05</span>Verify the certificate</h4><p>Signature chain to a trusted root, hostname match, expiry, revocation. The whole authenticity guarantee lives in this step, which is why skipping it is never a fix.</p></div>
+      <div><h4><span>06</span>Finished + request</h4><p>Both sides derive the same symmetric key. From here every byte is encrypted and tamper-evident, and the HTTP request goes out on the same flight.</p></div>
+      <div><h4><span>07</span>First byte</h4><p>About 450 ms after the first SYN across an ocean, most of it waiting on light. The server's work is added on top of this, never instead of it.</p></div>
+      <div><h4><span>08</span>Reliability</h4><p>Sequence numbers, acknowledgements, retransmission on timeout, reordering and de-duplication — plus flow control for the receiver and congestion control for the network.</p></div>
+      <div><h4><span>09</span>Ports</h4><p>An IP address picks the machine, a port picks the program. 0–1023 well-known, 1024–49151 registered, 49152–65535 ephemeral for outgoing connections.</p></div>
+      <div><h4><span>10</span>TCP or UDP</h4><p>TCP when every byte must arrive in order; UDP when timeliness beats completeness. HTTP/3 rebuilt reliability per stream on UDP to escape head-of-line blocking.</p></div>
+      <div><h4><span>11</span>Chain of trust</h4><p>A root CA in the trust store signs an intermediate, which signs the site certificate binding a name to a public key. Certificate Transparency logs catch certificates that should not exist.</p></div>
+      <div><h4><span>12</span>Asymmetric then symmetric</h4><p>RSA or ECDSA once, slowly, to agree a secret without sharing one in advance; AES or ChaCha20 for all the data, fast and hardware-accelerated. Together: confidentiality, integrity, authenticity.</p></div>
+      <div><h4><span>13</span>Failure modes</h4><p>Disabled verification, silently expired certificates, SYN floods, missing timeouts, unpooled connections and plaintext behind the load balancer — the last answered with mTLS.</p></div>
+      <div><h4><span>14</span>Reuse</h4><p>Keep-alive, connection pools and TLS session resumption all buy the same thing: skipping this ladder. Opening a connection per database query or API call is among the most expensive mistakes in backend code.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — THE REQUEST COUNTER ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>The Request Counter</h2>
+    <span class="form">Process plant</span>
+    <span class="cov">Covers · HTTP HTTPS · API Design</span>
+  </div>
+  <p class="thesis">Stop 10 of sheet 1, the one stop you own. A request enters the counter and passes six checks, cheapest first, each with its own rejection chute and its own status code. <strong>The code behind the counter can be rewritten at will; the counter itself — its paths, codes, errors and versions — is a promise to strangers you can never take back.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A process plant for one API request. Eight numbered stations run left to right: the request arrives, rate limit, authenticate, validate, idempotency check, authorise the object, business logic, and respond. Below each checking station a chute drops rejected requests into a bin labelled with a status code: 429, 401, 422, a replayed stored result, 403 or 404, and 500; the final station emits 201 Created. The middle band shows the anatomy of a request and response, the HTTP methods with their safety and idempotency, and the status code classes. The bottom band shows caching with max-age and ETag revalidation, HTTP versions and HTTPS, and the design rules of an API contract.">
+        <defs>
+          <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="c3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <text x="40" y="42" class="s-zone" fill="var(--line)">The counter · one POST, checked cheapest first, every failure with its own code</text>
+        <g fill="var(--z2)" stroke="var(--rule)">
+          <rect x="40" y="62" width="150" height="88"/><rect x="208" y="62" width="150" height="88"/><rect x="376" y="62" width="150" height="88"/><rect x="544" y="62" width="150" height="88"/>
+          <rect x="880" y="62" width="150" height="88"/><rect x="1048" y="62" width="150" height="88"/>
+        </g>
+        <rect x="712" y="62" width="150" height="88" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <rect x="1216" y="62" width="150" height="88" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#c1)">
+          <path d="M190,104 L204,104"/><path d="M358,104 L372,104"/><path d="M526,104 L540,104"/><path d="M694,104 L708,104"/><path d="M862,104 L876,104"/><path d="M1030,104 L1044,104"/><path d="M1198,104 L1212,104"/>
+        </g>
+        <g class="s-num"><text x="50" y="80">01</text><text x="218" y="80">02</text><text x="386" y="80">03</text><text x="554" y="80">04</text><text x="722" y="80">05</text><text x="890" y="80">06</text><text x="1058" y="80">07</text><text x="1226" y="80">08</text></g>
+        <g class="s-lab" font-size="11.5"><text x="74" y="80">the request</text><text x="242" y="80">rate limit</text><text x="410" y="80">authenticate</text><text x="578" y="80">validate</text><text x="746" y="80">idempotency</text><text x="914" y="80">authorise</text><text x="1082" y="80">business logic</text><text x="1250" y="80">respond</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="50" y="100">POST /v1/orders with</text><text x="50" y="114">a Bearer token, JSON</text><text x="50" y="128">and Idempotency-Key</text>
+          <text x="218" y="100">per client, per key —</text><text x="218" y="114">the cheapest check,</text><text x="218" y="128">so it runs first</text>
+          <text x="386" y="100">is the token valid?</text><text x="386" y="114">who is calling?</text><text x="386" y="128">nothing else known yet</text>
+          <text x="554" y="100">schema, types, ranges,</text><text x="554" y="114">at the boundary;</text><text x="554" y="128">never trust a client</text>
+          <text x="722" y="100">seen abc-123 before?</text><text x="722" y="114">then don't act twice</text><text x="722" y="128">— replay the result</text>
+          <text x="890" y="100">may THIS user act on</text><text x="890" y="114">THIS order? Checked</text><text x="890" y="128">per object, not route</text>
+          <text x="1058" y="100">services, rules, one</text><text x="1058" y="114">transaction, then the</text><text x="1058" y="128">database</text>
+          <text x="1226" y="100">status, Location,</text><text x="1226" y="114">a body in the same</text><text x="1226" y="128">shape as every other</text>
+        </g>
+
+        <g fill="none" stroke-width="3" stroke-dasharray="7 5">
+          <path d="M283,150 L283,190" stroke="var(--hazard)" marker-end="url(#c2)"/><path d="M451,150 L451,190" stroke="var(--hazard)" marker-end="url(#c2)"/>
+          <path d="M619,150 L619,190" stroke="var(--hazard)" marker-end="url(#c2)"/><path d="M787,150 L787,190" stroke="var(--fast)" marker-end="url(#c3)"/>
+          <path d="M955,150 L955,190" stroke="var(--hazard)" marker-end="url(#c2)"/><path d="M1123,150 L1123,190" stroke="var(--hazard)" marker-end="url(#c2)"/>
+        </g>
+        <path d="M1291,150 L1291,190" fill="none" stroke="var(--line)" stroke-width="3.5" marker-end="url(#c1)"/>
+        <g fill="var(--paper)" stroke-width="2">
+          <rect x="223" y="194" width="120" height="30" stroke="var(--hazard)"/><rect x="391" y="194" width="120" height="30" stroke="var(--hazard)"/><rect x="559" y="194" width="120" height="30" stroke="var(--hazard)"/>
+          <rect x="727" y="194" width="120" height="30" stroke="var(--fast)"/><rect x="895" y="194" width="120" height="30" stroke="var(--hazard)"/><rect x="1063" y="194" width="120" height="30" stroke="var(--hazard)"/>
+          <rect x="1231" y="194" width="120" height="30" stroke="var(--line)"/>
+        </g>
+        <g class="s-mono" font-size="10.5" text-anchor="middle">
+          <text x="283" y="214" fill="var(--hazard)">429 Retry-After</text><text x="451" y="214" fill="var(--hazard)">401</text><text x="619" y="214" fill="var(--hazard)">422 per field</text>
+          <text x="787" y="214" fill="var(--fast)">replayed 201</text><text x="955" y="214" fill="var(--hazard)">403, or 404</text><text x="1123" y="214" fill="var(--hazard)">500, no trace</text>
+          <text x="1291" y="214" fill="var(--line)">201 Created</text>
+        </g>
+        <text x="40" y="250" class="s-note">Cheapest checks first: nothing touches the database until 02 to 06 have all said yes.</text>
+
+        <!-- M1 ANATOMY -->
+        <rect x="30" y="266" width="520" height="276" fill="var(--z2)"/>
+        <text x="46" y="290" class="s-zone" fill="var(--mute)">09 · Anatomy of one exchange</text>
+        <g class="s-lab" font-size="11" style="fill:var(--line)"><text x="46" y="312">request</text><text x="300" y="312">response</text></g>
+        <g class="s-mono" font-size="10">
+          <text x="46" y="330">POST /v1/orders HTTP/1.1</text><text x="46" y="346">Host: example.com</text><text x="46" y="362">Authorization: Bearer eyJ…</text><text x="46" y="378">Content-Type: application/json</text><text x="46" y="402">{"item": "book", "qty": 2}</text>
+          <text x="300" y="330">HTTP/1.1 201 Created</text><text x="300" y="346">Content-Type: application/json</text><text x="300" y="362">Location: /v1/orders/42</text><text x="300" y="378">Cache-Control: no-store</text><text x="300" y="402">{"id": 42, "status": "pending"}</text>
+        </g>
+        <text x="46" y="424" class="s-sub">start line · headers · optional body — both directions</text>
+        <text x="46" y="450" class="s-lab" font-size="11">Stateless: every request carries everything</text>
+        <text x="46" y="466" class="s-sub">GET /profile and GET /orders each re-send Authorization. The server</text>
+        <text x="46" y="480" class="s-sub">remembers nothing, so any server can handle any request — easy scaling.</text>
+        <text x="46" y="502" class="s-note" font-size="10.5">Sessions and JWTs are state added back on top of a stateless protocol.</text>
+        <text x="46" y="526" class="s-haz" font-size="10.5">Never put tokens in the URL — servers, proxies and browser history log it.</text>
+
+        <!-- M2 METHODS -->
+        <rect x="560" y="266" width="400" height="276" fill="var(--z1)"/>
+        <text x="576" y="290" class="s-zone" fill="var(--line)">10 · Methods and their promises</text>
+        <g class="s-zone" font-size="10" fill="var(--mute)"><text x="576" y="312">Method</text><text x="650" y="312">Purpose</text><text x="800" y="312">Safe</text><text x="856" y="312">Idempotent</text></g>
+        <line x1="576" y1="320" x2="944" y2="320" stroke="var(--rule)"/>
+        <g class="s-mono" font-size="10.5"><text x="576" y="340">GET</text><text x="576" y="362">POST</text><text x="576" y="384">PUT</text><text x="576" y="406">PATCH</text><text x="576" y="428">DELETE</text></g>
+        <g class="s-sub"><text x="650" y="340">retrieve</text><text x="650" y="362">create, or act</text><text x="650" y="384">replace entirely</text><text x="650" y="406">modify partially</text><text x="650" y="428">remove</text></g>
+        <g class="s-sub"><text x="800" y="340">yes</text><text x="800" y="362">no</text><text x="800" y="384">no</text><text x="800" y="406">no</text><text x="800" y="428">no</text>
+          <text x="856" y="340">yes</text><text x="856" y="384">yes</text><text x="856" y="406">no</text><text x="856" y="428">yes</text></g>
+        <text x="856" y="362" class="s-haz" font-size="11">NO</text>
+        <text x="576" y="456" class="s-lab" font-size="11">Why idempotency is not academic</text>
+        <text x="576" y="474" class="s-mono" font-size="10" style="fill:var(--hazard)">POST /payments → retried → charged twice</text>
+        <text x="576" y="490" class="s-mono" font-size="10" style="fill:var(--fast)">+ Idempotency-Key: abc-123 → first result</text>
+        <text x="576" y="512" class="s-sub">Networks retry, users double-click, mobile clients resend.</text>
+        <text x="576" y="528" class="s-sub">Anything that costs money or sends a message needs a key.</text>
+
+        <!-- M3 STATUS -->
+        <rect x="970" y="266" width="400" height="276" fill="var(--z3)"/>
+        <text x="986" y="290" class="s-zone" fill="var(--mute)">11 · Status codes</text>
+        <g class="s-mono" font-size="11"><text x="986" y="316" fill="var(--line)">2xx</text><text x="986" y="340" fill="var(--cool)">3xx</text><text x="986" y="364" fill="var(--fast)">4xx</text><text x="986" y="404" fill="var(--hazard)">5xx</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="1026" y="316">200 OK · 201 Created · 204 No Content</text>
+          <text x="1026" y="340">301 Moved Permanently · 304 Not Modified</text>
+          <text x="1026" y="364">400 Bad Request · 401 Unauthorized · 403 Forbidden</text>
+          <text x="1026" y="380">404 Not Found · 409 Conflict · 422 · 429 Too Many</text>
+          <text x="1026" y="404">500 Internal · 502 Bad Gateway · 503 · 504 Timeout</text>
+        </g>
+        <rect x="986" y="422" width="368" height="56" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="998" y="444" class="s-lab" font-size="11">401 — “I don't know who you are”</text>
+        <text x="998" y="464" class="s-lab" font-size="11">403 — “I know who you are, and you may not”</text>
+        <text x="986" y="504" class="s-haz" font-size="10.5">200 with an error in the body blinds every client, proxy</text>
+        <text x="986" y="520" class="s-haz" font-size="10.5">and monitor that only reads the status line.</text>
+
+        <!-- B1 CACHING -->
+        <rect x="30" y="558" width="440" height="310" fill="var(--z4)"/>
+        <text x="46" y="582" class="s-zone" fill="var(--fast)">12 · Caching, the underused feature</text>
+        <text x="46" y="602" class="s-sub">the first response carries</text>
+        <text x="46" y="618" class="s-mono" font-size="10">Cache-Control: max-age=3600</text>
+        <text x="46" y="632" class="s-mono" font-size="10">ETag: "abc123"</text>
+        <rect x="46" y="644" width="200" height="18" fill="var(--line)" opacity=".7"/>
+        <rect x="246" y="644" width="204" height="18" fill="var(--fast)" opacity=".45"/>
+        <g class="s-sub" font-size="10.5"><text x="46" y="678">0 – 1 h: from the cache, 0 bytes</text><text x="252" y="678">after 1 h: revalidate</text></g>
+        <text x="46" y="704" class="s-mono" font-size="10">GET /api/orders/42  If-None-Match: "abc123"</text>
+        <text x="46" y="720" class="s-mono" font-size="10" style="fill:var(--fast)">→ 304 Not Modified, empty body</text>
+        <text x="46" y="738" class="s-sub">a full round trip, near-zero bytes</text>
+        <text x="46" y="764" class="s-note" font-size="10.5">CDNs are HTTP caches near the user; this header drives them.</text>
+        <text x="46" y="788" class="s-sub">The largest HTTP wins are fewer requests, connection reuse</text>
+        <text x="46" y="802" class="s-sub">and correct cache headers — rarely faster server code.</text>
+        <text x="46" y="828" class="s-haz" font-size="10.5">Private, authenticated data: Cache-Control: no-store.</text>
+        <text x="46" y="852" class="s-sub">Ignore cache headers and you re-fetch unchanged data forever.</text>
+
+        <!-- B2 VERSIONS + HTTPS -->
+        <rect x="480" y="558" width="450" height="310" fill="var(--z1)"/>
+        <text x="496" y="582" class="s-zone" fill="var(--line)">13 · Versions, and the S</text>
+        <g class="s-mono" font-size="10.5"><text x="496" y="608">HTTP/1.1</text><text x="496" y="634">HTTP/2</text><text x="496" y="660">HTTP/3</text></g>
+        <g stroke="var(--rule)" fill="var(--paper)"><rect x="570" y="596" width="180" height="16"/><rect x="570" y="622" width="180" height="16"/><rect x="570" y="648" width="180" height="16"/></g>
+        <g fill="var(--line)" opacity=".75"><rect x="572" y="598" width="54" height="12"/><rect x="632" y="598" width="54" height="12"/><rect x="692" y="598" width="54" height="12"/></g>
+        <g opacity=".8">
+          <rect x="572" y="624" width="16" height="12" fill="var(--line)"/><rect x="592" y="624" width="16" height="12" fill="var(--fast)"/><rect x="612" y="624" width="16" height="12" fill="var(--cool)"/><rect x="632" y="624" width="16" height="12" fill="var(--line)"/><rect x="652" y="624" width="16" height="12" fill="var(--fast)"/><rect x="672" y="624" width="16" height="12" fill="var(--cool)"/><rect x="692" y="624" width="16" height="12" fill="var(--line)"/><rect x="712" y="624" width="16" height="12" fill="var(--fast)"/><rect x="732" y="624" width="16" height="12" fill="var(--cool)"/>
+          <rect x="572" y="650" width="16" height="12" fill="var(--line)"/><rect x="592" y="650" width="16" height="12" fill="var(--fast)"/><rect x="632" y="650" width="16" height="12" fill="var(--line)"/><rect x="652" y="650" width="16" height="12" fill="var(--fast)"/><rect x="672" y="650" width="16" height="12" fill="var(--cool)"/><rect x="692" y="650" width="16" height="12" fill="var(--line)"/><rect x="712" y="650" width="16" height="12" fill="var(--fast)"/><rect x="732" y="650" width="16" height="12" fill="var(--cool)"/>
+        </g>
+        <rect x="612" y="650" width="16" height="12" fill="none" stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="3 2"/>
+        <g class="s-sub" font-size="10.5"><text x="762" y="608">one request at a time</text><text x="762" y="634">streams multiplexed</text><text x="762" y="660">QUIC: per-stream loss</text></g>
+        <text x="496" y="684" class="s-sub" font-size="10.5">1.1 queues requests, so browsers opened 6 connections per host.</text>
+
+        <text x="496" y="710" class="s-lab" font-size="11">HTTP</text><text x="716" y="710" class="s-lab" font-size="11">HTTPS</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="496" y="726">plaintext on the wire — readable</text><text x="496" y="740">and modifiable by every network;</text><text x="496" y="754">ISPs have injected adverts into it</text>
+          <text x="716" y="726">the same HTTP inside TLS —</text><text x="716" y="740">tampering is detectable, and a</text><text x="716" y="754">certificate proves the server</text>
+        </g>
+        <text x="496" y="778" class="s-note" font-size="10.5">Redirect to HTTPS and set HSTS. Let's Encrypt made it free.</text>
+        <text x="496" y="802" class="s-lab" font-size="11">Browser-facing headers</text>
+        <text x="496" y="818" class="s-sub" font-size="10.5">CORS: no Allow-Origin * on an authenticated API.</text>
+        <text x="496" y="832" class="s-sub" font-size="10.5">Cookies: Secure, HttpOnly, SameSite. Plus CSP, nosniff, HSTS.</text>
+        <text x="496" y="856" class="s-haz" font-size="10.5">Mixed content — HTTP inside an HTTPS page — is blocked.</text>
+
+        <!-- B3 CONTRACT -->
+        <rect x="940" y="558" width="430" height="310" fill="var(--band)"/>
+        <text x="956" y="582" class="s-zone" fill="var(--mute)">14 · The contract you can't take back</text>
+        <text x="956" y="604" class="s-lab" font-size="11">Resources, not actions</text>
+        <text x="956" y="620" class="s-mono" font-size="10">POST /getUser?id=42  →  GET    /users/42</text>
+        <text x="956" y="634" class="s-mono" font-size="10">POST /deleteUser     →  DELETE /users/42</text>
+        <text x="956" y="658" class="s-lab" font-size="11">Errors designed like successes</text>
+        <text x="956" y="674" class="s-mono" font-size="10">{"error": "validation_failed",</text>
+        <text x="956" y="688" class="s-mono" font-size="10"> "message": "Email address is not valid",</text>
+        <text x="956" y="702" class="s-mono" font-size="10"> "field": "email", "request_id": "req_8f3a"}</text>
+        <text x="956" y="726" class="s-lab" font-size="11">Paginate from day one</text>
+        <text x="956" y="742" class="s-sub" font-size="10.5">cursor: ?limit=50&amp;cursor=… stable under inserts — prefer it;</text>
+        <text x="956" y="756" class="s-sub" font-size="10.5">offset is slow on big tables and skips rows as data shifts.</text>
+        <text x="956" y="780" class="s-lab" font-size="11">Version, and only ever add</text>
+        <text x="956" y="796" class="s-sub" font-size="10.5">/v1/users. Adding a field breaks nobody; removing, renaming or</text>
+        <text x="956" y="810" class="s-sub" font-size="10.5">retyping one breaks every client that relied on it.</text>
+        <text x="956" y="834" class="s-haz" font-size="10.5">Never expose the database schema as the API.</text>
+        <text x="956" y="852" class="s-sub" font-size="10.5">Stripe pins every account to its integration version.</text>
+      </svg>
+    </div>
+    <figcaption><b>The counter is the whole of API security and most of API usability.</b> Every rejection chute is a status code a client can act on; every missing chute is a bug class — no rate limit is an outage, no idempotency is a double charge, and no per-object check at 06 is the most common serious API vulnerability there is.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the stations, the chutes and the contract</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>The request</h4><p>Method, path, headers and body, already decrypted by TLS. Identity, content type and an idempotency key all arrive as headers — nothing is remembered from last time.</p></div>
+      <div><h4><span>02</span>Rate limit</h4><p>The cheapest check and the first line of defence. Rejected with <code>429 Too Many Requests</code> and a <code>Retry-After</code> header well-behaved clients respect.</p></div>
+      <div><h4><span>03</span>Authenticate</h4><p>Is the token valid, and who does it belong to? Failure is <code>401</code>: "I do not know who you are". Confusing it with 403 makes client error handling impossible.</p></div>
+      <div><h4><span>04</span>Validate</h4><p>Schema, types and ranges, at the boundary, for every client including your own. Failure is <code>422</code> with per-field errors. Bind only known fields — mass assignment lets a caller set <code>is_admin</code>.</p></div>
+      <div><h4><span>05</span>Idempotency</h4><p>If this <code>Idempotency-Key</code> was seen, return the stored result instead of acting again. The difference between a retried payment and a double charge.</p></div>
+      <div><h4><span>06</span>Authorise the object</h4><p>Not "is the user logged in" but "does order 12345 belong to them". Failure is <code>403</code>, or <code>404</code> where existence itself is sensitive. Skipping it is OWASP's number one API flaw.</p></div>
+      <div><h4><span>07</span>Business logic</h4><p>Services, rules, database — the part free to change. A failure here is <code>500</code>, and the body must never carry a stack trace, SQL or file path.</p></div>
+      <div><h4><span>08</span>Respond</h4><p><code>201 Created</code> with a <code>Location</code> header and a body in the same shape as every other endpoint: one naming style, one ISO 8601 date format, everywhere.</p></div>
+      <div><h4><span>09</span>Anatomy and statelessness</h4><p>Start line, headers, body, both ways. Because the server keeps no memory, any instance can serve any request — and sessions or JWTs are how state gets added back.</p></div>
+      <div><h4><span>10</span>Methods</h4><p>GET is safe and idempotent, PUT and DELETE are idempotent, POST and PATCH are neither. Using POST for everything throws away both caching and safe retries.</p></div>
+      <div><h4><span>11</span>Status codes</h4><p>2xx success, 3xx redirect, 4xx the client's fault, 5xx yours. Returning 200 with an error inside hides failures from clients, proxies and monitoring alike.</p></div>
+      <div><h4><span>12</span>Caching</h4><p><code>max-age</code> lets clients and CDNs skip the request entirely; <code>ETag</code> with <code>If-None-Match</code> turns a re-fetch into a near-empty <code>304</code>. The highest-leverage web performance change available.</p></div>
+      <div><h4><span>13</span>Versions and HTTPS</h4><p>HTTP/2 multiplexes streams on one connection; HTTP/3 runs over QUIC. Plain HTTP can be read and rewritten in transit, so redirect, set HSTS, and lock down CORS and cookies.</p></div>
+      <div><h4><span>14</span>The contract</h4><p>Resources not actions, structured errors with a request id, cursor pagination from day one, <code>/v1</code> versioning, additive changes only — and never the database schema as the API.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Authenticated is not authorised</b>
+    <p>Broken Object Level Authorization — <code>GET /orders/12345</code> returning someone else's order because the endpoint only checked that a user was logged in — is the most common serious API bug there is. Station 06 has to run for every object, on every request, including the ones your own frontend never makes.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — CHOOSING THE WIRE ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>Choosing the Wire</h2>
+    <span class="form">Decision tree</span>
+    <span class="cov">Covers · API Design · gRPC · WebSockets · HTTP HTTPS</span>
+  </div>
+  <p class="thesis">Before sheet 1 ever runs, someone decided what kind of conversation it would be. Six questions pick the protocol; the leaves say what each one costs you afterwards. <strong>The two questions that matter most are who is calling and whether the server must speak first — get those wrong and no amount of tuning recovers the difference.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A decision tree for choosing a communication style. Question 1 asks who is calling: outsiders and browsers go to question 2, your own services go to question 6. Question 2 asks whether the server must speak first; if not, question 3 asks whether many clients need different shapes of data, leading to REST or GraphQL. If the server speaks first, question 4 asks whether the client pushes too: if yes, WebSocket; if not, question 5 asks how often, leading to polling or Server-Sent Events. Question 6 asks about volume and streaming, leading to gRPC or plain REST internally. Below, three panels: the WebSocket upgrade handshake and its security rules, scaling WebSockets across servers with Redis pub/sub, and a gRPC contract with its operational catches.">
+        <defs>
+          <marker id="d6a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="d6b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <text x="40" y="36" class="s-zone" fill="var(--line)">The tree · answer from the left, stop at the first leaf</text>
+
+        <g stroke="var(--line)" stroke-width="3" fill="none" marker-end="url(#d6a)">
+          <path d="M250,290 L275,290 L275,200 L296,200"/><path d="M250,310 L275,310 L275,492 L296,492"/>
+          <path d="M510,190 L545,190 L545,95 L576,95"/><path d="M510,215 L545,215 L545,290 L576,290"/>
+          <path d="M790,87 L1116,87"/><path d="M790,110 L830,110 L830,157 L1116,157"/>
+          <path d="M790,290 L825,290 L825,240 L856,240"/><path d="M685,322 L685,367 L1116,367"/>
+          <path d="M1070,227 L1116,227"/><path d="M1070,252 L1095,252 L1095,297 L1116,297"/>
+          <path d="M510,482 L545,482 L545,457 L1116,457"/><path d="M510,502 L545,502 L545,527 L1116,527"/>
+        </g>
+
+        <g fill="var(--z3)" stroke="var(--ink)" stroke-width="2">
+          <rect x="40" y="268" width="210" height="64"/><rect x="300" y="168" width="210" height="64"/><rect x="580" y="63" width="210" height="64"/>
+          <rect x="580" y="258" width="210" height="64"/><rect x="860" y="208" width="210" height="64"/><rect x="300" y="460" width="210" height="64"/>
+        </g>
+        <g class="s-lab" font-size="11.5">
+          <text x="52" y="288">Q1 · Who is calling?</text><text x="312" y="188">Q2 · Server speaks first?</text><text x="592" y="83">Q3 · Many client shapes?</text>
+          <text x="592" y="278">Q4 · Client pushes too?</text><text x="872" y="228">Q5 · How often?</text><text x="312" y="480">Q6 · Volume, streaming?</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="306">outsiders, browsers → Q2</text><text x="52" y="320">your own services → Q6</text>
+          <text x="312" y="206">no, the client asks → Q3</text><text x="312" y="220">yes → Q4</text>
+          <text x="592" y="101">one or a few → REST</text><text x="592" y="115">many, varied reads → GraphQL</text>
+          <text x="592" y="296">no, server → client → Q5</text><text x="592" y="310">yes, often, fast → WebSocket</text>
+          <text x="872" y="246">a few times an hour → polling</text><text x="872" y="260">a steady stream → SSE</text>
+          <text x="312" y="498">high, polyglot, streams → gRPC</text><text x="312" y="512">two services, low → REST</text>
+        </g>
+
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="1120" y="57" width="250" height="60"/><rect x="1120" y="127" width="250" height="60"/><rect x="1120" y="197" width="250" height="60"/>
+          <rect x="1120" y="267" width="250" height="60"/><rect x="1120" y="427" width="250" height="60"/><rect x="1120" y="497" width="250" height="60"/>
+        </g>
+        <rect x="1120" y="337" width="250" height="60" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g class="s-note" font-size="12"><text x="1132" y="77">A</text><text x="1132" y="147">B</text><text x="1132" y="217">C</text><text x="1132" y="287">D</text><text x="1132" y="357">E</text><text x="1132" y="447">F</text><text x="1132" y="517">G</text></g>
+        <g class="s-lab" font-size="11.5"><text x="1150" y="77">REST + JSON</text><text x="1150" y="147">GraphQL</text><text x="1150" y="217">Polling</text><text x="1150" y="287">Server-Sent Events</text><text x="1150" y="357">WebSocket</text><text x="1150" y="447">gRPC</text><text x="1150" y="517">REST inside, too</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="1132" y="93">the default: HTTP caching, OpenAPI;</text><text x="1132" y="107">curl works. Risk: endpoint sprawl</text>
+          <text x="1132" y="163">schema enforced, no over-fetching;</text><text x="1132" y="177">caching hard, nested queries costly</text>
+          <text x="1132" y="233">simple and wasteful: most requests</text><text x="1132" y="247">find nothing, each a round trip</text>
+          <text x="1132" y="303">server → client over plain HTTP,</text><text x="1132" y="317">auto-reconnect, no proxy changes</text>
+          <text x="1132" y="373">full duplex, 2–14 byte frames —</text><text x="1132" y="387">stateful, needs pub/sub to scale</text>
+          <text x="1132" y="463">protobuf over HTTP/2, 3–10× smaller;</text><text x="1132" y="477">enforced contract, not for browsers</text>
+          <text x="1132" y="533">two services do not justify a</text><text x="1132" y="547">code-generation pipeline</text>
+        </g>
+
+        <text x="40" y="380" class="s-note">The common production shape</text>
+        <text x="40" y="396" class="s-sub">REST at the edge for outsiders,</text>
+        <text x="40" y="410" class="s-sub">gRPC between your services where</text>
+        <text x="40" y="424" class="s-sub">speed and contracts matter.</text>
+        <text x="40" y="566" class="s-sub">Peer-to-peer audio, video and data — WebRTC — sits outside this tree.</text>
+        <text x="600" y="420" class="s-haz" font-size="10.5">The difference between gRPC and JSON is negligible at 10 requests a second</text>
+        <text x="600" y="434" class="s-haz" font-size="10.5">and decisive at 100,000. Choose by call volume, not by a benchmark.</text>
+
+        <!-- P1 UPGRADE -->
+        <rect x="30" y="590" width="460" height="296" fill="var(--z1)"/>
+        <text x="46" y="614" class="s-zone" fill="var(--line)">01 · The WebSocket upgrade</text>
+        <g class="s-mono" font-size="10">
+          <text x="46" y="638">GET /socket HTTP/1.1</text><text x="46" y="652">Upgrade: websocket · Connection: Upgrade</text><text x="46" y="666">Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==</text>
+          <text x="46" y="686" fill="var(--line)">HTTP/1.1 101 Switching Protocols</text><text x="46" y="700">Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=</text>
+          <text x="46" y="720" fill="var(--fast)">══ from here: raw frames, both directions ══</text>
+        </g>
+        <text x="46" y="744" class="s-sub">Starting as HTTP gets it through proxies and firewalls.</text>
+        <text x="46" y="760" class="s-sub">Polling: 99% of requests find nothing, each with its own handshake.</text>
+        <text x="46" y="774" class="s-sub">The open line: one connection, milliseconds, nothing wasted.</text>
+        <text x="46" y="798" class="s-haz" font-size="10.5">Same-origin policy does not apply: validate Origin, or any site</text>
+        <text x="46" y="812" class="s-haz" font-size="10.5">can connect as your logged-in user (cross-site hijacking).</text>
+        <text x="46" y="834" class="s-sub" font-size="10.5">wss:// only · authenticate in the handshake · re-authorise per message</text>
+        <text x="46" y="848" class="s-sub" font-size="10.5">rate-limit messages · cap connections per user · validate every message</text>
+        <text x="46" y="870" class="s-note" font-size="10.5">Ping dead connections; reconnect with backoff.</text>
+
+        <!-- P2 SCALING -->
+        <rect x="500" y="590" width="440" height="296" fill="var(--z4)"/>
+        <text x="516" y="614" class="s-zone" fill="var(--fast)">02 · Scaling the open line</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="516" y="630" width="96" height="34"/><rect x="636" y="630" width="110" height="34"/><rect x="516" y="742" width="96" height="34"/><rect x="636" y="742" width="110" height="34"/>
+        </g>
+        <rect x="790" y="630" width="130" height="34" fill="var(--paper)" stroke="var(--rule)" stroke-width="2"/>
+        <rect x="790" y="686" width="130" height="40" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="564" y="651">User A</text><text x="691" y="651">Server 1</text><text x="855" y="651">database</text><text x="855" y="703">Redis pub/sub</text><text x="564" y="763">User B</text><text x="691" y="763">Server 2</text></g>
+        <text x="855" y="718" text-anchor="middle" class="s-mono" font-size="10">room:42</text>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#d6a)">
+          <path d="M612,647 L632,647"/><path d="M746,647 L786,647"/>
+        </g>
+        <g stroke="var(--fast)" stroke-width="2.5" fill="none" marker-end="url(#d6b)">
+          <path d="M700,664 C700,700 740,706 786,706"/><path d="M800,726 C790,759 770,759 750,759"/><path d="M636,759 L616,759"/>
+        </g>
+        <g class="s-sub" font-size="10"><text x="524" y="686">1 · sent, ~1 ms</text><text x="524" y="700">2 · validated</text><text x="524" y="714">3 · persisted</text><text x="524" y="728">4 · published</text><text x="760" y="790">5 · Server 2 subscribed</text><text x="760" y="804">6 · pushed down to B</text></g>
+        <text x="516" y="828" class="s-sub" font-size="10.5">Server 1 holds A's connection, not B's. With a second instance</text>
+        <text x="516" y="842" class="s-sub" font-size="10.5">a shared pub/sub backbone is required — the step teams find late.</text>
+        <text x="516" y="864" class="s-haz" font-size="10.5">Stateful: memory and a descriptor per connection; sticky LB.</text>
+        <text x="516" y="878" class="s-sub" font-size="10.5">Poor fit for serverless; invisible to caches and CDNs.</text>
+
+        <!-- P3 gRPC -->
+        <rect x="950" y="590" width="420" height="296" fill="var(--band)"/>
+        <text x="966" y="614" class="s-zone" fill="var(--mute)">03 · gRPC: contract and catches</text>
+        <g class="s-mono" font-size="10">
+          <text x="966" y="638">service UserService {</text>
+          <text x="966" y="652">  rpc GetUser (GetUserRequest) returns (User);</text>
+          <text x="966" y="666">  rpc ListUsers (ListUsersRequest) returns (stream User);</text>
+          <text x="966" y="680">}</text>
+          <text x="966" y="694">message User { int64 id = 1; string name = 2; }</text>
+        </g>
+        <text x="966" y="716" class="s-sub" font-size="10.5">one .proto generates typed clients and servers in every language</text>
+        <text x="966" y="734" class="s-lab" font-size="11">unary · server stream · client stream · bidirectional</text>
+        <text x="966" y="752" class="s-mono" font-size="10">{"userId": 12345, "isActive": true} ~40 B → ~8 B</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="966" y="776">· Set a deadline on every call — say 200 ms — or one hung</text>
+          <text x="966" y="790">  dependency cascades: DEADLINE_EXCEEDED is a feature.</text>
+          <text x="966" y="808">· One HTTP/2 connection: naive L4 balancing pins one backend.</text>
+          <text x="966" y="826">· Never reuse or renumber field numbers; disable reflection.</text>
+          <text x="966" y="844">· Types check shape, not validity — validate as in REST.</text>
+        </g>
+        <text x="966" y="870" class="s-haz" font-size="10.5">Inside is not trusted: mTLS, and authorise every call.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the leaves as bills, not badges.</b> REST's bill is endpoint sprawl, GraphQL's is expensive queries and lost caching, WebSocket's is state on every server, gRPC's is tooling and browser reach. Pick the one whose bill you can pay — which for a public API is almost always leaf A.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the questions, the leaves and the machinery</h3>
+    <div class="gazgrid">
+      <div><h4><span>Q1</span>Who is calling?</h4><p>Third-party developers and browsers expect REST and JSON and cannot easily use anything else. Your own services can agree on anything, including a binary contract.</p></div>
+      <div><h4><span>Q2</span>Must the server speak first?</h4><p>HTTP cannot push: the client always asks. If updates must arrive without being requested, request/response alone will not do.</p></div>
+      <div><h4><span>Q3</span>Many client shapes?</h4><p>Many different clients reading varied shapes of the same data is GraphQL's case. A single frontend on a well-designed REST API does not have that problem.</p></div>
+      <div><h4><span>Q4</span>Does the client push too?</h4><p>Chat, collaborative editing, trading and multiplayer need both directions at low latency. Notifications, feeds and progress bars only need one.</p></div>
+      <div><h4><span>Q5</span>How often?</h4><p>A connection held open for hours to deliver two messages is waste; poll. A steady server-to-client stream belongs on Server-Sent Events.</p></div>
+      <div><h4><span>Q6</span>Volume and streaming?</h4><p>High call volume, polyglot services, or streaming justify gRPC's code generation and tooling. Two services at low volume do not.</p></div>
+      <div><h4><span>A</span>REST + JSON</h4><p>The default for public and browser-facing APIs: universal, cacheable, debuggable with curl, described with OpenAPI. Its main risk is endpoint sprawl.</p></div>
+      <div><h4><span>B</span>GraphQL</h4><p>An enforced schema where clients ask for exactly the fields they need. The price is hard caching and nested queries that can be arbitrarily expensive.</p></div>
+      <div><h4><span>C</span>Polling</h4><p>Ask "anything new?" on a timer. Simple and wasteful — most answers are "no", each paying a round trip. Long polling holds the request open, which is better and still clumsy.</p></div>
+      <div><h4><span>D</span>Server-Sent Events</h4><p>Server-to-client only, over plain HTTP, with automatic reconnection and no special proxy configuration. Simpler than WebSockets whenever the client does not need to push.</p></div>
+      <div><h4><span>E</span>WebSocket</h4><p>A TCP connection that never closes, started as HTTP and upgraded. Tiny frames and true two-way messaging, in exchange for stateful servers and reconnection logic you write yourself.</p></div>
+      <div><h4><span>F</span>gRPC</h4><p>Contract-first RPC with protobuf over HTTP/2: 5–10× faster to serialise, 3–10× smaller, four streaming modes, deadlines built in. Not human-readable, and browsers need gRPC-Web and a proxy.</p></div>
+      <div><h4><span>G</span>REST inside</h4><p>For a small internal system the simplest answer still wins. Adopt gRPC when JSON overhead is measurable, not before.</p></div>
+      <div><h4><span>01</span>The upgrade</h4><p>An HTTP request with <code>Upgrade: websocket</code> answered by <code>101 Switching Protocols</code>. Validate <code>Origin</code>, use <code>wss://</code>, authenticate here and authorise per message.</p></div>
+      <div><h4><span>02</span>Scaling with pub/sub</h4><p>A user on server 1 cannot be reached by server 2. Redis Pub/Sub or NATS fans messages out across instances; the load balancer must support upgrades and sticky routing.</p></div>
+      <div><h4><span>03</span>gRPC catches</h4><p>Deadlines on every call, L7 load balancing because HTTP/2 reuses one connection, never renumbered protobuf fields, reflection off in production, mTLS inside the network.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The protocol is part of the contract</b>
+    <p>Moving a public API from REST to gRPC, or a polling client to WebSockets, is a breaking change for every consumer, and a stateful protocol changes how every server is deployed. Decide at the tree, deliberately — the choice outlives the code written on top of it.</p>
+  </div>
+</div>
+
+</div>
+

@@ -1,0 +1,1235 @@
+<meta charset="utf-8">
+<title>Atlas of the Templates — six sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 16 Templates · six sheets</p>
+  <h1>Atlas of the <em>Templates</em></h1>
+  <p class="thesis">Five documents you copy rather than read: one for learning a technology, one for planning a task, one for recording a decision, one for reviewing a diff, one for securing a system. Sheet 1 is the route a single piece of work travels past all five; every other sheet opens one template and shows its sections, the order you fill them in, and why each one is there. <strong>A template is not paperwork — it is a list of the questions people forget to ask until the answer is expensive.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 6</span>
+    <span><b>Numbered steps</b> 137</span>
+    <span><b>Read first</b> Sheet 1, then the template you are about to copy</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Work Line</h4><p>One piece of work from an unfamiliar tool to production and back: where each template boards, and the two exits that skip them.</p><em>Transit diagram</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Twenty-Six Questions</h4><p>The learning template cut open: seven groups of sections, the six that bear the load, and the two you may only write after using the thing.</p><em>Cutaway section</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>The Task Sheet</h4><p>Size the task first, then fill ten sections in order — with "done when" written before any code exists.</p><em>Process plant</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>The Decision Register</h4><p>Proposed, accepted, superseded: an ADR's life as a circuit that never edits the past, plus the anatomy of one page.</p><em>Closed circuit</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>The Review Ladder</h4><p>Diff size decides whether review happens at all; then eight rungs of priority, from correctness down to style.</p><em>Ladder plate</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>The Security Perimeter</h4><p>Ten items that cause real breaches, nine layers of checklist, four threat-model questions and seven steps for the bad day.</p><em>Cutaway section</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 300" role="img" aria-label="How the six sheets fit together. Sheet 1, the work line, runs across the middle as the route one piece of work takes from learning to production. Above it, the learning template boards before a tool is chosen, the task template before code is written, and the decision record when a choice is expensive to reverse. Below it, the code review checklist boards at every pull request and the security checklist at a new service, account or review. A bar underneath marks that every template ends in personal notes and a workbook exercise.">
+        <rect x="30" y="118" width="1340" height="62" fill="var(--z3)"/>
+        <text x="46" y="144" class="s-zone" fill="var(--mute)">Sheet 1 — the route one piece of work takes, from unfamiliar tool to running in production</text>
+        <text x="46" y="164" class="s-sub">each template is a station on it: the place where a specific question is cheapest to answer, drawn before the point where it becomes expensive</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M220,118 L220,80"/><path d="M560,118 L560,80"/><path d="M900,118 L900,80"/>
+          <path d="M760,180 L760,216"/><path d="M1180,180 L1180,216"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="220" y="68">2 · the twenty-six questions</text>
+          <text x="560" y="68">3 · the task sheet</text>
+          <text x="900" y="68">4 · the decision register</text>
+          <text x="760" y="234">5 · the review ladder</text>
+          <text x="1180" y="234">6 · the security perimeter</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="220" y="50">before you judge a technology</text>
+          <text x="560" y="50">before the first line of code</text>
+          <text x="900" y="50">when a choice is expensive to reverse</text>
+          <text x="760" y="252">before every merge, as reviewer and author</text>
+          <text x="1180" y="252">new service, new account, audit, incident</text>
+        </g>
+        <path d="M1110,58 C1250,58 1250,100 1250,118" fill="none" stroke="var(--learn)" stroke-width="2" stroke-dasharray="6 5"/>
+        <text x="1120" y="50" class="s-learn">revisit triggers fire → a new ADR</text>
+        <rect x="30" y="276" width="1340" height="10" fill="color-mix(in srgb,var(--learn) 26%,transparent)"/>
+        <text x="1370" y="270" text-anchor="end" class="s-learn">Every template ends in Personal Notes and a Workbook Exercise — the proof that it was used</text>
+      </svg>
+    </div>
+    <figcaption>Read it as one habit applied five times. <b>Before the work</b> — sheets 2, 3 and 4 — the templates force thinking to happen on paper, where being wrong costs fifteen minutes. <b>At the gate</b> — sheets 5 and 6 — the checklists catch what the thinking missed, while it is still a diff and not an incident.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE WORK LINE ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Work Line</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Universal Technology Learning Template · Task Template · Architecture Decision Record · Code Review Checklist · Security Checklist</span>
+  </div>
+  <p class="thesis">One piece of work, one route, eighteen stops. Each template boards at the exact station where its question is still cheap to answer. <strong>Two exits let work skip the templates entirely — and knowing when to take them is what stops the templates from being ignored everywhere else.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 2160 760" role="img" aria-label="A transit map of one piece of work. Twelve outbound stations run left to right through five zones: learn, plan, build, gate and ship. Station 2 is the learning template. Stations 3 to 5 are the task template: sizing, goal and done-when, not in scope. Station 3 has a dashed exit straight to the return line for tasks under an hour. Station 6 asks whether the choice is expensive to reverse; if so a branch line runs through four decision record stops and rejoins at the approach. Station 10, the review, has a dashed loop back into build when the diff is too large to review. Station 11 branches down to the security checklist. The return line runs right to left through production, appended notes, revisit triggers, superseding decisions, personal notes and the workbook exercise, back to the start.">
+        <defs>
+          <marker id="m1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="m1b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="m1c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="m1d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <rect x="30" y="150" width="349" height="250" fill="var(--z6)"/>
+        <rect x="379" y="150" width="681" height="250" fill="var(--z1)"/>
+        <rect x="1060" y="150" width="340" height="250" fill="var(--z2)"/>
+        <rect x="1400" y="150" width="510" height="250" fill="var(--z4)"/>
+        <rect x="1910" y="150" width="220" height="250" fill="var(--z5)"/>
+        <g class="s-zone" fill="var(--mute)">
+          <text x="42" y="172">Learn</text><text x="391" y="172">Plan</text>
+          <text x="1072" y="172">Build</text><text x="1412" y="172">The gate</text>
+          <text x="1922" y="172">Ship</text>
+        </g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="379" y1="150" x2="379" y2="400"/><line x1="1060" y1="150" x2="1060" y2="400"/>
+          <line x1="1400" y1="150" x2="1400" y2="400"/><line x1="1910" y1="150" x2="1910" y2="400"/>
+        </g>
+
+        <line x1="70" y1="290" x2="2070" y2="290" stroke="var(--line)" stroke-width="7"/>
+        <line x1="70" y1="273" x2="70" y2="307" stroke="var(--line)" stroke-width="7"/>
+        <path d="M2070,290 C2124,290 2124,660 2070,660" fill="none" stroke="var(--line)" stroke-width="7"/>
+        <line x1="2070" y1="660" x2="82" y2="660" stroke="var(--line)" stroke-width="7" marker-end="url(#m1a)"/>
+
+        <g class="st"><circle cx="90" cy="290" r="9"/><circle cx="430" cy="290" r="9"/><circle cx="600" cy="290" r="9"/><circle cx="770" cy="290" r="9"/><circle cx="1110" cy="290" r="9"/><circle cx="1280" cy="290" r="9"/><circle cx="1450" cy="290" r="9"/><circle cx="1790" cy="290" r="9"/><circle cx="1960" cy="290" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"><circle cx="260" cy="290" r="13"/><circle cx="940" cy="290" r="13"/><circle cx="1620" cy="290" r="13"/></g>
+
+        <g class="s-num">
+          <text x="44" y="206">01</text><text x="214" y="206">02</text><text x="384" y="206">03</text><text x="554" y="206">04</text><text x="724" y="206">05</text><text x="894" y="206">06</text><text x="1064" y="206">07</text><text x="1234" y="206">08</text><text x="1404" y="206">09</text><text x="1574" y="206">10</text><text x="1744" y="206">11</text><text x="1914" y="206">12</text>
+        </g>
+        <g class="s-lab">
+          <text x="44" y="224">a new technology</text><text x="214" y="224">the 26 questions</text><text x="384" y="224">a task arrives</text><text x="554" y="224">goal + done when</text><text x="724" y="224">not in scope</text><text x="894" y="224">reversible?</text><text x="1064" y="224">approach</text><text x="1234" y="224">build</text><text x="1404" y="224">read your own diff</text><text x="1574" y="224">the review</text><text x="1744" y="224">security-shaped?</text><text x="1914" y="224">how this ships</text>
+        </g>
+        <g class="s-sub">
+          <text x="44" y="242">a tool you must judge</text><text x="44" y="256">before you adopt it</text>
+          <text x="214" y="242">or the short six,</text><text x="214" y="256">20 minutes · sheet 2</text>
+          <text x="384" y="242">size it first: hour,</text><text x="384" y="256">half day, days, weeks</text>
+          <text x="554" y="242">an outcome, observable,</text><text x="554" y="256">before any code</text>
+          <text x="724" y="242">stops the "that's not</text><text x="724" y="256">what I meant" talk</text>
+          <text x="894" y="242">an afternoon to undo,</text><text x="894" y="256">or months?</text>
+          <text x="1064" y="242">detailed enough that</text><text x="1064" y="256">someone can disagree</text>
+          <text x="1234" y="242">notes appended daily,</text><text x="1234" y="256">never rewritten</text>
+          <text x="1404" y="242">CI green, one purpose,</text><text x="1404" y="256">weak spots flagged</text>
+          <text x="1574" y="242">diff size first, then</text><text x="1574" y="256">8 rungs · sheet 5</text>
+          <text x="1744" y="242">auth, payments, roles,</text><text x="1744" y="256">personal data</text>
+          <text x="1914" y="242">flag, migration,</text><text x="1914" y="256">rollback, monitoring</text>
+        </g>
+        <text x="960" y="316" class="s-sub" style="fill:var(--line)">cheap? straight on</text>
+
+        <!-- EXIT A -->
+        <path d="M430,299 L430,654" fill="none" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#m1b)"/>
+        <circle cx="430" cy="540" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="430" y="544" text-anchor="middle" class="s-note" font-size="12">A</text>
+        <text x="452" y="530" class="s-note">under an hour: just do it</text>
+        <text x="452" y="544" class="s-sub" style="fill:var(--fast)">writing it down costs more than</text>
+        <text x="452" y="558" class="s-sub" style="fill:var(--fast)">the work · half a day gets two lines</text>
+
+        <!-- ADR BRANCH -->
+        <rect x="900" y="420" width="450" height="184" fill="var(--band)" stroke="var(--line)" stroke-width="2" stroke-dasharray="7 6"/>
+        <path d="M940,303 L940,494" fill="none" stroke="var(--line)" stroke-width="4"/>
+        <line x1="940" y1="500" x2="1240" y2="500" stroke="var(--line)" stroke-width="4"/>
+        <g class="st" stroke-width="2.5"><circle cx="940" cy="500" r="7"/><circle cx="1040" cy="500" r="7"/><circle cx="1140" cy="500" r="7"/><circle cx="1240" cy="500" r="7"/></g>
+        <path d="M1240,493 C1240,420 1110,420 1110,311" fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#m1a)"/>
+        <g class="s-num"><text x="920" y="524">D1</text><text x="1020" y="524">D2</text><text x="1120" y="524">D3</text><text x="1220" y="524">D4</text></g>
+        <g class="s-lab" font-size="11"><text x="920" y="540">context</text><text x="1020" y="540">decision</text><text x="1120" y="540">options</text><text x="1220" y="540">reversibility</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="920" y="556">facts, numbers,</text><text x="920" y="569">the unknowns</text>
+          <text x="1020" y="556">"We will …"</text><text x="1020" y="569">one sentence</text>
+          <text x="1120" y="556">rejected ones,</text><text x="1120" y="569">do-nothing too</text>
+          <text x="1220" y="556">cost to undo,</text><text x="1220" y="569">revisit when</text>
+        </g>
+        <text x="916" y="594" class="s-zone" fill="var(--line)">Branch line · the decision record · sheet 4</text>
+        <text x="960" y="440" class="s-sub" style="fill:var(--line)">if two competent people argued,</text>
+        <text x="960" y="454" class="s-sub" style="fill:var(--line)">write it down</text>
+
+        <!-- EXIT B -->
+        <path d="M1620,303 L1620,560 L1380,560 L1380,305" fill="none" stroke="var(--hazard)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#m1c)"/>
+        <circle cx="1500" cy="560" r="12.5" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <text x="1500" y="564" text-anchor="middle" class="s-haz" font-size="12">B</text>
+        <text x="1400" y="590" class="s-haz">over 500 lines: split it</text>
+        <text x="1400" y="604" class="s-sub" style="fill:var(--hazard)">a 900-line PR is approved, not reviewed</text>
+        <text x="1400" y="470" class="s-sub" style="fill:var(--hazard)">back into build, as</text>
+        <text x="1400" y="484" class="s-sub" style="fill:var(--hazard)">two smaller changes</text>
+
+        <!-- SECURITY BRANCH -->
+        <rect x="1680" y="420" width="450" height="184" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2" stroke-dasharray="7 6"/>
+        <path d="M1790,303 L1790,416" fill="none" stroke="var(--hazard)" stroke-width="3.5" stroke-dasharray="8 6"/>
+        <text x="1810" y="444" class="s-haz">S · the security checklist</text>
+        <text x="1810" y="464" class="s-sub">The ten that cause real breaches first,</text>
+        <text x="1810" y="478" class="s-sub">then nine layers: identity, network,</text>
+        <text x="1810" y="492" class="s-sub">secrets, data, application, supply chain,</text>
+        <text x="1810" y="506" class="s-sub">logging, backups, people. Sheet 6.</text>
+        <text x="1696" y="532" class="s-note">Also boards off this line entirely:</text>
+        <text x="1696" y="548" class="s-sub">a new cloud account, an audit response,</text>
+        <text x="1696" y="562" class="s-sub">or the first ten minutes after a key leaks.</text>
+        <text x="1696" y="588" class="s-haz" font-size="10.5">Misconfiguration, not sophistication, is the usual breach.</text>
+
+        <!-- RETURN LINE -->
+        <g class="st"><circle cx="1960" cy="660" r="9"/><circle cx="1620" cy="660" r="9"/><circle cx="1280" cy="660" r="9"/><circle cx="940" cy="660" r="9"/><circle cx="600" cy="660" r="9"/><circle cx="260" cy="660" r="9"/></g>
+        <line x1="90" y1="643" x2="90" y2="677" stroke="var(--line)" stroke-width="7"/>
+        <g class="s-num"><text x="1914" y="626">13</text><text x="1574" y="626">14</text><text x="1234" y="626">15</text><text x="894" y="626">16</text><text x="554" y="626">17</text><text x="214" y="626">18</text></g>
+        <g class="s-lab"><text x="1914" y="644">production</text><text x="1574" y="644">notes + progress</text><text x="1234" y="644">revisit trigger fires</text><text x="894" y="644">supersede, never edit</text><text x="554" y="644">personal notes</text><text x="214" y="644">workbook exercise</text><text x="110" y="644">understood</text></g>
+        <g class="s-sub">
+          <text x="1914" y="686">who needs to know</text><text x="1914" y="700">that it shipped</text>
+          <text x="1574" y="686">the wrong assumption</text><text x="1574" y="700">is the useful part</text>
+          <text x="1234" y="686">a number, an event,</text><text x="1234" y="700">or a review date</text>
+          <text x="894" y="686">ADR-0014 replaces 0009;</text><text x="894" y="700">the pair is the history</text>
+          <text x="554" y="686">learned, still unclear,</text><text x="554" y="700">research later</text>
+          <text x="214" y="686">run it, break it,</text><text x="214" y="700">write the number down</text>
+          <text x="110" y="686">not familiar —</text><text x="110" y="700">explainable</text>
+        </g>
+        <text x="2130" y="740" text-anchor="end" class="s-learn">The return line is where templates pay off: stops 14–18 turn what happened into something the next person can read.</text>
+      </svg>
+    </div>
+    <figcaption><b>Three things on this map matter more than any single section.</b> Exit A exists so that the templates are only used where they earn their cost. The decision branch is taken on reversibility, not importance. And exit B sends work backwards on purpose: a change too large to review is sent back to be split, not waved through.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every stop on this sheet, and the template that owns it</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>A new technology</h4><p>A tool, protocol, pattern or service you will have to judge. The learning template exists so that "I've read about it" becomes "I can explain where it is the wrong choice".</p></div>
+      <div><h4><span>02</span>The 26 questions</h4><p>Copy the template, spend 30–60 minutes filling what documentation can answer, and leave 25 and 26 blank until you have used it. In a hurry, answer only the short six. Sheet 2.</p></div>
+      <div><h4><span>03</span>A task arrives</h4><p>Size it before describing it. Under an hour, just do it; half a day, one line of goal and one of done-when; a few days, the full template; over a week, split it.</p></div>
+      <div><h4><span>04</span>Goal + done when</h4><p>An outcome for someone, not an activity — "users can find a product by part of its name", not "implement Elasticsearch" — and acceptance criteria a person can verify, with numbers where numbers apply.</p></div>
+      <div><h4><span>05</span>Not in scope</h4><p>What someone would reasonably assume is included and is not. The section that prevents the "that's not what I meant" conversation, and the one people skip.</p></div>
+      <div><h4><span>06</span>Reversible?</h4><p>The switch onto the decision branch. If a choice inside the task could be undone in an afternoon, a line in "approach" is enough. If it is expensive to reverse, it needs an ADR.</p></div>
+      <div><h4><span>D1</span>Context</h4><p>The facts that force the decision, with the numbers: load, growth, team, deadline, budget. And, explicitly, what is unknown — that explains why the choice favours reversibility.</p></div>
+      <div><h4><span>D2</span>Decision</h4><p>"We will …" — one paragraph, active voice, unambiguous. A reader should be able to act on that sentence alone.</p></div>
+      <div><h4><span>D3</span>Options</h4><p>The chosen option with its cons, the rejected ones with the specific reason, and always "do nothing". Most of an ADR's value lives in what was turned down.</p></div>
+      <div><h4><span>D4</span>Reversibility</h4><p>Cost to reverse, what would lock you in, and the triggers that would make you look again. Then the branch rejoins the task at its approach.</p></div>
+      <div><h4><span>07</span>Approach</h4><p>How, in enough detail that someone can disagree, with the uncertain parts marked and one line per alternative. The place where "Postgres, not Elasticsearch — 40k rows" saves a fortnight.</p></div>
+      <div><h4><span>08</span>Build</h4><p>The work itself, with the notes section appended as you go. Dated entries, never rewritten, because the assumption that turned out wrong is the useful detail.</p></div>
+      <div><h4><span>09</span>Read your own diff</h4><p>The author's half of the review: read it first, get CI green, keep it to one purpose, describe why and how it was verified, and flag the parts you are unsure about.</p></div>
+      <div><h4><span>10</span>The review</h4><p>Size decides whether review is possible; then correctness, security, data, failure, tests, clarity, performance, style — in that order, with severity labels on every comment. Sheet 5.</p></div>
+      <div><h4><span>11</span>Security-shaped?</h4><p>Changes touching auth, payments, permissions or personal data get a security review, not just a code review. The code checklist's security section points straight at sheet 6.</p></div>
+      <div><h4><span>12</span>How this ships</h4><p>Feature flag, backward-compatible migration, rollback plan, monitoring. Decided in the task template before the work started, so none of it is improvised at the end.</p></div>
+      <div><h4><span>13</span>Production</h4><p>The metric or alert named at stop 12 says whether it works. Support, sales, docs and users are told it shipped.</p></div>
+      <div><h4><span>14</span>Notes + progress</h4><p>The task's append-only log: what happened, what was learned, which criterion was vague and how it was narrowed. The raw material for every later question about why.</p></div>
+      <div><h4><span>15</span>Revisit trigger fires</h4><p>An ADR's written condition comes true — a volume crosses X per second, a contract demands exact behaviour, or twelve months pass. Without it, a decision becomes permanent by default.</p></div>
+      <div><h4><span>16</span>Supersede, never edit</h4><p>The old record keeps what was known at the time. A new ADR replaces it and the old one is marked. The pair together is the actual history.</p></div>
+      <div><h4><span>17</span>Personal notes</h4><p>Every template ends with them: things learned, questions still open, where it surprised you, sections you never use. Familiarity turns into knowledge here.</p></div>
+      <div><h4><span>18</span>Workbook exercise</h4><p>One practical task per template, unchecked until done: run it, break it, measure it, write the number down. Then the next unfamiliar technology boards at stop 01.</p></div>
+      <div><h4><span>A</span>Exit · just do it</h4><p>Work under an hour skips the task template. Writing it down for a one-hour job trains people to skip the template for the five-day job too.</p></div>
+      <div><h4><span>B</span>Exit · split it</h4><p>A diff over about 500 lines gets "LGTM", which is approval by trust. The most valuable review comment there is sends it back as smaller changes.</p></div>
+      <div><h4><span>S</span>Security branch</h4><p>The checklist also boards off this line: a new service, a new cloud account, an audit response, an incident. Its first ten items fix most real breaches.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Templates scaled wrong get abandoned</b>
+    <p>Every template in this folder warns against using it for everything: no task sheet for an hour's work, no ADR for a naming convention, no 26 sections for a tool you will touch once. A template applied everywhere is skipped everywhere — the exits on this map are what keep the stations credible.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE TWENTY-SIX QUESTIONS ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Twenty-Six Questions</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · Universal Technology Learning Template</span>
+  </div>
+  <p class="thesis">Stops 01 and 02 of sheet 1, opened up. The same twenty-six questions, asked of every technology, so that a new tool becomes a form to fill in rather than a mountain to climb. <strong>Six sections carry the load; two cannot be written from documentation at all — and those two are what turn familiarity into knowledge.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 900" role="img" aria-label="A cutaway of the learning template. On the left, all 26 sections drawn as rows in two columns, shaded by group: what why and where, mechanism, in the world, judgement, understanding, practice and proof. Six rows carry a bar marking them as load-bearing: short definition, problem, architecture position, when not to use, mental model and key takeaway. Rows 25 and 26 are dashed because they can only be written after using the technology. Below, the order of filling one in, as eight boxes that stop at section 24 and return later. On the right, the twenty-minute version with six questions, three example answers of different quality about Redis, the four callout types and where they appear, and the standard lesson summary.">
+        <defs>
+          <marker id="m2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="m2b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <text x="40" y="44" class="s-zone" fill="var(--line)">The note, cut open · 26 sections in seven groups</text>
+        <text x="40" y="64" class="s-sub">a bar marks the load-bearing six; dashed rows can only be written after using the technology</text>
+
+        <!-- COLUMN A -->
+        <g stroke="var(--rule)">
+          <rect x="40" y="96" width="340" height="34" fill="var(--z1)"/><rect x="40" y="134" width="340" height="34" fill="var(--z1)"/><rect x="40" y="172" width="340" height="34" fill="var(--z1)"/>
+          <rect x="40" y="210" width="340" height="34" fill="var(--z2)"/><rect x="40" y="248" width="340" height="34" fill="var(--z2)"/><rect x="40" y="286" width="340" height="34" fill="var(--z2)"/><rect x="40" y="324" width="340" height="34" fill="var(--z2)"/>
+          <rect x="40" y="362" width="340" height="34" fill="var(--z3)"/><rect x="40" y="400" width="340" height="34" fill="var(--z3)"/>
+          <rect x="40" y="438" width="340" height="34" fill="var(--z4)"/><rect x="40" y="476" width="340" height="34" fill="var(--z4)"/><rect x="40" y="514" width="340" height="34" fill="var(--z4)"/><rect x="40" y="552" width="340" height="34" fill="var(--z4)"/>
+        </g>
+        <!-- COLUMN B -->
+        <g stroke="var(--rule)">
+          <rect x="400" y="96" width="340" height="34" fill="var(--z4)"/><rect x="400" y="134" width="340" height="34" fill="var(--z4)"/>
+          <rect x="400" y="172" width="340" height="34" fill="var(--z6)"/><rect x="400" y="210" width="340" height="34" fill="var(--z6)"/><rect x="400" y="248" width="340" height="34" fill="var(--z6)"/><rect x="400" y="286" width="340" height="34" fill="var(--z6)"/>
+          <rect x="400" y="324" width="340" height="34" fill="var(--z3)"/><rect x="400" y="362" width="340" height="34" fill="var(--z3)"/><rect x="400" y="400" width="340" height="34" fill="var(--z3)"/>
+          <rect x="400" y="438" width="340" height="34" fill="var(--z5)"/><rect x="400" y="476" width="340" height="34" fill="var(--z5)"/>
+        </g>
+        <g fill="var(--z5)" stroke="var(--learn)" stroke-width="2" stroke-dasharray="6 4">
+          <rect x="400" y="514" width="340" height="34"/><rect x="400" y="552" width="340" height="34"/>
+        </g>
+        <g fill="var(--fast)">
+          <rect x="40" y="96" width="6" height="34"/><rect x="40" y="134" width="6" height="34"/><rect x="40" y="172" width="6" height="34"/>
+          <rect x="40" y="438" width="6" height="34"/><rect x="400" y="172" width="6" height="34"/><rect x="400" y="286" width="6" height="34"/>
+        </g>
+
+        <g class="s-num">
+          <text x="54" y="111">01</text><text x="54" y="149">02</text><text x="54" y="187">03</text><text x="54" y="225">04</text><text x="54" y="263">05</text><text x="54" y="301">06</text><text x="54" y="339">07</text><text x="54" y="377">08</text><text x="54" y="415">09</text><text x="54" y="453">10</text><text x="54" y="491">11</text><text x="54" y="529">12</text><text x="54" y="567">13</text>
+          <text x="414" y="111">14</text><text x="414" y="149">15</text><text x="414" y="187">16</text><text x="414" y="225">17</text><text x="414" y="263">18</text><text x="414" y="301">19</text><text x="414" y="339">20</text><text x="414" y="377">21</text><text x="414" y="415">22</text><text x="414" y="453">23</text><text x="414" y="491">24</text><text x="414" y="529">25</text><text x="414" y="567">26</text>
+        </g>
+        <g class="s-num" text-anchor="end">
+          <text x="372" y="111">what · why · where</text><text x="372" y="225">mechanism</text><text x="372" y="377">in the world</text><text x="372" y="453">judgement</text>
+          <text x="732" y="111">judgement, cont.</text><text x="732" y="187">understanding</text><text x="732" y="339">practice</text><text x="732" y="453">proof</text>
+        </g>
+        <g class="s-lab" font-size="11">
+          <text x="76" y="111">Short Definition</text><text x="76" y="149">Problem</text><text x="76" y="187">Architecture Position</text><text x="76" y="225">How It Works</text><text x="76" y="263">Core Concepts</text><text x="76" y="301">Variants and Alternatives</text><text x="76" y="339">Configuration That Matters</text><text x="76" y="377">Real World Example</text><text x="76" y="415">Communication and Dependencies</text><text x="76" y="453">When To Use / When NOT To Use</text><text x="76" y="491">Advantages and Disadvantages</text><text x="76" y="529">Performance Impact</text><text x="76" y="567">Cost Impact</text>
+          <text x="436" y="111">Security Considerations</text><text x="436" y="149">Failure Modes</text><text x="436" y="187">Mental Model</text><text x="436" y="225">Mini Architecture Diagram</text><text x="436" y="263">Complete Request Flow</text><text x="436" y="301">Key Takeaway</text><text x="436" y="339">Common Mistakes</text><text x="436" y="377">Open Source Technologies</text><text x="436" y="415">Learning Resources</text><text x="436" y="453">Explanation Test</text><text x="436" y="491">Related Notes</text><text x="436" y="529">Personal Notes</text><text x="436" y="567">Workbook Exercise</text>
+        </g>
+        <g class="s-sub" font-size="10.5">
+          <text x="76" y="125">What is it? Two to four plain sentences</text><text x="76" y="163">What was painful before it existed?</text><text x="76" y="201">What sits above, below and beside it?</text><text x="76" y="239">The mechanism, enough to reason about load</text><text x="76" y="277">The five to ten words its docs assume</text><text x="76" y="315">What else solves it — and your default</text><text x="76" y="353">The setting whose wrong value bites</text><text x="76" y="391">Who uses it, and the obvious-choice case</text><text x="76" y="429">What it needs; the one people forget</text><text x="76" y="467">The most useful question on the page</text><text x="76" y="505">The disadvantage that matters, in bold</text><text x="76" y="543">Latency, throughput, the hidden ceiling</text><text x="76" y="581">What drives the bill; the surprise item</text>
+          <text x="436" y="125">The real, recurring mistake — not generic</text><text x="436" y="163">Symptom you observe → what it actually is</text><text x="436" y="201">A physical analogy, and where it breaks</text><text x="436" y="239">The realistic production shape</text><text x="436" y="277">One request: normal, under load, failing</text><text x="436" y="315">One sentence, if you keep nothing else</text><text x="436" y="353">Including the one you personally made</text><text x="436" y="391">The tool that makes operation bearable</text><text x="436" y="429">The good doc, the why, the one to skip</text><text x="436" y="467">Six boxes, ticked without notes</text><text x="436" y="505">Link it, even to notes not yet written</text><text x="436" y="543">Only after finishing the lesson</text><text x="436" y="581">Something you run, break or measure</text>
+        </g>
+
+        <!-- FILL ORDER -->
+        <rect x="30" y="610" width="720" height="270" fill="var(--band)"/>
+        <text x="46" y="634" class="s-zone" fill="var(--mute)">Filling one in · the order is not 1 to 26</text>
+        <g stroke="var(--rule)" fill="var(--paper)">
+          <rect x="40" y="650" width="156" height="64"/><rect x="218" y="650" width="156" height="64"/><rect x="396" y="650" width="156" height="64"/>
+          <rect x="574" y="650" width="156" height="64" stroke="var(--learn)" stroke-width="2"/>
+          <rect x="574" y="744" width="156" height="64" stroke="var(--learn)" stroke-width="2"/><rect x="396" y="744" width="156" height="64"/>
+          <rect x="218" y="744" width="156" height="64" stroke="var(--fast)" stroke-width="2"/><rect x="40" y="744" width="156" height="64" stroke="var(--fast)" stroke-width="2"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#m2a)">
+          <path d="M196,682 L214,682"/><path d="M374,682 L392,682"/><path d="M552,682 L570,682"/>
+          <path d="M396,776 L378,776"/><path d="M218,776 L200,776"/>
+        </g>
+        <path d="M652,714 L652,740" fill="none" stroke="var(--learn)" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#m2b)"/>
+        <path d="M574,776 L556,776" fill="none" stroke="var(--line)" stroke-width="2.5" marker-end="url(#m2a)"/>
+        <g class="s-num"><text x="48" y="668">F1</text><text x="226" y="668">F2</text><text x="404" y="668">F3</text><text x="582" y="668">F4</text><text x="582" y="762">F5</text><text x="404" y="762">F6</text><text x="226" y="762">F7</text><text x="48" y="762">F8</text></g>
+        <g class="s-lab" font-size="11"><text x="72" y="668">copy the block</text><text x="250" y="668">name the note</text><text x="428" y="668">the docs pass</text><text x="606" y="668">stop at 24</text><text x="606" y="762">use the thing</text><text x="428" y="762">finish 25 + 26</text><text x="250" y="762">write line one</text><text x="72" y="762">explain it aloud</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="48" y="686">COPY FROM HERE to</text><text x="48" y="700">COPY TO HERE</text>
+          <text x="226" y="686">after the technology;</text><text x="226" y="700">fill the header table</text>
+          <text x="404" y="686">30–60 minutes of what</text><text x="404" y="700">reading can answer</text>
+          <text x="582" y="686">leave 25 and 26 blank</text><text x="582" y="700">— not used it yet</text>
+          <text x="582" y="780">run it, break it,</text><text x="582" y="794">measure something</text>
+          <text x="404" y="780">personal notes and</text><text x="404" y="794">workbook, from use</text>
+          <text x="226" y="780">"In one line" last:</text><text x="226" y="794">what + central trade</text>
+          <text x="48" y="780">close the note; where</text><text x="48" y="794">you stumble, it's weak</text>
+        </g>
+        <text x="46" y="834" class="s-learn">The half-finished state is correct: stop at 24, use it, then come back.</text>
+        <text x="46" y="852" class="s-sub">Familiarity while reading feels exactly like knowledge and disappears the moment the file closes.</text>
+        <text x="46" y="868" class="s-sub">Writing sections 25 and 26 is what converts one into the other.</text>
+
+        <!-- P1 · THE SHORT SIX -->
+        <rect x="770" y="40" width="600" height="212" fill="var(--z3)"/>
+        <text x="786" y="64" class="s-zone" fill="var(--fast)">The load-bearing six · the 20-minute version</text>
+        <g class="s-num"><text x="786" y="94">§01</text><text x="786" y="116">§02</text><text x="786" y="138">§03</text><text x="786" y="160">§10</text><text x="786" y="182">§16</text><text x="786" y="204">§19</text></g>
+        <g class="s-lab" font-size="11"><text x="826" y="94">What is it?</text><text x="826" y="116">Why does it exist?</text><text x="826" y="138">Where does it sit?</text><text x="826" y="160">When should I NOT use it?</text><text x="826" y="182">What is the mental model?</text><text x="826" y="204">What is the one takeaway?</text></g>
+        <g class="s-sub"><text x="1040" y="94">two sentences</text><text x="1040" y="116">what was painful before</text><text x="1040" y="138">one diagram</text><text x="1040" y="160">the most useful question here</text><text x="1040" y="182">one analogy</text><text x="1040" y="204">one sentence</text></g>
+        <text x="786" y="228" class="s-note">Question 4 is the one that separates understanding from familiarity.</text>
+        <text x="786" y="244" class="s-sub" style="fill:var(--fast)">Anyone can list features; knowing where a tool is wrong requires knowing its costs.</text>
+
+        <!-- P2 · SHAPE OF AN ANSWER -->
+        <rect x="770" y="266" width="600" height="206" fill="var(--z1)"/>
+        <text x="786" y="290" class="s-zone" fill="var(--line)">The shape of a good answer</text>
+        <text x="786" y="316" class="s-haz">TOO SHORT</text><text x="880" y="316" class="s-mono" font-size="10">"Redis is a cache."</text><text x="1060" y="316" class="s-sub">→ true, and teaches nothing</text>
+        <text x="786" y="340" class="s-haz">TOO LONG</text><text x="880" y="340" class="s-sub">three paragraphs of documentation, quoted</text><text x="1160" y="340" class="s-sub">→ copied, not understood</text>
+        <text x="786" y="366" class="s-note">RIGHT</text>
+        <line x1="870" y1="354" x2="870" y2="436" stroke="var(--line)" stroke-width="2"/>
+        <g class="s-mono" font-size="10">
+          <text x="880" y="366">An in-memory key-value store.</text>
+          <text x="880" y="382">It exists because RAM is ~100× faster than disk,</text>
+          <text x="880" y="398">and apps re-read the same small set of data.</text>
+          <text x="880" y="414">It sits between the application and the database.</text>
+          <text x="880" y="430">Not durable by default: never the only copy.</text>
+        </g>
+        <g class="s-lab" font-size="11" style="fill:var(--line)"><text x="1250" y="366">← what</text><text x="1250" y="382">← why</text><text x="1250" y="414">← where</text><text x="1250" y="430">← the trade</text></g>
+        <text x="786" y="458" class="s-sub">What, why, where and the trade, in four sentences. Write "In one line" last.</text>
+
+        <!-- P3 · CALLOUTS -->
+        <rect x="770" y="486" width="600" height="154" fill="var(--z4)"/>
+        <text x="786" y="510" class="s-zone" fill="var(--mute)">Four callouts, four jobs</text>
+        <g class="s-mono" font-size="10.5" style="fill:var(--line)"><text x="786" y="536">[!IMPORTANT]</text><text x="786" y="556">[!TIP]</text><text x="786" y="576">[!CAUTION]</text><text x="786" y="596">[!NOTE]</text></g>
+        <g class="s-sub"><text x="892" y="536">the one thing to remember if you forget everything else</text><text x="892" y="556">the practical default an experienced person would take</text><text x="892" y="576">the mistake that will actually bite you</text><text x="892" y="596">the analogy or mental model</text></g>
+        <g class="s-num" text-anchor="end"><text x="1356" y="536">§2 §15 §19</text><text x="1356" y="556">§6 §12 §18 §24</text><text x="1356" y="576">§7 §10 §13 §14</text><text x="1356" y="596">§16</text></g>
+        <text x="786" y="624" class="s-haz" font-size="10.5">At least one CAUTION per technology — no failure mode named means you read marketing.</text>
+
+        <!-- P4 · LESSON SUMMARY -->
+        <rect x="770" y="656" width="600" height="224" fill="var(--z2)"/>
+        <text x="786" y="680" class="s-zone" fill="var(--mute)">Standard Lesson Summary · the note, compressed</text>
+        <g stroke="var(--rule)" fill="var(--paper)">
+          <rect x="786" y="694" width="134" height="104"/><rect x="930" y="694" width="134" height="104"/><rect x="1074" y="694" width="134" height="104"/><rect x="1218" y="694" width="136" height="104"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="796" y="714">architecture map</text><text x="940" y="714">request flow</text><text x="1084" y="714">real-world usage</text><text x="1228" y="714">final summary</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="796" y="734">the whole thing in</text><text x="796" y="748">one or two lines</text>
+          <text x="1084" y="734">what production</text><text x="1084" y="748">taught the industry;</text><text x="1084" y="762">what the docs</text><text x="1084" y="776">will not say</text>
+          <text x="1228" y="734">what is it?</text><text x="1228" y="748">why does it exist?</text><text x="1228" y="762">where does it belong?</text><text x="1228" y="776">when should I use it?</text>
+        </g>
+        <g class="s-mono" font-size="10"><text x="940" y="734">Input</text><text x="940" y="750">  ↓ Processing</text><text x="940" y="766">  ↓ Output</text></g>
+        <text x="940" y="786" class="s-sub" font-size="10">+ the guarantee it carries</text>
+        <text x="786" y="822" class="s-sub">The header table carries Category, Architectural Layer and 3–6 related notes —</text>
+        <text x="786" y="836" class="s-sub">the connections, not the files, are what make the handbook valuable.</text>
+        <text x="786" y="862" class="s-note">Sections 25 and 26 are the only ones documentation cannot fill in for you.</text>
+      </svg>
+    </div>
+    <figcaption><b>Do not fill in all twenty-six for every technology.</b> Answer the barred six and you will understand a tool better than most people who use it daily; the rest earn their place as you go deeper. Section 18, the complete request flow, is the one most worth writing and most often skipped — you cannot trace one request through failure vaguely.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the sections and the order of filling them</h3>
+    <div class="gazgrid">
+      <div><h4><span>01–03</span>What, why, where</h4><p>A plain definition with no marketing words, the painful situation it was created for, and a diagram of what sits above, below and beside it. If you cannot define it without its own vocabulary, you do not understand it yet.</p></div>
+      <div><h4><span>04–07</span>Mechanism</h4><p>How it works (enough to reason about load and failure, not an implementation tour), the core vocabulary, the alternatives with a stated default, and the configuration whose default is wrong for production.</p></div>
+      <div><h4><span>08–09</span>In the world</h4><p>Who uses it and for what, including the case where it is the obvious choice; and what it depends on, including the dependency people forget until it breaks.</p></div>
+      <div><h4><span>10</span>When NOT to use it</h4><p>"When you need X and can accept Y" — then the conditions where it is a mistake, and the thing people misuse it as. Load-bearing, and the question that separates understanding from familiarity.</p></div>
+      <div><h4><span>11–13</span>Trade-offs, speed, money</h4><p>Advantages and disadvantages with the one that matters in bold, performance with a number or an order of magnitude, and cost drivers with the line item that surprises people: egress, log ingestion, idle capacity.</p></div>
+      <div><h4><span>14–15</span>Security and failure</h4><p>The specific, documented, recurring security mistake — not a generic reminder — and failure modes written as symptom → cause, plus whether it degrades gracefully or all at once.</p></div>
+      <div><h4><span>16</span>Mental model</h4><p>One physical-world analogy developed in a few sentences, including where it breaks down, which is usually the most instructive part. Load-bearing.</p></div>
+      <div><h4><span>17–18</span>Diagram and request flow</h4><p>The realistic production shape with the surrounding components, then one request traced end to end, again under load, again when something fails. The section that exposes every gap.</p></div>
+      <div><h4><span>19</span>Key takeaway</h4><p>One sentence you would want to keep if you forgot everything else. Load-bearing — and together with 1, 2, 3, 10 and 16, the whole of the twenty-minute version.</p></div>
+      <div><h4><span>20–22</span>Practice</h4><p>Common mistakes including one you made, the open-source tools that make daily operation bearable, and learning resources — including the one to skip, and why.</p></div>
+      <div><h4><span>23–24</span>Explanation test, links</h4><p>Six boxes to tick without notes: two-sentence definition, the problem, the position, one rejected alternative, one misuse, how it fails. Then links, added whenever a connection appears.</p></div>
+      <div><h4><span>25–26</span>Personal notes, workbook</h4><p>Things learned, open questions, surprises; then something you actually run, break or measure, with a number written down. Left blank until the technology has been used.</p></div>
+      <div><h4><span>F1–F2</span>Copy and name</h4><p>Copy between the two markers into a new note named after the technology and fill the header: full name, category, architectural layer, sub-topics, three to six related notes.</p></div>
+      <div><h4><span>F3–F4</span>The documentation pass</h4><p>Thirty to sixty minutes answering what reading can answer, then stop at section 24. Stopping there is the design, not a failure to finish.</p></div>
+      <div><h4><span>F5–F6</span>Use it, then finish</h4><p>Run the thing, break it, measure it, and only then write personal notes and the workbook exercise from what actually happened.</p></div>
+      <div><h4><span>F7–F8</span>Line one, out loud</h4><p>Write "In one line" last, capturing what it is and its central trade-off. Then close the note and explain the technology to an imaginary colleague: where you stumble is where the note is weak.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — THE TASK SHEET ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>The Task Sheet</h2>
+    <span class="form">Process plant</span>
+    <span class="cov">Covers · Task Template</span>
+  </div>
+  <p class="thesis">Stops 03 to 08 and 12 of sheet 1, drawn as a plant. A task goes through a sizing gate, then ten sections in order, and comes out as work someone could disagree with before it is built. <strong>The product is not the document — it is thinking forced to happen before the work, where a wrong approach costs fifteen minutes instead of five days.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 850" role="img" aria-label="A process plant for the task template. At the top, a sizing gate sends a task to one of four outcomes: under an hour just do it, half a day two lines, a few days the full template, more than a week the full template and a split. Beside it, the warning that long estimates hide an unanswered decision. In the middle, ten stations in a row: title and header, goal, why now, done when, not in scope, approach, dependencies, risks, how this ships, and notes and progress. Done when, not in scope and how this ships are highlighted; approach has an exit to an architecture decision record. Below left, a worked example of the product search task filled in. Below right, a table matching common mistakes to the missing section that caused them.">
+        <defs>
+          <marker id="m3a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="m3b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <!-- SIZING GATE -->
+        <text x="40" y="34" class="s-zone" fill="var(--line)">The sizing gate · scale the template to the task</text>
+        <rect x="40" y="100" width="200" height="76" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="54" y="124" class="s-lab">how big is it?</text>
+        <text x="54" y="142" class="s-sub" font-size="10.5">size before you describe;</text>
+        <text x="54" y="156" class="s-sub" font-size="10.5">the answer picks how much</text>
+        <text x="54" y="170" class="s-sub" font-size="10.5">of the template to use</text>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#m3a)">
+          <path d="M240,138 C280,138 280,68 316,68"/><path d="M240,138 C280,138 280,116 316,116"/>
+          <path d="M240,138 C280,138 280,164 316,164"/><path d="M240,138 C280,138 280,212 316,212"/>
+        </g>
+        <rect x="320" y="48" width="480" height="40" fill="var(--z2)" stroke="var(--rule)"/>
+        <rect x="320" y="96" width="480" height="40" fill="var(--z2)" stroke="var(--rule)"/>
+        <rect x="320" y="144" width="480" height="40" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="320" y="192" width="480" height="40" fill="var(--z5)" stroke="var(--hazard)" stroke-width="2"/>
+        <g class="s-num"><text x="332" y="65">S1</text><text x="332" y="113">S2</text><text x="332" y="161">S3</text><text x="332" y="209">S4</text></g>
+        <g class="s-lab" font-size="11.5"><text x="362" y="65">under an hour</text><text x="362" y="113">half a day</text><text x="362" y="161">a few days</text><text x="362" y="209">more than a week</text></g>
+        <g class="s-sub"><text x="362" y="80">just do it — writing it down costs more than the work</text><text x="362" y="128">one line of goal, one line of "done when"</text><text x="362" y="176">the full template: all ten stations below</text><text x="362" y="224">full template, then split — two tasks and one open question</text></g>
+
+        <rect x="830" y="48" width="540" height="184" fill="var(--z5)"/>
+        <text x="846" y="72" class="s-haz">"Two or three weeks" is almost always hiding a decision</text>
+        <text x="846" y="92" class="s-sub">Before starting, find the question you have not answered — which library,</text>
+        <text x="846" y="106" class="s-sub">which data model, whose approval — and answer that first.</text>
+        <text x="846" y="122" class="s-sub" style="fill:var(--hazard)">Long estimates are usually uncertainty wearing a number.</text>
+        <text x="846" y="148" class="s-lab" font-size="11">Why write it down at all</text>
+        <text x="846" y="166" class="s-mono" font-size="10">"add search" → 3 days → "that's not what I meant"</text>
+        <text x="846" y="182" class="s-mono" font-size="10">→ 2 more days → nobody can say whether it is finished,</text>
+        <text x="846" y="198" class="s-mono" font-size="10">  because nobody said what finished meant</text>
+        <text x="846" y="222" class="s-note">A task wrong on paper is far cheaper than one wrong in code.</text>
+
+        <!-- THE PLANT -->
+        <text x="36" y="274" class="s-zone" fill="var(--line)">The plant · ten stations, filled in order, before the work starts — except the last</text>
+        <g>
+          <rect x="36" y="290" width="122" height="94" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="170" y="290" width="122" height="94" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="304" y="290" width="122" height="94" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="438" y="290" width="122" height="94" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="572" y="290" width="122" height="94" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="706" y="290" width="122" height="94" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="840" y="290" width="122" height="94" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="974" y="290" width="122" height="94" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="1108" y="290" width="122" height="94" fill="var(--z4)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="1242" y="290" width="122" height="94" fill="var(--z6)" stroke="var(--learn)" stroke-width="2" stroke-dasharray="6 4"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#m3a)">
+          <path d="M158,337 L166,337"/><path d="M292,337 L300,337"/><path d="M426,337 L434,337"/><path d="M560,337 L568,337"/><path d="M694,337 L702,337"/><path d="M828,337 L836,337"/><path d="M962,337 L970,337"/><path d="M1096,337 L1104,337"/>
+        </g>
+        <path d="M1230,337 L1238,337" fill="none" stroke="var(--learn)" stroke-width="2.5" marker-end="url(#m3b)"/>
+        <g class="s-num"><text x="44" y="306">01</text><text x="178" y="306">02</text><text x="312" y="306">03</text><text x="446" y="306">04</text><text x="580" y="306">05</text><text x="714" y="306">06</text><text x="848" y="306">07</text><text x="982" y="306">08</text><text x="1116" y="306">09</text><text x="1250" y="306">10</text></g>
+        <g class="s-lab" font-size="11"><text x="44" y="322">title + header</text><text x="178" y="322">goal</text><text x="312" y="322">why now</text><text x="446" y="322">done when</text><text x="580" y="322">not in scope</text><text x="714" y="322">approach</text><text x="848" y="322">dependencies</text><text x="982" y="322">risks</text><text x="1116" y="322">how this ships</text><text x="1250" y="322">notes, progress</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="44" y="340">verb + outcome;</text><text x="44" y="354">one owner, not a</text><text x="44" y="368">team · priority</text>
+          <text x="178" y="340">an outcome for</text><text x="178" y="354">someone — not</text><text x="178" y="368">"implement X"</text>
+          <text x="312" y="340">the cost of not</text><text x="312" y="354">doing it. None?</text><text x="312" y="368">Then not yet.</text>
+          <text x="446" y="340">observable boxes,</text><text x="446" y="354">numbers where</text><text x="446" y="368">numbers apply</text>
+          <text x="580" y="340">adjacent tasks,</text><text x="580" y="354">deferred extras,</text><text x="580" y="368">accepted edges</text>
+          <text x="714" y="340">steps or diagram;</text><text x="714" y="354">unsure parts</text><text x="714" y="368">marked for review</text>
+          <text x="848" y="340">needs from others,</text><text x="848" y="354">prerequisites,</text><text x="848" y="368">open decisions</text>
+          <text x="982" y="340">most likely and</text><text x="982" y="354">most painful, each</text><text x="982" y="368">with consequence</text>
+          <text x="1116" y="340">flag, migration,</text><text x="1116" y="354">rollback, metric,</text><text x="1116" y="368">who to tell</text>
+          <text x="1250" y="340">dated entries,</text><text x="1250" y="354">appended daily,</text><text x="1250" y="368">never rewritten</text>
+        </g>
+
+        <text x="36" y="410" class="s-haz" font-size="10.5">A goal describing activity</text>
+        <text x="36" y="424" class="s-sub" font-size="10.5">("implement Redis") has no finish line.</text>
+        <text x="36" y="438" class="s-sub" font-size="10.5">Owner is one name, never a team.</text>
+        <text x="438" y="410" class="s-note">04 is written before any code.</text>
+        <text x="438" y="424" class="s-sub" font-size="10.5">If you cannot say how you'd know it works,</text>
+        <text x="438" y="438" class="s-sub" font-size="10.5">you do not yet know what you are building.</text>
+        <path d="M767,384 L767,444" fill="none" stroke="var(--line)" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#m3a)"/>
+        <text x="780" y="410" class="s-lab" font-size="11" style="fill:var(--line)">expensive to reverse?</text>
+        <text x="780" y="424" class="s-sub" font-size="10.5">then an ADR, not a line in</text>
+        <text x="780" y="438" class="s-sub" font-size="10.5">"approach" · sheet 4</text>
+        <text x="1108" y="410" class="s-note">09 is decided before the work.</text>
+        <text x="1108" y="424" class="s-sub" font-size="10.5">Otherwise the flag, the migration and</text>
+        <text x="1108" y="438" class="s-sub" font-size="10.5">the rollback are improvised at the end.</text>
+
+        <!-- WORKED EXAMPLE -->
+        <rect x="30" y="470" width="730" height="366" fill="var(--band)"/>
+        <text x="46" y="494" class="s-zone" fill="var(--mute)">A worked example · the product search task, filled in</text>
+        <g class="s-mono" font-size="10" style="fill:var(--line)">
+          <text x="46" y="522">TITLE</text><text x="46" y="540">GOAL</text><text x="46" y="558">WHY NOW</text><text x="46" y="576">DONE WHEN</text><text x="46" y="658">NOT</text><text x="46" y="676">APPROACH</text><text x="46" y="710">RISKS</text><text x="46" y="728">SHIPS</text><text x="46" y="746">NOTES</text>
+        </g>
+        <g class="s-mono" font-size="10">
+          <text x="116" y="522">Add product name search to the catalogue page</text>
+          <text x="116" y="540">A customer types part of a name and sees matches, ranked sensibly</text>
+          <text x="116" y="558">32% of catalogue sessions end with no product view</text>
+          <text x="116" y="576">[ ] 3+ characters return matches, including partial words</text>
+          <text x="116" y="592">[ ] p95 under 200 ms on the full production catalogue</text>
+          <text x="116" y="608">[ ] misspellings within one character still match</text>
+          <text x="116" y="624">[ ] tests: empty, no results, special characters, 10k results</text>
+          <text x="116" y="640">[ ] a dashboard shows search volume and zero-result rate</text>
+          <text x="116" y="658">− facets · − descriptions · − multi-language · − personalised</text>
+          <text x="116" y="676">PostgreSQL full-text + trigram index, not Elasticsearch: 40k rows</text>
+          <text x="116" y="692">rejected: Elasticsearch (a new system) · LIKE '%term%' (full scan)</text>
+          <text x="116" y="710">index size: low, ~30 MB · ranking: medium, ship behind a flag</text>
+          <text x="116" y="728">[x] flag search_v1 · [x] INDEX CONCURRENTLY · [x] rollback: flag off</text>
+          <text x="116" y="746">03-02 trigram index built in 8 s on a production-sized copy</text>
+          <text x="116" y="762">03-03 "misspelling" was vague → similarity 0.3, agreed with product</text>
+        </g>
+        <g class="s-num" text-anchor="end"><text x="744" y="522">01</text><text x="744" y="540">02</text><text x="744" y="558">03</text><text x="744" y="576">04</text><text x="744" y="658">05</text><text x="744" y="676">06</text><text x="744" y="710">08</text><text x="744" y="728">09</text><text x="744" y="746">10</text></g>
+        <text x="46" y="794" class="s-note">One line in APPROACH kills a fortnight of cluster operations.</text>
+        <text x="46" y="810" class="s-sub">Written down, the reasoning is visible enough to be challenged in a comment, not after the deploy.</text>
+        <text x="46" y="826" class="s-sub" style="fill:var(--learn)">The 03-03 note is the most useful line on the page: the assumption that turned out wrong.</text>
+
+        <!-- MISTAKES -->
+        <rect x="780" y="470" width="590" height="366" fill="var(--z3)"/>
+        <text x="796" y="494" class="s-zone" fill="var(--mute)">The overrun, traced to the missing station</text>
+        <g class="s-sub">
+          <text x="796" y="524">no "done when" — the task ends by exhaustion, not completion</text>
+          <text x="796" y="546">no "not in scope" — a scope disagreement, guaranteed</text>
+          <text x="796" y="568">a goal describing activity — "implement Redis"</text>
+          <text x="796" y="590">a team as owner — so nobody is accountable</text>
+          <text x="796" y="612">no deployment plan — flag and rollback improvised at the end</text>
+          <text x="796" y="634">criteria with no numbers — "fast" is not a criterion</text>
+          <text x="796" y="656">notes rewritten — the wrong assumption erased</text>
+          <text x="796" y="678">an architecture choice buried in "approach"</text>
+          <text x="796" y="700">a multi-week task not split — a question hiding inside</text>
+          <text x="796" y="722">the template used for a one-hour task</text>
+        </g>
+        <g class="s-lab" font-size="11" text-anchor="end">
+          <text x="1356" y="524">→ 04</text><text x="1356" y="546">→ 05</text><text x="1356" y="568">→ 02</text><text x="1356" y="590">→ 01</text><text x="1356" y="612">→ 09</text><text x="1356" y="634">→ 04</text><text x="1356" y="656">→ 10</text><text x="1356" y="678">→ 06 + ADR</text><text x="1356" y="700">→ S4</text><text x="1356" y="722">→ S1</text>
+        </g>
+        <text x="796" y="754" class="s-haz" font-size="10.5">The last row matters as much as the first: a template forced onto</text>
+        <text x="796" y="768" class="s-haz" font-size="10.5">trivial work trains people to skip it on the work that needs it.</text>
+        <text x="796" y="796" class="s-note">"Why now" may honestly conclude: not yet.</text>
+        <text x="796" y="812" class="s-sub">If the cost of not doing it cannot be stated, the task may not be worth</text>
+        <text x="796" y="826" class="s-sub">doing — and writing that down is a valid, cheap outcome.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the plant for its three highlighted stations.</b> "Done when" defines finished, "not in scope" defines what was never promised, and "how this ships" defines the escape route. A task missing any of the three can still be built — it just cannot be declared done, defended, or rolled back.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the gate and the ten stations</h3>
+    <div class="gazgrid">
+      <div><h4><span>S1</span>Under an hour</h4><p>Just do it. Writing the task down would cost more than doing it, and filling a template for trivial work teaches the team that the template is ceremony.</p></div>
+      <div><h4><span>S2</span>Half a day</h4><p>Two lines: the goal and "done when". Enough to know when to stop, with nothing to maintain.</p></div>
+      <div><h4><span>S3</span>A few days</h4><p>The full template. Fifteen minutes of writing that routinely changes the approach — the whole return on the exercise.</p></div>
+      <div><h4><span>S4</span>More than a week</h4><p>The full template plus a split. A task nobody can finish in a week is usually two tasks and one unanswered question; find the question and answer it first.</p></div>
+      <div><h4><span>01</span>Title and header</h4><p>A title that is a verb and an outcome. Status from not started to done, one named owner, a size, a priority with the reason it is now, and links to the issue, ADR or incident.</p></div>
+      <div><h4><span>02</span>Goal</h4><p>One or two sentences describing an outcome and who gets it. "Users can find a product by typing part of its name" — never the technology you plan to use.</p></div>
+      <div><h4><span>03</span>Why now</h4><p>The cost of not doing it. If it cannot be articulated, the task may not be worth doing yet, and saying so is a legitimate result.</p></div>
+      <div><h4><span>04</span>Done when</h4><p>Acceptance criteria that are observable, not aspirational: something a person can see, a number such as p95 under 300 ms, the test that exists afterwards, the runbook updated. Written before code.</p></div>
+      <div><h4><span>05</span>Not in scope</h4><p>The adjacent task, the deferred nice-to-have, the edge case accepted for now and why. It prevents "that's not what I meant" — and it is the section people skip.</p></div>
+      <div><h4><span>06</span>Approach</h4><p>Steps or a small diagram, detailed enough to disagree with, with the unsure parts marked for reviewers and one line per alternative. An expensive-to-reverse choice here graduates to an ADR.</p></div>
+      <div><h4><span>07</span>Dependencies and blockers</h4><p>What you need from which person or team, what must exist first, and which decisions are still open — with the name of whoever decides them.</p></div>
+      <div><h4><span>08</span>Risks</h4><p>A small table: the thing most likely to go wrong and the thing that would hurt most, each with likelihood and what happens if it does.</p></div>
+      <div><h4><span>09</span>How this ships</h4><p>Five boxes decided before the work: feature flag or not, migration compatibility and locking, rollback plan and its duration, the metric that shows it working, and who needs to know.</p></div>
+      <div><h4><span>10</span>Notes and progress</h4><p>Dated entries appended as you go. Never rewrite them: the assumption that turned out to be wrong is where the useful detail lives, and the next similar task starts here.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — THE DECISION REGISTER ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>The Decision Register</h2>
+    <span class="form">Closed circuit</span>
+    <span class="cov">Covers · Architecture Decision Record</span>
+  </div>
+  <p class="thesis">The branch at stop 06 of sheet 1, and the return stops 15 and 16. A short, dated, immutable page recording what was decided and why. <strong>The decision is usually visible in the code; the context never is — and context is what expires invisibly, so the record exists to say whether a decision is still correct or merely still in place.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="On the left, a closed circuit of six steps in an ADR's life: a choice worth recording, proposed, reviewed in a pull request, accepted, a revisit trigger fires, superseded by a new record, and round again to a new choice. Below it, the status values, a filter for what deserves an ADR and what does not, and the docs slash adr folder in the repository where record 0014 supersedes 0009. On the right, the anatomy of one ADR page as eight stacked sections from title to notes, each annotated with why it exists. Below that, the worked example ADR-0003, accepting eventual consistency for inventory display, with its measured numbers.">
+        <defs>
+          <marker id="m4a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="m4b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <!-- THE CIRCUIT -->
+        <text x="40" y="40" class="s-zone" fill="var(--line)">The life of one decision · never edited, only superseded</text>
+        <g fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#m4a)">
+          <path d="M388,157 A190,190 0 0,1 507,222"/>
+          <path d="M533,272 A190,190 0 0,1 533,408"/>
+          <path d="M507,458 A190,190 0 0,1 388,523"/>
+        </g>
+        <g fill="none" stroke="var(--learn)" stroke-width="4" stroke-dasharray="9 6" marker-end="url(#m4b)">
+          <path d="M332,523 A190,190 0 0,1 213,458"/>
+          <path d="M187,408 A190,190 0 0,1 187,272"/>
+          <path d="M213,222 A190,190 0 0,1 332,157"/>
+        </g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="3.5">
+          <circle cx="360" cy="150" r="26"/><circle cx="524" cy="245" r="26"/><circle cx="524" cy="435" r="26"/>
+        </g>
+        <circle cx="360" cy="530" r="26" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <g fill="var(--paper)" stroke="var(--learn)" stroke-width="3.5"><circle cx="196" cy="435" r="26"/><circle cx="196" cy="245" r="26"/></g>
+        <g class="s-big" text-anchor="middle" font-size="14">
+          <text x="360" y="155" fill="var(--line)">C1</text><text x="524" y="250" fill="var(--line)">C2</text><text x="524" y="440" fill="var(--line)">C3</text>
+          <text x="360" y="535" fill="var(--fast)">C4</text><text x="196" y="440" fill="var(--learn)">C5</text><text x="196" y="250" fill="var(--learn)">C6</text>
+        </g>
+        <g class="s-lab" text-anchor="middle"><text x="360" y="84">a choice worth recording</text></g>
+        <g class="s-sub" text-anchor="middle"><text x="360" y="100">expensive to reverse, or two</text><text x="360" y="114">competent people argued</text></g>
+        <text x="566" y="238" class="s-lab">Proposed</text>
+        <g class="s-sub"><text x="566" y="256">ADR-00XX, drafted</text><text x="566" y="270">before the decision</text></g>
+        <text x="566" y="428" class="s-lab">reviewed in a PR</text>
+        <g class="s-sub"><text x="566" y="446">by those affected,</text><text x="566" y="460">beside the code</text></g>
+        <text x="360" y="580" text-anchor="middle" class="s-lab" style="fill:var(--fast)">Accepted</text>
+        <g class="s-sub" text-anchor="middle"><text x="360" y="596">dated and numbered — immutable from here on:</text><text x="360" y="610">a record of what was known at that time</text></g>
+        <text x="154" y="428" text-anchor="end" class="s-lab">trigger fires</text>
+        <g class="s-sub" text-anchor="end"><text x="154" y="446">a number crossed,</text><text x="154" y="460">an event, a date —</text><text x="154" y="474">or a review finds</text><text x="154" y="488">it still holds</text></g>
+        <text x="154" y="238" text-anchor="end" class="s-lab">Superseded</text>
+        <g class="s-sub" text-anchor="end"><text x="154" y="256">by ADR-00YY; the</text><text x="154" y="270">old one is marked,</text><text x="154" y="284">never rewritten</text></g>
+        <text x="360" y="326" text-anchor="middle" class="s-note" font-size="13">edit nothing</text>
+        <text x="360" y="346" text-anchor="middle" class="s-sub">when circumstances change,</text>
+        <text x="360" y="360" text-anchor="middle" class="s-sub">write the next record —</text>
+        <text x="360" y="374" text-anchor="middle" class="s-sub">the pair is the real history</text>
+
+        <!-- STATUS -->
+        <text x="40" y="640" class="s-zone" fill="var(--mute)">Status · the field that moves while the reasoning stays put</text>
+        <g stroke-width="2">
+          <rect x="40" y="652" width="130" height="36" fill="var(--z2)" stroke="var(--line)"/>
+          <rect x="190" y="652" width="130" height="36" fill="var(--z4)" stroke="var(--fast)"/>
+          <rect x="340" y="652" width="190" height="36" fill="var(--z6)" stroke="var(--learn)"/>
+          <rect x="550" y="652" width="130" height="36" fill="var(--band)" stroke="var(--rule)"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#m4a)"><path d="M170,670 L186,670"/><path d="M320,670 L336,670"/></g>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="105" y="674">Proposed</text><text x="255" y="674">Accepted</text><text x="435" y="674">Superseded by ADR-00XX</text><text x="615" y="674">Deprecated</text></g>
+        <text x="540" y="674" text-anchor="middle" class="s-sub">/</text>
+
+        <!-- DESERVES ONE -->
+        <rect x="30" y="706" width="330" height="166" fill="var(--z1)"/>
+        <text x="46" y="728" class="s-lab" font-size="11" style="fill:var(--line)">Write one for</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="746">· a database, queue or cloud provider</text>
+          <text x="46" y="760">· a structural change: monolith to services</text>
+          <text x="46" y="774">· a decision argued for more than an hour</text>
+          <text x="46" y="788">· a trade-off accepted on purpose</text>
+          <text x="46" y="802">· NOT doing something obvious, and why</text>
+        </g>
+        <text x="46" y="826" class="s-haz" font-size="11">Not for</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="844">· naming, formatting, library minor versions</text>
+          <text x="46" y="858">· anything reversible in an afternoon</text>
+        </g>
+
+        <!-- WHERE THEY LIVE -->
+        <rect x="376" y="706" width="324" height="166" fill="var(--band)"/>
+        <g class="s-mono" font-size="9.5">
+          <text x="390" y="728">repo/docs/adr/</text>
+          <text x="400" y="746">0001-use-postgresql-as-primary….md</text>
+          <text x="400" y="762">0002-reject-microservices-for-now.md</text>
+          <text x="400" y="778">0003-accept-eventual-consistency….md</text>
+          <text x="400" y="794">0009-adopt-kafka-for-order-events.md</text>
+          <text x="400" y="810">0014-replace-kafka-with-sqs.md</text>
+        </g>
+        <text x="400" y="826" class="s-learn" font-size="10.5">↑ supersedes 0009</text>
+        <text x="390" y="848" class="s-sub" font-size="10.5">In version control, reviewed like code. A wiki</text>
+        <text x="390" y="862" class="s-sub" font-size="10.5">page survives about one reorganisation.</text>
+
+        <!-- ANATOMY -->
+        <rect x="720" y="40" width="650" height="480" fill="var(--z3)"/>
+        <text x="736" y="62" class="s-zone" fill="var(--mute)">One page, eight sections · why each is there</text>
+        <g stroke="var(--rule)">
+          <rect x="736" y="76" width="294" height="50" fill="var(--paper)"/>
+          <rect x="736" y="126" width="294" height="64" fill="var(--paper)"/>
+          <rect x="736" y="190" width="294" height="44" fill="var(--paper)"/>
+          <rect x="736" y="234" width="294" height="78" fill="var(--paper)"/>
+          <rect x="736" y="312" width="294" height="60" fill="var(--paper)"/>
+          <rect x="736" y="372" width="294" height="48" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="736" y="420" width="294" height="50" fill="var(--paper)"/>
+          <rect x="736" y="470" width="294" height="36" fill="var(--paper)"/>
+        </g>
+        <g class="s-num"><text x="746" y="92">01</text><text x="746" y="142">02</text><text x="746" y="206">03</text><text x="746" y="250">04</text><text x="746" y="328">05</text><text x="746" y="388">06</text><text x="746" y="436">07</text><text x="746" y="486">08</text></g>
+        <g class="s-lab" font-size="11"><text x="776" y="92">ADR-00XX — title</text><text x="776" y="142">Context</text><text x="776" y="206">Decision</text><text x="776" y="250">Options considered</text><text x="776" y="328">Consequences</text><text x="776" y="388">Reversibility</text><text x="776" y="436">What would make us revisit</text><text x="776" y="486">Notes</text></g>
+        <g class="s-mono" font-size="9.5">
+          <text x="776" y="108">Status · Date · Deciders</text><text x="776" y="121">Consulted · Supersedes</text>
+          <text x="776" y="158">facts, not the conclusion:</text><text x="776" y="171">load, growth, team, deadline,</text><text x="776" y="184">budget — and what is UNKNOWN</text>
+          <text x="776" y="222">We will &lt;do the thing&gt;.</text>
+          <text x="776" y="266">A — name          ← chosen</text><text x="776" y="280">B — why rejected, for us</text><text x="776" y="294">C — do nothing</text>
+          <text x="776" y="344">+ what gets easier</text><text x="776" y="357">− what gets harder</text><text x="776" y="370">→ follow-on work</text>
+          <text x="776" y="404">COST TO REVERSE · LOCK-IN</text>
+          <text x="776" y="452">a number · an event · a date</text>
+          <text x="776" y="500">benchmarks, spikes, the thread</text>
+        </g>
+        <g class="s-sub">
+          <text x="1046" y="92">Title stated as a decision. Deciders are</text><text x="1046" y="106">the accountable names; Supersedes links</text><text x="1046" y="120">the record this one replaces.</text>
+          <text x="1046" y="142">The part that expires invisibly. Include</text><text x="1046" y="156">the numbers, and say what is unknown —</text><text x="1046" y="170">"10× or 2×?" explains a bias toward</text><text x="1046" y="184">reversibility.</text>
+          <text x="1046" y="206">Active voice, present tense. A reader</text><text x="1046" y="220">should be able to act on this alone.</text>
+          <text x="1046" y="250">Where most of the value lives. Pros and</text><text x="1046" y="264">cons specific to this context, the reason</text><text x="1046" y="278">each loser lost — and always the option</text><text x="1046" y="292">of doing nothing, which sometimes wins.</text>
+          <text x="1046" y="328">The honest downside earns credibility; a</text><text x="1046" y="342">list of advantages reads as advocacy. And</text><text x="1046" y="356">what it obliges: monitoring, migration.</text>
+          <text x="1046" y="436">Written while you still remember why.</text><text x="1046" y="450">No trigger, and the decision quietly</text><text x="1046" y="464">becomes permanent by default.</text>
+          <text x="1046" y="486">Anything that constitutes evidence.</text>
+        </g>
+        <text x="1046" y="388" class="s-note" font-size="11">If expensive, this is the key sentence.</text>
+        <text x="1046" y="402" class="s-sub" style="fill:var(--fast)">If cheap, say so: it should have lowered</text>
+        <text x="1046" y="416" class="s-sub" style="fill:var(--fast)">the stakes and the deliberation.</text>
+
+        <!-- WORKED EXAMPLE -->
+        <rect x="720" y="536" width="650" height="336" fill="var(--z1)"/>
+        <text x="736" y="560" class="s-zone" fill="var(--line)">ADR-0003 · accept eventual consistency for inventory</text>
+        <g class="s-mono" font-size="9.5" style="fill:var(--line)">
+          <text x="736" y="584">STATUS</text><text x="736" y="600">CONTEXT</text><text x="736" y="648">DECISION</text><text x="736" y="679">OPTIONS</text><text x="736" y="727">CONSEQ.</text><text x="736" y="758">REVERSE</text><text x="736" y="774">REVISIT</text>
+        </g>
+        <g class="s-mono" font-size="9.5">
+          <text x="800" y="584">Accepted · 2026-02-14</text>
+          <text x="800" y="600">product pages are 92% of traffic, render &lt; 200 ms</text>
+          <text x="800" y="615">4 warehouses, 3 channels; live stock 340 ms p99</text>
+          <text x="800" y="630">oversell ~12 a month, ~£4 each, via support</text>
+          <text x="800" y="648">cached availability, ≤ 30 s stale; reserve</text>
+          <text x="800" y="663">stock atomically only at checkout</text>
+          <text x="800" y="679">A cached display + atomic reserve  ← chosen</text>
+          <text x="800" y="694">B live check per view: 340 ms, worse with load</text>
+          <text x="800" y="709">C reserve at cart: abandoned carts hold stock</text>
+          <text x="800" y="727">+ pages &lt; 200 ms at any traffic level</text>
+          <text x="800" y="742">− oversell rises; support is now a DESIGN dep.</text>
+          <text x="800" y="758">weeks — display path behind one service call</text>
+          <text x="800" y="774">&gt; 100 oversells/month · exact contract · 12 mo</text>
+        </g>
+        <text x="1146" y="600" class="s-note">Notice the numbers.</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="1146" y="618">340 ms p99, 12 a month, £4</text>
+          <text x="1146" y="632">an incident. Measured facts</text>
+          <text x="1146" y="646">age visibly, so a future</text>
+          <text x="1146" y="660">reader can tell whether the</text>
+          <text x="1146" y="674">situation has changed.</text>
+          <text x="1146" y="702">Option C is rejected for</text>
+          <text x="1146" y="716">a reason specific to this</text>
+          <text x="1146" y="730">shop, not in general.</text>
+        </g>
+        <text x="736" y="806" class="s-haz" font-size="10.5">"Too slow" and "quite risky" cannot be re-evaluated later; measured numbers can.</text>
+        <text x="736" y="828" class="s-sub">The negative consequence turns the support team's refund process into a design dependency —</text>
+        <text x="736" y="842" class="s-sub">exactly the kind of fact that is forgotten, and then "optimised" away.</text>
+        <text x="736" y="862" class="s-note">One page. Two at most. A long ADR is not read, and neither is the next one written.</text>
+      </svg>
+    </div>
+    <figcaption><b>The circuit is why the record stays trustworthy.</b> Because nobody edits an accepted ADR, it shows what was known at the time, including what later proved wrong. The dashed half of the loop — trigger, supersede, new choice — is how a decision is allowed to change without erasing why it was made.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the circuit and the page</h3>
+    <div class="gazgrid">
+      <div><h4><span>C1</span>A choice worth recording</h4><p>Databases, queues, providers, structural changes, deliberate trade-offs, not doing the obvious thing. The best signal is disagreement: if two competent people argued, the reasoning that settled it is what will be lost.</p></div>
+      <div><h4><span>C2</span>Proposed</h4><p>Drafted as the next number in docs/adr/ before the decision is made. Written after the fact it becomes documentation, and the reasoning is already gone.</p></div>
+      <div><h4><span>C3</span>Reviewed in a PR</h4><p>Discussed like code, by the people the decision affects, in the repository beside the system it describes — so the record cannot be separated from what it explains.</p></div>
+      <div><h4><span>C4</span>Accepted</h4><p>Dated, numbered and immutable. Its value is precisely that it captures the state of knowledge at that moment, including the parts later shown to be wrong.</p></div>
+      <div><h4><span>C5</span>Trigger fires</h4><p>A condition written in section 07 comes true: a load threshold, a new requirement such as multi-region writes, or the scheduled review date. The question is whether the decision is still correct, not merely still in place.</p></div>
+      <div><h4><span>C6</span>Superseded</h4><p>A new ADR — 0014 replacing 0009 — carries the new context and links back; the old status changes to "Superseded by". Nothing in the old reasoning is rewritten.</p></div>
+      <div><h4><span>01</span>Title and header</h4><p>"ADR-00XX — short title stated as a decision", then status, date, deciders who are accountable, who was consulted, and the record it supersedes.</p></div>
+      <div><h4><span>02</span>Context</h4><p>Two to five paragraphs of facts with numbers: current load, growth, team size, deadline, budget, regulation — and explicitly what nobody knows yet.</p></div>
+      <div><h4><span>03</span>Decision</h4><p>"We will …" in one unambiguous paragraph. Anyone reading only this sentence should know what to do.</p></div>
+      <div><h4><span>04</span>Options considered</h4><p>The chosen option with its accepted cons, each rejected option with the specific reason it lost here, and "do nothing / keep the current approach" every time.</p></div>
+      <div><h4><span>05</span>Consequences</h4><p>Positive, negative and neutral follow-on work. The negative list is where credibility is earned; an ADR with no honest downside is not trusted.</p></div>
+      <div><h4><span>06</span>Reversibility</h4><p>Cost to reverse — days, weeks, months, effectively permanent — and what would lock you in: data gravity, API contracts, team knowledge. Skipping it gives cheap decisions three weeks and expensive ones an afternoon.</p></div>
+      <div><h4><span>07</span>Revisit triggers</h4><p>A number, an event, a date. Written while the reasons are fresh; without them every decision is permanent by default.</p></div>
+      <div><h4><span>08</span>Notes</h4><p>Links to benchmarks, spikes, vendor comparisons, the meeting and the chat thread — anything that counts as evidence for the context above.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Editing an ADR destroys its purpose</b>
+    <p>A rewritten record always looks correct and therefore teaches nothing. When circumstances change, write the superseding ADR and mark the old one. Also fatal, more quietly: keeping them in a wiki that gets migrated, omitting the rejected options, and writing them for everything, which trains people to ignore them.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — THE REVIEW LADDER ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>The Review Ladder</h2>
+    <span class="form">Ladder plate</span>
+    <span class="cov">Covers · Code Review Checklist</span>
+  </div>
+  <p class="thesis">Stops 09 and 10 of sheet 1, opened up. Before any rung is climbed, diff size decides whether a review is even possible; then eight priorities, in order, with human attention spent where machines cannot help. <strong>The most valuable thing a reviewer does is refuse to approve a change too large to review — and the least valuable is commenting on formatting in a change that is missing a timeout.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 870" role="img" aria-label="At the top left, a bar showing reviewer effectiveness by diff size in four bands: under 50 lines real defects are found, under 200 good review, under 500 structural comments only, over 500 approval by trust. At the top right, the five checks before reading the code. In the middle, a descending ladder of eight review priorities from tallest to shortest: correctness, security, data, failure, tests, clarity, performance and style, each listing the checklist questions for that rung. Beside the short rungs, the operational checks after the ladder. Along the bottom, the five severity labels for comments, unhelpful comments rewritten as helpful ones, and the author's half of the review.">
+        <defs>
+          <marker id="m5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+        </defs>
+
+        <!-- DIFF SIZE -->
+        <rect x="30" y="40" width="730" height="164" fill="var(--band)"/>
+        <text x="46" y="62" class="s-zone" fill="var(--mute)">Diff size decides whether review happens at all</text>
+        <g class="s-num"><text x="46" y="80">D1</text><text x="196" y="80">D2</text><text x="386" y="80">D3</text><text x="576" y="80">D4</text></g>
+        <rect x="46" y="86" width="150" height="28" fill="var(--line)" opacity=".85"/>
+        <rect x="196" y="86" width="190" height="28" fill="var(--cool)" opacity=".8"/>
+        <rect x="386" y="86" width="190" height="28" fill="var(--fast)" opacity=".8"/>
+        <rect x="576" y="86" width="168" height="28" fill="var(--hazard)" opacity=".8"/>
+        <g class="s-lab" font-size="11" style="fill:var(--paper)"><text x="56" y="105">&lt; 50 lines</text><text x="206" y="105">&lt; 200 lines</text><text x="396" y="105">&lt; 500 lines</text><text x="586" y="105">&gt; 500 lines</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="132">real defects found,</text><text x="46" y="146">line by line</text>
+          <text x="196" y="132">good review,</text><text x="196" y="146">some skimming</text>
+          <text x="386" y="132">structural comments</text><text x="386" y="146">only; details missed</text>
+          <text x="576" y="132">"LGTM" — approval by</text><text x="576" y="146">trust, not by reading</text>
+        </g>
+        <text x="46" y="174" class="s-haz">A 900-line pull request does not get reviewed; it gets approved.</text>
+        <text x="46" y="192" class="s-sub">Cannot split the change? Split the review: a pass for intent, a pass for correctness — and say which.</text>
+
+        <!-- §1 GATE -->
+        <rect x="780" y="40" width="590" height="164" fill="var(--z1)"/>
+        <text x="796" y="62" class="s-zone" fill="var(--line)">§1 · Before reading the code</text>
+        <g class="s-mono" font-size="10" style="fill:var(--line)"><text x="796" y="86">[ ]</text><text x="796" y="104">[ ]</text><text x="796" y="122">[ ]</text><text x="796" y="140">[ ]</text><text x="796" y="158">[ ]</text></g>
+        <g class="s-sub">
+          <text x="824" y="86">Is the purpose clear — can I state it in one sentence?</text>
+          <text x="824" y="104">Is it one change, or several unrelated things bundled?</text>
+          <text x="824" y="122">Is it small enough to review properly? If not, say so now.</text>
+          <text x="824" y="140">Is CI green? Reviewing failing code wastes both people's time.</text>
+          <text x="824" y="158">Does the description say WHY? The diff already says what.</text>
+        </g>
+        <text x="796" y="186" class="s-note">The highest-value review comment in existence: "please split this".</text>
+
+        <!-- THE LADDER -->
+        <text x="40" y="236" class="s-zone" fill="var(--line)">The priority ladder · review top-down, and stop caring below a broken rung</text>
+        <line x1="30" y1="560" x2="1370" y2="560" stroke="var(--ink)" stroke-width="2"/>
+        <g stroke-width="2">
+          <rect x="40" y="260" width="157" height="300" fill="var(--z1)" stroke="var(--line)"/>
+          <rect x="207" y="290" width="157" height="270" fill="var(--z5)" stroke="var(--hazard)"/>
+          <rect x="374" y="320" width="157" height="240" fill="var(--z4)" stroke="var(--fast)"/>
+          <rect x="541" y="350" width="157" height="210" fill="var(--z4)" stroke="var(--fast)"/>
+          <rect x="708" y="380" width="157" height="180" fill="var(--z2)" stroke="var(--line)"/>
+          <rect x="875" y="410" width="157" height="150" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="1042" y="440" width="157" height="120" fill="var(--z3)" stroke="var(--rule)"/>
+          <rect x="1209" y="470" width="157" height="90" fill="var(--band)" stroke="var(--rule)" stroke-dasharray="5 4"/>
+        </g>
+        <g class="s-num"><text x="50" y="280">P1 · §2</text><text x="217" y="310">P2 · §3</text><text x="384" y="340">P3 · §4</text><text x="551" y="370">P4 · §5</text><text x="718" y="400">P5 · §6</text><text x="885" y="430">P6 · §7</text><text x="1052" y="460">P7 · §8</text><text x="1219" y="490">P8 · linter</text></g>
+        <g class="s-lab" font-size="12.5"><text x="50" y="298">correctness</text><text x="217" y="328">security</text><text x="384" y="358">data</text><text x="551" y="388">failure</text><text x="718" y="418">tests</text><text x="885" y="448">clarity</text><text x="1052" y="478">performance</text><text x="1219" y="508">style</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="50" y="316">does it do what the</text><text x="50" y="330">description claims?</text><text x="50" y="348">edge cases: empty, zero,</text><text x="50" y="362">one, null, max, dupes</text><text x="50" y="380">off-by-one; errors</text><text x="50" y="394">swallowed in a catch?</text><text x="50" y="412">two requests racing?</text><text x="50" y="426">safe if it runs twice?</text><text x="50" y="444">time zones, DST, leap</text><text x="50" y="458">years; money never float</text>
+          <text x="217" y="346">input validated server-</text><text x="217" y="360">side; SQL parameterised</text><text x="217" y="378">output encoded, never</text><text x="217" y="392">rendered as HTML</text><text x="217" y="410">authorisation, not just</text><text x="217" y="424">authentication: can A</text><text x="217" y="438">reach B's record by id?</text><text x="217" y="456">no secrets or PII in</text><text x="217" y="470">code, config or logs</text><text x="217" y="488">new dependency, new</text><text x="217" y="502">endpoint, new upload?</text>
+          <text x="384" y="376">does the old release</text><text x="384" y="390">still run against it?</text><text x="384" y="408">a dropped column cannot</text><text x="384" y="422">be rolled back</text><text x="384" y="440">locks a large table —</text><text x="384" y="454">for how long?</text><text x="384" y="472">backfill batched;</text><text x="384" y="486">index CONCURRENTLY</text>
+          <text x="551" y="406">a timeout on every</text><text x="551" y="420">external call</text><text x="551" y="438">what the user sees</text><text x="551" y="452">when it is down</text><text x="551" y="470">retries with backoff,</text><text x="551" y="484">only where safe</text><text x="551" y="502">a log line with the</text><text x="551" y="516">request id</text>
+          <text x="718" y="436">would a regression</text><text x="718" y="450">be caught?</text><text x="718" y="468">behaviour, not a copy</text><text x="718" y="482">of the implementation</text><text x="718" y="500">a failure case tested</text><text x="718" y="518">no sleep, real clocks;</text><text x="718" y="532">CI under ten minutes</text>
+          <text x="885" y="466">changeable in a year,</text><text x="885" y="480">author absent?</text><text x="885" y="498">accurate names;</text><text x="885" y="512">comments say WHY</text><text x="885" y="530">no dead code or flags</text>
+          <text x="1052" y="496">only if measured:</text><text x="1052" y="510">N+1 in a loop?</text><text x="1052" y="524">unbounded results?</text><text x="1052" y="538">cache key per tenant?</text>
+          <text x="1219" y="526">a formatter's and a</text><text x="1219" y="540">linter's job, in CI</text>
+        </g>
+
+        <text x="900" y="266" class="s-haz">Formatting comments in a review that missed a timeout</text>
+        <text x="900" y="282" class="s-sub" style="fill:var(--hazard)">are worse than no review: they signal the code was read but not</text>
+        <text x="900" y="296" class="s-sub" style="fill:var(--hazard)">examined, and the author reasonably concludes it was checked.</text>
+        <rect x="1060" y="316" width="306" height="108" fill="var(--z6)" stroke="var(--learn)" stroke-width="2"/>
+        <text x="1074" y="338" class="s-learn">§9 · operational, after the ladder</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="1074" y="356">· config or environment change documented?</text>
+          <text x="1074" y="370">· a flag for anything risky or visible?</text>
+          <text x="1074" y="384">· a metric or alert it does not have yet?</text>
+          <text x="1074" y="398">· API contract versioned, or breaking?</text>
+          <text x="1074" y="412">· README, runbook or ADR to update?</text>
+        </g>
+        <text x="40" y="582" class="s-note">The rungs are also a stopping rule: an unhandled failure in P4 makes P6 comments noise.</text>
+
+        <!-- SEVERITY -->
+        <rect x="30" y="602" width="440" height="258" fill="var(--z4)"/>
+        <text x="46" y="626" class="s-zone" fill="var(--fast)">Label the severity of every comment</text>
+        <g class="s-num"><text x="46" y="656">L1</text><text x="46" y="680">L2</text><text x="46" y="704">L3</text><text x="46" y="728">L4</text><text x="46" y="752">L5</text></g>
+        <g class="s-mono" font-size="10.5"><text x="74" y="656" fill="var(--hazard)">BLOCKING</text><text x="74" y="680" fill="var(--fast)">SUGGESTION</text><text x="74" y="704" fill="var(--mute)">NIT</text><text x="74" y="728" fill="var(--line)">QUESTION</text><text x="74" y="752" fill="var(--learn)">PRAISE</text></g>
+        <g class="s-sub"><text x="170" y="656">must change before merge</text><text x="170" y="680">I would do it differently; your call</text><text x="170" y="704">trivial, feel free to ignore</text><text x="170" y="728">I do not understand this yet</text><text x="170" y="752">yes, actually — do this</text></g>
+        <text x="46" y="784" class="s-note">The single cheapest improvement to review culture.</text>
+        <text x="46" y="802" class="s-sub">Twelve thoughts, one of which blocks, and everyone knows which.</text>
+        <text x="46" y="816" class="s-sub">Without labels every nit reads as a demand.</text>
+        <text x="46" y="840" class="s-sub" style="fill:var(--learn)">Add PRAISE on purpose: all-criticism reviews get dreaded.</text>
+
+        <!-- COMMENTS -->
+        <rect x="490" y="602" width="440" height="258" fill="var(--z2)"/>
+        <text x="506" y="626" class="s-zone" fill="var(--mute)">Unhelpful → helpful</text>
+        <g class="s-mono" font-size="10" style="fill:var(--hazard)"><text x="506" y="654">"this is wrong"</text><text x="506" y="690">"use a map here"</text><text x="506" y="726">"bad naming"</text><text x="506" y="762">"why did you do</text><text x="506" y="776"> it this way?"</text></g>
+        <g class="s-mono" font-size="10" style="fill:var(--line)"><text x="660" y="654">"if items is empty this</text><text x="660" y="668"> throws — line 42"</text><text x="660" y="690">"a map avoids the O(n²) —</text><text x="660" y="704"> can this list be large?"</text><text x="660" y="726">"data — could this be</text><text x="660" y="740"> pendingInvoices?"</text><text x="660" y="762">"what made you choose Y?</text><text x="660" y="776"> Genuinely asking."</text></g>
+        <g stroke="var(--rule)" stroke-width="1"><line x1="506" y1="676" x2="914" y2="676"/><line x1="506" y1="712" x2="914" y2="712"/><line x1="506" y1="748" x2="914" y2="748"/></g>
+        <text x="506" y="806" class="s-haz" font-size="11">Review the code, not the person.</text>
+        <text x="506" y="822" class="s-sub">"What led you to X?" gets an explanation; "why on earth did</text>
+        <text x="506" y="836" class="s-sub">you X?" gets defensiveness — and a defensive author stops</text>
+        <text x="506" y="850" class="s-sub">volunteering the uncertainty you most need to hear.</text>
+
+        <!-- AUTHOR -->
+        <rect x="950" y="602" width="420" height="258" fill="var(--z1)"/>
+        <text x="966" y="626" class="s-zone" fill="var(--line)">A · the author's half</text>
+        <text x="966" y="650" class="s-lab" font-size="11">Before requesting review</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="966" y="668">· read your own diff first — you will find several things</text>
+          <text x="966" y="682">· CI green, small, one purpose</text>
+          <text x="966" y="696">· describe WHY, and how you verified it</text>
+          <text x="966" y="710">· flag the parts you are unsure about; comment the non-obvious</text>
+        </g>
+        <text x="966" y="734" class="s-lab" font-size="11">During review</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="966" y="752">· a question is not an attack; "good catch" costs nothing</text>
+          <text x="966" y="766">· reviewers who disagree resolve it between themselves</text>
+          <text x="966" y="780">· a comment revealing unclear code: fix the CODE, not the thread</text>
+        </g>
+        <text x="966" y="808" class="s-note">"I'm not confident about the locking in reserve()"</text>
+        <text x="966" y="824" class="s-sub" style="fill:var(--fast)">points attention where it matters. That is not weakness;</text>
+        <text x="966" y="838" class="s-sub" style="fill:var(--fast)">it is wanting the bug found now rather than in production.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the plate from the top-left down.</b> Size first, because nothing below works on a diff you cannot hold in your head; then the five questions that decide whether reading is worthwhile; then the ladder, stopping at the first broken rung. Style is on the ladder only to show where it belongs — at the bottom, and automated.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the gate, the rungs and the comments</h3>
+    <div class="gazgrid">
+      <div><h4><span>D1–D4</span>Diff size</h4><p>Under 50 lines, real defects found line by line; under 200, good review with some skimming; under 500, structural comments only; over 500, "LGTM" — approval by trust. Ask for a split, or do two labelled passes.</p></div>
+      <div><h4><span>§1</span>Before reading</h4><p>Purpose statable in one sentence, one change not several, small enough, CI green, and a description that explains why. A change whose purpose is unclear cannot be judged correct.</p></div>
+      <div><h4><span>P1</span>Correctness</h4><p>Does it do what it claims? Empty, zero, one, null, maximum, negative and duplicate inputs; boundaries; swallowed errors; races on shared state; idempotency under retries; dates and DST; money in integers or decimals.</p></div>
+      <div><h4><span>P2</span>Security</h4><p>Server-side validation, parameterised SQL, output encoding, object-level authorisation, no secrets or sensitive data in code or logs, and scrutiny for new dependencies and new attack surface. Anything security-shaped goes to sheet 6.</p></div>
+      <div><h4><span>P3</span>Data and migrations</h4><p>Backward compatible with the previous release, nothing destructive without a plan, table locks sized against traffic, backfills batched, indexes for new query patterns created concurrently, rollback without data loss.</p></div>
+      <div><h4><span>P4</span>Failure behaviour</h4><p>Timeouts on every external call, a defined user experience when a dependency is slow or down, retries only where safe, partial failures considered, errors observable, and a log line carrying the request id.</p></div>
+      <div><h4><span>P5</span>Tests</h4><p>The only question that matters is whether a regression would be caught. Tests of behaviour rather than restated implementation, a failure case, nothing flaky, and a pipeline kept under ten minutes.</p></div>
+      <div><h4><span>P6</span>Clarity and design</h4><p>Could someone change this in a year without the author? Accurate names, comments that explain why, no drifting duplication or premature abstraction, local conventions respected, nothing dead left behind.</p></div>
+      <div><h4><span>P7</span>Performance</h4><p>Only where it matters and only if measured: queries inside loops, unbounded result sets, loading what could be streamed, cache keys scoped to user or tenant. Speculative optimisation is a cost.</p></div>
+      <div><h4><span>P8</span>Style</h4><p>A formatter's and a linter's job, run in CI, so that no human ever spends a comment on it and human attention goes where machines cannot help.</p></div>
+      <div><h4><span>§9</span>Operational</h4><p>Config or environment changes documented, a feature flag for risky or visible behaviour, the metric or alert it needs, API contracts versioned, and the README, runbook or ADR updated.</p></div>
+      <div><h4><span>L1–L5</span>Severity labels</h4><p>BLOCKING, SUGGESTION, NIT, QUESTION, PRAISE. Labels let a reviewer leave many thoughts of which one blocks, and stop authors arguing about nits as if they were demands.</p></div>
+      <div><h4><span>A</span>The author's half</h4><p>Read your own diff before anyone else does, keep it small and single-purpose, say how it was verified, and point at your own weak spots — reviewers will look exactly there.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Approval is not review</b>
+    <p>The most common failure is approving a diff too large to have read; close behind are style comments on a change missing a timeout, rubber-stamping seniors, reviewing only the diff without opening the surrounding code, missing the migration hidden in a large change, and counting test lines instead of asking whether a regression would be caught.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — THE SECURITY PERIMETER ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>The Security Perimeter</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · Security Checklist · Code Review Checklist</span>
+  </div>
+  <p class="thesis">The branch at stop 11 of sheet 1, and a checklist that also stands alone for a new service, a new cloud account or an audit. The nine sections are drawn as the layers an attacker must cross, with the ten items that cause most real breaches pinned where they belong. <strong>Real breaches come overwhelmingly from misconfiguration — a public bucket, a key in a repository — so almost everything on this sheet is a setting you can change this afternoon, before buying any tool.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 890" role="img" aria-label="A cutaway of a system as nested layers, from the outside in: people and process, logging and detection, network exposure, identity and access, application, secrets, and data protection at the core. Supply chain is drawn as a box below with an arrow entering the application layer through the build, and backups as a separate box outside every layer. Ten numbered markers pin the ten breach-causing items onto their layers. On the right, the list of those ten items, and the four threat model questions with the fourth, how far an attacker gets, highlighted. Along the bottom, the seven incident response steps as a line: contain, preserve, assess, eradicate, recover, learn, notify.">
+        <defs>
+          <marker id="m6a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="m6b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <text x="40" y="38" class="s-zone" fill="var(--line)">The layers, outside in · the checklist's nine sections</text>
+
+        <!-- RINGS -->
+        <rect x="40" y="56" width="640" height="500" fill="var(--z3)" stroke="var(--rule)"/>
+        <rect x="70" y="92" width="580" height="428" fill="var(--z2)" stroke="var(--rule)"/>
+        <rect x="100" y="128" width="520" height="356" fill="var(--z1)" stroke="var(--line)" stroke-width="1.5"/>
+        <rect x="130" y="164" width="460" height="284" fill="var(--z6)" stroke="var(--learn)" stroke-width="1.5"/>
+        <rect x="160" y="200" width="400" height="212" fill="var(--z4)" stroke="var(--fast)" stroke-width="1.5"/>
+        <rect x="190" y="236" width="340" height="140" fill="var(--z5)" stroke="var(--hazard)" stroke-width="1.5"/>
+        <rect x="220" y="272" width="280" height="68" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+
+        <g class="s-lab" font-size="11">
+          <text x="52" y="71">§9 · people and process</text>
+          <text x="82" y="107">§7 · logging, detection, response</text>
+          <text x="112" y="143">§2 · network exposure</text>
+          <text x="142" y="179">§1 · identity and access</text>
+          <text x="172" y="215">§5 · application</text>
+          <text x="202" y="251">§3 · secrets</text>
+          <text x="232" y="289">§4 · data protection — the core</text>
+        </g>
+        <g class="s-sub" font-size="10">
+          <text x="52" y="84">reviewed deploys, admins included · same-day offboarding · phishing-resistant MFA · vendors</text>
+          <text x="82" y="120">audit logs in an account the intruder cannot reach · alerts few enough to be read</text>
+          <text x="112" y="156">nothing public without a reason · no 0.0.0.0/0 but 80/443 · no inbound SSH</text>
+          <text x="142" y="192">MFA · roles and OIDC, not keys · least privilege · separate prod account</text>
+          <text x="172" y="228">validate server-side · parameterise · encode · authorise</text>
+          <text x="202" y="264">a secret manager · anything committed is rotated</text>
+          <text x="232" y="305">encrypted in transit and at rest,</text>
+          <text x="232" y="319">inventoried, retention enforced;</text>
+          <text x="232" y="333">deletion reaches every copy</text>
+        </g>
+
+        <!-- T MARKERS -->
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5">
+          <circle cx="575" cy="262" r="11"/><circle cx="575" cy="292" r="11"/>
+          <circle cx="605" cy="262" r="11"/><circle cx="605" cy="292" r="11"/>
+          <circle cx="515" cy="300" r="11"/>
+          <circle cx="545" cy="270" r="11"/><circle cx="545" cy="310" r="11"/>
+          <circle cx="635" cy="292" r="11"/>
+        </g>
+        <g class="s-mono" font-size="8.5" text-anchor="middle" style="fill:var(--hazard)">
+          <text x="575" y="265">T1</text><text x="575" y="295">T2</text>
+          <text x="605" y="265">T3</text><text x="605" y="295">T4</text>
+          <text x="515" y="303">T5</text>
+          <text x="545" y="273">T9</text><text x="545" y="313">T10</text>
+          <text x="635" y="295">T6</text>
+        </g>
+        <text x="232" y="366" class="s-sub" font-size="10" style="fill:var(--hazard)">prevention fails — the core is what it reaches</text>
+        <text x="172" y="400" class="s-sub" font-size="10">CSP · CSRF · HttpOnly cookies · no SSRF · uploads never run</text>
+        <text x="142" y="438" class="s-sub" font-size="10">break-glass credentials offline, alarmed on use · access reviewed</text>
+        <text x="112" y="474" class="s-sub" font-size="10">TLS everywhere, internally too · certificates auto-renewed · egress restricted</text>
+        <text x="82" y="510" class="s-sub" font-size="10">an incident plan that revokes sessions · evidence preserved · SECURITY.md</text>
+        <text x="52" y="546" class="s-sub" font-size="10">account recovery by a helpful human is a bypass — threat-model the support path</text>
+
+        <!-- SUPPLY CHAIN + BACKUPS -->
+        <rect x="40" y="576" width="310" height="92" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+        <path d="M46,576 L46,320 L156,320" fill="none" stroke="var(--fast)" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#m6a)"/>
+        <text x="54" y="596" class="s-lab" font-size="11">§6 · dependencies, supply chain</text>
+        <g class="s-sub" font-size="10">
+          <text x="54" y="612">enters through the build, not the network:</text>
+          <text x="54" y="626">lock files · images pinned by digest · CI</text>
+          <text x="54" y="640">actions pinned to a SHA · artefacts signed ·</text>
+          <text x="54" y="654">no secrets for pull requests from forks</text>
+        </g>
+        <circle cx="330" cy="596" r="11" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="330" y="599" class="s-mono" font-size="8.5" text-anchor="middle" style="fill:var(--hazard)">T8</text>
+
+        <rect x="370" y="576" width="310" height="92" fill="var(--band)" stroke="var(--learn)" stroke-width="2" stroke-dasharray="7 5"/>
+        <text x="384" y="596" class="s-lab" font-size="11">§8 · backup and recovery</text>
+        <g class="s-sub" font-size="10">
+          <text x="384" y="612">outside every layer on purpose: immutable,</text>
+          <text x="384" y="626">in a separate account, undeletable by the</text>
+          <text x="384" y="640">production credential — and a restore</text>
+          <text x="384" y="654">actually performed and timed</text>
+        </g>
+        <circle cx="660" cy="596" r="11" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <text x="660" y="599" class="s-mono" font-size="8.5" text-anchor="middle" style="fill:var(--hazard)">T7</text>
+
+        <!-- THE TEN -->
+        <rect x="720" y="40" width="650" height="296" fill="var(--z5)"/>
+        <text x="736" y="64" class="s-zone" fill="var(--hazard)">Start here · the ten that cause real breaches</text>
+        <g class="s-num"><text x="736" y="92">T1</text><text x="736" y="112">T2</text><text x="736" y="132">T3</text><text x="736" y="152">T4</text><text x="736" y="172">T5</text><text x="736" y="192">T6</text><text x="736" y="212">T7</text><text x="736" y="232">T8</text><text x="736" y="252">T9</text><text x="736" y="272">T10</text></g>
+        <g class="s-sub">
+          <text x="770" y="92">MFA on every administrative account, and on the cloud root account</text>
+          <text x="770" y="112">No long-lived cloud access keys — roles and OIDC instead</text>
+          <text x="770" y="132">No public storage buckets — public access blocked at the ACCOUNT level</text>
+          <text x="770" y="152">No database or admin interface reachable from the internet</text>
+          <text x="770" y="172">No secrets in code, config files, CI logs or environment dumps</text>
+          <text x="770" y="192">Audit logging on, shipped where the attacker cannot delete it</text>
+          <text x="770" y="212">Immutable backups in a separate account, restore TESTED</text>
+          <text x="770" y="232">Dependencies scanned, and actually updated</text>
+          <text x="770" y="252">Parameterised queries and output encoding — no string-built SQL or HTML</text>
+          <text x="770" y="272">Authorisation checked on every request, not just authentication</text>
+        </g>
+        <g class="s-lab" font-size="11" text-anchor="end" style="fill:var(--hazard)"><text x="1356" y="92">§1</text><text x="1356" y="112">§1</text><text x="1356" y="132">§2</text><text x="1356" y="152">§2</text><text x="1356" y="172">§3</text><text x="1356" y="192">§7</text><text x="1356" y="212">§8</text><text x="1356" y="232">§6</text><text x="1356" y="252">§5</text><text x="1356" y="272">§5</text></g>
+        <text x="736" y="302" class="s-note">Every one is a setting you already control; none needs a security team.</text>
+        <text x="736" y="320" class="s-sub" style="fill:var(--hazard)">A scanner reporting the same ten findings for two years has improved nothing.</text>
+
+        <!-- THREAT MODEL -->
+        <rect x="720" y="352" width="650" height="316" fill="var(--z1)"/>
+        <text x="736" y="376" class="s-zone" fill="var(--line)">Threat model in four questions · before the detailed review</text>
+        <g stroke-width="2">
+          <rect x="736" y="390" width="618" height="46" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="736" y="442" width="618" height="46" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="736" y="494" width="618" height="46" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="736" y="546" width="618" height="54" fill="var(--z4)" stroke="var(--fast)" stroke-width="3"/>
+        </g>
+        <g class="s-num"><text x="748" y="408">Q1</text><text x="748" y="460">Q2</text><text x="748" y="512">Q3</text><text x="748" y="566">Q4</text></g>
+        <g class="s-lab" font-size="11.5"><text x="780" y="408">WHAT would an attacker want?</text><text x="780" y="460">WHO is the realistic attacker?</text><text x="780" y="512">WHERE is the boundary?</text><text x="780" y="566" fill="var(--fast)">IF they succeed, HOW FAR do they get?</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="780" y="425">money · personal data · compute · access to your customers · disruption</text>
+          <text x="780" y="477">opportunistic scanners, most often · fraudsters · an insider · rarely a targeted actor</text>
+          <text x="780" y="529">every place untrusted input enters, and every place a credential is used</text>
+          <text x="780" y="583">one tenant's data or all of them? can it delete the audit log? reach the backups?</text>
+          <text x="780" y="596" fill="var(--fast)">← the question worth the most engineering</text>
+        </g>
+        <text x="736" y="626" class="s-note">Blast radius is architecture, and it decides incident versus catastrophe.</text>
+        <text x="736" y="644" class="s-sub">Separate accounts, scoped credentials and immutable logs are the answers to Q4 —</text>
+        <text x="736" y="658" class="s-sub">which is why they appear as rings and a detached box on the left, not as tools.</text>
+
+        <!-- INCIDENT LINE -->
+        <text x="40" y="712" class="s-zone" fill="var(--hazard)">When something happens · seven steps, in this order</text>
+        <line x1="60" y1="740" x2="1330" y2="740" stroke="var(--hazard)" stroke-width="6" marker-end="url(#m6b)"/>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"><circle cx="90" cy="740" r="9"/><circle cx="280" cy="740" r="9"/><circle cx="470" cy="740" r="9"/><circle cx="660" cy="740" r="9"/><circle cx="850" cy="740" r="9"/><circle cx="1040" cy="740" r="9"/><circle cx="1230" cy="740" r="9"/></g>
+        <g class="s-num"><text x="80" y="768">R1</text><text x="270" y="768">R2</text><text x="460" y="768">R3</text><text x="650" y="768">R4</text><text x="840" y="768">R5</text><text x="1030" y="768">R6</text><text x="1220" y="768">R7</text></g>
+        <g class="s-lab"><text x="80" y="784">contain</text><text x="270" y="784">preserve</text><text x="460" y="784">assess</text><text x="650" y="784">eradicate</text><text x="840" y="784">recover</text><text x="1030" y="784">learn</text><text x="1220" y="784">notify</text></g>
+        <g class="s-sub">
+          <text x="80" y="800">revoke sessions and keys;</text><text x="80" y="814">isolate — never power off</text>
+          <text x="270" y="800">snapshot before rebuild;</text><text x="270" y="814">logs are the only record</text>
+          <text x="460" y="800">what could the credential</text><text x="460" y="814">reach? the audit trail says</text>
+          <text x="650" y="800">rotate all it could see;</text><text x="650" y="814">rebuild from code</text>
+          <text x="840" y="800">from immutable backups</text><text x="840" y="814">into a reviewed setup</text>
+          <text x="1030" y="800">blameless: the finding is</text><text x="1030" y="814">never a careless person</text>
+          <text x="1220" y="800">legal deadlines exist —</text><text x="1220" y="814">know yours in advance</text>
+        </g>
+        <text x="40" y="852" class="s-haz">Rebuilding in a hurry is how the second incident is created: open security groups and relaxed permissions are what the attacker wants next.</text>
+        <text x="40" y="870" class="s-sub">Rebuild from infrastructure code so the configuration is the reviewed one, not the improvised one. Powering off destroys memory evidence.</text>
+      </svg>
+    </div>
+    <figcaption><b>Read the cutaway from the core outward.</b> Data sits in the middle; every ring around it is a separate chance to stop the attacker, and each is mostly configuration. The two detached boxes matter as much as the rings: the supply chain comes in through the build rather than the network, and the backups only save you if nothing inside the rings can delete them.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — layers, the ten, the questions and the bad day</h3>
+    <div class="gazgrid">
+      <div><h4><span>§1</span>Identity and access</h4><p>MFA on every admin human, a root account with hardware MFA and no keys, roles for services and OIDC for CI, least privilege, no shared accounts, same-day leavers, separate prod accounts, guardrails above IAM, alarmed break-glass credentials.</p></div>
+      <div><h4><span>§2</span>Network exposure</h4><p>Databases, caches, brokers and dashboards never public; no 0.0.0.0/0 except 80/443 on a load balancer; no inbound SSH; private subnets by default; egress restricted; TLS 1.2+ everywhere with auto-renewed certificates; rate limiting at the edge.</p></div>
+      <div><h4><span>§3</span>Secrets</h4><p>Not in code, .env files, Dockerfiles or CI logs; a secret manager with an audit trail; push-protected scanning; anything ever committed is rotated, because deleting the commit does nothing. Kubernetes Secrets are base64 and Terraform state is plaintext.</p></div>
+      <div><h4><span>§4</span>Data protection</h4><p>Encryption at rest and in transit, personal data inventoried, retention enforced, deletion that reaches replicas, backups, caches and vector indexes, no production data in test, passwords hashed with argon2id, scrypt or bcrypt, card data tokenised.</p></div>
+      <div><h4><span>§5</span>Application</h4><p>Server-side validation, parameterised queries, context-aware output encoding, a CSP without unsafe-inline, object-level authorisation, CSRF protection, HttpOnly Secure SameSite cookies, SSRF allowlists, safe uploads, no stack traces in errors, security headers.</p></div>
+      <div><h4><span>§6</span>Supply chain</h4><p>Scanning that fails CI on criticals and updates actually applied, lock files committed, base images pinned by digest and rebuilt, CI actions pinned to a SHA, no secrets exposed to fork PRs, signed artefacts verified at deploy.</p></div>
+      <div><h4><span>§7</span>Logging and response</h4><p>Audit logs on the control plane and the application, shipped to a separate account, with lawful retention; alerts on root use, permission changes and disabled logging that someone reads; a plan that revokes sessions; a SECURITY.md contact route.</p></div>
+      <div><h4><span>§8</span>Backup and recovery</h4><p>Backups of everything that cannot be regenerated, immutable in a separate account, beyond the reach of the production credential, kept at least 30 days, with keys and runbook stored outside — and a restore performed and timed.</p></div>
+      <div><h4><span>§9</span>People and process</h4><p>Nobody deploys alone, administrators included in branch protection; security review for auth, payments, permissions and personal data; phishing-resistant MFA; support recovery paths threat-modelled; vendors reviewed, since their breach is yours.</p></div>
+      <div><h4><span>T1–T10</span>The ten</h4><p>MFA, no long-lived keys, no public buckets, nothing admin-facing on the internet, no secrets in code, undeletable audit logs, tested immutable backups, updated dependencies, parameterised queries and encoding, authorisation on every request.</p></div>
+      <div><h4><span>Q1–Q4</span>Threat model</h4><p>What an attacker wants, who they realistically are, where the boundary is, and how far they get if they succeed. The fourth is where design effort belongs, because prevention eventually fails somewhere.</p></div>
+      <div><h4><span>R1–R2</span>Contain, preserve</h4><p>Revoke sessions and credentials and isolate the system without powering it off, then snapshot before rebuilding — the logs and memory are the only record of what happened.</p></div>
+      <div><h4><span>R3–R5</span>Assess, eradicate, recover</h4><p>Establish what the credential could reach from the audit trail, rotate everything the attacker could have seen, rebuild from infrastructure code, and restore from immutable backups into a properly configured environment.</p></div>
+      <div><h4><span>R6–R7</span>Learn, notify</h4><p>A blameless review whose finding is never "a person was careless", and notification within legal deadlines you already knew before the incident began.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The cloud provider secures its infrastructure, not your configuration</b>
+    <p>The recurring mistakes are all on your side of that line: one account for everything, backups and audit logs in the account they protect, secrets "removed" in a later commit instead of rotated, authentication without authorisation, compliance mistaken for security, alerts nobody reads, and a restore never tested — so the recovery time is unknown until the day it matters.</p>
+  </div>
+</div>
+
+</div>

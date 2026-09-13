@@ -1,0 +1,1616 @@
+<meta charset="utf-8">
+<title>Atlas of the Frontend — eight sheets</title>
+
+<style>
+  :root{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+      --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+      --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1418; --ink:#E8E6E0; --mute:#8B9A9C; --rule:#28312F; --band:#161C1E;
+    --line:#3FB5B0; --fast:#D2A24C; --hazard:#E0696A; --cool:#7FAECB; --learn:#A79BD0;
+    --z1:#16232A; --z2:#1A2426; --z3:#212422; --z4:#28241E; --z5:#30251C; --z6:#221F2C;
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --ink:#121A22; --mute:#6A7A7D; --rule:#D4D8D4; --band:#F1F0EC;
+    --line:#0B6E6E; --fast:#A9761A; --hazard:#9E2A2B; --cool:#3C6E8F; --learn:#5B4B8A;
+    --z1:#E2EDEE; --z2:#E6EBEC; --z3:#EDEBE6; --z4:#F2E9DF; --z5:#F6E4D4; --z6:#EAE6F1;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .atlas{max-width:1500px;margin:0 auto;padding:38px 26px 80px;display:flex;flex-direction:column;gap:0}
+
+  .sheet{display:flex;flex-direction:column;gap:26px;padding:44px 0 56px;border-top:1px solid var(--rule)}
+  .sheet:first-of-type{border-top:0;padding-top:0}
+
+  .plate{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .plate .no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--line);text-transform:uppercase}
+  .plate h2{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.4vw,40px);letter-spacing:-.02em;margin:0;line-height:1;text-wrap:balance}
+  .plate .form{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--fast);margin-left:auto}
+  .plate .cov{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+
+  .thesis{max-width:74ch;margin:0;font-size:16.5px}
+  .thesis strong{font-weight:400;box-shadow:inset 0 -.42em 0 color-mix(in srgb,var(--fast) 26%,transparent)}
+
+  figure{margin:0;display:flex;flex-direction:column;gap:11px}
+  .scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  svg{display:block;width:100%;height:auto}
+  .scroll > svg{min-width:880px}
+  .scroll > svg.wide{min-width:1180px}
+  figcaption{font-size:13.5px;color:var(--mute);max-width:86ch}
+  figcaption b{color:var(--ink);font-weight:400}
+
+  .s-name{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)}
+  .s-sub{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+  .s-num{font-family:var(--mono);font-size:10.5px;fill:var(--mute)}
+  .s-mono{font-family:var(--mono);font-size:11px;fill:var(--ink)}
+  .s-zone{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+  .s-note{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--fast)}
+  .s-haz{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--hazard)}
+  .s-learn{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--learn)}
+  .s-lab{font-family:var(--sans);font-size:12px;font-weight:700;fill:var(--ink)}
+  .s-big{font-family:var(--sans);font-size:15px;font-weight:700;fill:var(--ink)}
+  .st{fill:var(--paper);stroke:var(--line);stroke-width:3}
+
+  .gaz{border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+  .gaz > h3{font-family:var(--sans);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin:0;color:var(--mute);font-weight:700}
+  .gazgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .gazgrid > div{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:12px 15px}
+  .gazgrid h4{font-family:var(--sans);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 5px;font-weight:700;color:var(--line)}
+  .gazgrid h4 span{font-family:var(--mono);color:var(--fast);margin-right:7px;letter-spacing:0}
+  .gazgrid p{margin:0;font-size:12.5px;line-height:1.5}
+  .gazgrid p.n{font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.65}
+  .gazgrid p.w{color:var(--mute);margin-top:5px;font-size:12px}
+
+  .warn{border-left:4px solid var(--hazard);background:color-mix(in srgb,var(--hazard) 6%,transparent);padding:14px 18px;max-width:92ch}
+  .warn b{color:var(--hazard);font-family:var(--sans);font-size:13px}
+  .warn p{margin:4px 0 0}
+
+  .contents{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;border:1px solid var(--rule);border-bottom:0}
+  .contents a{display:flex;gap:14px;padding:15px 17px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-decoration:none;border-left:0;border-top:0;color:var(--ink);align-items:flex-start}
+  .contents a:hover{background:var(--band)}
+  .contents .n{font-family:var(--mono);font-size:12px;color:var(--line);min-width:2.2em}
+  .contents h4{font-family:var(--sans);font-size:14px;margin:0 0 3px;font-weight:700}
+  .contents p{margin:0;font-size:12.5px;color:var(--mute);line-height:1.45}
+  .contents em{font-style:normal;font-family:var(--sans);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fast);display:block;margin-top:4px}
+
+  h1{font-family:var(--sans);font-weight:700;font-size:clamp(32px,5.6vw,64px);letter-spacing:-.024em;line-height:.95;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--line)}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--line);margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 26px;font-family:var(--mono);font-size:11.5px;color:var(--mute);border-top:1px solid var(--rule);padding-top:12px}
+  .meta b{color:var(--ink);font-weight:400}
+  a{color:var(--line)}
+  a:focus-visible{outline:2px solid var(--fast);outline-offset:3px}
+
+  @media (max-width:720px){.atlas{padding:22px 14px 50px}.plate .form{margin-left:0}}
+
+  @page{size:A2 landscape;margin:11mm}
+  @media print{
+    :root{
+      --paper:#fff;--ink:#111;--mute:#555;--rule:#c9c9c9;--band:#F2F1ED;
+      --line:#0B6E6E;--fast:#8F6212;--hazard:#8E1F20;--cool:#2F5A76;--learn:#4A3D75;
+      --z1:#E2EDEE;--z2:#E9EDEE;--z3:#EFEDE9;--z4:#F4EBE2;--z5:#F8E7D8;--z6:#EBE7F2;
+    }
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:9.5pt}
+    .atlas{max-width:none;padding:0}
+    .sheet{break-before:page;border-top:0;padding:0 0 0;gap:16px}
+    .sheet:first-of-type{break-before:avoid}
+    .scroll{overflow:visible}
+    .scroll > svg,.scroll > svg.wide{min-width:0}
+    figure,.warn,.gazgrid > div,.contents a{break-inside:avoid}
+    .plate{break-after:avoid}
+  }
+</style>
+
+<div class="atlas">
+
+<!-- ══════════════════════ SHEET 0 — CONTENTS ══════════════════════ -->
+<div class="sheet">
+  <p class="eyebrow">Software Engineering Handbook · 05 Frontend Architecture · eight sheets</p>
+  <h1>Atlas of the <em>Frontend</em></h1>
+  <p class="thesis">One URL, one page, and everything that has to happen between the first byte and a button that responds. Sheet 1 is the route a page load actually travels; sheets 2 to 4 open up the three machines inside the browser, and sheets 5 to 8 are the choices you make on top of them. <strong>The browser is fixed machinery with a 16.7 ms timetable — frontend engineering is the craft of cooperating with it instead of fighting it.</strong></p>
+  <div class="meta">
+    <span><b>Print</b> A2 landscape · one sheet per page</span>
+    <span><b>Sheets</b> 8</span>
+    <span><b>Numbered steps</b> 110</span>
+    <span><b>Read first</b> Sheet 1 end to end, then sheet 4 — the event loop explains every other sheet's failure modes</span>
+  </div>
+
+  <div class="contents">
+    <a href="#a1"><span class="n">1</span><span><h4>The Page-Load Line</h4><p>URL to interactive page: twelve stops, two that block, one cache exit that skips the network entirely.</p><em>Transit diagram</em></span></a>
+    <a href="#a2"><span class="n">2</span><span><h4>The Pixel Pipeline</h4><p>Style, layout, paint, composite — why each stage costs more than the next, and which CSS property enters where.</p><em>Cutaway section</em></span></a>
+    <a href="#a3"><span class="n">3</span><span><h4>From Source to Machine Code</h4><p>TypeScript erased, JavaScript parsed, bytecode profiled, hot code optimised — and thrown away when a guess fails.</p><em>Process plant</em></span></a>
+    <a href="#a4"><span class="n">4</span><span><h4>One Thread, Three Queues</h4><p>Call stack, microtasks, macrotasks, render: the loop that decides what the only thread does next.</p><em>Closed circuit</em></span></a>
+    <a href="#a5"><span class="n">5</span><span><h4>The Render Cycle</h4><p>setState to screen: components run again, trees are diffed, and only the difference touches the DOM.</p><em>Control loop</em></span></a>
+    <a href="#a6"><span class="n">6</span><span><h4>Where the HTML Is Made</h4><p>SSG, ISR, SSR or CSR, chosen per page — and the server/client component boundary that decides what ships.</p><em>Decision tree</em></span></a>
+    <a href="#a7"><span class="n">7</span><span><h4>Where State Lives</h4><p>Five rungs from useState to a server-state cache. Start at the bottom and climb only when forced.</p><em>Ladder plate</em></span></a>
+    <a href="#a8"><span class="n">8</span><span><h4>The Town Plan</h4><p>Features, shared UI, lib, backend: one-way dependencies, performance budgets, and the fact that everything shipped is public.</p><em>Zoning plan</em></span></a>
+  </div>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1400 300" role="img" aria-label="How the eight sheets fit together. Sheet 1, the page-load line, runs across the middle as the route a page takes from URL to interactive. Above it, sheet 3 zooms into the script stop, sheet 2 into the layout, paint and composite stops, and sheet 4 into what runs the page once it is interactive. Below it, sheet 6 decides which machine produces the HTML, sheet 5 shows how a framework re-drives the rendering stops, and sheet 7 holds the data behind every re-render. Sheet 8, the codebase plan, runs underneath everything.">
+        <rect x="30" y="118" width="1340" height="62" fill="var(--z3)"/>
+        <text x="46" y="144" class="s-zone" fill="var(--mute)">Sheet 1 — the route one page takes, from URL to a button that responds</text>
+        <text x="46" y="164" class="s-sub">every other sheet is either a zoom into one of its stops, a choice about how a stop is produced, or the plan of the code that feeds it</text>
+
+        <g stroke="var(--line)" stroke-width="2" fill="none">
+          <path d="M250,118 L250,80"/><path d="M640,118 L640,80"/><path d="M1060,118 L1060,80"/>
+          <path d="M300,180 L300,216"/><path d="M720,180 L720,216"/><path d="M1140,180 L1140,216"/>
+        </g>
+        <g class="s-lab" text-anchor="middle">
+          <text x="250" y="68">3 · from source to machine code</text>
+          <text x="640" y="68">2 · the pixel pipeline</text>
+          <text x="1060" y="68">4 · one thread, three queues</text>
+          <text x="300" y="234">6 · where the HTML is made</text>
+          <text x="720" y="234">5 · the render cycle</text>
+          <text x="1140" y="234">7 · where state lives</text>
+        </g>
+        <g class="s-sub" text-anchor="middle">
+          <text x="250" y="50">stop 06, the script, magnified</text>
+          <text x="640" y="50">stops 07 to 10, magnified</text>
+          <text x="1060" y="50">what runs the page after stop 12</text>
+          <text x="300" y="252">which machine runs stops 03 and 04</text>
+          <text x="720" y="252">how React re-drives stops 07 to 10</text>
+          <text x="1140" y="252">the data behind every re-render</text>
+        </g>
+        <rect x="30" y="276" width="1340" height="10" fill="color-mix(in srgb,var(--fast) 26%,transparent)"/>
+        <text x="1370" y="270" text-anchor="end" class="s-note">Sheet 8 — the plan of the codebase runs under every sheet on this atlas</text>
+      </svg>
+    </div>
+    <figcaption>Read it as two kinds of sheet. <b>Machinery</b> — sheets 1 to 4 — is the browser itself: you do not choose it, you write code that either helps it or blocks it. <b>Decisions</b> — sheets 5 to 8 — are yours: a library, a rendering strategy, a home for each piece of data, a folder structure. Almost every frontend performance bug is a decision on the second half that ignored the machinery on the first.</figcaption>
+  </figure>
+</div>
+
+<!-- ══════════════════════ SHEET 1 — THE PAGE-LOAD LINE ══════════════════════ -->
+<div class="sheet" id="a1">
+  <div class="plate">
+    <span class="no">Sheet 1</span>
+    <h2>The Page-Load Line</h2>
+    <span class="form">Transit diagram</span>
+    <span class="cov">Covers · Browser Internals · HTML · CSS · DOM and CSSOM</span>
+  </div>
+  <p class="thesis">One URL, one route, twelve stops. The server owns the first three; the browser owns everything after the first byte. <strong>Two stations stop the line on purpose — CSS holds back painting, a plain script holds back parsing — and stops 08 to 10 are drawn with a loop because a page is not rendered once, it is rendered sixty times a second.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 2000 850" role="img" aria-label="A transit map of one page load. Twelve numbered stations run left to right through five zones: the network, the parser, the render, the GPU, and interactive. Station 2 has a dashed cache exit, because cache headers decide whether the network stops happen at all. Station 5, CSS, has a hazard drop because it blocks rendering. Station 6, a script, has a branch box showing how plain, defer and async scripts interrupt parsing. A loop runs from composite back to layout, because stops 8 to 10 repeat for every change within a 16.7 millisecond frame. A branch below station 12 hands the page to the event loop. Along the bottom, the browser's process architecture, its storage mechanisms, and its security model.">
+        <defs>
+          <marker id="p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <rect x="30" y="150" width="450" height="250" fill="var(--z1)"/>
+        <rect x="480" y="150" width="460" height="250" fill="var(--z2)"/>
+        <rect x="940" y="150" width="460" height="250" fill="var(--z4)"/>
+        <rect x="1400" y="150" width="320" height="250" fill="var(--z5)"/>
+        <rect x="1720" y="150" width="250" height="250" fill="var(--z6)"/>
+        <g class="s-zone" fill="var(--mute)">
+          <text x="42" y="172">The network</text><text x="492" y="172">The parser</text>
+          <text x="952" y="172">The render</text><text x="1412" y="172">The GPU</text><text x="1732" y="172">Interactive</text>
+        </g>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="480" y1="150" x2="480" y2="400"/><line x1="940" y1="150" x2="940" y2="400"/>
+          <line x1="1400" y1="150" x2="1400" y2="400"/><line x1="1720" y1="150" x2="1720" y2="400"/>
+        </g>
+
+        <line x1="70" y1="290" x2="1880" y2="290" stroke="var(--line)" stroke-width="7"/>
+        <line x1="70" y1="273" x2="70" y2="307" stroke="var(--line)" stroke-width="7"/>
+        <line x1="1880" y1="273" x2="1880" y2="307" stroke="var(--line)" stroke-width="7"/>
+
+        <g class="st"><circle cx="90" cy="290" r="9"/><circle cx="400" cy="290" r="9"/><circle cx="555" cy="290" r="9"/><circle cx="1020" cy="290" r="9"/><circle cx="1175" cy="290" r="9"/><circle cx="1330" cy="290" r="9"/><circle cx="1640" cy="290" r="9"/><circle cx="1795" cy="290" r="9"/></g>
+        <g fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"><circle cx="245" cy="290" r="13"/><circle cx="1485" cy="290" r="13"/></g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="3.5"><circle cx="710" cy="290" r="13"/><circle cx="865" cy="290" r="13"/></g>
+
+        <g class="s-num">
+          <text x="44" y="206">01</text><text x="199" y="206">02</text><text x="354" y="206">03</text><text x="509" y="206">04</text><text x="664" y="206">05</text><text x="819" y="206">06</text><text x="974" y="206">07</text><text x="1129" y="206">08</text><text x="1284" y="206">09</text><text x="1439" y="206">10</text><text x="1594" y="206">11</text><text x="1749" y="206">12</text>
+        </g>
+        <g class="s-lab">
+          <text x="44" y="224">URL entered</text><text x="199" y="224">DNS, TCP, TLS</text><text x="354" y="224">HTTP GET</text><text x="509" y="224">HTML streams</text><text x="664" y="224">CSS found</text><text x="819" y="224">script found</text><text x="974" y="224">render tree</text><text x="1129" y="224">layout</text><text x="1284" y="224">paint</text><text x="1439" y="224">composite</text><text x="1594" y="224">first pixels</text><text x="1749" y="224">interactive</text>
+        </g>
+        <g class="s-sub">
+          <text x="44" y="242">a typed address,</text><text x="44" y="256">a link, a redirect</text>
+          <text x="199" y="242">round trips before any</text><text x="199" y="256">HTML · see folder 04</text>
+          <text x="354" y="242">Time to First Byte —</text><text x="354" y="256">the server's share</text>
+          <text x="509" y="242">parsed incrementally;</text><text x="509" y="256">the DOM grows live</text>
+          <text x="664" y="242">fetched, parsed into</text><text x="664" y="256">the CSSOM · blocks paint</text>
+          <text x="819" y="242">blocks the parser</text><text x="819" y="256">unless defer or async</text>
+          <text x="974" y="242">DOM + CSSOM, visible</text><text x="974" y="256">elements only</text>
+          <text x="1129" y="242">position and size</text><text x="1129" y="256">of every box · costly</text>
+          <text x="1284" y="242">colours, text, shadows</text><text x="1284" y="256">and borders to pixels</text>
+          <text x="1439" y="242">layers assembled</text><text x="1439" y="256">on the GPU · cheap</text>
+          <text x="1594" y="242">LCP stops when the</text><text x="1594" y="256">main content paints</text>
+          <text x="1749" y="242">DOMContentLoaded,</text><text x="1749" y="256">then load</text>
+        </g>
+
+        <!-- A: cache exit -->
+        <path d="M245,303 L245,506" fill="none" stroke="var(--fast)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#p2)"/>
+        <circle cx="245" cy="470" r="12.5" fill="var(--paper)" stroke="var(--fast)" stroke-width="3"/>
+        <text x="245" y="474" text-anchor="middle" class="s-note" font-size="12">A</text>
+        <text x="268" y="462" class="s-note">served from the HTTP cache</text>
+        <text x="268" y="478" class="s-sub" style="fill:var(--fast)">Cache-Control and ETag — headers you set on the</text>
+        <text x="268" y="492" class="s-sub" style="fill:var(--fast)">server — decide whether stops 02 to 05 happen at all</text>
+
+        <!-- B: render blocking -->
+        <path d="M710,303 L710,650" fill="none" stroke="var(--hazard)" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#p3)"/>
+        <circle cx="710" cy="620" r="12.5" fill="var(--paper)" stroke="var(--hazard)" stroke-width="3"/>
+        <text x="710" y="624" text-anchor="middle" class="s-haz" font-size="12">B</text>
+        <text x="688" y="596" text-anchor="end" class="s-haz">nothing paints until the CSSOM exists</text>
+        <text x="688" y="612" text-anchor="end" class="s-sub" style="fill:var(--hazard)">CSS in the head blocks rendering on purpose:</text>
+        <text x="688" y="626" text-anchor="end" class="s-sub" style="fill:var(--hazard)">an unstyled flash would be worse than a wait</text>
+
+        <!-- S: script branch -->
+        <path d="M865,303 L865,430" fill="none" stroke="var(--hazard)" stroke-width="3"/>
+        <rect x="760" y="430" width="390" height="184" fill="var(--band)" stroke="var(--line)" stroke-width="2" stroke-dasharray="7 6"/>
+        <text x="774" y="454" class="s-zone" fill="var(--line)">Branch · three ways to load</text>
+        <g class="s-num"><text x="774" y="490">S1</text><text x="774" y="530">S2</text><text x="774" y="570">S3</text></g>
+        <g class="s-mono" font-size="10.5"><text x="798" y="490">plain</text><text x="798" y="530">defer</text><text x="798" y="570">async</text></g>
+        <g>
+          <rect x="860" y="479" width="70" height="14" fill="var(--line)" opacity=".8"/><rect x="930" y="479" width="80" height="14" fill="var(--hazard)" opacity=".75"/><rect x="1010" y="479" width="124" height="14" fill="var(--line)" opacity=".8"/>
+          <rect x="860" y="519" width="220" height="14" fill="var(--line)" opacity=".8"/><rect x="890" y="536" width="100" height="5" fill="var(--fast)"/><rect x="1084" y="519" width="50" height="14" fill="var(--fast)" opacity=".85"/>
+          <rect x="860" y="559" width="100" height="14" fill="var(--line)" opacity=".8"/><rect x="880" y="576" width="75" height="5" fill="var(--fast)"/><rect x="960" y="559" width="50" height="14" fill="var(--hazard)" opacity=".75"/><rect x="1010" y="559" width="124" height="14" fill="var(--line)" opacity=".8"/>
+        </g>
+        <text x="774" y="602" class="s-sub" font-size="10.5" style="fill:var(--line)">■ parse</text>
+        <text x="828" y="602" class="s-sub" font-size="10.5" style="fill:var(--fast)">■ fetch</text>
+        <text x="880" y="602" class="s-sub" font-size="10.5" style="fill:var(--hazard)">■ stop and run</text>
+        <text x="1136" y="602" text-anchor="end" class="s-note" font-size="10.5">defer is the default</text>
+
+        <!-- the frame loop -->
+        <path d="M1485,303 C1485,420 1175,420 1175,311" fill="none" stroke="var(--fast)" stroke-width="4" marker-end="url(#p2)"/>
+        <text x="1330" y="446" text-anchor="middle" class="s-note">stops 08–10 run again for every change</text>
+        <text x="1330" y="462" text-anchor="middle" class="s-sub" style="fill:var(--fast)">16.7 ms per frame at 60 fps: script, style,</text>
+        <text x="1330" y="476" text-anchor="middle" class="s-sub" style="fill:var(--fast)">layout, paint and composite all share it</text>
+
+        <!-- handover to the event loop -->
+        <path d="M1795,299 L1795,466" fill="none" stroke="var(--learn)" stroke-width="3.5" stroke-dasharray="8 6"/>
+        <rect x="1540" y="470" width="430" height="134" fill="var(--z6)" stroke="var(--learn)" stroke-width="2" stroke-dasharray="7 6"/>
+        <text x="1556" y="494" class="s-learn">then the page belongs to the event loop</text>
+        <text x="1556" y="514" class="s-sub">Every click, timer and network response is now a</text>
+        <text x="1556" y="528" class="s-sub">task on one thread — the same thread that renders.</text>
+        <text x="1556" y="542" class="s-sub">Sheet 4 draws that loop; sheet 5 the framework on it.</text>
+        <text x="1556" y="566" class="s-haz" font-size="10.5">100 ms of synchronous JavaScript = six dropped frames.</text>
+        <text x="1556" y="584" class="s-sub" font-size="10.5">Mid-range phones parse JavaScript several times slower.</text>
+
+        <!-- BOTTOM: processes -->
+        <rect x="30" y="670" width="620" height="164" fill="var(--z3)"/>
+        <text x="46" y="694" class="s-zone" fill="var(--mute)">The process plan · why tabs can't see each other</text>
+        <rect x="46" y="708" width="292" height="32" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="58" y="729" class="s-lab" font-size="11">browser process · UI, network, storage</text>
+        <rect x="356" y="708" width="278" height="32" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="368" y="729" class="s-lab" font-size="11">GPU process · compositing</text>
+        <g stroke="var(--line)" stroke-width="2" fill="none"><path d="M192,740 L91,770"/><path d="M192,740 L191,770"/><path d="M192,740 L291,770"/></g>
+        <g fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"><rect x="46" y="770" width="90" height="30"/><rect x="146" y="770" width="90" height="30"/><rect x="246" y="770" width="90" height="30"/></g>
+        <g class="s-lab" font-size="10.5"><text x="56" y="789">renderer A</text><text x="156" y="789">renderer B</text><text x="256" y="789">renderer C</text></g>
+        <text x="46" y="820" class="s-sub" font-size="10.5">one per site · each one sandboxed</text>
+        <text x="356" y="766" class="s-sub">One renderer per site, with no file system</text>
+        <text x="356" y="780" class="s-sub">and no OS. A compromised page reaches its</text>
+        <text x="356" y="794" class="s-sub">own process only, and Spectre cannot read</text>
+        <text x="356" y="808" class="s-sub">memory outside its address space.</text>
+        <text x="356" y="826" class="s-note" font-size="10.5">Security first, not performance.</text>
+
+        <!-- BOTTOM: storage -->
+        <rect x="670" y="670" width="640" height="164" fill="var(--z2)"/>
+        <text x="686" y="694" class="s-zone" fill="var(--mute)">Storage · what lives here, and who reads it</text>
+        <g class="s-lab" font-size="10.5" style="fill:var(--mute)"><text x="686" y="716">mechanism</text><text x="816" y="716">size</text><text x="896" y="716">sent to server?</text><text x="1016" y="716">use for</text></g>
+        <g class="s-mono" font-size="10.5">
+          <text x="686" y="734">cookies</text><text x="816" y="734">~4 KB</text><text x="896" y="734">every request</text><text x="1016" y="734">session identifiers</text>
+          <text x="686" y="750">localStorage</text><text x="816" y="750">5–10 MB</text><text x="896" y="750">no</text><text x="1016" y="750">preferences, safe cache</text>
+          <text x="686" y="766">sessionStorage</text><text x="816" y="766">5–10 MB</text><text x="896" y="766">no</text><text x="1016" y="766">per-tab temporary state</text>
+          <text x="686" y="782">IndexedDB</text><text x="816" y="782">large</text><text x="896" y="782">no</text><text x="1016" y="782">offline, structured data</text>
+          <text x="686" y="798">Cache API</text><text x="816" y="798">large</text><text x="896" y="798">no</text><text x="1016" y="798">service-worker assets</text>
+        </g>
+        <text x="686" y="822" class="s-haz" font-size="10.5">localStorage is readable by any script, XSS included. Session tokens go in HttpOnly cookies.</text>
+
+        <!-- BOTTOM: security -->
+        <rect x="1330" y="670" width="640" height="164" fill="var(--band)"/>
+        <text x="1346" y="694" class="s-zone" fill="var(--hazard)">The security model · enforced here</text>
+        <g class="s-lab" font-size="11"><text x="1346" y="720">Same-Origin Policy</text><text x="1346" y="740">CORS</text><text x="1346" y="760">CSP</text><text x="1346" y="780">Sandbox</text><text x="1346" y="800">Site isolation</text></g>
+        <g class="s-sub">
+          <text x="1496" y="720">a page from origin A cannot read origin B's data</text>
+          <text x="1496" y="740">the server's way of granting selective exceptions</text>
+          <text x="1496" y="760">which scripts may run at all — the best XSS defence</text>
+          <text x="1496" y="780">renderers cannot touch the file system or the OS</text>
+          <text x="1496" y="800">a separate process for every site</text>
+        </g>
+        <text x="1346" y="824" class="s-note" font-size="10.5">Set on the server, enforced in the browser: misconfigure them and the client breaks.</text>
+      </svg>
+    </div>
+    <figcaption><b>Three things on this map surprise backend developers.</b> Time to First Byte is the only stop the server controls, and the page is usually slow somewhere after it. The two red stations are deliberate: the browser would rather wait than paint unstyled content or run scripts out of order. And the loop between 08 and 10 means "rendering" is not an event at load time — it is a sixty-times-a-second obligation for as long as the tab is open.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every stop on this sheet, and what it does</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>URL entered</h4><p>A navigation starts: a typed address, a link, a redirect. Everything about a browser follows from what happens next — it is about to download and run code from a stranger.</p></div>
+      <div><h4><span>02</span>DNS, TCP, TLS</h4><p>Resolve the name, open a connection, negotiate encryption. Several round trips before one byte of HTML exists, which is why connection reuse and CDNs matter. Drawn in full in folder 04.</p></div>
+      <div><h4><span>03</span>HTTP GET</h4><p>The request for the document. Time to First Byte is the server's share of the load; everything after it belongs to the browser and to the code you sent it.</p></div>
+      <div><h4><span>04</span>HTML streams in</h4><p>The parser builds the DOM incrementally as bytes arrive, so content can appear before the file finishes. The parser is extremely tolerant: malformed markup is repaired silently, not rejected.</p></div>
+      <div><h4><span>05</span>CSS found</h4><p>A <code>&lt;link rel="stylesheet"&gt;</code> is fetched and parsed into the CSSOM. Rendering is blocked until it arrives, because no element can be drawn before its style is known. Keep critical CSS small and early.</p></div>
+      <div><h4><span>06</span>Script found</h4><p>A plain <code>&lt;script&gt;</code> stops the parser while it downloads and executes, because it might change the document. <code>defer</code> and <code>async</code> remove that stall.</p></div>
+      <div><h4><span>07</span>Render tree</h4><p>DOM and CSSOM combined: only visible elements, each with its computed style. <code>display:none</code> elements are left out entirely. Sheet 2 opens this stop up.</p></div>
+      <div><h4><span>08</span>Layout</h4><p>Geometry: the exact position and size of every box. The most expensive stage, triggered again by any change to width, height, position, font size or DOM structure.</p></div>
+      <div><h4><span>09</span>Paint</h4><p>Filling pixels: colours, text, shadows, borders. Cheaper than layout, still real work, and re-run whenever appearance changes.</p></div>
+      <div><h4><span>10</span>Composite</h4><p>Painted layers are assembled on the GPU process. Changes that only touch <code>transform</code> or <code>opacity</code> start here, skipping 08 and 09 — the root of most animation advice.</p></div>
+      <div><h4><span>11</span>First pixels</h4><p>Content on screen. Largest Contentful Paint measures when the main content finished painting; unreserved image space here becomes Cumulative Layout Shift a moment later.</p></div>
+      <div><h4><span>12</span>Interactive</h4><p>DOM complete fires <code>DOMContentLoaded</code>; images and fonts finishing fires <code>load</code>. From now on every event is a task on the event loop — sheet 4.</p></div>
+      <div><h4><span>A</span>HTTP cache</h4><p>The headers you set on the server decide whether stops 02 to 05 happen at all. A cached document or stylesheet costs no round trip and no bytes over the wire.</p></div>
+      <div><h4><span>B</span>Render blocking</h4><p>CSS in the head deliberately holds back the first paint. Large or late stylesheets therefore delay everything the user sees, however fast the server was.</p></div>
+      <div><h4><span>S1</span>Plain script</h4><p>Parsing stops, the file is fetched and run, then parsing resumes. One slow third-party script in the head can hold the whole page hostage.</p></div>
+      <div><h4><span>S2</span>defer</h4><p>Downloaded in parallel with parsing, executed in order after parsing finishes. The right default for almost every script, and one of the two habits that fix most render-blocking problems.</p></div>
+      <div><h4><span>S3</span>async</h4><p>Downloaded in parallel, executed the moment it arrives — interrupting the parser and ignoring order. Suits independent scripts such as analytics, nothing that depends on another file.</p></div>
+      <div><h4><span>16.7</span>The frame budget</h4><p>At 60 frames per second the browser has 16.7 ms for script, style, layout, paint and composite together. A single long task blocks all of it, and users feel it as jank.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Nothing in the browser is trustworthy</b>
+    <p>Everything on this line runs on a machine you do not control. Browser validation, route guards, hidden elements and client state are conveniences; an attacker can skip the page entirely and call your server directly. Validate on the server, set CSP and cookie flags there, and keep tokens where scripts cannot reach them.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 2 — THE PIXEL PIPELINE ══════════════════════ -->
+<div class="sheet" id="a2">
+  <div class="plate">
+    <span class="no">Sheet 2</span>
+    <h2>The Pixel Pipeline</h2>
+    <span class="form">Cutaway section</span>
+    <span class="cov">Covers · Rendering Engine · DOM and CSSOM · CSS</span>
+  </div>
+  <p class="thesis">Stops 07 to 10 of sheet 1, opened up. Two trees go in, a frame comes out, and every change you make enters the pipeline at one of three doors. <strong>Each stage is more expensive than the one after it — so the question for any style change is not "does it work" but "which door did it come through".</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 860" role="img" aria-label="A cutaway of the rendering engine. Across the top, three panels: the DOM tree and CSSOM tree built from HTML and CSS; the cascade and specificity scores that resolve conflicting rules; and the box model beside a render tree that excludes a display none element. Across the middle, the pipeline of JavaScript, style, layout, paint and composite drawn three times: a geometry change runs every stage, an appearance change skips layout, and a transform or opacity change skips layout and paint. Along the bottom, layout thrashing shown as eight forced layouts versus one, compositor layers moved by the GPU, and the Core Web Vitals located on the pipeline.">
+        <defs>
+          <marker id="px1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="px2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- PANEL: two trees -->
+        <rect x="30" y="40" width="430" height="290" fill="var(--z2)"/>
+        <text x="46" y="64" class="s-zone" fill="var(--mute)">Two files, two trees</text>
+        <text x="46" y="88" class="s-num">01</text><text x="68" y="88" class="s-lab">DOM · from HTML</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="60" y="110">Document</text><text x="80" y="134">html</text><text x="100" y="158">body</text><text x="120" y="182">div.card</text><text x="140" y="206">h1</text>
+        </g>
+        <text x="160" y="230" class="s-mono" font-size="10.5" style="fill:var(--fast)">"Title"  ← a text node</text>
+        <g stroke="var(--line)" stroke-width="1.5" fill="none">
+          <path d="M66,116 V130 H76"/><path d="M86,140 V154 H96"/><path d="M106,164 V178 H116"/><path d="M126,188 V202 H136"/><path d="M146,212 V226 H156"/>
+        </g>
+        <text x="250" y="88" class="s-num">02</text><text x="272" y="88" class="s-lab">CSSOM · from CSS</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="250" y="110">body { font: 16px }</text><text x="270" y="134">.card { padding: 1rem }</text><text x="290" y="158">h1 { color: teal }</text>
+        </g>
+        <g stroke="var(--fast)" stroke-width="1.5" fill="none"><path d="M256,116 V130 H266"/><path d="M276,140 V154 H286"/></g>
+        <text x="46" y="256" class="s-sub">Every element, attribute and piece of text becomes an object</text>
+        <text x="46" y="270" class="s-sub">that JavaScript can read and change, and the screen follows.</text>
+        <text x="46" y="292" class="s-note">Parsed once, then mutated forever — no reload.</text>
+        <text x="46" y="314" class="s-haz" font-size="10.5">CSS blocks rendering: nothing is drawn before its style is known.</text>
+
+        <!-- PANEL: cascade -->
+        <rect x="476" y="40" width="450" height="290" fill="var(--z3)"/>
+        <text x="492" y="64" class="s-zone" fill="var(--mute)">When two rules disagree</text>
+        <text x="492" y="90" class="s-num">03</text><text x="516" y="90" class="s-lab">The cascade, in order</text>
+        <g class="s-sub">
+          <text x="516" y="110">1 · !important — wins over everything</text>
+          <text x="516" y="126">2 · specificity — inline 1000 › id 100 › class 10 › element 1</text>
+          <text x="516" y="142">3 · source order — later wins among equals</text>
+        </g>
+        <text x="492" y="172" class="s-num">04</text><text x="516" y="172" class="s-lab">Specificity, scored</text>
+        <g class="s-mono" font-size="10.5"><text x="492" y="195">#nav .item a</text><text x="492" y="217">.nav .item a</text><text x="492" y="239">a</text></g>
+        <rect x="600" y="184" width="222" height="14" fill="var(--hazard)" opacity=".7"/>
+        <rect x="600" y="206" width="42" height="14" fill="var(--fast)" opacity=".8"/>
+        <rect x="600" y="228" width="4" height="14" fill="var(--line)"/>
+        <g class="s-mono" font-size="10.5"><text x="830" y="195">100+10+1 = 111</text><text x="650" y="217">10+10+1 = 21</text><text x="612" y="239">1</text></g>
+        <text x="492" y="266" class="s-note">Keep specificity low and flat.</text>
+        <text x="492" y="282" class="s-sub">BEM, CSS Modules and Tailwind all solve this one problem:</text>
+        <text x="492" y="296" class="s-sub">the cascade does not scale without conventions.</text>
+        <text x="492" y="318" class="s-haz" font-size="10.5">One !important leads to another, until nothing can be overridden.</text>
+
+        <!-- PANEL: box + render tree -->
+        <rect x="942" y="40" width="428" height="290" fill="var(--z1)"/>
+        <rect x="958" y="72" width="170" height="126" fill="none" stroke="var(--mute)" stroke-dasharray="5 4"/>
+        <rect x="972" y="88" width="142" height="96" fill="none" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="986" y="104" width="114" height="66" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="1004" y="122" width="78" height="32" fill="var(--line)" opacity=".25"/>
+        <g class="s-sub" font-size="9.5"><text x="962" y="84">margin</text><text x="976" y="100">border</text><text x="990" y="116">padding</text></g>
+        <text x="1043" y="142" text-anchor="middle" class="s-sub" font-size="10">content</text>
+        <text x="1142" y="88" class="s-num">05</text><text x="1164" y="88" class="s-lab">box-sizing: border-box</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="1142" y="108">width includes padding and</text><text x="1142" y="122">border — what everyone means.</text>
+          <text x="1142" y="142">Flexbox for one dimension,</text><text x="1142" y="156">Grid for two. Floats are legacy.</text>
+          <text x="1142" y="176">Mobile-first: base styles, then</text><text x="1142" y="190">@media (min-width: 768px).</text>
+        </g>
+        <text x="958" y="226" class="s-num">06</text><text x="980" y="226" class="s-lab">Render tree = visible nodes + computed styles</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="958" y="240" width="70" height="26"/><rect x="1036" y="240" width="70" height="26"/><rect x="1114" y="240" width="70" height="26"/><rect x="1270" y="240" width="70" height="26"/>
+        </g>
+        <rect x="1192" y="240" width="70" height="26" fill="none" stroke="var(--hazard)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <line x1="1196" y1="253" x2="1258" y2="253" stroke="var(--hazard)" stroke-width="1.5"/>
+        <g class="s-mono" font-size="10" text-anchor="middle"><text x="993" y="257">header</text><text x="1071" y="257">nav</text><text x="1149" y="257">main</text><text x="1227" y="257" fill="var(--hazard)">.modal</text><text x="1305" y="257">footer</text></g>
+        <text x="958" y="286" class="s-haz" font-size="10.5">display:none — excluded from the tree, still in the DOM</text>
+        <text x="958" y="304" class="s-sub">Hidden with CSS is not removed: DevTools still shows it.</text>
+        <text x="958" y="320" class="s-note" font-size="10.5">CSS is never a security boundary. Don't send it.</text>
+
+        <!-- MIDDLE BAND: three doors -->
+        <rect x="30" y="350" width="1340" height="250" fill="var(--z4)"/>
+        <text x="46" y="374" class="s-zone" fill="var(--fast)">The same pipeline, three doors in</text>
+        <g class="s-lab" text-anchor="middle"><text x="415" y="402">JavaScript</text><text x="595" y="402">07 · Style</text><text x="775" y="402">Layout</text><text x="955" y="402">Paint</text><text x="1135" y="402">Composite</text></g>
+        <g class="s-sub" text-anchor="middle" font-size="10.5"><text x="415" y="418">a handler runs</text><text x="595" y="418">cost: low–medium</text><text x="775" y="418" fill="var(--hazard)">cost: HIGH</text><text x="955" y="418">cost: medium</text><text x="1135" y="418">cost: low · GPU</text></g>
+
+        <g class="s-num"><text x="46" y="454">08</text><text x="46" y="510">09</text><text x="46" y="566">10</text></g>
+        <g class="s-lab"><text x="70" y="454">reflow</text><text x="70" y="510">repaint</text><text x="70" y="566">composite only</text></g>
+        <g class="s-sub" font-size="10.5"><text x="70" y="470">width, height, top, left, font-size</text><text x="70" y="526">background-color, visibility</text><text x="70" y="582">transform, opacity</text></g>
+
+        <g fill="var(--z1)" stroke="var(--line)" stroke-width="2">
+          <rect x="340" y="436" width="150" height="40"/><rect x="520" y="436" width="150" height="40"/><rect x="880" y="436" width="150" height="40"/><rect x="1060" y="436" width="150" height="40"/>
+          <rect x="340" y="492" width="150" height="40"/><rect x="520" y="492" width="150" height="40"/><rect x="880" y="492" width="150" height="40"/><rect x="1060" y="492" width="150" height="40"/>
+          <rect x="340" y="548" width="150" height="40"/><rect x="520" y="548" width="150" height="40"/>
+        </g>
+        <rect x="700" y="436" width="150" height="40" fill="color-mix(in srgb,var(--hazard) 16%,transparent)" stroke="var(--hazard)" stroke-width="2.5"/>
+        <rect x="1060" y="548" width="150" height="40" fill="color-mix(in srgb,var(--fast) 18%,transparent)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g fill="none" stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="5 4">
+          <rect x="700" y="492" width="150" height="40"/><rect x="700" y="548" width="150" height="40"/><rect x="880" y="548" width="150" height="40"/>
+        </g>
+        <g class="s-sub" text-anchor="middle" font-size="10.5">
+          <text x="415" y="460">adds a class</text><text x="595" y="460">match selectors</text><text x="775" y="460" fill="var(--hazard)">recompute boxes</text><text x="955" y="460">repaint pixels</text><text x="1135" y="460">assemble layers</text>
+          <text x="415" y="516">sets a colour</text><text x="595" y="516">match selectors</text><text x="775" y="516">skipped</text><text x="955" y="516">repaint pixels</text><text x="1135" y="516">assemble layers</text>
+          <text x="415" y="572">sets transform</text><text x="595" y="572">match selectors</text><text x="775" y="572">skipped</text><text x="955" y="572">skipped</text><text x="1135" y="572" fill="var(--fast)">GPU moves a layer</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#px1)">
+          <path d="M490,456 L516,456"/><path d="M670,456 L696,456"/><path d="M850,456 L876,456"/><path d="M1030,456 L1056,456"/>
+          <path d="M490,512 L516,512"/><path d="M1030,512 L1056,512"/>
+          <path d="M490,568 L516,568"/>
+        </g>
+        <path d="M670,512 C770,486 790,486 876,512" fill="none" stroke="var(--line)" stroke-width="2" marker-end="url(#px1)"/>
+        <path d="M670,568 C860,600 900,600 1056,568" fill="none" stroke="var(--fast)" stroke-width="2.5" marker-end="url(#px2)"/>
+        <text x="1230" y="460" class="s-haz">EXPENSIVE</text><text x="1230" y="474" class="s-sub" font-size="10.5">and 09, 10 run after it</text>
+        <text x="1230" y="516" class="s-lab" style="fill:var(--mute)">moderate</text><text x="1230" y="530" class="s-sub" font-size="10.5">layout skipped</text>
+        <text x="1230" y="572" class="s-note">CHEAP</text><text x="1230" y="586" class="s-sub" font-size="10.5">two stages skipped</text>
+
+        <!-- BOTTOM: thrashing -->
+        <rect x="30" y="620" width="440" height="230" fill="var(--z3)"/>
+        <text x="46" y="644" class="s-zone" fill="var(--hazard)">11 · layout thrashing</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="46" y="666">for (const el of elements) {</text>
+          <text x="62" y="682">el.style.width = el.offsetWidth + 10 + 'px';</text>
+          <text x="46" y="698">}</text>
+        </g>
+        <text x="70" y="698" class="s-sub" font-size="10.5" style="fill:var(--hazard)">↑ the read forces a layout NOW, every iteration</text>
+        <text x="46" y="727" class="s-lab" font-size="11">interleaved</text>
+        <g fill="var(--hazard)" opacity=".75"><rect x="130" y="716" width="30" height="14"/><rect x="170" y="716" width="30" height="14"/><rect x="210" y="716" width="30" height="14"/><rect x="250" y="716" width="30" height="14"/><rect x="290" y="716" width="30" height="14"/><rect x="330" y="716" width="30" height="14"/><rect x="370" y="716" width="30" height="14"/><rect x="410" y="716" width="30" height="14"/></g>
+        <text x="46" y="753" class="s-lab" font-size="11">batched</text>
+        <rect x="130" y="742" width="90" height="14" fill="var(--line)" opacity=".7"/><rect x="224" y="742" width="90" height="14" fill="var(--fast)" opacity=".75"/><rect x="318" y="742" width="30" height="14" fill="var(--hazard)" opacity=".75"/>
+        <text x="356" y="753" class="s-sub" font-size="10">1 layout</text>
+        <text x="46" y="782" class="s-note">Read all measurements first, then write all changes.</text>
+        <text x="46" y="798" class="s-sub" font-size="10.5">offsetHeight, getBoundingClientRect() and scrollTop flush</text>
+        <text x="46" y="812" class="s-sub" font-size="10.5">pending layout. In a loop, 1 ms becomes 500 ms.</text>
+        <text x="46" y="836" class="s-num">12</text><text x="70" y="836" class="s-sub" font-size="10.5">DocumentFragment: build off-DOM, insert once, lay out once</text>
+
+        <!-- BOTTOM: layers -->
+        <rect x="490" y="620" width="420" height="230" fill="var(--z2)"/>
+        <text x="506" y="644" class="s-zone" fill="var(--mute)">13 · layers, the GPU's shortcut</text>
+        <rect x="506" y="656" width="110" height="70" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="520" y="670" width="110" height="70" fill="var(--paper)" stroke="var(--rule)"/>
+        <rect x="534" y="684" width="110" height="70" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <text x="589" y="723" text-anchor="middle" class="s-lab" font-size="11">own layer</text>
+        <rect x="690" y="684" width="110" height="70" fill="none" stroke="var(--fast)" stroke-width="2" stroke-dasharray="6 4"/>
+        <text x="745" y="723" text-anchor="middle" class="s-note" font-size="10.5">transform</text>
+        <path d="M648,719 L684,719" fill="none" stroke="var(--fast)" stroke-width="2.5" marker-end="url(#px2)"/>
+        <g class="s-sub" font-size="10.5"><text x="808" y="696">the GPU slides</text><text x="808" y="710">a finished layer</text><text x="808" y="724">— no layout,</text><text x="808" y="738">no paint</text></g>
+        <text x="506" y="778" class="s-sub">Normal element: change → layout → paint → composite.</text>
+        <text x="506" y="792" class="s-sub">Own layer: transform or opacity → composite only.</text>
+        <text x="506" y="816" class="s-haz" font-size="10.5">will-change everywhere exhausts GPU memory and can make</text>
+        <text x="506" y="830" class="s-haz" font-size="10.5">things slower. A targeted tool, not a global setting.</text>
+
+        <!-- BOTTOM: vitals -->
+        <rect x="930" y="620" width="440" height="230" fill="var(--z1)"/>
+        <text x="946" y="644" class="s-zone" fill="var(--line)">14 · Core Web Vitals, located</text>
+        <g class="s-lab" style="fill:var(--line)"><text x="946" y="670">LCP</text><text x="946" y="712">CLS</text><text x="946" y="754">INP</text></g>
+        <g class="s-sub">
+          <text x="996" y="670">Largest Contentful Paint — when the main content</text><text x="996" y="684">finished painting. Stop 11 on sheet 1.</text>
+          <text x="996" y="712">Cumulative Layout Shift — layout moving content</text><text x="996" y="726">unexpectedly. Reserve width and height on images.</text>
+          <text x="996" y="754">Interaction to Next Paint — how fast input</text><text x="996" y="768">becomes a visible response. Owned by the event loop.</text>
+        </g>
+        <text x="946" y="796" class="s-note">An internal browser concept became a ranking factor.</text>
+        <text x="946" y="814" class="s-sub">Lighthouse and WebPageTest measure it in the lab;</text>
+        <text x="946" y="828" class="s-sub">web-vitals measures it on real users' devices.</text>
+      </svg>
+    </div>
+    <figcaption><b>The useful mental model is a stage crew.</b> Layout is deciding where every piece of scenery stands — move one and its neighbours must move too. Paint is decorating each piece. Compositing is sliding a finished piece across the stage on wheels: fast, because nothing is rebuilt. Animate <b>transform</b> and <b>opacity</b> and you only ever pay for the wheels.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the vocabulary of this sheet</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>DOM</h4><p>The live object tree built from HTML: every element, attribute and text node. Not slow to read — expensive only because changing it can trigger layout and paint.</p></div>
+      <div><h4><span>02</span>CSSOM</h4><p>The parallel tree of style rules built from CSS. Rendering waits for it, which is why stylesheet size and placement in the head matter so much.</p></div>
+      <div><h4><span>03</span>Cascade</h4><p>The rulebook for conflicts: importance first, then specificity, then source order. <code>!important</code> is shouting — it works once, then everyone shouts.</p></div>
+      <div><h4><span>04</span>Specificity</h4><p>Inline 1000, id 100, class 10, element 1. <code>#nav .item a</code> scores 111 and beats <code>.nav .item a</code> at 21 regardless of intent. Keep it low and flat.</p></div>
+      <div><h4><span>05</span>Box model and layout</h4><p>Content, padding, border, margin — with <code>border-box</code> set globally. Flexbox lays out one dimension, Grid two. Write mobile-first and add rules for wider screens.</p></div>
+      <div><h4><span>06</span>Render tree</h4><p>Visible nodes with computed styles. <code>display:none</code> removes an element from it but not from the DOM, so hidden data is still delivered and readable.</p></div>
+      <div><h4><span>07</span>Style recalculation</h4><p>Matching selectors to affected elements after a class or rule changes. Low to medium cost, made worse by deeply nested selectors on large trees.</p></div>
+      <div><h4><span>08</span>Reflow</h4><p>Geometry changed — width, height, position, font size, DOM insertion, font loading. Layout re-runs for affected elements, then paint and composite follow. The expensive door.</p></div>
+      <div><h4><span>09</span>Repaint</h4><p>Appearance changed without geometry — background colour, visibility, shadows. Layout is skipped; pixels are redrawn. Moderate.</p></div>
+      <div><h4><span>10</span>Composite only</h4><p><code>transform</code> and <code>opacity</code> on a layer: the GPU moves existing pixels. Two whole stages skipped, which is why smooth animation uses only these.</p></div>
+      <div><h4><span>11</span>Layout thrashing</h4><p>Reading geometry after writing styles forces a synchronous layout; in a loop it happens every iteration. Batch all reads, then all writes.</p></div>
+      <div><h4><span>12</span>DocumentFragment</h4><p>Build many nodes off-document and insert them in one operation: one layout instead of one per item. Frameworks do the equivalent for you.</p></div>
+      <div><h4><span>13</span>Compositor layer</h4><p>An element promoted to its own GPU surface. Cheap to move, costly in memory — use <code>will-change</code> on the few elements that animate, never globally.</p></div>
+      <div><h4><span>14</span>Core Web Vitals</h4><p>LCP, CLS and INP: paint time, layout stability and input responsiveness — rendering-engine behaviour turned into an SEO ranking factor.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>The engine parses hostile input, in C++, at speed</b>
+    <p>Rendering engines are historically one of the largest sources of remote-code-execution bugs in consumer software, which is why renderers are sandboxed and browsers update aggressively. Your part: keep users on current browsers, set a Content Security Policy, and never let user-controlled styles in — CSS injection can exfiltrate data through attribute selectors and background URLs.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 3 — FROM SOURCE TO MACHINE CODE ══════════════════════ -->
+<div class="sheet" id="a3">
+  <div class="plate">
+    <span class="no">Sheet 3</span>
+    <h2>From Source to Machine Code</h2>
+    <span class="form">Process plant</span>
+    <span class="cov">Covers · TypeScript · JavaScript · JavaScript Engine</span>
+  </div>
+  <p class="thesis">Stop 06 of sheet 1, opened up: what happens to your code between the editor and the CPU. Two plants joined by a network cable. <strong>The first plant checks your types and then throws them away; the second plant guesses them all over again from how the code behaves — and throws its own work away the moment a guess is wrong.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A two-part process plant. On the left, build time: TypeScript source, the type checker, type erasure and bundling. A dashed boundary marks where types stop existing. On the right, runtime inside the JavaScript engine: parsing to an abstract syntax tree, the Ignition bytecode interpreter profiling as it runs, the TurboFan optimising compiler producing machine code, and the CPU, with a deoptimisation loop back to bytecode when a guard fails. Below, panels on why a typed API response is only a claim, on hidden classes and guards, and on garbage collection and structural typing. Along the bottom, the cost of shipping a JavaScript bundle and the language's defining traits and quirks.">
+        <defs>
+          <marker id="sm1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="sm2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="sm3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--learn)"/></marker>
+        </defs>
+
+        <rect x="30" y="50" width="660" height="200" fill="var(--z6)"/>
+        <rect x="700" y="50" width="670" height="200" fill="var(--z1)"/>
+        <text x="46" y="74" class="s-zone" fill="var(--learn)">Build time · on your machine</text>
+        <text x="716" y="74" class="s-zone" fill="var(--line)">Runtime · inside V8, on theirs</text>
+        <line x1="695" y1="40" x2="695" y2="258" stroke="var(--learn)" stroke-width="2.5" stroke-dasharray="8 6"/>
+
+        <g>
+          <rect x="40" y="86" width="140" height="72" fill="var(--paper)" stroke="var(--learn)" stroke-width="2"/>
+          <rect x="202" y="86" width="140" height="72" fill="var(--paper)" stroke="var(--learn)" stroke-width="2"/>
+          <rect x="364" y="86" width="140" height="72" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="526" y="86" width="140" height="72" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="720" y="86" width="140" height="72" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="882" y="86" width="140" height="72" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="1044" y="86" width="140" height="72" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="1206" y="86" width="140" height="72" fill="var(--paper)" stroke="var(--rule)"/>
+        </g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#sm1)">
+          <path d="M180,122 L198,122"/><path d="M342,122 L360,122"/><path d="M504,122 L522,122"/><path d="M666,122 L716,122"/>
+          <path d="M860,122 L878,122"/><path d="M1022,122 L1040,122"/><path d="M1184,122 L1202,122"/>
+        </g>
+        <text x="691" y="112" text-anchor="middle" class="s-sub" font-size="10">ships</text>
+        <g class="s-num"><text x="52" y="106">01</text><text x="214" y="106">02</text><text x="376" y="106">03</text><text x="538" y="106">04</text><text x="732" y="106">05</text><text x="894" y="106">06</text><text x="1056" y="106">07</text><text x="1218" y="106">08</text></g>
+        <g class="s-lab"><text x="76" y="106">source</text><text x="238" y="106">type check</text><text x="400" y="106">erase</text><text x="562" y="106">bundle</text><text x="756" y="106">parse</text><text x="918" y="106">Ignition</text><text x="1080" y="106">TurboFan</text><text x="1242" y="106">CPU</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="126">interface User {…}</text><text x="52" y="140">annotated .ts files</text>
+          <text x="214" y="126">tsc, strict: true</text><text x="214" y="140">errors in the editor</text>
+          <text x="376" y="126">esbuild or swc strip</text><text x="376" y="140">every annotation</text>
+          <text x="538" y="126">Vite, Rollup, esbuild</text><text x="538" y="140">what actually ships</text>
+          <text x="732" y="126">source → AST</text><text x="732" y="140">slow on big bundles</text>
+          <text x="894" y="126">bytecode interpreter,</text><text x="894" y="140">profiling as it runs</text>
+          <text x="1056" y="126">hot code → machine</text><text x="1056" y="140">code, on assumptions</text>
+          <text x="1218" y="126">near-native speed</text><text x="1218" y="140">after warm-up</text>
+        </g>
+
+        <path d="M1114,158 C1114,212 952,212 952,164" fill="none" stroke="var(--hazard)" stroke-width="3" marker-end="url(#sm2)"/>
+        <text x="1033" y="232" text-anchor="middle" class="s-haz">guard fails → deoptimise</text>
+
+        <text x="46" y="186" class="s-learn">Types exist only to the left of this line.</text>
+        <text x="46" y="204" class="s-sub">At runtime there is no TypeScript: the browser sees plain JavaScript</text>
+        <text x="46" y="218" class="s-sub">with every annotation stripped — identical speed, identical size.</text>
+        <text x="46" y="238" class="s-sub" font-size="10.5" style="fill:var(--learn)">Transpilers strip without checking; tsc checks slowly. Run both.</text>
+
+        <text x="716" y="186" class="s-note">the JIT learns your accent</text>
+        <text x="716" y="204" class="s-sub">slow at first, fast once code is hot,</text>
+        <text x="716" y="218" class="s-sub">slow again when a guess is wrong</text>
+        <g class="s-sub" font-size="10.5"><text x="1206" y="186">V8 has no DOM, no</text><text x="1206" y="200">fetch, no setTimeout:</text><text x="1206" y="214">the host provides them,</text><text x="1206" y="228">so it also runs Node.</text></g>
+
+        <!-- PANEL A: where types stop -->
+        <rect x="30" y="270" width="440" height="300" fill="var(--z6)"/>
+        <text x="46" y="294" class="s-zone" fill="var(--learn)">09 · 10 · where the types stop</text>
+        <text x="46" y="322" class="s-mono" font-size="10.5">const user: User = await res.json();</text>
+        <text x="46" y="338" class="s-haz" font-size="10.5">↑ a claim the compiler accepts, never checked</text>
+        <text x="46" y="366" class="s-mono" font-size="10.5">const user = UserSchema.parse(await res.json());</text>
+        <text x="46" y="382" class="s-note" font-size="10.5">↑ Zod checks at runtime and infers the type</text>
+        <text x="46" y="410" class="s-lab" font-size="11">Validate at every boundary</text>
+        <text x="46" y="428" class="s-sub">API responses · request bodies · environment variables ·</text>
+        <text x="46" y="442" class="s-sub">database rows · anything parsed from a file.</text>
+        <text x="46" y="458" class="s-sub" style="fill:var(--learn)">Inside those boundaries, trust the types.</text>
+        <text x="46" y="488" class="s-lab" font-size="11">any versus unknown</text>
+        <g class="s-mono" font-size="10.5"><text x="46" y="508">any</text><text x="46" y="526">unknown</text></g>
+        <g class="s-sub"><text x="110" y="508">checking off — and it spreads to everything derived</text><text x="110" y="526">must be narrowed before use — the safe choice</text></g>
+        <text x="46" y="550" class="s-haz" font-size="10.5">as assertions silence the checker. They fix nothing.</text>
+
+        <!-- PANEL B: what the JIT bets on -->
+        <rect x="490" y="270" width="420" height="300" fill="var(--z3)"/>
+        <text x="506" y="294" class="s-zone" fill="var(--mute)">12 · 13 · what the JIT bets on</text>
+        <text x="506" y="320" class="s-lab" font-size="11" style="fill:var(--line)">fast</text>
+        <text x="546" y="320" class="s-mono" font-size="10.5">const p = {x: 1, y: 2};</text>
+        <rect x="506" y="330" width="80" height="26" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+        <text x="546" y="347" text-anchor="middle" class="s-mono" font-size="10.5">{x, y}</text>
+        <text x="600" y="347" class="s-sub">one shape: a fixed memory offset</text>
+        <text x="506" y="382" class="s-lab" font-size="11" style="fill:var(--hazard)">slow</text>
+        <text x="546" y="382" class="s-mono" font-size="10.5">p = {}; p.x = 1; p.y = 2; delete p.x;</text>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"><rect x="506" y="394" width="66" height="26"/><rect x="616" y="394" width="66" height="26"/><rect x="726" y="394" width="66" height="26"/></g>
+        <rect x="836" y="394" width="66" height="26" fill="color-mix(in srgb,var(--hazard) 14%,transparent)" stroke="var(--hazard)" stroke-width="2"/>
+        <g class="s-mono" font-size="10.5" text-anchor="middle"><text x="539" y="411">{}</text><text x="649" y="411">{x}</text><text x="759" y="411">{x, y}</text><text x="869" y="411" fill="var(--hazard)">dict</text></g>
+        <g stroke="var(--mute)" stroke-width="1.5" fill="none" marker-end="url(#sm1)"><path d="M572,407 L612,407"/><path d="M682,407 L722,407"/><path d="M792,407 L832,407"/></g>
+        <g class="s-mono" font-size="9.5" text-anchor="middle" style="fill:var(--mute)"><text x="592" y="436">+x</text><text x="702" y="436">+y</text><text x="812" y="436">delete</text></g>
+        <text x="506" y="456" class="s-sub">four shape changes, the last one a slow hash lookup</text>
+        <text x="506" y="486" class="s-num">13</text><text x="528" y="486" class="s-lab" font-size="11">Guess, guard, bail out</text>
+        <g class="s-mono" font-size="10.5"><text x="506" y="506">add(a, b) × 10,000 with integers → fast path</text><text x="506" y="522">add('4', 2) once → guard fails → deoptimise</text></g>
+        <text x="506" y="546" class="s-note" font-size="10.5">Stable types help the JIT. Micro-tuning for it rarely does.</text>
+        <text x="506" y="560" class="s-sub" font-size="10.5">Benchmarks without warm-up measure the interpreter.</text>
+
+        <!-- PANEL C: GC + structural -->
+        <rect x="930" y="270" width="440" height="300" fill="var(--z2)"/>
+        <text x="946" y="294" class="s-zone" fill="var(--mute)">14 · memory, then 11 · shapes</text>
+        <rect x="946" y="306" width="160" height="104" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="1186" y="306" width="170" height="104" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="956" y="324" class="s-lab" font-size="11">young generation</text>
+        <text x="1196" y="324" class="s-lab" font-size="11">old generation</text>
+        <g fill="var(--line)" opacity=".55">
+          <circle cx="966" cy="344" r="5"/><circle cx="986" cy="360" r="5"/><circle cx="1010" cy="342" r="5"/><circle cx="1030" cy="366" r="5"/><circle cx="1054" cy="348" r="5"/><circle cx="1078" cy="362" r="5"/><circle cx="974" cy="378" r="5"/><circle cx="1046" cy="380" r="5"/>
+        </g>
+        <g fill="var(--fast)" opacity=".75"><circle cx="1210" cy="352" r="8"/><circle cx="1244" cy="364" r="8"/><circle cx="1282" cy="348" r="8"/><circle cx="1322" cy="366" r="8"/></g>
+        <path d="M1106,358 L1180,358" fill="none" stroke="var(--fast)" stroke-width="2.5" marker-end="url(#sm1)"/>
+        <text x="1143" y="378" text-anchor="middle" class="s-sub" font-size="10">promoted</text>
+        <text x="956" y="400" class="s-sub" font-size="10">scavenged often, fast</text>
+        <text x="1196" y="400" class="s-sub" font-size="10">mark-and-sweep, incremental</text>
+        <text x="946" y="432" class="s-sub">Most objects die young. Collection is mostly concurrent, so</text>
+        <text x="946" y="446" class="s-sub">pauses are short — but not zero, and they show as dropped frames.</text>
+        <text x="946" y="476" class="s-num">11</text><text x="968" y="476" class="s-lab" font-size="11">Structural typing</text>
+        <g class="s-mono" font-size="10.5"><text x="946" y="496">interface Point { x: number; y: number }</text><text x="946" y="512">const p = { x: 1, y: 2, z: 3 };</text><text x="946" y="528">const q: Point = p;   // ✓ the shape fits</text></g>
+        <text x="946" y="550" class="s-sub">Shapes, not names — suits object-literal JavaScript.</text>
+
+        <!-- BOTTOM: bundle cost -->
+        <rect x="30" y="590" width="660" height="270" fill="var(--z5)"/>
+        <text x="46" y="614" class="s-zone" fill="var(--fast)">15 · the fastest JavaScript is the JavaScript never shipped</text>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="121" y="642">download</text><text x="296" y="642">parse</text><text x="456" y="642">compile</text><text x="595" y="642">execute</text></g>
+        <rect x="46" y="650" width="150" height="30" fill="var(--cool)" opacity=".8"/>
+        <rect x="196" y="650" width="200" height="30" fill="var(--hazard)" opacity=".75"/>
+        <rect x="396" y="650" width="120" height="30" fill="var(--fast)" opacity=".8"/>
+        <rect x="516" y="650" width="158" height="30" fill="var(--line)" opacity=".8"/>
+        <text x="46" y="700" class="s-sub">A 1 MB bundle costs hundreds of milliseconds of parsing alone on a mid-range phone,</text>
+        <text x="46" y="714" class="s-sub">before one line runs. On mobile, parse and compile dominate — not execution.</text>
+        <text x="46" y="742" class="s-lab" font-size="11">What actually moves the bar</text>
+        <g class="s-sub">
+          <text x="46" y="760">· route-level code splitting — users download only the page they visit</text>
+          <text x="46" y="776">· dependency discipline — one heavy library can outweigh all your own code</text>
+          <text x="46" y="792">· WebAssembly for genuinely hot paths — pre-compiled, no guessing</text>
+          <text x="46" y="808">· TypeScript changes none of it: types add zero bytes and zero runtime cost</text>
+        </g>
+        <text x="46" y="836" class="s-note" font-size="10.5">Bundle size hits download, parse, compile and memory at once — the biggest lever there is.</text>
+
+        <!-- BOTTOM: the language -->
+        <rect x="710" y="590" width="660" height="270" fill="var(--z3)"/>
+        <text x="726" y="614" class="s-zone" fill="var(--mute)">16 · 17 · the language underneath</text>
+        <g class="s-lab" font-size="11"><text x="726" y="638">dynamically typed</text><text x="726" y="656">single-threaded</text><text x="726" y="674">event-driven</text><text x="726" y="692">prototype-based</text><text x="726" y="710">first-class functions</text></g>
+        <g class="s-sub" font-size="10.5"><text x="882" y="638">fast to write, errors at runtime</text><text x="882" y="656">no races; blocking freezes all</text><text x="882" y="674">async by default · sheet 4</text><text x="882" y="692">class is syntax over prototypes</text><text x="882" y="710">callbacks and closures</text></g>
+        <g class="s-mono" font-size="10.5"><text x="1110" y="638">function counter() {</text><text x="1124" y="654">let count = 0;</text><text x="1124" y="670">return () =&gt; ++count;</text><text x="1110" y="686">}</text></g>
+        <text x="1110" y="706" class="s-sub" font-size="10.5">count outlives the call — a closure.</text>
+        <text x="1110" y="720" class="s-sub" font-size="10.5">React hooks are built on it.</text>
+        <g class="s-mono" font-size="10.5"><text x="726" y="760">0.1 + 0.2 === 0.3 → false</text><text x="726" y="776">typeof null → "object"</text><text x="726" y="792">[1, 10, 2].sort() → [1, 10, 2]</text><text x="726" y="808">[] + {} → "[object Object]"</text></g>
+        <g class="s-sub" font-size="10.5"><text x="946" y="760">IEEE 754 floats, like most languages</text><text x="946" y="776">a 1995 bug, kept for compatibility</text><text x="946" y="792">sorts as strings by default</text><text x="946" y="808">coercion — so use === always</text></g>
+        <text x="726" y="742" class="s-lab" font-size="11">The parts that surprise people</text>
+        <text x="726" y="836" class="s-note" font-size="10.5">await suspends the function. It never blocks the thread, and it never creates one.</text>
+      </svg>
+    </div>
+    <figcaption><b>Two plants, two kinds of guess.</b> TypeScript guesses nothing — it checks what you declared and then deletes the declarations, so it cannot protect you from data that arrives later. V8 knows nothing you declared and guesses everything from observation, so it rewards code that behaves consistently. Neither one makes a large bundle cheap.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — every stage and term on this sheet</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>TypeScript source</h4><p>JavaScript plus static types — interfaces, unions, optional fields. A superset: every JavaScript file is already valid TypeScript, which is why adoption can happen file by file.</p></div>
+      <div><h4><span>02</span>Type checking</h4><p><code>tsc</code> and the editor's language server catch the typo, the missing field, the possibly-undefined value before the code runs. Enable <code>strict</code> on day one; adding it later hurts.</p></div>
+      <div><h4><span>03</span>Type erasure</h4><p>Annotations are stripped and plain JavaScript emitted. esbuild and swc do this fast by skipping the check entirely, so a build can be green while the types are wrong.</p></div>
+      <div><h4><span>04</span>Bundle</h4><p>Vite, Rollup or esbuild combine and minify modules into the files users download. The only artifact of the build that users ever pay for.</p></div>
+      <div><h4><span>05</span>Parse</h4><p>Source text becomes an abstract syntax tree. On large bundles and weak phones this alone costs real time before anything executes.</p></div>
+      <div><h4><span>06</span>Ignition</h4><p>V8's bytecode interpreter. It starts running immediately and records what types and shapes each function actually sees — the evidence the optimiser needs.</p></div>
+      <div><h4><span>07</span>TurboFan</h4><p>The optimising compiler. Hot functions become machine code specialised to the observed types, protected by guards that check the assumption still holds.</p></div>
+      <div><h4><span>08</span>CPU</h4><p>Optimised code runs close to native speed. First runs of any path are slow — the warm-up — which is why cold benchmarks lie.</p></div>
+      <div><h4><span>09</span>Runtime validation</h4><p>A typed API response is a claim. A schema library such as Zod, io-ts or Valibot checks the data at runtime and infers the type, so the claim becomes true.</p></div>
+      <div><h4><span>10</span>any and unknown</h4><p><code>any</code> switches checking off and infects everything derived from it; <code>unknown</code> forces narrowing first. Treat every explicit <code>any</code> and every <code>as</code> as needing a justification.</p></div>
+      <div><h4><span>11</span>Structural typing</h4><p>TypeScript compares shapes, not declared names: an object with at least the required fields is assignable. A good fit for how JavaScript objects are really built.</p></div>
+      <div><h4><span>12</span>Hidden classes</h4><p>Internal shapes that make property access a fixed memory offset. Objects created with the same fields in the same order share one; adding and deleting fields later forces new ones.</p></div>
+      <div><h4><span>13</span>Deoptimisation</h4><p>When a guard fails — strings arrive where integers always did — the optimised code is discarded and execution falls back to bytecode. Performance becomes unpredictable, not wrong.</p></div>
+      <div><h4><span>14</span>Garbage collection</h4><p>A young generation scavenged often and cheaply, an old generation marked and swept incrementally. Pauses are short, not zero, and leaks come from references you keep — listeners, detached nodes.</p></div>
+      <div><h4><span>15</span>Bundle cost</h4><p>Every kilobyte is downloaded, parsed, compiled and held in memory. Route splitting and fewer dependencies beat any micro-optimisation of what remains.</p></div>
+      <div><h4><span>16</span>Language traits</h4><p>Dynamic typing, one thread, event-driven, prototype-based, first-class functions and closures. Each trait explains a whole family of bugs and patterns elsewhere in this atlas.</p></div>
+      <div><h4><span>17</span>Quirks</h4><p>Float arithmetic, <code>typeof null</code>, string sorting, loose-equality coercion — design decisions that can never be removed without breaking the web. Use <code>===</code>, always.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Types are not validation, and the JIT is attack surface</b>
+    <p>Declaring a request body as <code>LoginRequest</code> checks nothing; an attacker sends whatever they like. On the engine side, <code>eval</code> and <code>new Function</code> with user input are remote code execution, prototype pollution changes behaviour application-wide, and every npm dependency runs with your page's full privileges. The renderer sandbox is the real defence — audit and pin what you install.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 4 — ONE THREAD, THREE QUEUES ══════════════════════ -->
+<div class="sheet" id="a4">
+  <div class="plate">
+    <span class="no">Sheet 4</span>
+    <h2>One Thread, Three Queues</h2>
+    <span class="form">Closed circuit</span>
+    <span class="cov">Covers · Event Loop · JavaScript · Browser Internals</span>
+  </div>
+  <p class="thesis">What runs the page after stop 12 of sheet 1 — and what runs every Node.js server. One thread, one loop, four steps, forever. <strong>Nothing on this circuit can be interrupted: a task that takes 100 ms owns the thread for 100 ms, and clicks, frames and network callbacks all wait in line behind it.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A closed circuit of four steps on one thread: take one macrotask, run it to completion on the call stack, drain every microtask, and render a frame if one is due, then repeat. The microtask step has a loop of its own because microtasks can queue more microtasks. To the right, the classic ordering example: two console logs run immediately, the promise callback runs from the microtask queue, and the timeout runs last from the macrotask queue, printing 1, 4, 3, 2. Below that, the layers where waiting actually happens — your JavaScript, the loop, Web APIs or libuv, and the operating system — with a Node request suspending at await. Along the bottom, what blocking the loop does, and the alternatives for CPU-bound work.">
+        <defs>
+          <marker id="el1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="el2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+          <marker id="el3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- THE CIRCUIT -->
+        <text x="40" y="42" class="s-zone" fill="var(--line)">The loop · one turn, repeated for as long as the page is open</text>
+        <g fill="none" stroke="var(--line)" stroke-width="4" marker-end="url(#el1)">
+          <path d="M453,143 A190,190 0 0,1 607,297"/>
+          <path d="M607,363 A190,190 0 0,1 453,517"/>
+          <path d="M387,517 A190,190 0 0,1 233,363"/>
+          <path d="M233,297 A190,190 0 0,1 387,143"/>
+        </g>
+        <g fill="var(--paper)" stroke-width="3.5">
+          <circle cx="420" cy="140" r="28" stroke="var(--line)"/><circle cx="610" cy="330" r="28" stroke="var(--line)"/>
+          <circle cx="420" cy="520" r="28" stroke="var(--fast)"/><circle cx="230" cy="330" r="28" stroke="var(--line)"/>
+        </g>
+        <g class="s-big" text-anchor="middle"><text x="420" y="146" fill="var(--line)">01</text><text x="610" y="336" fill="var(--line)">02</text><text x="420" y="526" fill="var(--fast)">03</text><text x="230" y="336" fill="var(--line)">04</text></g>
+
+        <text x="420" y="84" text-anchor="middle" class="s-lab">take ONE macrotask</text>
+        <text x="420" y="100" text-anchor="middle" class="s-sub">a timer, an I/O callback, a click</text>
+        <text x="652" y="324" class="s-lab">run it to completion</text>
+        <text x="652" y="342" class="s-sub">on the call stack. Nothing can</text>
+        <text x="652" y="356" class="s-sub">interrupt it, however long</text>
+        <text x="420" y="612" text-anchor="middle" class="s-lab">drain ALL microtasks</text>
+        <text x="420" y="628" text-anchor="middle" class="s-sub">Promise.then, await continuations,</text>
+        <text x="420" y="642" text-anchor="middle" class="s-sub">queueMicrotask — every one, before anything else</text>
+        <text x="188" y="324" text-anchor="end" class="s-lab">render, if it's time</text>
+        <text x="188" y="342" text-anchor="end" class="s-sub">browser only: style,</text>
+        <text x="188" y="356" text-anchor="end" class="s-sub">layout, paint · sheet 2</text>
+
+        <path d="M398,544 C366,592 474,592 442,544" fill="none" stroke="var(--hazard)" stroke-width="2.5" marker-end="url(#el2)"/>
+        <text x="490" y="578" class="s-haz" font-size="10.5">a microtask can queue another —</text>
+        <text x="490" y="592" class="s-haz" font-size="10.5">and still starve the render step</text>
+
+        <text x="420" y="316" text-anchor="middle" class="s-note" font-size="13">one turn</text>
+        <text x="420" y="336" text-anchor="middle" class="s-sub">one thread runs all of it —</text>
+        <text x="420" y="350" text-anchor="middle" class="s-sub">the thread that also paints</text>
+        <text x="420" y="378" text-anchor="middle" class="s-sub" style="fill:var(--fast)">16.7 ms per lap, or frames drop</text>
+
+        <!-- BLOCKING -->
+        <rect x="30" y="680" width="810" height="180" fill="var(--band)"/>
+        <text x="46" y="704" class="s-zone" fill="var(--hazard)">12 · blocking · the failure mode that matters</text>
+        <g class="s-mono" font-size="10.5"><text x="46" y="730">const end = Date.now() + 3000;</text><text x="46" y="746">while (Date.now() &lt; end) {}   // frozen 3 s</text></g>
+        <text x="440" y="730" class="s-note">Move CPU work off the loop:</text>
+        <text x="440" y="746" class="s-sub">Web Worker · worker_threads · a process · a job queue</text>
+        <g>
+          <rect x="46" y="764" width="150" height="30" fill="color-mix(in srgb,var(--hazard) 14%,transparent)" stroke="var(--hazard)" stroke-width="2"/>
+          <rect x="216" y="764" width="170" height="30" fill="var(--paper)" stroke="var(--hazard)" stroke-width="1.5"/>
+          <rect x="406" y="764" width="222" height="30" fill="var(--paper)" stroke="var(--hazard)" stroke-width="1.5"/>
+        </g>
+        <g class="s-lab" font-size="11" text-anchor="middle"><text x="121" y="783">a long sync task</text><text x="301" y="783">the loop cannot turn</text><text x="517" y="783">no clicks, frames, callbacks</text></g>
+        <g stroke="var(--hazard)" stroke-width="2" fill="none" marker-end="url(#el2)"><path d="M196,779 L212,779"/><path d="M386,779 L402,779"/><path d="M628,772 L644,766"/><path d="M628,786 L644,792"/></g>
+        <text x="650" y="770" class="s-haz" font-size="11">browser: this page frozen</text>
+        <text x="650" y="796" class="s-haz" font-size="11">Node: every user stalled</text>
+        <text x="46" y="822" class="s-sub">Over 16 ms drops a frame; over ~50 ms users notice. In Node one blocked process stalls every request in it.</text>
+        <text x="46" y="842" class="s-haz" font-size="10.5">ReDoS, an unbounded JSON body or readFileSync in a handler turns one hostile request into a denial of service.</text>
+
+        <!-- ORDERING -->
+        <rect x="860" y="50" width="510" height="344" fill="var(--z3)"/>
+        <text x="876" y="74" class="s-zone" fill="var(--mute)">05 – 08 · the ordering example</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="876" y="100">console.log('1');</text>
+          <text x="876" y="116">setTimeout(() =&gt; console.log('2'), 0);</text>
+          <text x="876" y="132">Promise.resolve().then(() =&gt; console.log('3'));</text>
+          <text x="876" y="148">console.log('4');</text>
+        </g>
+        <rect x="876" y="170" width="150" height="130" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="1040" y="170" width="150" height="130" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <rect x="1204" y="170" width="150" height="130" fill="var(--paper)" stroke="var(--rule)" stroke-width="2"/>
+        <g class="s-num"><text x="886" y="188">05</text><text x="1050" y="188">06</text><text x="1214" y="188">07</text></g>
+        <g class="s-lab" font-size="11"><text x="908" y="188">call stack</text><text x="1072" y="188">microtasks</text><text x="1236" y="188">macrotasks</text></g>
+        <g class="s-sub" font-size="10.5"><text x="886" y="204">runs right now</text><text x="1050" y="204">drained completely</text><text x="1214" y="204">one per turn</text></g>
+        <g fill="var(--z1)" stroke="var(--line)"><rect x="886" y="218" width="130" height="22"/><rect x="886" y="248" width="130" height="22"/></g>
+        <rect x="1050" y="218" width="130" height="22" fill="var(--z5)" stroke="var(--fast)"/>
+        <rect x="1214" y="218" width="130" height="22" fill="var(--z2)" stroke="var(--rule)"/>
+        <g class="s-mono" font-size="10"><text x="896" y="233">log('1')</text><text x="896" y="263">log('4')</text><text x="1060" y="233">then → log('3')</text><text x="1224" y="233">timeout → log('2')</text></g>
+        <text x="1060" y="286" class="s-sub" font-size="10">promises · await</text>
+        <text x="1224" y="286" class="s-sub" font-size="10">timers · I/O · events</text>
+        <text x="896" y="290" class="s-sub" font-size="10">synchronous</text>
+        <text x="886" y="336" class="s-num">08</text><text x="908" y="336" class="s-lab" font-size="11">output</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2"><rect x="960" y="318" width="30" height="28"/><rect x="996" y="318" width="30" height="28"/></g>
+        <rect x="1032" y="318" width="30" height="28" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <rect x="1068" y="318" width="30" height="28" fill="var(--paper)" stroke="var(--rule)" stroke-width="2"/>
+        <g class="s-big" text-anchor="middle"><text x="975" y="338">1</text><text x="1011" y="338">4</text><text x="1047" y="338" fill="var(--fast)">3</text><text x="1083" y="338">2</text></g>
+        <text x="1114" y="330" class="s-sub" font-size="10.5">setTimeout(fn, 0) does not mean now:</text>
+        <text x="1114" y="344" class="s-sub" font-size="10.5">a future turn, after all microtasks</text>
+        <text x="876" y="376" class="s-note" font-size="10.5">Stack empties → every microtask runs → only then the next macrotask.</text>
+
+        <!-- WHERE WAITING HAPPENS -->
+        <rect x="860" y="410" width="510" height="252" fill="var(--z1)"/>
+        <text x="876" y="434" class="s-zone" fill="var(--line)">09 · where the waiting happens</text>
+        <g>
+          <rect x="876" y="450" width="180" height="34" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="876" y="500" width="180" height="34" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="876" y="550" width="180" height="34" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="876" y="600" width="180" height="34" fill="var(--paper)" stroke="var(--rule)"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="888" y="471">your JavaScript</text><text x="888" y="521">the event loop</text><text x="888" y="571">Web APIs · libuv</text><text x="888" y="621">OS · epoll, kqueue</text></g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#el1)"><path d="M966,484 L966,496"/><path d="M966,534 L966,546"/><path d="M966,584 L966,596"/></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="1076" y="462">a Node request, step by step:</text>
+          <text x="1076" y="480">request arrives → a macrotask</text>
+          <text x="1076" y="496">handler runs until await db.query()</text>
+          <text x="1076" y="512" fill="var(--fast)">handler suspends; loop serves others</text>
+          <text x="1076" y="528">database replies → OS tells libuv</text>
+          <text x="1076" y="544">continuation queued as a microtask</text>
+          <text x="1076" y="560">handler resumes, writes the response</text>
+        </g>
+        <text x="1076" y="586" class="s-note" font-size="10.5">the third line is the entire benefit</text>
+        <text x="1076" y="608" class="s-sub" font-size="10.5">setTimeout, fetch and file I/O are not</text>
+        <text x="1076" y="622" class="s-sub" font-size="10.5">JavaScript — the host runs them elsewhere.</text>
+        <text x="1076" y="646" class="s-sub" font-size="10.5" style="fill:var(--line)">KBs per pending operation, not MBs per thread.</text>
+
+        <!-- ALTERNATIVES -->
+        <rect x="860" y="680" width="510" height="180" fill="var(--z2)"/>
+        <text x="876" y="704" class="s-zone" fill="var(--mute)">10 · 11 · other ways to wait</text>
+        <g class="s-lab" font-size="11"><text x="876" y="728">event loop</text><text x="876" y="746">thread pool</text><text x="876" y="764">goroutines</text><text x="876" y="782">Web Workers</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="976" y="728">one thread, huge I/O concurrency, no locks, no races</text>
+          <text x="976" y="746">real parallelism — with locks, races and MBs per thread</text>
+          <text x="976" y="764">user-space scheduling: concurrency and parallelism</text>
+          <text x="976" y="782">separate threads for CPU work; messages only, no DOM</text>
+        </g>
+        <text x="876" y="812" class="s-num">11</text><text x="898" y="812" class="s-lab" font-size="11">async is not parallel</text>
+        <text x="876" y="830" class="s-sub" font-size="10.5">await is syntax over promises — microtasks on the same single thread.</text>
+        <text x="876" y="846" class="s-haz" font-size="10.5">Unhandled rejections end a Node process, and every request in it.</text>
+      </svg>
+    </div>
+    <figcaption><b>The event loop is a single waiter in a busy restaurant.</b> They pass each order to the kitchen instead of standing there, so one waiter serves fifty tables — until they sit down to peel potatoes themselves and every table waits. Microtasks are the urgent notes checked between tables; macrotasks are the tables. Ideal for work that mostly waits, and exactly wrong for work that computes.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the loop and its vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Take one macrotask</h4><p>The loop picks the next queued task — a timer that expired, an I/O completion, a user event — and only one per turn.</p></div>
+      <div><h4><span>02</span>Run to completion</h4><p>The task's code runs on the call stack until it returns. There is no pre-emption: while it runs, the page cannot scroll, click or paint.</p></div>
+      <div><h4><span>03</span>Drain all microtasks</h4><p>Every queued promise callback and <code>await</code> continuation runs before anything else — including microtasks queued by microtasks. Higher priority than macrotasks, always.</p></div>
+      <div><h4><span>04</span>Render if due</h4><p>In the browser, a frame is produced if it is time: style, layout, paint, composite. Because it shares the thread, any long step above pushes it past 16.7 ms.</p></div>
+      <div><h4><span>05</span>Call stack</h4><p>The functions currently executing. Synchronous code runs here immediately, which is why logs 1 and 4 print first.</p></div>
+      <div><h4><span>06</span>Microtask queue</h4><p><code>Promise.then</code>, <code>await</code>, <code>queueMicrotask</code>. Emptied completely every turn, so log 3 beats the timeout even though the timeout was scheduled first.</p></div>
+      <div><h4><span>07</span>Macrotask queue</h4><p><code>setTimeout</code>, <code>setInterval</code>, I/O and events. One per turn — so <code>setTimeout(fn, 0)</code> means "a future turn", never "now".</p></div>
+      <div><h4><span>08</span>1, 4, 3, 2</h4><p>Synchronous first, then all microtasks, then the next macrotask. Predict the output before running it; most developers get it wrong once.</p></div>
+      <div><h4><span>09</span>Host APIs</h4><p>Web APIs in the browser, libuv in Node, <code>epoll</code> or <code>kqueue</code> underneath. They do the actual waiting elsewhere and hand back a callback — a few KB per operation instead of megabytes per thread.</p></div>
+      <div><h4><span>10</span>Web Workers</h4><p>Real threads for CPU work — image processing, big sorts, encryption, large JSON — that talk by message passing and cannot touch the DOM. In Node: <code>worker_threads</code>, extra processes or a job queue.</p></div>
+      <div><h4><span>11</span>Async is not parallel</h4><p><code>async</code>/<code>await</code> creates no threads. One Node process uses one core, so run several behind a cluster, and handle every promise rejection.</p></div>
+      <div><h4><span>12</span>Blocking</h4><p>A long synchronous task stops the loop: no events, no frames, no callbacks. In Node it stalls every user's request at once, and hostile input — ReDoS, huge bodies — can trigger it deliberately.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 5 — THE RENDER CYCLE ══════════════════════ -->
+<div class="sheet" id="a5">
+  <div class="plate">
+    <span class="no">Sheet 5</span>
+    <h2>The Render Cycle</h2>
+    <span class="form">Control loop</span>
+    <span class="cov">Covers · React · DOM and CSSOM</span>
+  </div>
+  <p class="thesis">How a framework re-drives stops 07 to 10 of sheet 1 every time data changes. You stop writing instructions for how to change the page and describe what it should look like now. <strong>"Re-render" means React called your function again — not that the browser repainted. Most of the loop is cheap JavaScript; only stop 07 ever touches the DOM.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 870" role="img" aria-label="A control loop of eight steps. Along the top: a user click, setState, a scheduled render, and the component function running again. Down the right side to the bottom row, running right to left: a new virtual tree, reconciliation against the previous tree, patching only the changed DOM nodes, and the browser's style, layout and paint. A dashed edge returns to wait for the next event. Below, a drawing of reconciliation comparing a previous and a new tree where only one text node differs; a comparison showing ten components re-run, one DOM node patched and a small repaint; and a panel of hooks and core pieces. Along the bottom, imperative against declarative code, common mistakes, and when React is the wrong choice.">
+        <defs>
+          <marker id="rc1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="rc2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <text x="40" y="42" class="s-zone" fill="var(--line)">The loop · React owns 01 to 07, the browser owns 08</text>
+        <g>
+          <rect x="40" y="70" width="200" height="80" fill="var(--z2)" stroke="var(--rule)"/>
+          <rect x="300" y="70" width="200" height="80" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="560" y="70" width="200" height="80" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="820" y="70" width="200" height="80" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="820" y="240" width="200" height="80" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="560" y="240" width="200" height="80" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="300" y="240" width="200" height="80" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+          <rect x="40" y="240" width="200" height="80" fill="var(--z4)" stroke="var(--rule)"/>
+        </g>
+        <g class="s-num"><text x="52" y="90">01</text><text x="312" y="90">02</text><text x="572" y="90">03</text><text x="832" y="90">04</text><text x="832" y="260">05</text><text x="572" y="260">06</text><text x="312" y="260">07</text><text x="52" y="260">08</text></g>
+        <g class="s-lab"><text x="76" y="90">user clicks</text><text x="336" y="90">setState</text><text x="596" y="90">render scheduled</text><text x="856" y="90">component runs</text><text x="856" y="260">new virtual tree</text><text x="596" y="260">reconcile</text><text x="336" y="260">patch the DOM</text><text x="76" y="260">browser renders</text></g>
+        <g class="s-sub">
+          <text x="52" y="110">an event, queued as a</text><text x="52" y="124">macrotask · sheet 4</text>
+          <text x="312" y="110">a new value replaces the</text><text x="312" y="124">old one — never mutated</text>
+          <text x="572" y="110">updates are batched; React</text><text x="572" y="124">decides when to run</text>
+          <text x="832" y="110">your function is called</text><text x="832" y="124">again: props + state → JSX</text>
+          <text x="832" y="280">plain JavaScript objects —</text><text x="832" y="294">cheap to build and discard</text>
+          <text x="572" y="280">diff against the previous</text><text x="572" y="294">tree, matched by type and key</text>
+          <text x="312" y="280">only nodes that changed:</text><text x="312" y="294">the minimal set of operations</text>
+          <text x="52" y="280">style → layout → paint</text><text x="52" y="294">→ composite · sheet 2</text>
+        </g>
+        <g stroke="var(--line)" stroke-width="3.5" fill="none" marker-end="url(#rc1)">
+          <path d="M240,110 L294,110"/><path d="M500,110 L554,110"/><path d="M760,110 L814,110"/>
+          <path d="M920,150 L920,234"/>
+          <path d="M820,280 L766,280"/><path d="M560,280 L506,280"/>
+        </g>
+        <path d="M300,280 L246,280" fill="none" stroke="var(--fast)" stroke-width="3.5" marker-end="url(#rc2)"/>
+        <path d="M140,240 L140,156" fill="none" stroke="var(--mute)" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#rc1)"/>
+        <text x="152" y="200" class="s-sub">waits for the next event</text>
+        <text x="932" y="186" class="s-haz" font-size="10.5">and every child,</text>
+        <text x="932" y="200" class="s-haz" font-size="10.5">by default</text>
+        <text x="40" y="350" class="s-note">Steps 01–06 are JavaScript. The DOM is touched once, at 07 — and the browser works only if 07 changed something.</text>
+
+        <!-- RECONCILIATION -->
+        <rect x="30" y="366" width="640" height="218" fill="var(--z1)"/>
+        <text x="46" y="390" class="s-zone" fill="var(--line)">06 · reconciliation, drawn</text>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5">
+          <rect x="110" y="404" width="70" height="22"/><rect x="50" y="448" width="70" height="22"/><rect x="170" y="448" width="70" height="22"/><rect x="130" y="492" width="70" height="22"/><rect x="210" y="492" width="70" height="22"/>
+          <rect x="410" y="404" width="70" height="22"/><rect x="350" y="448" width="70" height="22"/><rect x="470" y="448" width="70" height="22"/><rect x="430" y="492" width="70" height="22"/>
+        </g>
+        <rect x="510" y="492" width="70" height="22" fill="var(--z5)" stroke="var(--fast)" stroke-width="2.5"/>
+        <g stroke="var(--line)" stroke-width="1.5"><path d="M145,426 L85,448"/><path d="M145,426 L205,448"/><path d="M205,470 L165,492"/><path d="M205,470 L245,492"/><path d="M445,426 L385,448"/><path d="M445,426 L505,448"/><path d="M505,470 L465,492"/><path d="M505,470 L545,492"/></g>
+        <g class="s-mono" font-size="10" text-anchor="middle">
+          <text x="145" y="419">App</text><text x="85" y="463">Header</text><text x="205" y="463">Cart</text><text x="165" y="507">item a</text><text x="245" y="507">count 3</text>
+          <text x="445" y="419">App</text><text x="385" y="463">Header</text><text x="505" y="463">Cart</text><text x="465" y="507">item a</text><text x="545" y="507" fill="var(--fast)">count 4</text>
+        </g>
+        <path d="M290,459 L340,459" fill="none" stroke="var(--fast)" stroke-width="2.5" marker-end="url(#rc2)"/>
+        <text x="315" y="448" text-anchor="middle" class="s-note" font-size="10.5">diff</text>
+        <g class="s-sub" font-size="10.5"><text x="50" y="534">previous virtual tree</text><text x="350" y="534">new virtual tree</text></g>
+        <text x="596" y="468" class="s-lab" font-size="11" style="fill:var(--fast)">1 DOM</text>
+        <text x="596" y="482" class="s-lab" font-size="11" style="fill:var(--fast)">update</text>
+        <text x="50" y="558" class="s-note" font-size="10.5">Four nodes compared equal and left alone; one text node patched.</text>
+        <text x="50" y="574" class="s-sub" font-size="10.5">Not faster than ideal hand-written DOM code — faster than what most people write.</text>
+
+        <!-- RE-RENDER != REPAINT -->
+        <rect x="690" y="366" width="330" height="218" fill="var(--z3)"/>
+        <text x="706" y="390" class="s-zone" fill="var(--mute)">09 · re-render ≠ repaint</text>
+        <text x="706" y="414" class="s-lab" font-size="11">components re-run</text>
+        <g fill="var(--line)" opacity=".7"><rect x="706" y="422" width="14" height="14"/><rect x="726" y="422" width="14" height="14"/><rect x="746" y="422" width="14" height="14"/><rect x="766" y="422" width="14" height="14"/><rect x="786" y="422" width="14" height="14"/><rect x="806" y="422" width="14" height="14"/><rect x="826" y="422" width="14" height="14"/><rect x="846" y="422" width="14" height="14"/><rect x="866" y="422" width="14" height="14"/><rect x="886" y="422" width="14" height="14"/></g>
+        <text x="912" y="434" class="s-mono" font-size="10">10</text>
+        <text x="706" y="458" class="s-lab" font-size="11">DOM nodes patched</text>
+        <rect x="706" y="466" width="14" height="14" fill="var(--fast)"/><text x="732" y="478" class="s-mono" font-size="10">1</text>
+        <text x="706" y="502" class="s-lab" font-size="11">pixels repainted</text>
+        <rect x="706" y="510" width="40" height="14" fill="var(--hazard)" opacity=".6"/><text x="756" y="522" class="s-mono" font-size="10">one small area</text>
+        <text x="706" y="550" class="s-sub" font-size="10.5">Most re-renders are cheap. Measure with the</text>
+        <text x="706" y="564" class="s-sub" font-size="10.5">React Profiler before adding memo anywhere —</text>
+        <text x="706" y="578" class="s-sub" font-size="10.5">memo everywhere often makes things slower.</text>
+
+        <!-- HOOKS + PIECES -->
+        <rect x="1040" y="50" width="330" height="534" fill="var(--z2)"/>
+        <text x="1056" y="74" class="s-zone" fill="var(--mute)">10 · hooks</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="1056" y="98">function Counter() {</text>
+          <text x="1070" y="114">const [count, setCount] = useState(0);</text>
+          <text x="1070" y="130">useEffect(() =&gt; {</text>
+          <text x="1084" y="146">document.title = `Count: ${count}`;</text>
+          <text x="1070" y="162">}, [count]);</text>
+          <text x="1070" y="178">return &lt;button onClick={…}&gt;{count}&lt;/button&gt;;</text>
+          <text x="1056" y="194">}</text>
+        </g>
+        <text x="1160" y="162" class="s-sub" font-size="10.5" style="fill:var(--fast)">← dependency array</text>
+        <g class="s-mono" font-size="10.5" style="fill:var(--line)"><text x="1056" y="226">useState</text><text x="1056" y="244">useEffect</text><text x="1056" y="262">useContext</text><text x="1056" y="280">useMemo, useCallback</text><text x="1056" y="298">useRef</text></g>
+        <g class="s-sub" font-size="10.5"><text x="1134" y="226">local component state</text><text x="1134" y="244">sync with non-React systems</text><text x="1134" y="262">shared data, no prop drilling</text><text x="1196" y="280">cache values, stable fns</text><text x="1134" y="298">mutable value, no re-render</text></g>
+        <text x="1056" y="328" class="s-haz" font-size="10.5">useEffect is not a place to fetch data.</text>
+        <text x="1056" y="344" class="s-sub" font-size="10.5">Effects run after render and cause waterfalls.</text>
+        <text x="1056" y="358" class="s-sub" font-size="10.5">Use React Query, SWR or a framework loader.</text>
+
+        <text x="1056" y="392" class="s-num">11</text><text x="1078" y="392" class="s-lab" font-size="11">The pieces</text>
+        <g class="s-lab" font-size="10.5"><text x="1056" y="414">component</text><text x="1056" y="432">props</text><text x="1056" y="450">state</text><text x="1056" y="468">JSX</text><text x="1056" y="486">key</text></g>
+        <g class="s-sub" font-size="10.5"><text x="1134" y="414">a function: props in, UI out</text><text x="1134" y="432">inputs passed down, read-only</text><text x="1134" y="450">changes over time, triggers 02</text><text x="1134" y="468">compiles to React.createElement</text><text x="1134" y="486">identity of a child across renders</text></g>
+        <text x="1056" y="522" class="s-note" font-size="13">UI = f(state)</text>
+        <text x="1056" y="542" class="s-sub" font-size="10.5">Describe the result for this state;</text>
+        <text x="1056" y="556" class="s-sub" font-size="10.5">React works out the transition.</text>
+
+        <!-- BOTTOM: declarative -->
+        <rect x="30" y="604" width="440" height="252" fill="var(--z3)"/>
+        <text x="46" y="628" class="s-zone" fill="var(--mute)">12 · imperative vs declarative</text>
+        <g class="s-mono" font-size="10.5">
+          <text x="46" y="656">if (loggedIn) {</text><text x="60" y="672">showProfile();</text><text x="60" y="688">hideLoginButton();</text><text x="46" y="704">} else {</text><text x="60" y="720">hideProfile();</text><text x="60" y="736">showLoginButton();</text><text x="46" y="752">}</text>
+        </g>
+        <g class="s-mono" font-size="10.5" style="fill:var(--line)"><text x="256" y="656">return loggedIn</text><text x="270" y="672">? &lt;Profile /&gt;</text><text x="270" y="688">: &lt;LoginButton /&gt;;</text></g>
+        <line x1="240" y1="642" x2="240" y2="760" stroke="var(--rule)"/>
+        <text x="46" y="780" class="s-haz" font-size="10.5">every transition by hand</text>
+        <text x="256" y="712" class="s-note" font-size="10.5">describe the result</text>
+        <text x="256" y="728" class="s-sub" font-size="10.5">React works out how</text>
+        <text x="46" y="808" class="s-sub">Each new piece of state multiplies the transitions to write</text>
+        <text x="46" y="822" class="s-sub">by hand. Declaring the result removes that whole category</text>
+        <text x="46" y="836" class="s-sub">of synchronisation bug.</text>
+
+        <!-- BOTTOM: mistakes -->
+        <rect x="490" y="604" width="420" height="252" fill="var(--band)"/>
+        <text x="506" y="628" class="s-zone" fill="var(--hazard)">13 · the bugs that recur</text>
+        <g class="s-lab" font-size="11"><text x="506" y="654">mutating state</text><text x="506" y="690">index as key</text><text x="506" y="726">wrong dependencies</text><text x="506" y="762">two owners, one node</text><text x="506" y="798">detached references</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="506" y="670">same object back, so React sees no change — create new ones</text>
+          <text x="506" y="706">reorder the list and state sticks to the wrong row</text>
+          <text x="506" y="742">stale values when missing, infinite loops when wrong</text>
+          <text x="506" y="778">jQuery and React editing the same DOM: unreproducible bugs</text>
+          <text x="506" y="814">holding removed nodes or listeners leaks memory</text>
+        </g>
+        <text x="506" y="842" class="s-note" font-size="10.5">Profile before memo; fix ownership before performance.</text>
+
+        <!-- BOTTOM: when not -->
+        <rect x="930" y="604" width="440" height="252" fill="var(--z4)"/>
+        <text x="946" y="628" class="s-zone" fill="var(--mute)">14 · when React, and when not</text>
+        <text x="946" y="652" class="s-lab" font-size="11" style="fill:var(--line)">Yes</text>
+        <text x="986" y="652" class="s-sub">substantial interactive state, shared by many</text>
+        <text x="986" y="666" class="s-sub">components, maintained for years</text>
+        <text x="946" y="690" class="s-lab" font-size="11" style="fill:var(--hazard)">No</text>
+        <text x="986" y="690" class="s-sub">a mostly static site: shipping a framework,</text>
+        <text x="986" y="704" class="s-sub">hydrating it and re-implementing links in JS is slower</text>
+        <text x="946" y="732" class="s-lab" font-size="11">The bill</text>
+        <text x="1012" y="732" class="s-sub">~45 KB for React + ReactDOM, before your code;</text>
+        <text x="1012" y="746" class="s-sub">slower first paint than HTML unless SSR · sheet 6</text>
+        <text x="946" y="774" class="s-lab" font-size="11">Alternatives</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="946" y="792">Vue — reactive by default, gentler curve</text>
+          <text x="946" y="806">Svelte — compiles away, no runtime in the bundle</text>
+          <text x="946" y="820">Solid — React-like syntax, fine-grained, no virtual DOM</text>
+          <text x="946" y="834">HTMX or vanilla — for pages that never needed one</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption><b>React is a photograph of the UI, retaken whenever the data changes.</b> You describe what the picture should show now; React compares it with the last photograph and changes only what differs. The cost is a shipped runtime, a build step, and the discipline to know when — and how widely — components re-render.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the loop and its vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Event</h4><p>A click reaches an <code>onClick</code> handler through the event loop. React's work is still single-threaded JavaScript on the same thread that renders.</p></div>
+      <div><h4><span>02</span>setState</h4><p>The only way to change state: pass a new value or a new object. Mutating the existing object in place gives React nothing to detect.</p></div>
+      <div><h4><span>03</span>Scheduled render</h4><p>React batches several updates into one render and chooses when to run it, so three <code>setState</code> calls in a handler produce one pass, not three.</p></div>
+      <div><h4><span>04</span>Component runs</h4><p>Your function is called again with current props and state and returns JSX. Its children re-render by default whether or not their props changed.</p></div>
+      <div><h4><span>05</span>Virtual tree</h4><p>The returned description as plain JavaScript objects. Building and discarding it is cheap compared with touching the real DOM.</p></div>
+      <div><h4><span>06</span>Reconciliation</h4><p>Diffing the new tree against the previous one by element type and <code>key</code> to find the minimum set of changes.</p></div>
+      <div><h4><span>07</span>DOM patch</h4><p>Only differing nodes are updated. This is the single step that can trigger layout and paint — the costs drawn on sheet 2.</p></div>
+      <div><h4><span>08</span>Browser renders</h4><p>Style, layout, paint and composite, only for what changed and only if something did. The frame budget from sheet 1 still applies.</p></div>
+      <div><h4><span>09</span>Re-render ≠ repaint</h4><p>Calling ten component functions may patch one node and repaint a few pixels. Optimise only what the React Profiler shows; blanket <code>memo</code> adds work.</p></div>
+      <div><h4><span>10</span>Hooks</h4><p><code>useState</code> for local state, <code>useEffect</code> for syncing with systems outside React, <code>useContext</code>, <code>useMemo</code>/<code>useCallback</code>, <code>useRef</code>. Built on closures, bound by call-order rules that are easy to break.</p></div>
+      <div><h4><span>11</span>Props, state, key</h4><p>Props flow down and are read-only; state changes and triggers renders; JSX compiles to <code>React.createElement</code>; <code>key</code> gives list items a stable identity.</p></div>
+      <div><h4><span>12</span>Declarative UI</h4><p>UI as a function of state. You declare what each state looks like, so the number of transitions you write stops growing with every new flag.</p></div>
+      <div><h4><span>13</span>Recurring bugs</h4><p>Mutated state, array index as key in reorderable lists, wrong dependency arrays, a second library editing the same nodes, and leaked references to removed elements.</p></div>
+      <div><h4><span>14</span>When not to</h4><p>A mostly static site pays ~45 KB, a build step and hydration for nothing. Consider Svelte, Solid, Vue, or HTML with HTMX before defaulting.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Escaped by default, until you opt out</b>
+    <p><code>{userInput}</code> is escaped automatically, which stops most XSS. <code>dangerouslySetInnerHTML</code> — like <code>innerHTML</code> — removes that protection, so sanitise with DOMPurify. <code>href={userInput}</code> allows <code>javascript:</code> URLs. Everything in the bundle, including build-time environment variables, is public, and client-side route guards are UX, not authorisation.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 6 — WHERE THE HTML IS MADE ══════════════════════ -->
+<div class="sheet" id="a6">
+  <div class="plate">
+    <span class="no">Sheet 6</span>
+    <h2>Where the HTML Is Made</h2>
+    <span class="form">Decision tree</span>
+    <span class="cov">Covers · Next.js · Frontend Architecture · React</span>
+  </div>
+  <p class="thesis">Stops 03 and 04 of sheet 1 assume HTML arrives. This sheet decides which machine produced it, and when: a build server last Tuesday, a server a millisecond ago, or the user's own phone. <strong>Rendering strategy is an architectural decision made per page — and server components add a second one: which code is allowed to reach the browser at all.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A decision tree with three questions — does the content change per user, does it change often, is SEO or fast first paint needed — leading to four leaves: static generation, incremental static regeneration, server-side rendering and client-side rendering. To the right, two timelines compare the first second of a client-only page, which shows nothing until JavaScript downloads, runs and fetches, with a server-rendered page that is visible at once and hydrates later; below them, a comparison of server and client components. Across the middle, one product page request from middleware through a cache check, a server component querying the database, streamed HTML, hydration and a server action. Along the bottom, Next.js as a backend, the server-client security boundary, and when to choose something else.">
+        <defs>
+          <marker id="nx1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="nx2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+        </defs>
+
+        <!-- TREE -->
+        <text x="40" y="42" class="s-zone" fill="var(--line)">Choose per page, not per application</text>
+        <g fill="var(--paper)" stroke="var(--ink)" stroke-width="2">
+          <rect x="262" y="62" width="260" height="46" rx="23"/><rect x="77" y="178" width="260" height="46" rx="23"/><rect x="447" y="178" width="260" height="46" rx="23"/>
+        </g>
+        <g class="s-num"><text x="282" y="80">01</text><text x="97" y="196">02</text><text x="467" y="196">03</text></g>
+        <g class="s-lab" font-size="11.5"><text x="306" y="80">Content differs per user?</text><text x="121" y="196">Content changes often?</text><text x="491" y="196">SEO or fast first paint?</text></g>
+        <g class="s-sub" font-size="10"><text x="306" y="96">a cart, a feed, an account</text><text x="121" y="212">prices, stock, headlines</text><text x="491" y="212">public, indexable, mobile</text></g>
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#nx1)">
+          <path d="M370,108 L220,174"/><path d="M414,108 L564,174"/>
+          <path d="M180,224 L118,296"/><path d="M234,224 L296,296"/>
+          <path d="M550,224 L488,296"/><path d="M604,224 L666,296"/>
+        </g>
+        <g class="s-lab" font-size="11" style="fill:var(--mute)"><text x="266" y="140">no</text><text x="500" y="140">yes</text><text x="126" y="264">no</text><text x="276" y="264">yes</text><text x="486" y="264">yes</text><text x="646" y="264">no</text></g>
+
+        <g>
+          <rect x="30" y="300" width="170" height="100" fill="var(--z1)" stroke="var(--line)" stroke-width="2.5"/>
+          <rect x="215" y="300" width="170" height="100" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="400" y="300" width="170" height="100" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="585" y="300" width="170" height="100" fill="var(--z4)" stroke="var(--rule)" stroke-width="2"/>
+        </g>
+        <g class="s-num"><text x="40" y="320">04</text><text x="225" y="320">05</text><text x="410" y="320">06</text><text x="595" y="320">07</text></g>
+        <g class="s-lab"><text x="64" y="320">SSG</text><text x="249" y="320">ISR</text><text x="434" y="320">SSR</text><text x="619" y="320">CSR</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="40" y="340">HTML at build time</text><text x="40" y="354">blogs, docs, marketing</text>
+          <text x="225" y="340">built, then refreshed</text><text x="225" y="354">catalogues, news</text>
+          <text x="410" y="340">HTML on every request</text><text x="410" y="354">personalised and SEO</text>
+          <text x="595" y="340">HTML in the browser</text><text x="595" y="354">dashboards behind login</text>
+        </g>
+        <text x="40" y="384" class="s-note" font-size="10.5">CDN · no server cost</text>
+        <text x="225" y="384" class="s-note" font-size="10.5">cached, stays fresh</text>
+        <text x="410" y="384" class="s-haz" font-size="10.5">CPU per request</text>
+        <text x="595" y="384" class="s-haz" font-size="10.5">empty shell first</text>
+        <path d="M44,428 L744,428" fill="none" stroke="var(--fast)" stroke-width="2.5" marker-start="url(#nx2)" marker-end="url(#nx2)"/>
+        <text x="44" y="420" class="s-sub" style="fill:var(--fast)">faster and cheaper</text>
+        <text x="744" y="420" text-anchor="end" class="s-sub" style="fill:var(--fast)">fresher and more personal</text>
+        <text x="40" y="452" class="s-haz" font-size="10.5">SSR on a page that could be static pays server cost on every request for nothing.</text>
+
+        <!-- TIMELINES -->
+        <rect x="780" y="40" width="590" height="200" fill="var(--z3)"/>
+        <text x="796" y="64" class="s-zone" fill="var(--mute)">08 · the first second, two ways</text>
+        <text x="796" y="90" class="s-lab" font-size="11">client-side only</text>
+        <rect x="800" y="98" width="30" height="18" fill="var(--mute)" opacity=".5"/>
+        <rect x="830" y="98" width="200" height="18" fill="var(--cool)" opacity=".8"/>
+        <rect x="1030" y="98" width="180" height="18" fill="var(--hazard)" opacity=".7"/>
+        <rect x="1210" y="98" width="40" height="18" fill="var(--line)" opacity=".85"/>
+        <g class="s-sub" font-size="10"><text x="800" y="130">shell</text><text x="836" y="130">download 300 KB of JS</text><text x="1036" y="130">execute, fetch data</text><text x="1212" y="130">render</text></g>
+        <line x1="1252" y1="92" x2="1252" y2="152" stroke="var(--hazard)" stroke-width="2"/>
+        <text x="1258" y="106" class="s-sub" font-size="10" style="fill:var(--hazard)">slow on mobile,</text>
+        <text x="1258" y="120" class="s-sub" font-size="10" style="fill:var(--hazard)">poor for SEO</text>
+        <text x="1246" y="150" text-anchor="end" class="s-haz" font-size="10.5">visible, finally</text>
+        <text x="796" y="166" class="s-lab" font-size="11">server-rendered</text>
+        <rect x="800" y="174" width="100" height="18" fill="var(--line)" opacity=".85"/>
+        <rect x="900" y="174" width="160" height="18" fill="var(--cool)" opacity=".5"/>
+        <rect x="1060" y="174" width="80" height="18" fill="var(--fast)" opacity=".8"/>
+        <g class="s-sub" font-size="10"><text x="804" y="206">full HTML</text><text x="906" y="206">download JS</text><text x="1066" y="206">hydrate</text></g>
+        <text x="800" y="228" class="s-note" font-size="10.5">visible at once</text>
+        <text x="1066" y="228" class="s-sub" font-size="10.5">interactive</text>
+        <text x="1160" y="182" class="s-sub" font-size="10.5">crawlers receive real</text>
+        <text x="1160" y="196" class="s-sub" font-size="10.5">HTML, not a shell</text>
+
+        <!-- COMPONENTS -->
+        <rect x="780" y="252" width="590" height="208" fill="var(--z1)"/>
+        <text x="796" y="276" class="s-zone" fill="var(--line)">09 · server and client components</text>
+        <rect x="796" y="288" width="280" height="118" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <rect x="1090" y="288" width="264" height="118" fill="var(--paper)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="808" y="306" class="s-lab" font-size="11" style="fill:var(--line)">server component · the default</text>
+        <text x="1102" y="306" class="s-lab" font-size="11" style="fill:var(--fast)">client component · 'use client'</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="808" y="326">runs on the server only</text><text x="808" y="342">can query the database directly</text><text x="808" y="374">cannot use useState or onClick</text>
+          <text x="1102" y="326">runs in the browser</text><text x="1102" y="342">state, effects, event handlers</text><text x="1102" y="374">cannot touch the database</text>
+        </g>
+        <text x="808" y="358" class="s-note" font-size="10.5">ships zero JavaScript</text>
+        <text x="1102" y="358" class="s-lab" font-size="10.5">ships JavaScript</text>
+        <text x="808" y="394" class="s-sub" font-size="10">a product list → HTML only</text>
+        <text x="1102" y="394" class="s-sub" font-size="10">the cart button → hydrated</text>
+        <text x="796" y="428" class="s-note" font-size="10.5">The point is bundle size: rendering code never reaches the browser.</text>
+        <text x="796" y="446" class="s-haz" font-size="10.5">Marking everything 'use client' throws the whole benefit away.</text>
+
+        <!-- REQUEST FLOW -->
+        <rect x="30" y="476" width="1340" height="200" fill="var(--z2)"/>
+        <text x="46" y="500" class="s-zone" fill="var(--mute)">10 · one product page, end to end</text>
+        <line x1="60" y1="560" x2="1330" y2="560" stroke="var(--line)" stroke-width="6"/>
+        <path d="M380,547 C380,490 980,490 980,547" fill="none" stroke="var(--fast)" stroke-width="3" stroke-dasharray="9 7" marker-end="url(#nx2)"/>
+        <text x="680" y="532" text-anchor="middle" class="s-note" font-size="10.5">cache hit → served from the CDN in ~10 ms</text>
+        <g class="st"><circle cx="80" cy="560" r="9"/><circle cx="230" cy="560" r="9"/><circle cx="530" cy="560" r="9"/><circle cx="680" cy="560" r="9"/><circle cx="830" cy="560" r="9"/><circle cx="980" cy="560" r="9"/><circle cx="1130" cy="560" r="9"/><circle cx="1280" cy="560" r="9"/></g>
+        <circle cx="380" cy="560" r="13" fill="var(--paper)" stroke="var(--fast)" stroke-width="3.5"/>
+        <g class="s-num"><text x="40" y="592">R1</text><text x="190" y="592">R2</text><text x="340" y="592">R3</text><text x="490" y="592">R4</text><text x="640" y="592">R5</text><text x="790" y="592">R6</text><text x="940" y="592">R7</text><text x="1090" y="592">R8</text><text x="1240" y="592">R9</text></g>
+        <g class="s-lab" font-size="11.5"><text x="40" y="610">request</text><text x="190" y="610">middleware</text><text x="340" y="610">cached copy?</text><text x="490" y="610">server component</text><text x="640" y="610">database</text><text x="790" y="610">HTML streamed</text><text x="940" y="610">content visible</text><text x="1090" y="610">hydrate</text><text x="1240" y="610">server action</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="40" y="628">GET /products/42</text>
+          <text x="190" y="628">auth, redirects,</text><text x="190" y="642">headers</text>
+          <text x="340" y="628">static version on</text><text x="340" y="642">the CDN or cache</text>
+          <text x="490" y="628">runs on the server</text><text x="490" y="642">if nothing cached</text>
+          <text x="640" y="628">queried directly —</text><text x="640" y="642">no API round trip</text>
+          <text x="790" y="628">sent as it renders</text>
+          <text x="940" y="628">crawlers see this</text><text x="940" y="642">same HTML</text>
+          <text x="1090" y="628">the cart button</text><text x="1090" y="642">becomes interactive</text>
+          <text x="1240" y="628">Add to cart →</text><text x="1240" y="642">database → UI</text>
+        </g>
+
+        <!-- BOTTOM: backend -->
+        <rect x="30" y="694" width="440" height="172" fill="var(--z3)"/>
+        <text x="46" y="718" class="s-zone" fill="var(--mute)">11 · a real backend</text>
+        <rect x="46" y="740" width="80" height="26" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="86" y="757" text-anchor="middle" class="s-lab" font-size="11">browser</text>
+        <rect x="146" y="732" width="200" height="124" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+        <text x="156" y="750" class="s-lab" font-size="11">Next.js server or edge</text>
+        <g class="s-sub" font-size="10"><text x="156" y="768">middleware · runs first</text><text x="156" y="784">static files → CDN</text><text x="156" y="800">server components → HTML</text><text x="156" y="816">route handlers → API</text><text x="156" y="832">server actions → mutations</text></g>
+        <rect x="366" y="740" width="90" height="26" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="411" y="757" text-anchor="middle" class="s-lab" font-size="11">database</text>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#nx1)"><path d="M126,753 L142,753"/><path d="M346,753 L362,753"/></g>
+        <g class="s-sub" font-size="10"><text x="366" y="786">reached directly:</text><text x="366" y="800">a small app may</text><text x="366" y="814">need no separate</text><text x="366" y="828">API service</text></g>
+
+        <!-- BOTTOM: boundary -->
+        <rect x="490" y="694" width="420" height="172" fill="var(--band)"/>
+        <text x="506" y="718" class="s-zone" fill="var(--hazard)">12 · the boundary is a security line</text>
+        <g class="s-lab" font-size="11"><text x="506" y="744">NEXT_PUBLIC_ variables</text><text x="506" y="784">server actions</text><text x="506" y="824">shared imports</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="506" y="760">baked into the bundle at build time — public to everyone</text>
+          <text x="506" y="800">look like function calls, are HTTP endpoints: authorise inside</text>
+          <text x="506" y="840">a client component ships everything it imports, secrets too</text>
+        </g>
+        <text x="506" y="858" class="s-haz" font-size="10.5">Enforce in middleware and the data layer, never in client routing.</text>
+
+        <!-- BOTTOM: when not -->
+        <rect x="930" y="694" width="440" height="172" fill="var(--z1)"/>
+        <text x="946" y="718" class="s-zone" fill="var(--line)">13 · when not, and what else</text>
+        <g class="s-lab" font-size="11"><text x="946" y="744">login-only dashboard</text><text x="946" y="762">existing API team</text><text x="946" y="780">must self-host</text></g>
+        <g class="s-sub" font-size="10.5"><text x="1100" y="744">Vite + React: no SSR to run</text><text x="1100" y="762">backend features redundant</text><text x="1100" y="780">possible, noticeably more work</text></g>
+        <text x="946" y="808" class="s-lab" font-size="11">Alternatives</text>
+        <g class="s-sub" font-size="10.5"><text x="946" y="826">Astro — content-first, ships almost no JS by default</text><text x="946" y="840">Remix — web standards, forms · Nuxt (Vue) · SvelteKit</text></g>
+        <text x="946" y="858" class="s-haz" font-size="10.5">Caching layers and breaking changes are the recurring cost.</text>
+      </svg>
+    </div>
+    <figcaption><b>Next.js is a restaurant that serves three ways.</b> SSG is a dish from the display case — instant. SSR is cooked to order — fresh, but you wait. CSR is a kit you assemble at the table. The framework's real value is letting you choose per dish: product pages from the case, the checkout cooked to order, the account dashboard as a kit.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the decisions and what follows from them</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Per-user content?</h4><p>The first split. A page identical for every visitor can be produced ahead of time; a cart or account page cannot.</p></div>
+      <div><h4><span>02</span>Changes often?</h4><p>For shared content: rarely changing pages are built once; catalogues and news need periodic regeneration.</p></div>
+      <div><h4><span>03</span>SEO or first paint?</h4><p>For per-user content: if crawlers or slow phones matter, render on the server; if the page sits behind a login, the browser can do it.</p></div>
+      <div><h4><span>04</span>SSG</h4><p>Static generation at build time. Plain HTML from a CDN — fastest, cheapest, indexes perfectly. Docs, blogs, marketing.</p></div>
+      <div><h4><span>05</span>ISR</h4><p>Incremental static regeneration: built once, then refreshed in the background on a schedule. Static speed with bounded staleness.</p></div>
+      <div><h4><span>06</span>SSR</h4><p>Server-side rendering on every request. Fresh and personalised, visible immediately, at the price of CPU per request and a server to run.</p></div>
+      <div><h4><span>07</span>CSR</h4><p>Client-side rendering: an empty shell, then JavaScript builds the page. Simplest to deploy, fine behind a login, slow on mobile and poor for SEO elsewhere.</p></div>
+      <div><h4><span>08</span>Hydration</h4><p>Attaching event handlers to server-rendered HTML so it becomes interactive. Content is visible before hydration; buttons work only after it.</p></div>
+      <div><h4><span>09</span>Server components</h4><p>The App Router default: components that run only on the server, can query data directly and ship no JavaScript. <code>'use client'</code> opts a component into the browser.</p></div>
+      <div><h4><span>10</span>Request flow</h4><p>Middleware, cache check, server component, direct database query, streamed HTML, visible content, hydration, server action — R1 to R9 in the band above.</p></div>
+      <div><h4><span>11</span>A real backend</h4><p>Route handlers and server actions talk to the database directly, so a small product may need no separate API service. It is still a server to operate.</p></div>
+      <div><h4><span>12</span>The boundary</h4><p><code>NEXT_PUBLIC_</code> variables are public, server actions are public HTTP endpoints, and a client import ships its module. Authenticate and validate inside every action and handler.</p></div>
+      <div><h4><span>13</span>Alternatives</h4><p>Vite + React for login-only dashboards, Astro for content with little interactivity, Remix, Nuxt and SvelteKit for their ecosystems. Complexity and caching confusion are Next.js's real costs.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 7 — WHERE STATE LIVES ══════════════════════ -->
+<div class="sheet" id="a7">
+  <div class="plate">
+    <span class="no">Sheet 7</span>
+    <h2>Where State Lives</h2>
+    <span class="form">Ladder plate</span>
+    <span class="cov">Covers · State Management · React · Frontend Architecture</span>
+  </div>
+  <p class="thesis">The data behind every re-render on sheet 5, and the question of where each piece of it belongs. Four rungs for data the browser owns, a separate tower for data the server owns. <strong>Most frontend complexity is state kept too high, kept twice, or kept in the wrong tool — and the most common mistake of all is treating a cache as a store.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 870" role="img" aria-label="A staircase of four rungs rising left to right for client state: local component state, lifting state to a common parent, Context, and a global store, with the cost in indirection and re-render reach rising at each step. Beyond a dashed divider stands a separate tower for server state: a caching library such as React Query. Below on the left, a table contrasting server state and client state, and the URL as a third home for state. On the right, an add-to-cart mutation with an optimistic update that either invalidates the cart query or rolls back, and a comparison of three components holding their own copies against three components reading one cached source.">
+        <defs>
+          <marker id="sl1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fast)"/></marker>
+          <marker id="sl2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="sl3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <line x1="30" y1="470" x2="1370" y2="470" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M60,78 L1030,78" stroke="var(--fast)" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#sl1)" fill="none"/>
+        <text x="60" y="66" class="s-note">indirection · how many components re-render · libraries to learn and upgrade</text>
+
+        <g>
+          <rect x="40" y="400" width="240" height="70" fill="var(--z1)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="295" y="330" width="240" height="140" fill="var(--z2)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="550" y="260" width="240" height="210" fill="var(--z3)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="805" y="190" width="240" height="280" fill="var(--z4)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="1090" y="100" width="280" height="370" fill="var(--z6)" stroke="var(--learn)" stroke-width="2.5"/>
+        </g>
+        <line x1="1068" y1="44" x2="1068" y2="470" stroke="var(--learn)" stroke-width="2" stroke-dasharray="7 6"/>
+        <text x="1090" y="60" class="s-learn">it came from the server?</text>
+        <text x="1090" y="76" class="s-sub" style="fill:var(--learn)">then it never belonged on this ladder</text>
+
+        <g class="s-num"><text x="52" y="420">01</text><text x="307" y="350">02</text><text x="562" y="280">03</text><text x="817" y="210">04</text><text x="1102" y="120">05</text></g>
+        <g class="s-lab" font-size="12.5"><text x="76" y="420">local state</text><text x="331" y="350">lift to a parent</text><text x="586" y="280">Context</text><text x="841" y="210">global store</text><text x="1126" y="120">server-state cache</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="52" y="438">useState, in the component</text><text x="52" y="452">start here, always · costs nothing</text>
+          <text x="307" y="368">a sibling needs it too: move</text><text x="307" y="382">it to the common parent and</text><text x="307" y="396">pass it down as props</text>
+          <text x="562" y="298">stable, rarely changing data:</text><text x="562" y="312">theme, locale, current user</text><text x="562" y="326">built in, no library</text>
+          <text x="817" y="228">Zustand, Redux Toolkit, Jotai</text><text x="817" y="242">complex client state shared</text><text x="817" y="256">across distant parts of the app</text><text x="817" y="276">selectors: only components using</text><text x="817" y="290">the changed slice re-render</text><text x="817" y="310">Redux DevTools time travel is</text><text x="817" y="324">still unmatched for debugging</text>
+          <text x="1102" y="138">TanStack Query, SWR, RTK Query</text><text x="1102" y="158">for everything fetched from an API.</text><text x="1102" y="172">It gives you, by default:</text>
+          <text x="1116" y="192">· caching and deduplication</text><text x="1116" y="206">· loading and error states</text><text x="1116" y="220">· background refetching</text><text x="1116" y="234">· invalidation after mutations</text>
+          <text x="1102" y="260">Server data can go stale; client</text><text x="1102" y="274">state cannot. That one property is</text><text x="1102" y="288">why it needs a different tool.</text>
+        </g>
+        <text x="307" y="426" class="s-note" font-size="10.5">climb when drilling hits 4+ levels</text>
+        <text x="562" y="356" class="s-haz" font-size="10.5">every consumer re-renders</text>
+        <text x="562" y="370" class="s-haz" font-size="10.5">on every change</text>
+        <text x="562" y="436" class="s-note" font-size="10.5">climb when: complex, frequent,</text>
+        <text x="562" y="450" class="s-note" font-size="10.5">and widely shared</text>
+        <text x="817" y="444" class="s-haz" font-size="10.5">Not by default: many apps</text>
+        <text x="817" y="458" class="s-haz" font-size="10.5">need no global store at all.</text>
+        <text x="1102" y="318" class="s-note">Replacing hand-written fetch,</text>
+        <text x="1102" y="334" class="s-note">loading flags and caching with</text>
+        <text x="1102" y="350" class="s-note">this is usually the highest-value</text>
+        <text x="1102" y="366" class="s-note">change a React codebase can make.</text>
+        <text x="1102" y="444" class="s-haz" font-size="10.5">Never copy its data into a store:</text>
+        <text x="1102" y="458" class="s-haz" font-size="10.5">that is two versions of the truth.</text>
+
+        <text x="40" y="496" class="s-note">Start at 01. Climb only when forced.</text>
+        <text x="40" y="512" class="s-sub">State kept closest to where it is used is easier to reason about, easier to delete, and re-renders less. Most applications end up with far more global state than they need.</text>
+
+        <!-- TABLE -->
+        <rect x="30" y="532" width="640" height="326" fill="var(--z3)"/>
+        <text x="46" y="556" class="s-zone" fill="var(--mute)">06 · two different problems</text>
+        <g class="s-lab" font-size="11"><text x="250" y="580" fill="var(--line)">server state</text><text x="460" y="580" fill="var(--fast)">client state</text></g>
+        <line x1="46" y1="588" x2="654" y2="588" stroke="var(--rule)"/>
+        <g class="s-lab" font-size="10.5"><text x="46" y="606">owner</text><text x="46" y="624">examples</text><text x="46" y="642">can go stale</text><text x="46" y="660">needs caching</text><text x="46" y="678">loading and error states</text><text x="46" y="696">right tool</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="250" y="606">your backend</text><text x="460" y="606">the browser</text>
+          <text x="250" y="624">users, orders, products</text><text x="460" y="624">modal open, form draft, theme</text>
+          <text x="460" y="642">no</text>
+          <text x="250" y="660">yes</text><text x="460" y="660">no</text>
+          <text x="250" y="678">yes</text><text x="460" y="678">no</text>
+          <text x="250" y="696">React Query, SWR</text><text x="460" y="696">useState, Zustand, Context</text>
+        </g>
+        <text x="250" y="642" class="s-haz" font-size="10.5">yes</text>
+        <text x="46" y="724" class="s-haz" font-size="10.5">Putting API data in Redux means hand-writing loading flags, error handling, caching,</text>
+        <text x="46" y="738" class="s-haz" font-size="10.5">refetching and invalidation — every one of which a server-state library does by default.</text>
+        <text x="46" y="760" class="s-note" font-size="10.5">Most "state management" was really caching, done badly.</text>
+        <text x="46" y="790" class="s-num">07</text><text x="68" y="790" class="s-lab" font-size="11">The URL is state too</text>
+        <text x="46" y="810" class="s-mono" font-size="10.5">/products?category=books&amp;sort=price&amp;page=2</text>
+        <text x="46" y="830" class="s-sub" font-size="10.5">Survives refresh, can be shared, works with the Back button. Filters, tabs,</text>
+        <text x="46" y="844" class="s-sub" font-size="10.5">pagination and search terms belong here — not in a store.</text>
+
+        <!-- MUTATION -->
+        <rect x="690" y="532" width="680" height="326" fill="var(--z1)"/>
+        <text x="706" y="556" class="s-zone" fill="var(--line)">08 · add to cart, from one source</text>
+        <g>
+          <rect x="706" y="570" width="120" height="50" fill="var(--paper)" stroke="var(--rule)"/>
+          <rect x="846" y="570" width="120" height="50" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="986" y="570" width="120" height="50" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+          <rect x="1126" y="570" width="120" height="50" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="1266" y="562" width="94" height="30" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="1266" y="600" width="94" height="30" fill="var(--paper)" stroke="var(--hazard)" stroke-width="2"/>
+        </g>
+        <g class="s-lab" font-size="11"><text x="716" y="590">click</text><text x="856" y="590">mutation</text><text x="996" y="590">optimistic UI</text><text x="1136" y="590">POST /cart</text><text x="1274" y="582">invalidate</text><text x="1274" y="620" fill="var(--hazard)">roll back</text></g>
+        <g class="s-sub" font-size="10"><text x="716" y="608">Add to cart</text><text x="856" y="608">fires, React Query</text><text x="996" y="608">responds instantly</text><text x="1136" y="608">to the server</text></g>
+        <g stroke="var(--line)" stroke-width="2" fill="none" marker-end="url(#sl2)"><path d="M826,595 L842,595"/><path d="M966,595 L982,595"/><path d="M1106,595 L1122,595"/><path d="M1246,590 L1262,579"/></g>
+        <path d="M1246,600 L1262,613" fill="none" stroke="var(--hazard)" stroke-width="2" marker-end="url(#sl3)"/>
+        <text x="1266" y="646" class="s-sub" font-size="10" style="fill:var(--hazard)">and show the error</text>
+
+        <text x="706" y="676" class="s-num">09</text><text x="728" y="676" class="s-lab" font-size="11" style="fill:var(--hazard)">three copies</text>
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"><rect x="706" y="688" width="96" height="44"/><rect x="812" y="688" width="96" height="44"/></g>
+        <rect x="918" y="688" width="96" height="44" fill="color-mix(in srgb,var(--hazard) 12%,transparent)" stroke="var(--hazard)" stroke-width="2"/>
+        <g class="s-lab" font-size="10.5" text-anchor="middle"><text x="754" y="706">header</text><text x="860" y="706">sidebar</text><text x="966" y="706">checkout</text></g>
+        <g class="s-mono" font-size="10" text-anchor="middle"><text x="754" y="724">2 items</text><text x="860" y="724">2 items</text><text x="966" y="724" fill="var(--hazard)">3 items</text></g>
+        <text x="706" y="752" class="s-haz" font-size="10.5">an item is removed, one copy is forgotten,</text>
+        <text x="706" y="766" class="s-haz" font-size="10.5">and the UI contradicts itself</text>
+
+        <text x="1056" y="676" class="s-lab" font-size="11" style="fill:var(--line)">one cached source</text>
+        <ellipse cx="1210" cy="700" rx="70" ry="18" fill="var(--z5)" stroke="var(--fast)" stroke-width="2"/>
+        <text x="1210" y="704" text-anchor="middle" class="s-mono" font-size="10.5">query 'cart'</text>
+        <g stroke="var(--fast)" stroke-width="2" fill="none" marker-end="url(#sl1)"><path d="M1170,716 L1108,742"/><path d="M1210,718 L1210,742"/><path d="M1250,716 L1312,742"/></g>
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="1.5"><rect x="1056" y="746" width="92" height="30"/><rect x="1164" y="746" width="92" height="30"/><rect x="1272" y="746" width="88" height="30"/></g>
+        <g class="s-lab" font-size="10.5" text-anchor="middle"><text x="1102" y="765">header</text><text x="1210" y="765">sidebar</text><text x="1316" y="765">checkout</text></g>
+        <text x="1056" y="796" class="s-note" font-size="10.5">invalidate once; all three refetch together</text>
+
+        <text x="706" y="818" class="s-note">One source of truth per piece of data, and two views can never disagree.</text>
+        <text x="706" y="840" class="s-num">10</text>
+        <text x="728" y="840" class="s-haz" font-size="10.5">Client state is visible and editable in DevTools: isAdmin in a store is a UI hint, never authorisation.</text>
+      </svg>
+    </div>
+    <figcaption><b>The ladder is also a code-review order.</b> For each piece of state, ask in sequence: can it stay in the component, can it live in the parent, is it stable enough for Context, is it really shared client state — or did it come from the server all along? Most reviews end on the last question, and the fix is deleting a store.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the rungs and their vocabulary</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Local state</h4><p><code>useState</code> inside the component that uses it. Free, obvious, easy to delete, and it re-renders only that subtree. The right answer far more often than it is chosen.</p></div>
+      <div><h4><span>02</span>Lifting state</h4><p>When a sibling needs the same value, move it to the nearest common parent and pass it down. Climb further only when the props travel four or more levels.</p></div>
+      <div><h4><span>03</span>Context</h4><p>Shared values without prop drilling — theme, locale, current user. Every consumer re-renders on every change, so it is the wrong home for anything that changes rapidly.</p></div>
+      <div><h4><span>04</span>Global store</h4><p>Zustand for minimal ceremony, Redux Toolkit for large apps with complex flows and time-travel debugging, Jotai for atoms. Selectors limit re-renders to the slice that changed.</p></div>
+      <div><h4><span>05</span>Server-state cache</h4><p>TanStack Query, SWR or RTK Query for anything from an API: caching, deduplication, loading and error states, refetching and invalidation, all by default.</p></div>
+      <div><h4><span>06</span>Server vs client state</h4><p>Server state is owned elsewhere, can go stale and needs caching; client state is owned by the browser and cannot. Using one tool for both is the most common mistake in this area.</p></div>
+      <div><h4><span>07</span>URL state</h4><p>Query parameters for filters, tabs, pagination and search. Survives refresh, is shareable, and works with the Back button — for free.</p></div>
+      <div><h4><span>08</span>Optimistic update</h4><p>Update the UI before the server confirms, send the mutation, then invalidate the query on success or roll back and show an error on failure.</p></div>
+      <div><h4><span>09</span>Single source of truth</h4><p>Header, sidebar and checkout read the same cached query instead of keeping copies. Duplicated data is the direct cause of an interface that contradicts itself.</p></div>
+      <div><h4><span>10</span>Client state is public</h4><p>Anyone can inspect and edit it. Never store secrets there, prefer HttpOnly cookies to tokens in localStorage, re-check every permission on the server, and clear persisted data on logout.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Persisted state outlives the session</b>
+    <p>State written to localStorage or IndexedDB survives logout unless you clear it deliberately — the next person on a shared machine inherits the last user's cached orders and profile. Persist only what is safe to leak, and make "clear everything" part of the logout path, tested.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════ SHEET 8 — THE TOWN PLAN ══════════════════════ -->
+<div class="sheet" id="a8">
+  <div class="plate">
+    <span class="no">Sheet 8</span>
+    <h2>The Town Plan</h2>
+    <span class="form">Zoning plan</span>
+    <span class="cov">Covers · Frontend Architecture · HTML · CSS · Browser Internals</span>
+  </div>
+  <p class="thesis">The plan of the code that feeds every other sheet. Anyone can build one house; planning decides whether the hundredth still has road access and whether demolishing one brings down its neighbours. <strong>Organise by feature, let dependencies point one way, build shared UI on semantic HTML — and remember that everything above the network line is public.</strong></p>
+
+  <figure>
+    <div class="scroll">
+      <svg class="wide" viewBox="0 0 1400 880" role="img" aria-label="A zoning plan of a frontend codebase drawn as five horizontal zones: pages and routes, features, shared UI, lib and API, and below a network boundary, the backend. Allowed dependencies point downward; a shared component importing a feature and one feature importing another are drawn as forbidden dashed red arrows. To the right, a folder tree organised by file type beside one organised by feature, the dependency rules, and component design heuristics. Along the bottom, semantic HTML as the content layer with a button compared against a div with a click handler, accessibility and forms, and the architectural decisions that set performance and security.">
+        <defs>
+          <marker id="tp1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker>
+          <marker id="tp2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hazard)"/></marker>
+        </defs>
+
+        <!-- ZONES -->
+        <rect x="30" y="50" width="730" height="80" fill="var(--z1)"/>
+        <rect x="30" y="140" width="730" height="126" fill="var(--z2)"/>
+        <rect x="30" y="276" width="730" height="76" fill="var(--z3)"/>
+        <rect x="30" y="362" width="730" height="70" fill="var(--z4)"/>
+        <rect x="30" y="462" width="730" height="58" fill="var(--z5)"/>
+        <line x1="30" y1="447" x2="760" y2="447" stroke="var(--ink)" stroke-width="3" stroke-dasharray="12 6"/>
+        <text x="744" y="441" text-anchor="end" class="s-haz" font-size="10.5">network boundary · everything above it ships to the browser</text>
+
+        <g class="s-num"><text x="46" y="74">01</text><text x="46" y="164">02</text><text x="46" y="300">03</text><text x="46" y="386">04</text><text x="46" y="486">05</text></g>
+        <g class="s-zone" fill="var(--mute)"><text x="70" y="74">Pages</text><text x="70" y="164">Features</text><text x="70" y="300">Shared UI</text><text x="70" y="386">Lib / API</text><text x="70" y="486">Backend</text></g>
+        <g class="s-sub" font-size="10.5">
+          <text x="46" y="94">composition and</text><text x="46" y="108">routing only; one</text><text x="46" y="122">JS chunk per route</text>
+          <text x="46" y="184">one business capability:</text><text x="46" y="198">components, hooks and</text><text x="46" y="212">logic in one folder —</text><text x="46" y="226">deletable as a unit</text>
+          <text x="46" y="320">design-system primitives,</text><text x="46" y="334">built on semantic HTML</text>
+          <text x="46" y="406">HTTP client, formatting,</text><text x="46" y="420">runtime validation</text>
+          <text x="46" y="506">enforces every rule, again</text>
+        </g>
+
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="300" y="66" width="130" height="30"/><rect x="450" y="66" width="130" height="30"/><rect x="600" y="66" width="130" height="30"/>
+        </g>
+        <g class="s-mono" font-size="10.5" text-anchor="middle"><text x="365" y="85">/checkout</text><text x="515" y="85">/orders</text><text x="665" y="85">/products</text></g>
+
+        <g fill="var(--paper)" stroke="var(--line)" stroke-width="2">
+          <rect x="300" y="166" width="130" height="80"/><rect x="450" y="166" width="130" height="80"/><rect x="600" y="166" width="130" height="80"/>
+        </g>
+        <g class="s-lab" font-size="11.5"><text x="312" y="186">checkout</text><text x="462" y="186">orders</text><text x="612" y="186">products</text></g>
+        <g class="s-sub" font-size="10">
+          <text x="312" y="204">components</text><text x="312" y="218">hooks · state</text><text x="312" y="232">queries</text>
+          <text x="462" y="204">components</text><text x="462" y="218">hooks · state</text><text x="462" y="232">queries</text>
+          <text x="612" y="204">components</text><text x="612" y="218">hooks · state</text><text x="612" y="232">queries</text>
+        </g>
+
+        <g fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5">
+          <rect x="300" y="302" width="90" height="30"/><rect x="400" y="302" width="90" height="30"/><rect x="500" y="302" width="90" height="30"/><rect x="600" y="302" width="90" height="30"/>
+        </g>
+        <g class="s-mono" font-size="10.5" text-anchor="middle"><text x="345" y="321">Button</text><text x="445" y="321">Modal</text><text x="545" y="321">Input</text><text x="645" y="321">Card</text></g>
+
+        <rect x="300" y="382" width="390" height="30" fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"/>
+        <text x="495" y="401" text-anchor="middle" class="s-mono" font-size="10.5">api client · format · validate (Zod)</text>
+        <rect x="300" y="476" width="390" height="30" fill="var(--paper)" stroke="var(--fast)" stroke-width="1.5"/>
+        <text x="495" y="495" text-anchor="middle" class="s-mono" font-size="10.5">authentication · authorisation · validation</text>
+
+        <g stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#tp1)">
+          <path d="M365,96 L365,162"/><path d="M515,96 L515,162"/><path d="M665,96 L665,162"/>
+          <path d="M345,246 L345,298"/><path d="M545,246 L545,298"/><path d="M665,246 L645,298"/>
+          <path d="M730,206 L748,206 L748,397 L694,397"/>
+          <path d="M330,412 L330,472"/>
+        </g>
+        <path d="M445,302 L418,252" fill="none" stroke="var(--hazard)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#tp2)"/>
+        <text x="440" y="274" class="s-haz" font-size="12">✗</text>
+        <path d="M400,166 C400,146 480,146 480,162" fill="none" stroke="var(--hazard)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#tp2)"/>
+        <text x="434" y="141" class="s-haz" font-size="12">✗</text>
+        <text x="30" y="540" class="s-note">Dependencies point down only. The moment Button imports from checkout, the folders are decoration.</text>
+
+        <!-- 06 FOLDERS -->
+        <rect x="780" y="40" width="590" height="210" fill="var(--z3)"/>
+        <text x="796" y="64" class="s-zone" fill="var(--mute)">06 · by type, or by feature</text>
+        <text x="796" y="90" class="s-lab" font-size="11" style="fill:var(--hazard)">by type · scales badly</text>
+        <text x="1090" y="90" class="s-lab" font-size="11" style="fill:var(--line)">by feature · scales well</text>
+        <g class="s-mono" font-size="10.5"><text x="796" y="112">/components</text><text x="796" y="128">/hooks</text><text x="796" y="144">/utils</text><text x="796" y="160">/services</text></g>
+        <g class="s-sub" font-size="10.5" style="fill:var(--hazard)"><text x="890" y="112">← 200 files</text><text x="890" y="128">← 80 files</text><text x="890" y="144">← a landfill</text></g>
+        <g class="s-mono" font-size="10.5"><text x="1090" y="112">/features</text><text x="1106" y="128">/checkout</text><text x="1106" y="144">/orders</text><text x="1106" y="160">/products</text><text x="1090" y="176">/shared</text><text x="1106" y="192">/ui</text><text x="1106" y="208">/lib</text></g>
+        <g class="s-note" font-size="10.5"><text x="1200" y="128">a change to checkout</text><text x="1200" y="142">touches one folder</text></g>
+        <text x="796" y="192" class="s-haz" font-size="10.5">one feature, five folders:</text>
+        <text x="796" y="206" class="s-haz" font-size="10.5">deleting it is archaeology</text>
+        <text x="796" y="236" class="s-sub">The test: can you delete a feature by deleting a single folder?</text>
+
+        <!-- 07 RULES -->
+        <rect x="780" y="262" width="590" height="128" fill="var(--z1)"/>
+        <text x="796" y="286" class="s-zone" fill="var(--line)">07 · dependencies point one way</text>
+        <g class="s-mono" font-size="10.5"><text x="796" y="308">✓ page → feature</text><text x="796" y="326">✓ feature → shared</text></g>
+        <g class="s-mono" font-size="10.5" style="fill:var(--hazard)"><text x="796" y="344">✗ shared → feature</text><text x="796" y="362">✗ feature → feature</text></g>
+        <g class="s-sub" font-size="10.5"><text x="960" y="308">allowed</text><text x="960" y="326">allowed</text><text x="960" y="344">forbidden — inverts the hierarchy</text><text x="960" y="362">usually a missing shared module</text></g>
+        <text x="796" y="382" class="s-note" font-size="10.5">Enforce with ESLint import rules or dependency-cruiser, not a document.</text>
+
+        <!-- 08 COMPONENTS -->
+        <rect x="780" y="402" width="590" height="118" fill="var(--z2)"/>
+        <text x="796" y="426" class="s-zone" fill="var(--mute)">08 · component design</text>
+        <g class="s-lab" font-size="11"><text x="796" y="450">presentational</text><text x="796" y="468">container / feature</text></g>
+        <g class="s-sub" font-size="10.5"><text x="946" y="450">takes props, renders UI, fetches nothing</text><text x="946" y="468">fetches data, holds state, composes the rest</text></g>
+        <text x="796" y="492" class="s-sub" font-size="10.5">Smells: over ~200 lines · cannot be named clearly · more than ~7 props</text>
+        <text x="796" y="508" class="s-haz" font-size="10.5">Components that fetch, transform and render at once are the ones that rot.</text>
+
+        <!-- 09 HTML -->
+        <rect x="30" y="556" width="440" height="310" fill="var(--z3)"/>
+        <text x="46" y="580" class="s-zone" fill="var(--mute)">09 · HTML is the content layer</text>
+        <g class="s-mono" font-size="10.5"><text x="46" y="604">HTML</text><text x="46" y="620">CSS</text><text x="46" y="636">JS</text></g>
+        <g class="s-sub" font-size="10.5"><text x="96" y="604">structure and meaning — the skeleton</text><text x="96" y="620">presentation — the skin</text><text x="96" y="636">behaviour — the muscles</text></g>
+        <g class="s-mono" font-size="10.5"><text x="250" y="662">&lt;button&gt;</text><text x="344" y="662" fill="var(--hazard)">&lt;div onclick&gt;</text></g>
+        <line x1="46" y1="670" x2="454" y2="670" stroke="var(--rule)"/>
+        <g class="s-sub" font-size="10.5"><text x="46" y="688">focusable</text><text x="46" y="706">works with the keyboard</text><text x="46" y="724">announced by screen readers</text><text x="46" y="742">submits forms</text></g>
+        <g class="s-lab" text-anchor="middle" style="fill:var(--line)"><text x="276" y="688">✓</text><text x="276" y="706">✓</text><text x="276" y="724">✓</text><text x="276" y="742">✓</text></g>
+        <g class="s-lab" text-anchor="middle" style="fill:var(--hazard)"><text x="384" y="688">✗</text><text x="384" y="706">✗</text><text x="384" y="724">✗</text><text x="384" y="742">✗</text></g>
+        <text x="46" y="766" class="s-haz" font-size="10.5">A div with a click handler does none of this until you rebuild</text>
+        <text x="46" y="780" class="s-haz" font-size="10.5">it by hand — usually incompletely.</text>
+        <text x="46" y="806" class="s-lab" font-size="11">Landmarks</text>
+        <text x="46" y="824" class="s-mono" font-size="10.5">&lt;header&gt; &lt;nav&gt; &lt;main&gt; &lt;article&gt; &lt;aside&gt; &lt;footer&gt;</text>
+        <text x="46" y="844" class="s-sub" font-size="10.5">Screen readers navigate by them; SEO and reader modes read them.</text>
+
+        <!-- 10 A11Y + FORMS -->
+        <rect x="490" y="556" width="420" height="310" fill="var(--z1)"/>
+        <text x="506" y="580" class="s-zone" fill="var(--line)">10 · accessibility and forms</text>
+        <text x="506" y="604" class="s-note">~15% of people have a disability.</text>
+        <text x="506" y="620" class="s-sub" font-size="10.5">Semantic HTML is most of the fix, free from the start.</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="506" y="644">· every image has alt — or alt="" if decorative</text>
+          <text x="506" y="660">· every input has a &lt;label&gt;</text>
+          <text x="506" y="676">· headings nest h1 → h2 → h3, never skipped for size</text>
+          <text x="506" y="692">· colour is never the only signal</text>
+          <text x="506" y="708">· everything interactive works from the keyboard</text>
+        </g>
+        <text x="506" y="736" class="s-lab" font-size="11">Forms do the work for you</text>
+        <text x="506" y="754" class="s-mono" font-size="10.5">&lt;input type="email" id="email" required&gt;</text>
+        <text x="506" y="772" class="s-sub" font-size="10.5">one attribute: mobile keyboard, validation, semantics</text>
+        <text x="506" y="796" class="s-haz" font-size="10.5">Browser validation is a convenience, never a security</text>
+        <text x="506" y="810" class="s-haz" font-size="10.5">control: anyone can send the request without the page.</text>
+        <text x="506" y="834" class="s-sub" font-size="10.5">target="_blank" needs rel="noopener noreferrer";</text>
+        <text x="506" y="848" class="s-sub" font-size="10.5">untrusted iframes need sandbox.</text>
+
+        <!-- 11 12 PERF + PUBLIC -->
+        <rect x="930" y="556" width="440" height="310" fill="var(--z5)"/>
+        <text x="946" y="580" class="s-zone" fill="var(--fast)">11 · performance is decided here</text>
+        <g class="s-lab" font-size="11"><text x="946" y="604">route code splitting</text><text x="946" y="622">server components</text><text x="946" y="640">image optimisation</text><text x="946" y="658">dependency discipline</text><text x="946" y="676">bundle budgets in CI</text></g>
+        <g class="s-sub" font-size="10.5"><text x="1112" y="604">download only the page visited</text><text x="1112" y="622">rendering code never ships · sheet 6</text><text x="1112" y="640">usually the largest bytes on a page</text><text x="1112" y="658">one library can outweigh your code</text><text x="1112" y="676">stop slow, invisible growth</text></g>
+        <text x="946" y="700" class="s-note" font-size="10.5">What you ship matters more than how tight the loops are.</text>
+        <text x="946" y="728" class="s-num">12</text><text x="968" y="728" class="s-lab" font-size="11" style="fill:var(--hazard)">Everything in the frontend is public</text>
+        <g class="s-sub" font-size="10.5">
+          <text x="946" y="748">· the bundle, and environment variables baked into it</text>
+          <text x="946" y="764">· every API endpoint it calls</text>
+          <text x="946" y="780">· all client state, editable in DevTools</text>
+          <text x="946" y="796">· data hidden with CSS — so never send it</text>
+          <text x="946" y="812">· dependencies: your attack surface; audit and pin them</text>
+        </g>
+        <text x="946" y="836" class="s-haz" font-size="10.5">Client-side route guards are UX. The server enforces every rule.</text>
+        <text x="946" y="852" class="s-sub" font-size="10.5">Escape rendered content; CSP limits the damage when that fails.</text>
+      </svg>
+    </div>
+    <figcaption><b>Nobody notices good planning; everybody notices its absence.</b> The zoning map is the whole idea: routes compose features, features use shared UI and one API layer, nothing points upward, and the network line marks where your control ends. Folder names, lint rules and bundle budgets are just ways of keeping that map true after the tenth developer joins.</figcaption>
+  </figure>
+
+  <div class="gaz">
+    <h3>Step key — the zones and the rules between them</h3>
+    <div class="gazgrid">
+      <div><h4><span>01</span>Pages / routes</h4><p>Composition and routing only: which features appear on this URL. Each route is its own code chunk, so users download only the page they visit.</p></div>
+      <div><h4><span>02</span>Features</h4><p>A business capability — checkout, orders, products — with its components, hooks, state and queries in one folder. Changing it touches one place; deleting it is one operation.</p></div>
+      <div><h4><span>03</span>Shared UI</h4><p>Design-system primitives such as Button, Modal and Input, documented in Storybook. The only way twenty teams avoid twenty subtly different buttons.</p></div>
+      <div><h4><span>04</span>Lib / API</h4><p>One HTTP client, formatting and runtime validation. Every feature reaches the network through it, so auth headers, errors and schemas live in one place.</p></div>
+      <div><h4><span>05</span>Backend</h4><p>Below the network boundary: the only zone the user cannot read or modify. Every rule enforced in the client must be enforced again here.</p></div>
+      <div><h4><span>06</span>Folder structure</h4><p>By type scatters one feature across components, hooks, utils and services. By feature keeps it together. The <code>utils</code> folder is where type-based structures go to die.</p></div>
+      <div><h4><span>07</span>Dependency rules</h4><p>Page → feature and feature → shared are allowed; shared → feature inverts the hierarchy, feature → feature signals a missing shared module. Enforce with ESLint import rules or dependency-cruiser.</p></div>
+      <div><h4><span>08</span>Component design</h4><p>Presentational components render props; container components fetch and hold state. Over ~200 lines, hard to name, or more than ~7 props: split it.</p></div>
+      <div><h4><span>09</span>Semantic HTML</h4><p>Choose elements by meaning, then style them. <code>&lt;button&gt;</code> brings focus, keyboard, screen-reader and form behaviour for free; landmarks make the page navigable and indexable.</p></div>
+      <div><h4><span>10</span>Accessibility and forms</h4><p>Alt text, labels, ordered headings, more than colour, full keyboard access. Input types give validation and keyboards — but only server validation is a control.</p></div>
+      <div><h4><span>11</span>Performance budget</h4><p>Code splitting, server components, image optimisation, few dependencies, budgets checked in CI with Lighthouse CI or bundlesize. Architecture sets performance; micro-optimisation rarely does.</p></div>
+      <div><h4><span>12</span>Everything is public</h4><p>Bundle, baked-in variables, endpoints, client state and CSS-hidden data are all readable. There is no client-side secret, and a route guard is not authorisation.</p></div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Do not copy a large company's town plan</b>
+    <p>Structure pays from the second developer or the second month — retrofitting boundaries later costs far more. But a five-layer architecture on a three-page site pays the cost of abstraction at every change and never collects the benefit, and micro-frontends and monorepo tooling solve organisational problems you may not have. Plan for the town you are building.</p>
+  </div>
+</div>
+
+</div>
